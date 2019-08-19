@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "config:js-lib",
+    "schedule:monthly"
+  ],
+  "automerge": "minor",
+  "rebaseStalePrs": true,
+  "semanticCommits": true,
+  "pinVersions": false
+}
