@@ -13,13 +13,11 @@ const R576pExp = /(?<R576P>576(i|p))/i;
 const R480Exp = /(?<R480P>480(i|p)|640x480|848x480)/i;
 const resolutionExp = new RegExp(
   [R2160pExp.source, R1080pExp.source, R720pExp.source, R576pExp.source, R480Exp.source].join('|'),
-  'i'
+  'i',
 );
 
 export function parseResolution(title: string): Resolution | null {
-  const normalizedName = title.replace(/_/g, ' ').trim().toLowerCase();
-
-  const result = resolutionExp.exec(normalizedName);
+  const result = resolutionExp.exec(title);
   if (!result || !result.groups) {
     return null;
   }

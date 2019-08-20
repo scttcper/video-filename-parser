@@ -1,4 +1,4 @@
-import { parseTitle } from '../src/title';
+import { parseTitle } from '../src';
 
 describe('parseTitle', () => {
   const cases = [

@@ -1,12 +1,6 @@
-/**
- * A comment about DummyClass
- * It's a great class
- */
-export class DummyClass {
-  value = true;
-
-  async load() {
-    const something = await Promise.resolve({ text: 'text' });
-    return something.text;
-  }
-}
+export * from './codec';
+export * from './language';
+export * from './quality';
+export * from './resolution';
+export * from './source';
+export * from './title';
