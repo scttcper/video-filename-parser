@@ -1,19 +1,36 @@
 const editionTextExp = /\b(?<edition>((the.?)?((Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Ultimate|Final|Rogue(?=(.(Cut|Edition|Version)))|Extended|Special|Despecialized|\d{2,3}(th)?.Anniversary)(.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit))?|((Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit|Edition|Restored|((2|3|4)in1))))))\)?\b/i;
 
-export enum Edition {
-  Remastered = 'REMASTERED',
-  Extended = 'EXTENDED',
-  Theatrical = 'THEATRICAL',
-  Directors = 'DIRECTORS',
-  Unrated = 'UNRATED',
-  IMAX = 'IMAX',
+const remasteredExp = /\b(Remastered|Anniversary|Restored)\b/i;
+const imaxExp = /\b(IMAX)\b/i;
+const unratedExp = /\b(Uncensored|Unrated)\b/i;
+const extendedExp = /\b(Extended|Uncut|Ultimate|Rogue|Collector)\b/i;
+const theatricalExp = /\b(Theatrical)\b/i;
+const directorsExp = /\b(Directors?)\b/i;
+const fanExp = /\b(Despecialized|Fan.?Edit)\b/i;
+
+export interface Edition {
+  remastered: boolean;
+  extended: boolean;
+  theatrical: boolean;
+  directors: boolean;
+  unrated: boolean;
+  imax: boolean;
+  fanEdit: boolean;
 }
 
-export type Editions = Record<Edition, boolean>;
+export function parseEdition(title: string): Edition {
+  const editionText = parseEditionText(title);
 
-// export function parseEdition(): Editions {
-//   return {};
-// }
+  return {
+    imax: imaxExp.test(editionText),
+    remastered: remasteredExp.test(editionText),
+    extended: extendedExp.test(editionText),
+    theatrical: theatricalExp.test(editionText),
+    directors: directorsExp.test(editionText),
+    unrated: unratedExp.test(editionText),
+    fanEdit: fanExp.test(editionText),
+  };
+}
 
 export function parseEditionText(title: string): string {
   const result = editionTextExp.exec(title);

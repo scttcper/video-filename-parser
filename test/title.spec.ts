@@ -1,39 +1,42 @@
-import { parseTitle } from '../src';
+import { parseTitleAndYear } from '../src';
 
 describe('parseTitle', () => {
-  const cases = [
-    ['The.Man.from.U.N.C.L.E.2015.1080p.BluRay.x264-SPARKS', 'The Man from U.N.C.L.E.'],
-    ['1941.1979.EXTENDED.720p.BluRay.X264-AMIABLE', '1941'],
-    ['MY MOVIE (2016) [R][Action, Horror][720p.WEB-DL.AVC.8Bit.6ch.AC3].mkv', 'MY MOVIE'],
-    ['R.I.P.D.2013.720p.BluRay.x264-SPARKS', 'R.I.P.D.'],
-    ['V.H.S.2.2013.LIMITED.720p.BluRay.x264-GECKOS', 'V.H.S. 2'],
+  const cases: Array<[string, { title: string; year: string | null }]> = [
+    ['The.Man.from.U.N.C.L.E.2015.1080p.BluRay.x264-SPARKS', { title: 'The Man from U.N.C.L.E.', year: '2015' }],
+    ['1941.1979.EXTENDED.720p.BluRay.X264-AMIABLE', { title: '1941', year: '1979' }],
+    ['MY MOVIE (2016) [R][Action, Horror][720p.WEB-DL.AVC.8Bit.6ch.AC3].mkv', { title: 'MY MOVIE', year: '2016' }],
+    ['R.I.P.D.2013.720p.BluRay.x264-SPARKS', { title: 'R.I.P.D.', year: '2013' }],
+    ['V.H.S.2.2013.LIMITED.720p.BluRay.x264-GECKOS', { title: 'V.H.S. 2', year: '2013' }],
     [
       'This Is A Movie (1999) [IMDB #] <Genre, Genre, Genre> {ACTORS} !DIRECTOR +MORE_SILLY_STUFF_NO_ONE_NEEDS ?',
-      'This Is A Movie',
+      { title: 'This Is A Movie', year: '1999' },
     ],
-    ['We Are the Best!.2013.720p.H264.mkv', 'We Are the Best!'],
-    ['(500).Days.Of.Summer.(2009).DTS.1080p.BluRay.x264.NLsubs', '(500) Days Of Summer'],
-    ['To.Live.and.Die.in.L.A.1985.1080p.BluRay', 'To Live and Die in L.A.'],
-    ['A.I.Artificial.Intelligence.(2001)', 'A.I. Artificial Intelligence'],
-    ['A.Movie.Name.(1998)', 'A Movie Name'],
-    ['www.Torrenting.com - Revenge.2008.720p.X264-DIMENSION', 'Revenge'],
-    ['Thor: The Dark World 2013', 'Thor The Dark World'],
-    ['Resident.Evil.The.Final.Chapter.2016', 'Resident Evil The Final Chapter'],
-    ['Der.Soldat.James.German.Bluray.FuckYou.Pso.Why.cant.you.follow.scene.rules.1998', 'Der Soldat James'],
-    ['Passengers.German.DL.AC3.Dubbed..BluRay.x264-PsO', 'Passengers'],
-    ['Valana la Legende FRENCH BluRay 720p 2016 kjhlj', 'Valana la Legende'],
-    ['Valana la Legende TRUEFRENCH BluRay 720p 2016 kjhlj', 'Valana la Legende'],
+    ['We Are the Best!.2013.720p.H264.mkv', { title: 'We Are the Best!', year: '2013' }],
+    ['(500).Days.Of.Summer.(2009).DTS.1080p.BluRay.x264.NLsubs', { title: '(500) Days Of Summer', year: '2009' }],
+    ['To.Live.and.Die.in.L.A.1985.1080p.BluRay', { title: 'To Live and Die in L.A.', year: '1985' }],
+    ['A.I.Artificial.Intelligence.(2001)', { title: 'A.I. Artificial Intelligence', year: '2001' }],
+    ['A.Movie.Name.(1998)', { title: 'A Movie Name', year: '1998' }],
+    ['www.Torrenting.com - Revenge.2008.720p.X264-DIMENSION', { title: 'Revenge', year: '2008' }],
+    ['Thor: The Dark World 2013', { title: 'Thor The Dark World', year: '2013' }],
+    ['Resident.Evil.The.Final.Chapter.2016', { title: 'Resident Evil The Final Chapter', year: '2016' }],
+    [
+      'Der.Soldat.James.German.Bluray.FuckYou.Pso.Why.cant.you.follow.scene.rules.1998',
+      { title: 'Der Soldat James', year: '1998' },
+    ],
+    ['Passengers.German.DL.AC3.Dubbed..BluRay.x264-PsO', { title: 'Passengers', year: null }],
+    ['Valana la Legende FRENCH BluRay 720p 2016 kjhlj', { title: 'Valana la Legende', year: '2016' }],
+    ['Valana la Legende TRUEFRENCH BluRay 720p 2016 kjhlj', { title: 'Valana la Legende', year: '2016' }],
     [
       'Mission Impossible: Rogue Nation (2015)�[XviD - Ita Ac3 - SoftSub Ita]azione, spionaggio, thriller *Prima Visione* Team mulnic Tom Cruise',
-      'Mission Impossible Rogue Nation',
+      { title: 'Mission Impossible Rogue Nation', year: '2015' },
     ],
-    ['Scary.Movie.2000.FRENCH..BluRay.-AiRLiNE', 'Scary Movie'],
-    ['My Movie 1999 German Bluray', 'My Movie'],
-    ['Leaving Jeruselem by Railway (1897) [DVD].mp4', 'Leaving Jeruselem by Railway'],
-    ['Climax.2018.1080p.AMZN.WEB-DL.DD5.1.H.264-NTG', 'Climax'],
-    ['Movie.Title.Imax.2018.1080p.AMZN.WEB-DL.DD5.1.H.264-NTG', 'Movie Title'],
+    ['Scary.Movie.2000.FRENCH..BluRay.-AiRLiNE', { title: 'Scary Movie', year: '2000' }],
+    ['My Movie 1999 German Bluray', { title: 'My Movie', year: '1999' }],
+    ['Leaving Jeruselem by Railway (1897) [DVD].mp4', { title: 'Leaving Jeruselem by Railway', year: '1897' }],
+    ['Climax.2018.1080p.AMZN.WEB-DL.DD5.1.H.264-NTG', { title: 'Climax', year: '2018' }],
+    ['Movie.Title.Imax.2018.1080p.AMZN.WEB-DL.DD5.1.H.264-NTG', { title: 'Movie Title', year: '2018' }],
   ];
   test.each(cases)('should parse %s', (title, expected) => {
-    expect(parseTitle(title, true)).toBe(expected);
+    expect(parseTitleAndYear(title, true)).toEqual(expected);
   });
 });

@@ -1,5 +1,5 @@
 const blurayExp = /(?<bluray>M?BluRay|Blu-Ray|HDDVD|BD|BDISO|BD25|BD50|BR.?DISK)/i;
-const webdlExp = /(?<webdl>WEB[-_. ]DL|HDRIP|WEBDL|WebRip|Web-Rip|iTunesHD|WebHD|[. ]WEB[. ](?:[xh]26[45]|DD5[. ]1)|\d+0p[. ]WEB[. ])/i;
+const webdlExp = /(?<webdl>WEB[-_. ]DL|HDRIP|WEBDL|WebRip|Web-Rip|NETFLIX|AMZN|iTunesHD|WebHD|WEBCap|[. ]WEB[. ](?:[xh]26[45]|DD5[. ]1)|\d+0p[. ]WEB[. ])/i;
 const hdtvExp = /(?<hdtv>HDTV)/i;
 const bdripExp = /(?<bdrip>BDRip)/i;
 const brripExp = /(?<brrip>BRRip)/i;
@@ -7,7 +7,8 @@ const dvdrExp = /(?<dvdr>DVD-R|DVDR)/i;
 const dvdExp = /(?<dvd>DVD|DVDRip|NTSC|PAL|xvidvd)/i;
 const dsrExp = /(?<dsr>WS[-_. ]DSR|DSR)/i;
 const regionalExp = /(?<regional>R[0-9]{1}|REGIONAL)/i;
-const scrExp = /(?<scr>SCR|SCREENER|DVDSCR|DVDSCREENER)/i;
+const ppvExp = /(?<ppv>PPV)/i;
+const scrExp = /(?<scr>SCR|SCREENER|DVDSCR|DVD.?SCREENER)/i;
 const tsExp = /(?<ts>TS|TELESYNC|HD-TS|HDTS|PDVD|TSRip|HDTSRip)/i;
 const tcExp = /(?<tc>TC|TELECINE|HD-TC|HDTC)/i;
 const camExp = /(?<cam>CAMRIP|CAM|HDCAM|HD-CAM)/i;
@@ -21,6 +22,8 @@ export enum Source {
   WEBDL = 'WEBDL',
   DVD = 'DVD',
   CAM = 'CAM',
+  SCREENER = 'SCREENER',
+  PPV = 'PPV',
   TELESYNC = 'TELESYNC',
   TELECINE = 'TELECINE',
   WORKPRINT = 'WORKPRINT',
@@ -34,11 +37,12 @@ const sourceExp = new RegExp(
     hdtvExp.source,
     bdripExp.source,
     brripExp.source,
+    scrExp.source,
     dvdrExp.source,
     dvdExp.source,
     dsrExp.source,
     regionalExp.source,
-    scrExp.source,
+    ppvExp.source,
     tsExp.source,
     tcExp.source,
     camExp.source,
@@ -51,14 +55,17 @@ const sourceExp = new RegExp(
 );
 
 export function parseSource(title: string): Source | null {
-  const normalizedName = title.replace(/_/g, ' ').trim().toLowerCase();
+  const normalizedName = title
+    .replace(/_/g, ' ')
+    .trim()
+    .toLowerCase();
 
   const result = sourceExp.exec(normalizedName);
   if (!result || !result.groups) {
     return null;
   }
 
-  const groups = result.groups;
+  const { groups } = result;
 
   if (groups.bluray || groups.bdrip || groups.brrip) {
     return Source.BLURAY;
@@ -68,8 +75,24 @@ export function parseSource(title: string): Source | null {
     return Source.WEBDL;
   }
 
+  if (groups.scr) {
+    return Source.SCREENER;
+  }
+
+  if (groups.ppv) {
+    return Source.PPV;
+  }
+
+  if (groups.wp) {
+    return Source.WORKPRINT;
+  }
+
   if (groups.pdtv || groups.sdtv || groups.dsr || groups.tvrip) {
     return Source.TV;
+  }
+
+  if (groups.cam) {
+    return Source.CAM;
   }
 
   return null;

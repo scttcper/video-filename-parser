@@ -18,9 +18,9 @@ const simpleTitleRegex = /\s*(?:480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|[xh][\
 const simpleReplaceTitle = /\s*(?:[<>?*:|])/i;
 
 const requestInfoRegex = /\[.+?\]/i;
-const reportMovieTitleLenientRegex = /^(?<title>(?![(\[]).+?)((\W|_))(?:(?<!(19|20)\d{2}.)(German|French|TrueFrench))(.+?)(?=((19|20)\d{2}|$))(?<year>(19|20)\d{2}(?!p|i|\d+|\]|\W\d+))?(\W+|_|$)(?!\\)/i;
+const reportMovieTitleLenientRegex = /^(?<title>(?![([]).+?)((\W|_))(?:(?<!(19|20)\d{2}.)(German|French|TrueFrench))(.+?)(?=((19|20)\d{2}|$))(?<year>(19|20)\d{2}(?!p|i|\d+|\]|\W\d+))?(\W+|_|$)(?!\\)/i;
 
-export function parseTitle(title: string, isLenient = false) {
+export function parseTitleAndYear(title: string, isLenient = false): { title: string; year: string | null } {
   let simpleTitle = title.replace(simpleTitleRegex, '');
   simpleTitle = simpleTitle.replace(websitePrefixRegex, '');
   simpleTitle = simpleTitle.replace(cleanTorrentSuffixRegex, '');
@@ -38,11 +38,13 @@ export function parseTitle(title: string, isLenient = false) {
         continue;
       }
 
-      return result;
+      const year = match.groups.year || null;
+
+      return { title: result, year };
     }
   }
 
-  return '';
+  return { title: '', year: null };
 }
 
 export function parseMovieMatchCollection(title: string) {

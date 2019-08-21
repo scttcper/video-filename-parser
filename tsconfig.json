@@ -2,8 +2,9 @@
   "compileOnSave": false,
   "compilerOptions": {
     "moduleResolution": "node",
-    "lib": ["es2018"],
+    "lib": ["es2019"],
     "target": "es2017",
+    "importHelpers": true,
     "module": "commonjs",
     "esModuleInterop": true,
     "strict": true,
@@ -12,6 +13,5 @@
     "sourceMap": true,
     "inlineSources": true,
     "outDir": "dist"
-  },
-  "include": ["src/index.ts"]
+  }
 }
