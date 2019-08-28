@@ -2,6 +2,7 @@ import { parseSource, Source } from '../src';
 
 describe('source', () => {
   const cases: Array<[string, Source | null]> = [
+    ['Whats.Eating.Gilbert.Grape.1993.720p.BluRay.x264-SiNNERS', Source.BLURAY],
     ['Oceans.Thirteen.2007.iNTERNAL.720p.BluRay.x264-MHQ', Source.BLURAY],
     ['Rocketman 2019 2160p UHD BluRay x265-TERMiNAL', Source.BLURAY],
     ['Alita Battle Angel 2019 2160p WEB-DL DD+5 1 HEVC-DEFLATE[NO RAR]', Source.WEBDL],

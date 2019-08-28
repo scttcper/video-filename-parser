@@ -1,21 +1,21 @@
-const blurayExp = /(?<bluray>M?BluRay|Blu-Ray|HDDVD|BD|BDISO|BD25|BD50|BR.?DISK)/i;
-const webdlExp = /(?<webdl>WEB[-_. ]DL|HDRIP|WEBDL|WebRip|Web-Rip|NETFLIX|AMZN|iTunesHD|WebHD|WEBCap|[. ]WEB[. ](?:[xh]26[45]|DD5[. ]1)|\d+0p[. ]WEB[. ])/i;
-const hdtvExp = /(?<hdtv>HDTV)/i;
-const bdripExp = /(?<bdrip>BDRip)/i;
-const brripExp = /(?<brrip>BRRip)/i;
-const dvdrExp = /(?<dvdr>DVD-R|DVDR)/i;
-const dvdExp = /(?<dvd>DVD|DVDRip|NTSC|PAL|xvidvd)/i;
-const dsrExp = /(?<dsr>WS[-_. ]DSR|DSR)/i;
-const regionalExp = /(?<regional>R[0-9]{1}|REGIONAL)/i;
-const ppvExp = /(?<ppv>PPV)/i;
-const scrExp = /(?<scr>SCR|SCREENER|DVDSCR|DVD.?SCREENER)/i;
-const tsExp = /(?<ts>TS|TELESYNC|HD-TS|HDTS|PDVD|TSRip|HDTSRip)/i;
-const tcExp = /(?<tc>TC|TELECINE|HD-TC|HDTC)/i;
-const camExp = /(?<cam>CAMRIP|CAM|HDCAM|HD-CAM)/i;
-const wpExp = /(?<wp>WORKPRINT|WP)/i;
-const pdtvExp = /(?<pdtv>PDTV)/i;
-const sdtvExp = /(?<sdtv>SDTV)/i;
-const tvripExp = /(?<tvrip>TVRip)/i;
+const blurayExp = /\b(?<bluray>M?BluRay|Blu-Ray|HDDVD|BD|BDISO|BD25|BD50|BR.?DISK)\b/i;
+const webdlExp = /\b(?<webdl>WEB[-_. ]DL|HDRIP|WEBDL|WebRip|Web-Rip|NETFLIX|AMZN|iTunesHD|WebHD|WEBCap|[. ]WEB[. ](?:[xh]26[45]|DD5[. ]1)|\d+0p[. ]WEB[. ])\b/i;
+const hdtvExp = /\b(?<hdtv>HDTV)\b/i;
+const bdripExp = /\b(?<bdrip>BDRip)\b/i;
+const brripExp = /\b(?<brrip>BRRip)\b/i;
+const dvdrExp = /\b(?<dvdr>DVD-R|DVDR)\b/i;
+const dvdExp = /\b(?<dvd>DVD|DVDRip|NTSC|PAL|xvidvd)\b/i;
+const dsrExp = /\b(?<dsr>WS[-_. ]DSR|DSR)\b/i;
+const regionalExp = /\b(?<regional>R[0-9]{1}|REGIONAL)\b/i;
+const ppvExp = /\b(?<ppv>PPV)\b/i;
+const scrExp = /\b(?<scr>SCR|SCREENER|DVDSCR|DVD.?SCREENER)\b/i;
+const tsExp = /\b(?<ts>TS|TELESYNC|HD-TS|HDTS|PDVD|TSRip|HDTSRip)\b/i;
+const tcExp = /\b(?<tc>TC|TELECINE|HD-TC|HDTC)\b/i;
+const camExp = /\b(?<cam>CAMRIP|CAM|HDCAM|HD-CAM)\b/i;
+const wpExp = /\b(?<wp>WORKPRINT|WP)\b/i;
+const pdtvExp = /\b(?<pdtv>PDTV)\b/i;
+const sdtvExp = /\b(?<sdtv>SDTV)\b/i;
+const tvripExp = /\b(?<tvrip>TVRip)\b/i;
 
 export enum Source {
   BLURAY = 'BLURAY',
@@ -57,8 +57,7 @@ const sourceExp = new RegExp(
 export function parseSource(title: string): Source | null {
   const normalizedName = title
     .replace(/_/g, ' ')
-    .trim()
-    .toLowerCase();
+    .trim();
 
   const result = sourceExp.exec(normalizedName);
   if (!result || !result.groups) {
