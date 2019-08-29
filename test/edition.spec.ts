@@ -43,6 +43,7 @@ describe('parseEditionText', () => {
     ['Mission Impossible: Rogue Nation 2012 Bluray', ''],
     ['X-Men Days of Future Past 2014 THE ROGUE CUT BRRip XviD AC3-EVO', 'THE ROGUE CUT'],
     ['Loving.Pablo.2018.TS.FRENCH.MD.x264-DROGUERiE', ''],
+    ['Management.LIMITED.720p.BluRay.x264-iNFAMOUS', 'LIMITED'],
     // TODO: somehow exlude restored at beginning of title
     ['Restored S03E05 Mystery of the English Cottage XviD-AFGLoading', 'Restored'],
   ];

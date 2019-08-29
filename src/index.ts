@@ -6,3 +6,5 @@ export * from './quality';
 export * from './resolution';
 export * from './source';
 export * from './title';
+export * from './extensions';
+export * from './group';

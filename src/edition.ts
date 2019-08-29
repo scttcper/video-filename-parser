@@ -1,4 +1,4 @@
-const editionTextExp = /\b(?<edition>((the.?)?((Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Ultimate|Final|Rogue(?=(.(Cut|Edition|Version)))|Extended|Special|Despecialized|\d{2,3}(th)?.Anniversary)(.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit))?|((Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit|Edition|Restored|((2|3|4)in1))))))\)?\b/i;
+const editionTextExp = /\b(?<edition>((the.?)?((Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Ultimate|Final|Rogue(?=(.(Cut|Edition|Version)))|Extended|Special|Despecialized|\d{2,3}(th)?.Anniversary)(.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit))?|((LIMITED|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit|Edition|Restored|((2|3|4)in1))))))\)?\b/i;
 
 const remasteredExp = /\b(Remastered|Anniversary|Restored)\b/i;
 const imaxExp = /\b(IMAX)\b/i;
@@ -7,8 +7,10 @@ const extendedExp = /\b(Extended|Uncut|Ultimate|Rogue|Collector)\b/i;
 const theatricalExp = /\b(Theatrical)\b/i;
 const directorsExp = /\b(Directors?)\b/i;
 const fanExp = /\b(Despecialized|Fan.?Edit)\b/i;
+const limitedExp = /\b(LIMITED)\b/i;
 
 export interface Edition {
+  limited: boolean;
   remastered: boolean;
   extended: boolean;
   theatrical: boolean;
@@ -29,6 +31,7 @@ export function parseEdition(title: string): Edition {
     directors: directorsExp.test(editionText),
     unrated: unratedExp.test(editionText),
     fanEdit: fanExp.test(editionText),
+    limited: limitedExp.test(editionText),
   };
 }
 

@@ -1,6 +1,6 @@
-import { filenameParse, ParsedFilename, Source, Resolution } from '../src';
+import { filenameParse, ParsedFilename, Source, Resolution, Edition, Codec } from '../src';
 
-const noEditions = {
+const noEditions: Edition = {
   directors: false,
   extended: false,
   fanEdit: false,
@@ -8,6 +8,7 @@ const noEditions = {
   remastered: false,
   theatrical: false,
   unrated: false,
+  limited: false,
 };
 
 describe('parseEditionText', () => {
@@ -20,6 +21,8 @@ describe('parseEditionText', () => {
         source: Source.BLURAY,
         title: 'Whats Eating Gilbert Grape',
         year: '1993',
+        codec: Codec.X264,
+        group: 'SiNNERS',
       },
     ],
     [
@@ -30,6 +33,8 @@ describe('parseEditionText', () => {
         source: Source.BLURAY,
         title: 'Timecop',
         year: '1994',
+        codec: Codec.X264,
+        group: 'Japhson',
       },
     ],
     [
@@ -40,10 +45,12 @@ describe('parseEditionText', () => {
         source: Source.BLURAY,
         title: 'This is 40',
         year: '2012',
+        codec: Codec.X264,
+        group: 'Felony',
       },
     ],
   ];
-  test.each(cases)('should get edition of "%s"', (title, expected) => {
+  test.each(cases)('should get filename of "%s"', (title, expected) => {
     expect(filenameParse(title)).toEqual(expected);
   });
 });
