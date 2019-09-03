@@ -26,6 +26,16 @@ describe('parseGroup', () => {
     ['The.Middle.720p.HEVC.x265-MeGusta-Pre', 'MeGusta'],
     ['Haunted.Hayride.2018.720p.WEBRip.DDP5.1.x264-NTb-postbot', 'NTb'],
     ['Haunted.Hayride.2018.720p.WEBRip.DDP5.1.x264-NTb-xpost', 'NTb'],
+    ['Men.in.Black.International.2019.BluRay.1080p.AVC.DTS-HD.MA5.1-CHDBits-RakuvArrow', 'CHDBits'],
+    ['Aladdin.2019.1080p.BluRay.x264-SPARKS-WhiteRev', 'SPARKS'],
+    ['Elvis.Presley.The.Searcher.2018.1080p.BluRay.x264-HANDJOB-BUYMORE', 'HANDJOB'],
+    ['Kill.Bill.Vol.2.2004.1080p.BluRay.DTS.x264-CyTSuNee-AsRequested', 'CyTSuNee'],
+    ['The.Good.Doctor.S02E17.Breakdown.1080p.AMZN.WEB-DL.DDP5.1.H.264-SiGMA-AlternativeToRequested', 'SiGMA'],
+    ['Mandy.2018.NORDiC.1080p.BluRay.x264-EGEN-GEROV', 'EGEN'],
+    ['TheEqualizer.2.2018.1080p.BluRay.DTS.X264-CMRG-Z0iDS3N', 'CMRG'],
+    ['Ghosthouse.1988.720p.BluRay.x264-SADPANDA-Chamele0n', 'SADPANDA'],
+    ['The.Walking.Dead.S08E08.1080p.BluRay.x264-ROVERS-4P', 'ROVERS'],
+    ['Stranger.Things.S01E02.720p.BluRay.X264-REWARD-4Planet', 'REWARD'],
   ];
   test.each(cases)('should parse group "%s"', (title, expected) => {
     expect(parseGroup(title)).toBe(expected);

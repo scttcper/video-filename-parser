@@ -1,4 +1,4 @@
-const blurayExp = /\b(?<bluray>M?BluRay|Blu-Ray|HDDVD|BD|BDISO|BD25|BD50|BR.?DISK)\b/i;
+const blurayExp = /\b(?<bluray>M?BluRay|Blu-Ray|HDDVD|BD|BDISO|BD25|BD50|BR.?DISK|Bluray1080p|BD1080p)\b/i;
 const webdlExp = /\b(?<webdl>WEB[-_. ]DL|HDRIP|WEBDL|WebRip|Web-Rip|NETFLIX|AMZN|iTunesHD|WebHD|WEBCap|[. ]WEB[. ](?:[xh]26[45]|DD5[. ]1)|\d+0p[. ]WEB[. ])\b/i;
 const hdtvExp = /\b(?<hdtv>HDTV)\b/i;
 const bdripExp = /\b(?<bdrip>BDRip)\b/i;
@@ -30,41 +30,38 @@ export enum Source {
   TV = 'TV',
 }
 
-const sourceExp = new RegExp(
-  [
-    blurayExp.source,
-    webdlExp.source,
-    hdtvExp.source,
-    bdripExp.source,
-    brripExp.source,
-    scrExp.source,
-    dvdrExp.source,
-    dvdExp.source,
-    dsrExp.source,
-    regionalExp.source,
-    ppvExp.source,
-    tsExp.source,
-    tcExp.source,
-    camExp.source,
-    wpExp.source,
-    pdtvExp.source,
-    sdtvExp.source,
-    tvripExp.source,
-  ].join('|'),
-  'i',
-);
-
-export function parseSource(title: string): Source | null {
+export function parseSourceGroups(title: string) {
   const normalizedName = title
     .replace(/_/g, ' ')
     .trim();
 
-  const result = sourceExp.exec(normalizedName);
-  if (!result || !result.groups) {
+  return {
+    bluray: blurayExp.test(normalizedName),
+    webdl: webdlExp.test(normalizedName),
+    hdtv: hdtvExp.test(normalizedName),
+    bdrip: bdripExp.test(normalizedName),
+    brrip: brripExp.test(normalizedName),
+    scr: scrExp.test(normalizedName),
+    dvdr: dvdrExp.test(normalizedName),
+    dvd: dvdExp.test(normalizedName),
+    dsr: dsrExp.test(normalizedName),
+    regional: regionalExp.test(normalizedName),
+    ppv: ppvExp.test(normalizedName),
+    ts: tsExp.test(normalizedName),
+    tc: tcExp.test(normalizedName),
+    cam: camExp.test(normalizedName),
+    wp: wpExp.test(normalizedName),
+    pdtv: pdtvExp.test(normalizedName),
+    sdtv: sdtvExp.test(normalizedName),
+    tvrip: tvripExp.test(normalizedName),
+  };
+}
+
+export function parseSource(title: string): Source | null {
+  const groups = parseSourceGroups(title);
+  if (!groups) {
     return null;
   }
-
-  const { groups } = result;
 
   if (groups.bluray || groups.bdrip || groups.brrip) {
     return Source.BLURAY;
