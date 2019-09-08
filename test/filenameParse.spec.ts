@@ -1,4 +1,4 @@
-import { filenameParse, ParsedFilename, Source, Resolution, Edition, Codec } from '../src';
+import { filenameParse, ParsedFilename, Source, Resolution, Edition, Codec, QualitySource } from '../src';
 
 const noEditions: Edition = {
   directors: false,
@@ -23,6 +23,8 @@ describe('parseEditionText', () => {
         year: '1993',
         codec: Codec.X264,
         group: 'SiNNERS',
+        revision: { version: 1, real: 0 },
+        qualitySource: QualitySource.NAME,
       },
     ],
     [
@@ -35,6 +37,8 @@ describe('parseEditionText', () => {
         year: '1994',
         codec: Codec.X264,
         group: 'Japhson',
+        revision: { version: 2, real: 0 },
+        qualitySource: QualitySource.NAME,
       },
     ],
     [
@@ -47,6 +51,8 @@ describe('parseEditionText', () => {
         year: '2012',
         codec: Codec.X264,
         group: 'Felony',
+        revision: { version: 2, real: 0 },
+        qualitySource: QualitySource.NAME,
       },
     ],
   ];

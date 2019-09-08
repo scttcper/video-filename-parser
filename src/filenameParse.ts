@@ -4,6 +4,7 @@ import { parseGroup } from './group';
 import { parseResolution, Resolution } from './resolution';
 import { parseSource, Source } from './source';
 import { parseTitleAndYear } from './title';
+import { parseQuality, Revision, QualitySource } from './quality';
 
 export interface ParsedFilename {
   title: string;
@@ -13,22 +14,25 @@ export interface ParsedFilename {
   source: Source | null;
   codec: Codec | null;
   group: string | null;
+  revision: Revision;
+  qualitySource: QualitySource;
 }
 
 export function filenameParse(name: string): ParsedFilename {
   const { title, year } = parseTitleAndYear(name);
   const edition = parseEdition(name);
-  const resolution = parseResolution(name);
-  const source = parseSource(name);
   const codec = parseCodec(name);
   const group = parseGroup(name);
+  const quality = parseQuality(name);
 
   return {
     title,
     year,
     edition,
-    resolution,
-    source,
+    revision: quality.revision,
+    resolution: quality.resolution,
+    source: quality.source,
+    qualitySource: quality.qualitySource,
     codec,
     group,
   };

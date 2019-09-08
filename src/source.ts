@@ -1,4 +1,4 @@
-const blurayExp = /\b(?<bluray>M?BluRay|Blu-Ray|HDDVD|BD|BDISO|BD25|BD50|BR.?DISK|Bluray1080p|BD1080p)\b/i;
+const blurayExp = /\b(?<bluray>M?Blu-?Ray|HDDVD|BD|BDISO|BD25|BD50|BR.?DISK|Bluray(1080|720)p?|BD(1080|720)p?)\b/i;
 const webdlExp = /\b(?<webdl>WEB[-_. ]DL|HDRIP|WEBDL|WebRip|Web-Rip|NETFLIX|AMZN|iTunesHD|WebHD|WEBCap|[. ]WEB[. ](?:[xh]26[45]|DD5[. ]1)|\d+0p[. ]WEB[. ])\b/i;
 const hdtvExp = /\b(?<hdtv>HDTV)\b/i;
 const bdripExp = /\b(?<bdrip>BDRip)\b/i;
@@ -12,7 +12,7 @@ const scrExp = /\b(?<scr>SCR|SCREENER|DVDSCR|DVD.?SCREENER)\b/i;
 const tsExp = /\b(?<ts>TS|TELESYNC|HD-TS|HDTS|PDVD|TSRip|HDTSRip)\b/i;
 const tcExp = /\b(?<tc>TC|TELECINE|HD-TC|HDTC)\b/i;
 const camExp = /\b(?<cam>CAMRIP|CAM|HDCAM|HD-CAM)\b/i;
-const wpExp = /\b(?<wp>WORKPRINT|WP)\b/i;
+const workprintExp = /\b(?<workprint>WORKPRINT|WP)\b/i;
 const pdtvExp = /\b(?<pdtv>PDTV)\b/i;
 const sdtvExp = /\b(?<sdtv>SDTV)\b/i;
 const tvripExp = /\b(?<tvrip>TVRip)\b/i;
@@ -31,8 +31,9 @@ export enum Source {
 }
 
 export function parseSourceGroups(title: string) {
-  const normalizedName = title
-    .replace(/_/g, ' ')
+  const normalizedName = title.replace(/_/g, ' ')
+    .replace(/\[/g, ' ')
+    .replace(/\]/g, ' ')
     .trim();
 
   return {
@@ -50,7 +51,7 @@ export function parseSourceGroups(title: string) {
     ts: tsExp.test(normalizedName),
     tc: tcExp.test(normalizedName),
     cam: camExp.test(normalizedName),
-    wp: wpExp.test(normalizedName),
+    workprint: workprintExp.test(normalizedName),
     pdtv: pdtvExp.test(normalizedName),
     sdtv: sdtvExp.test(normalizedName),
     tvrip: tvripExp.test(normalizedName),
@@ -79,16 +80,24 @@ export function parseSource(title: string): Source | null {
     return Source.PPV;
   }
 
-  if (groups.wp) {
+  if (groups.workprint) {
     return Source.WORKPRINT;
   }
 
-  if (groups.pdtv || groups.sdtv || groups.dsr || groups.tvrip) {
+  if (groups.pdtv || groups.sdtv || groups.dsr || groups.tvrip || groups.hdtv) {
     return Source.TV;
   }
 
   if (groups.cam) {
     return Source.CAM;
+  }
+
+  if (groups.ts) {
+    return Source.TELESYNC;
+  }
+
+  if (groups.tc) {
+    return Source.TELECINE;
   }
 
   return null;

@@ -1,4 +1,5 @@
 import { Source } from './source';
+import { Resolution } from './resolution';
 
 export const fileExtensions = [
   // Unknown
@@ -59,9 +60,20 @@ export const fileExtensions = [
   { extension: '.m2ts', source: Source.BLURAY },
 ];
 
+export const resolutionExt = [
+  // HD
+  { extension: '.mkv', resolution: Resolution.R720P },
+  { extension: '.mk3d', resolution: Resolution.R720P },
+  { extension: '.ts', resolution: Resolution.R720P },
+  { extension: '.wtv', resolution: Resolution.R720P },
+
+  // Bluray
+  { extension: '.m2ts', resolution: Resolution.R720P },
+];
+
 const fileExtensionExp = /\.[a-z0-9]{2,4}$/i;
 
-export function removeFileExtension(title): string {
+export function removeFileExtension(title: string): string {
   return title.replace(fileExtensionExp, (x: string) => {
     if (fileExtensions.some(ext => ext.extension === x)) {
       return '';
@@ -69,4 +81,22 @@ export function removeFileExtension(title): string {
 
     return x;
   });
+}
+
+export function getSourceForExtension(extension: string): Source | null {
+  const ext = fileExtensions.find(x => x.extension === extension);
+  if (ext) {
+    return ext.source;
+  }
+
+  return null;
+}
+
+export function getResolutionForExtension(extension: string): Resolution | null {
+  const ext = resolutionExt.find(x => x.extension === extension);
+  if (ext) {
+    return ext.resolution;
+  }
+
+  return null;
 }
