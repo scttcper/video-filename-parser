@@ -1,6 +1,6 @@
 import { parseLanguage, Language } from '../src';
 
-describe('', () => {
+describe('parseLanguage', () => {
   const tests: Array<[string, Language[]]> = [
     ['Castle.2009.S01E14.English.HDTV.XviD-LOL', [Language.English]],
     ['Castle.2009.S01E14.French.HDTV.XviD-LOL', [Language.French]],
