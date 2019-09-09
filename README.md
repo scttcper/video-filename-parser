@@ -2,6 +2,8 @@
 
 > A simple file / release name parser based heavily on radarr's movie parsing
 
+__DEMO__: https://video-filename-parser.netlify.com/  
+
 ## Install
 
 ```console
