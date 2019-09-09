@@ -53,6 +53,9 @@
     "preset": "ts-jest",
     "testEnvironment": "node"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "release": {
     "branch": "master"
   },
