@@ -1,8 +1,8 @@
 import { Codec, parseCodec } from './codec';
 import { Edition, parseEdition } from './edition';
 import { parseGroup } from './group';
-import { parseResolution, Resolution } from './resolution';
-import { parseSource, Source } from './source';
+import { Resolution } from './resolution';
+import { Source } from './source';
 import { parseTitleAndYear } from './title';
 import { parseQuality, Revision, QualitySource } from './quality';
 

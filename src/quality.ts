@@ -10,7 +10,6 @@ const properRegex = /\b(?<proper>proper|repack|rerip)\b/i;
 const realRegex = /\b(?<real>REAL)\b/; // not insensitive
 const versionExp = /(?<version>v\d\b|\[v\d\])/i;
 
-const hardcodedSubsExp = /\b(?<hcsub>(\w+SUBS?)\b)|(?<hc>(HC|SUBBED))\b/i;
 const remuxExp = /\b(?<remux>(BD|UHD)?Remux)\b/i;
 const bdiskExp = /\b(COMPLETE|ISO|BDISO|BD25|BD50|BR.?DISK)\b/i;
 const rawHdExp = /\b(?<rawhd>RawHD|1080i[-_. ]HDTV|Raw[-_. ]HD|MPEG[-_. ]?2)\b/i;
@@ -256,7 +255,7 @@ export function parseQuality(title: string): QualityModel {
   }
 
   if (source !== null) {
-      if (sourceGroups.bluray) {
+    if (sourceGroups.bluray) {
       result.source = Source.BLURAY;
       if (codec === Codec.XVID) {
         result.resolution = Resolution.R480P;
@@ -360,7 +359,10 @@ export function parseQuality(title: string): QualityModel {
 
   // make vague assumptions based on file extension
   if (result.source === null) {
-    const extension = path.extname(title).trim().toLowerCase();
+    const extension = path
+      .extname(title)
+      .trim()
+      .toLowerCase();
     result.source = getSourceForExtension(extension);
     result.resolution = getResolutionForExtension(extension);
     result.qualitySource = QualitySource.EXTENSION;
