@@ -2,7 +2,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "moduleResolution": "node",
-    "allowJs": true,
     "lib": ["es2019"],
     "target": "es2017",
     "importHelpers": true,
