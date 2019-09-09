@@ -28,12 +28,12 @@ export function filenameParse(name: string): ParsedFilename {
   return {
     title,
     year,
-    edition,
-    revision: quality.revision,
     resolution: quality.resolution,
     source: quality.source,
-    qualitySource: quality.qualitySource,
     codec,
+    revision: quality.revision,
     group,
+    edition,
+    qualitySource: quality.qualitySource,
   };
 }

@@ -44,7 +44,7 @@ export function parseTitleAndYear(title: string, isLenient = false): { title: st
     }
   }
 
-  return { title: '', year: null };
+  return { title: title.trim(), year: null };
 }
 
 export function parseMovieMatchCollection(title: string) {

@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import path from 'path';
+import { extname } from 'path';
 
 import { parseResolution, Resolution } from './resolution';
 import { Source, parseSourceGroups, parseSource } from './source';
@@ -359,13 +359,14 @@ export function parseQuality(title: string): QualityModel {
 
   // make vague assumptions based on file extension
   if (result.source === null) {
-    const extension = path
-      .extname(title)
+    const extension = extname(title)
       .trim()
       .toLowerCase();
-    result.source = getSourceForExtension(extension);
-    result.resolution = getResolutionForExtension(extension);
-    result.qualitySource = QualitySource.EXTENSION;
+    if (extension) {
+      result.source = getSourceForExtension(extension);
+      result.resolution = getResolutionForExtension(extension);
+      result.qualitySource = QualitySource.EXTENSION;
+    }
   }
 
   return result;

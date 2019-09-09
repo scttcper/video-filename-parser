@@ -11,7 +11,7 @@ const noEditions: Edition = {
   limited: false,
 };
 
-describe('parseEditionText', () => {
+describe('filenameParse', () => {
   const cases: Array<[string, ParsedFilename]> = [
     [
       'Whats.Eating.Gilbert.Grape.1993.720p.BluRay.x264-SiNNERS',

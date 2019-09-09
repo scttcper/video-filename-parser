@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>@ctrl/video-filename-parser</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css" />
+    <link
+      rel="stylesheet"
+      href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css"
+    />
+    <style>
+      body {
+        background-color: #fcfffd;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+          'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+          'Noto Color Emoji';
+        line-height: 1.5;
+        font-weight: 400;
+        color: #282c30;
+      }
+
+      h1 {
+        padding-top: 1em;
+        margin-bottom: 0.8rem;
+        font-weight: 500;
+        line-height: 1.2;
+      }
+
+      h4 {
+        margin-bottom: 0.8rem;
+        font-weight: 500;
+        line-height: 1.2;
+      }
+
+      .lead {
+        font-size: 2rem;
+        font-weight: 300;
+      }
+
+      a {
+        text-decoration: underline;
+      }
+
+      @media (min-width: 768px) {
+        .container {
+          width: 600px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="column">
+          <section>
+            <h1>video-filename-parser</h1>
+            <p class="lead">Parse release names and files / folders for media metadata.</p>
+          </section>
+
+          <section>
+            <h4>Install</h4>
+            <pre><code>npm install @ctrl/video-filename-parser</code></pre>
+          </section>
+
+          <section>
+            <h4>Usage</h4>
+            <p><a href="https://github.com/TypeCtrl/video-filename-parser#readme">Readme</a></p>
+          </section>
+
+          <section>
+            <h4>Demo</h4>
+            <label for="color">Title:</label>
+            <textarea type="text" style="width: 100%" placeholder="input" id="input"></textarea>
+            <label for="color">Output:</label>
+            <pre><code id="output"></code></pre>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <script src="bundle.js"></script>
+  </body>
+</html>
