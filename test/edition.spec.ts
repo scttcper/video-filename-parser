@@ -46,6 +46,7 @@ describe('parseEditionText', () => {
     ['Management.LIMITED.720p.BluRay.x264-iNFAMOUS', 'LIMITED'],
     // TODO: somehow exlude restored at beginning of title
     ['Restored S03E05 Mystery of the English Cottage XviD-AFGLoading', 'Restored'],
+    ['Alita Battle Angel 2019 INTERNAL HDR 2160p WEB H265-DEFLATE', 'INTERNAL HDR'],
   ];
   test.each(cases)('should get edition of "%s"', (title, expected) => {
     expect(parseEditionText(title)).toBe(expected);
@@ -77,6 +78,7 @@ describe('parseEdition', () => {
     ['2001: A Space Odyssey (Extended Directors Cut FanEdit) 1968 Bluray 1080p', { extended: true, fanEdit: true, directors: true }],
     ['Prometheus 50th Anniversary Edition 2012.mkv', { remastered: true }],
     ['X-Men Days of Future Past 2014 THE ROGUE CUT BRRip XviD AC3-EVO', { extended: true }],
+    ['Alita Battle Angel 2019 INTERNAL HDR 2160p WEB H265-DEFLATE', { internal: true, hdr: true }],
   ];
   test.each(cases)('should get edition of "%s"', (title, expected) => {
     const result = parseEdition(title);

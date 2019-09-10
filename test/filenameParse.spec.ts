@@ -9,6 +9,8 @@ const noEditions: Edition = {
   theatrical: false,
   unrated: false,
   limited: false,
+  hdr: false,
+  internal: false,
 };
 
 describe('filenameParse', () => {
