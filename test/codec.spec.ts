@@ -17,8 +17,9 @@ describe('parseCodec', () => {
     ['The Incredibles 2004 BluRay x264-jlw', Codec.X264],
     ['Jack Reacher 2012 720p BluRay X264-AMIABLE', Codec.X264],
     ['Super Troopers 2 2018 1080p WEB-DL H264 AC3-EVO', Codec.X264],
+    ['The.Middle.720p.HEVC-MeGusta-Pre', Codec.X265],
   ];
   test.each(cases)('should parse codec for "%s"', (title, expected) => {
-    expect(parseCodec(title)).toBe(expected);
+    expect(parseCodec(title).codec).toBe(expected);
   });
 });

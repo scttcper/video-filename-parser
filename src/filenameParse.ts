@@ -21,7 +21,7 @@ export interface ParsedFilename {
 export function filenameParse(name: string): ParsedFilename {
   const { title, year } = parseTitleAndYear(name);
   const edition = parseEdition(name);
-  const codec = parseCodec(name);
+  const { codec } = parseCodec(name);
   const group = parseGroup(name);
   const quality = parseQuality(name);
 

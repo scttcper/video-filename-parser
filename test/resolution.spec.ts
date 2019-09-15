@@ -14,6 +14,6 @@ describe('parseResolution', () => {
     ['27.Dresses.2008.REMUX.2160p.Bluray.AVC.DTS-HR.MA.5.1-LEGi0N', Resolution.R2160P],
   ];
   test.each(cases)('should parse %s', (title, expected) => {
-    expect(parseResolution(title)).toBe(expected);
+    expect(parseResolution(title).resolution).toBe(expected);
   });
 });

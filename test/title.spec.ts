@@ -35,8 +35,10 @@ describe('parseTitle', () => {
     ['Leaving Jeruselem by Railway (1897) [DVD].mp4', { title: 'Leaving Jeruselem by Railway', year: '1897' }],
     ['Climax.2018.1080p.AMZN.WEB-DL.DD5.1.H.264-NTG', { title: 'Climax', year: '2018' }],
     ['Movie.Title.Imax.2018.1080p.AMZN.WEB-DL.DD5.1.H.264-NTG', { title: 'Movie Title', year: '2018' }],
+    ['The.Middle.720p.HEVC.x265-MeGusta-Pre', { title: 'The Middle', year: null }],
+    ['The.Middle.HEVC.x265-MeGusta-Pre', { title: 'The Middle', year: null }],
   ];
-  test.each(cases)('should parse %s', (title, expected) => {
+  test.each(cases)('should parse title %s', (title, expected) => {
     expect(parseTitleAndYear(title, true)).toEqual(expected);
   });
 });

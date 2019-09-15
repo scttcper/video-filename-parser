@@ -1,3 +1,6 @@
+import { parseResolution } from './resolution';
+import { parseCodec } from './codec';
+
 const movieTitleRegex = [
   // Special, Despecialized, etc. Edition Movies, e.g: Mission.Impossible.3.Special.Edition.2011
   /^(?<title>(?![([]).+?)?(?:(?:[-_\W](?<![)[!]))*\(?\b(?<edition>(((Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Ultimate|Final(?=(.(Cut|Edition|Version)))|Extended|Rogue|Special|Despecialized|\d{2,3}(th)?.Anniversary)(.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit))?|((Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit|Edition|Restored|((2|3|4)in1))))))\b\)?.{1,3}(?<year>(1(8|9)|20)\d{2}(?!p|i|\d+|\]|\W\d+)))+(\W+|_|$)(?!\\)/i,
@@ -14,7 +17,7 @@ const movieTitleRegex = [
 const websitePrefixRegex = /^\[\s*[a-z]+(\.[a-z]+)+\s*\][- ]*|^www\.[a-z]+\.(?:com|net)[ -]*/i;
 const cleanTorrentSuffixRegex = /\[(?:ettv|rartv|rarbg|cttv)\]$/i;
 
-const simpleTitleRegex = /\s*(?:480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|[xh][\W_]?26[45]|DD\W?5\W1|[<>?*:|]|848x480|1280x720|1920x1080|(8|10)b(it)?)/i;
+const simpleTitleRegex = /\s*(?:480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|HVEC|[xh][\W_]?26[45]|DD\W?5\W1|[<>?*:|]|848x480|1280x720|1920x1080|(8|10)b(it)?)/i;
 // const simpleReplaceTitle = /\s*(?:[<>?*:|])/i;
 
 const requestInfoRegex = /\[.+?\]/i;
@@ -42,6 +45,18 @@ export function parseTitleAndYear(title: string, isLenient = false): { title: st
 
       return { title: result, year };
     }
+  }
+
+  // year not found, attack using codec or resolution
+  // attempt to parse using the first found artifact like codec
+  const resolutionText = parseResolution(title).source;
+  const resolutionPosition = title.indexOf(resolutionText || '');
+  const codecTest = parseCodec(title).source;
+  const codecPosition = title.indexOf(codecTest || '');
+  const positions = [resolutionPosition, codecPosition].filter(x => x > 0);
+  if (positions.length) {
+    const firstPosition = Math.min(...positions);
+    return { title: parseMovieMatchCollection(title.slice(0, firstPosition)) || '', year: null };
   }
 
   return { title: title.trim(), year: null };

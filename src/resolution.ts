@@ -16,17 +16,17 @@ const resolutionExp = new RegExp(
   'i',
 );
 
-export function parseResolution(title: string): Resolution | null {
+export function parseResolution(title: string): { resolution: Resolution | null; source: string | null } {
   const result = resolutionExp.exec(title);
   if (!result || !result.groups) {
-    return null;
+    return { resolution: null, source: null };
   }
 
   for (const key of Object.keys(Resolution)) {
     if (result.groups[key] !== undefined) {
-      return Resolution[key];
+      return { resolution: Resolution[key], source: result.groups[key] };
     }
   }
 
-  return null;
+  return { resolution: null, source: null };
 }

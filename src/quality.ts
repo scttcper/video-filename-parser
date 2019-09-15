@@ -224,10 +224,10 @@ export function parseQuality(title: string): QualityModel {
     .toLowerCase();
 
   const revision = parseQualityModifyers(title);
-  const resolution = parseResolution(normalizedTitle);
+  const { resolution } = parseResolution(normalizedTitle);
   const sourceGroups = parseSourceGroups(normalizedTitle);
   const source = parseSource(normalizedTitle);
-  const codec = parseCodec(title);
+  const { codec } = parseCodec(title);
 
   const result: QualityModel = {
     source,

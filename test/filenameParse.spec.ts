@@ -57,6 +57,20 @@ describe('filenameParse', () => {
         qualitySource: QualitySource.NAME,
       },
     ],
+    [
+      'Spider-Man Far from Home.2019.1080p.HDRip.X264.AC3-EVO',
+      {
+        edition: noEditions,
+        resolution: Resolution.R1080P,
+        source: Source.WEBDL,
+        title: 'Spider-Man Far from Home',
+        year: '2019',
+        codec: Codec.X264,
+        group: 'EVO',
+        revision: { version: 1, real: 0 },
+        qualitySource: QualitySource.NAME,
+      },
+    ],
   ];
   test.each(cases)('should get filename of "%s"', (title, expected) => {
     expect(filenameParse(title)).toEqual(expected);

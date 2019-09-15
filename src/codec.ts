@@ -5,6 +5,7 @@ const h264Exp = /(?<h264>h264)/i;
 const xvidhdExp = /(?<xvidhd>XvidHD)/i;
 const xvidExp = /(?<xvid>X-?vid)/i;
 const divxExp = /(?<divx>divx)/i;
+const hevcExp = /(?<hevc>HEVC)/i;
 
 const codecExp = new RegExp(
   [
@@ -15,6 +16,7 @@ const codecExp = new RegExp(
     xvidhdExp.source,
     xvidExp.source,
     divxExp.source,
+    hevcExp.source,
   ].join('|'),
   'i',
 );
@@ -25,25 +27,25 @@ export enum Codec {
   XVID = 'xvid',
 }
 
-export function parseCodec(title: string): Codec | null {
+export function parseCodec(title: string): { codec: Codec | null; source: string | null } {
   const result = codecExp.exec(title);
   if (!result || !result.groups) {
-    return null;
+    return { codec: null, source: null };
   }
 
   const { groups } = result;
 
-  if (groups.x265 || groups.h265) {
-    return Codec.X265;
+  if (groups.x265 || groups.h265 || groups.hevc) {
+    return { codec: Codec.X265, source: groups.x265 || groups.h265 || groups.hevc };
   }
 
   if (groups.x264 || groups.h264) {
-    return Codec.X264;
+    return { codec: Codec.X264, source: groups.x264 || groups.h264 };
   }
 
   if (groups.xvidhd || groups.xvid || groups.divx) {
-    return Codec.XVID;
+    return { codec: Codec.XVID, source: groups.xvidhd || groups.xvid || groups.divx };
   }
 
-  return null;
+  return { codec: null, source: null };
 }
