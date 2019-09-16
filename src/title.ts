@@ -1,5 +1,5 @@
 import { parseResolution } from './resolution';
-import { parseCodec } from './codec';
+import { parseVideoCodec } from './codec';
 
 const movieTitleRegex = [
   // Special, Despecialized, etc. Edition Movies, e.g: Mission.Impossible.3.Special.Edition.2011
@@ -51,7 +51,7 @@ export function parseTitleAndYear(title: string, isLenient = false): { title: st
   // attempt to parse using the first found artifact like codec
   const resolutionText = parseResolution(title).source;
   const resolutionPosition = title.indexOf(resolutionText || '');
-  const codecTest = parseCodec(title).source;
+  const codecTest = parseVideoCodec(title).source;
   const codecPosition = title.indexOf(codecTest || '');
   const positions = [resolutionPosition, codecPosition].filter(x => x > 0);
   if (positions.length) {

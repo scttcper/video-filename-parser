@@ -1,4 +1,5 @@
-import { filenameParse, ParsedFilename, Source, Resolution, Edition, Codec, QualitySource } from '../src';
+import { filenameParse, ParsedFilename, Source, Resolution, Edition, VideoCodec, QualitySource } from '../src';
+import { AudioCodec } from '../src/audioCodec';
 
 const noEditions: Edition = {
   directors: false,
@@ -23,7 +24,8 @@ describe('filenameParse', () => {
         source: Source.BLURAY,
         title: 'Whats Eating Gilbert Grape',
         year: '1993',
-        codec: Codec.X264,
+        videoCodec: VideoCodec.X264,
+        audioCodec: null,
         group: 'SiNNERS',
         revision: { version: 1, real: 0 },
         qualitySource: QualitySource.NAME,
@@ -37,7 +39,8 @@ describe('filenameParse', () => {
         source: Source.BLURAY,
         title: 'Timecop',
         year: '1994',
-        codec: Codec.X264,
+        videoCodec: VideoCodec.X264,
+        audioCodec: null,
         group: 'Japhson',
         revision: { version: 2, real: 0 },
         qualitySource: QualitySource.NAME,
@@ -51,7 +54,8 @@ describe('filenameParse', () => {
         source: Source.BLURAY,
         title: 'This is 40',
         year: '2012',
-        codec: Codec.X264,
+        videoCodec: VideoCodec.X264,
+        audioCodec: null,
         group: 'Felony',
         revision: { version: 2, real: 0 },
         qualitySource: QualitySource.NAME,
@@ -65,7 +69,8 @@ describe('filenameParse', () => {
         source: Source.WEBDL,
         title: 'Spider-Man Far from Home',
         year: '2019',
-        codec: Codec.X264,
+        videoCodec: VideoCodec.X264,
+        audioCodec: null,
         group: 'EVO',
         revision: { version: 1, real: 0 },
         qualitySource: QualitySource.NAME,

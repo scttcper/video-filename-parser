@@ -21,13 +21,13 @@ const codecExp = new RegExp(
   'i',
 );
 
-export enum Codec {
+export enum VideoCodec {
   X265 = 'x265',
   X264 = 'x264',
   XVID = 'xvid',
 }
 
-export function parseCodec(title: string): { codec: Codec | null; source: string | null } {
+export function parseVideoCodec(title: string): { codec: VideoCodec | null; source: string | null } {
   const result = codecExp.exec(title);
   if (!result || !result.groups) {
     return { codec: null, source: null };
@@ -36,15 +36,15 @@ export function parseCodec(title: string): { codec: Codec | null; source: string
   const { groups } = result;
 
   if (groups.x265 || groups.h265 || groups.hevc) {
-    return { codec: Codec.X265, source: groups.x265 || groups.h265 || groups.hevc };
+    return { codec: VideoCodec.X265, source: groups.x265 || groups.h265 || groups.hevc };
   }
 
   if (groups.x264 || groups.h264) {
-    return { codec: Codec.X264, source: groups.x264 || groups.h264 };
+    return { codec: VideoCodec.X264, source: groups.x264 || groups.h264 };
   }
 
   if (groups.xvidhd || groups.xvid || groups.divx) {
-    return { codec: Codec.XVID, source: groups.xvidhd || groups.xvid || groups.divx };
+    return { codec: VideoCodec.XVID, source: groups.xvidhd || groups.xvid || groups.divx };
   }
 
   return { codec: null, source: null };
