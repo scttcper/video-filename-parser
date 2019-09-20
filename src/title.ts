@@ -1,6 +1,7 @@
 import { parseResolution } from './resolution';
 import { parseVideoCodec } from './videoCodec';
-import { parseAudioChannels, parseAudioCodec } from './audioCodec';
+import { parseAudioCodec } from './audioCodec';
+import { parseAudioChannels } from './audioChannels';
 
 const movieTitleRegex = [
   // Special, Despecialized, etc. Edition Movies, e.g: Mission.Impossible.3.Special.Edition.2011
