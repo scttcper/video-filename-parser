@@ -3,7 +3,7 @@ import { extname } from 'path';
 
 import { parseResolution, Resolution } from './resolution';
 import { Source, parseSourceGroups, parseSource } from './source';
-import { parseCodec, Codec } from './codec';
+import { parseVideoCodec, VideoCodec } from './videoCodec';
 import { getSourceForExtension, getResolutionForExtension } from './extensions';
 
 const properRegex = /\b(?<proper>proper|repack|rerip)\b/i;
@@ -227,7 +227,7 @@ export function parseQuality(title: string): QualityModel {
   const { resolution } = parseResolution(normalizedTitle);
   const sourceGroups = parseSourceGroups(normalizedTitle);
   const source = parseSource(normalizedTitle);
-  const { codec } = parseCodec(title);
+  const { codec } = parseVideoCodec(title);
 
   const result: QualityModel = {
     source,
@@ -257,7 +257,7 @@ export function parseQuality(title: string): QualityModel {
   if (source !== null) {
     if (sourceGroups.bluray) {
       result.source = Source.BLURAY;
-      if (codec === Codec.XVID) {
+      if (codec === VideoCodec.XVID) {
         result.resolution = Resolution.R480P;
         result.source = Source.DVD;
       }
@@ -316,7 +316,7 @@ export function parseQuality(title: string): QualityModel {
     }
 
     if (sourceGroups.bdrip || sourceGroups.brrip) {
-      if (codec === Codec.XVID) {
+      if (codec === VideoCodec.XVID) {
         result.resolution = Resolution.R480P;
         result.source = Source.DVD;
         return result;
@@ -352,7 +352,11 @@ export function parseQuality(title: string): QualityModel {
     }
   }
 
-  if (resolution === Resolution.R2160P || resolution === Resolution.R1080P || resolution === Resolution.R720P) {
+  if (
+    resolution === Resolution.R2160P ||
+    resolution === Resolution.R1080P ||
+    resolution === Resolution.R720P
+  ) {
     result.source = Source.WEBDL;
     return result;
   }
