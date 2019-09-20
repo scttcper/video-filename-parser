@@ -1,4 +1,4 @@
-export * from './codec';
+export * from './videoCodec';
 export * from './edition';
 export * from './filenameParse';
 export * from './language';

@@ -3,7 +3,7 @@ import { extname } from 'path';
 
 import { parseResolution, Resolution } from './resolution';
 import { Source, parseSourceGroups, parseSource } from './source';
-import { parseVideoCodec, VideoCodec } from './codec';
+import { parseVideoCodec, VideoCodec } from './videoCodec';
 import { getSourceForExtension, getResolutionForExtension } from './extensions';
 
 const properRegex = /\b(?<proper>proper|repack|rerip)\b/i;
@@ -352,7 +352,11 @@ export function parseQuality(title: string): QualityModel {
     }
   }
 
-  if (resolution === Resolution.R2160P || resolution === Resolution.R1080P || resolution === Resolution.R720P) {
+  if (
+    resolution === Resolution.R2160P ||
+    resolution === Resolution.R1080P ||
+    resolution === Resolution.R720P
+  ) {
     result.source = Source.WEBDL;
     return result;
   }
