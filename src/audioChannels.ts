@@ -15,7 +15,6 @@ export enum Channels {
   MONO = 'mono',
 }
 
-
 export function parseAudioChannels(title: string): { channels: Channels | null; source: string | null } {
   const channelResult = channelExp.exec(title);
   if (!channelResult || !channelResult.groups) {
