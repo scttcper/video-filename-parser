@@ -16,6 +16,10 @@ describe('parseAudioCodec', () => {
       'The.Daily.Show.2015.07.01.Kirsten.Gillibrand.Extended.720p.Comedy.Central.WEBRip.AAC2.0.x264-BTW.mkv',
       { codec: AudioCodec.AAC, source: 'AAC' },
     ],
+    [
+      'Behind the Candelabra 2013 BDRip 1080p DTS-HD extra-HighCode',
+      { codec: AudioCodec.DTSHD, source: 'DTS-HD' },
+    ],
   ];
   it.each(audioChannelCases)('should parse channel "%s"', (title, channel) => {
     expect(parseAudioCodec(title)).toEqual(channel);
