@@ -16,15 +16,9 @@ jobs:
             - ~/.npm
       - run:
           name: test
-          command: |
-            mkdir -p ~/reports
-            npm run test:ci
-          environment:
-            JEST_JUNIT_OUTPUT: "~/reports/test-results.xml"
+          command: npm run test:ci --testResultsProcessor="jest-junit"
       - store_test_results:
-          path: ~/reports
-      - store_artifacts:
-          path: ~/reports
+          path: reports
       - run:
           name: lint
           command: npm run lint

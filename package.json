@@ -23,7 +23,7 @@
     "build": "tsc -p tsconfig.build.json",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:ci": "jest --ci --runInBand --reporters=default --reporters=jest-junit --coverage",
+    "test:ci": "jest --ci --runInBand --reporters=default --coverage",
     "semantic-release": "semantic-release"
   },
   "dependencies": {},
