@@ -16,13 +16,15 @@ jobs:
             - ~/.npm
       - run:
           name: test
-          command: npm run test:ci
+          command: |
+            mkdir -p ~/reports
+            npm run test:ci
           environment:
-            JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
+            JEST_JUNIT_OUTPUT: "~/reports/test-results.xml"
       - store_test_results:
-          path: reports/junit
+          path: ~/reports
       - store_artifacts:
-          path: reports/junit
+          path: ~/reports
       - run:
           name: lint
           command: npm run lint
