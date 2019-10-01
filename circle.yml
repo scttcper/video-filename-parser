@@ -16,9 +16,7 @@ jobs:
             - ~/.npm
       - run:
           name: test
-          command: |
-            mkdir -p ./reports
-            npm run test:ci --testResultsProcessor="jest-junit"
+          command: npm run test:ci
           environment:
             JEST_JUNIT_OUTPUT_DIR: "./reports"
             JEST_JUNIT_OUTPUT_NAME: "test-results.xml"
