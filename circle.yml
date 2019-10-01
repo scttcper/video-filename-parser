@@ -18,9 +18,11 @@ jobs:
           name: test
           command: npm run test:ci
           environment:
-            JEST_JUNIT_OUTPUT: "./reports/junit/results.xml"
+            JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
       - store_test_results:
-          path: ./reports
+          path: reports/junit
+      - store_artifacts:
+          path: reports/junit
       - run:
           name: lint
           command: npm run lint
