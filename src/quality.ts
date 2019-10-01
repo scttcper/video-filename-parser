@@ -366,7 +366,7 @@ export function parseQuality(title: string): QualityModel {
     const extension = extname(title)
       .trim()
       .toLowerCase();
-    if (extension) {
+    if (extension.length > 0) {
       result.source = getSourceForExtension(extension);
       result.resolution = getResolutionForExtension(extension);
       result.qualitySource = QualitySource.EXTENSION;

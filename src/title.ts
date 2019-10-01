@@ -40,7 +40,7 @@ export function parseTitleAndYear(
 
   for (const exp of regexes) {
     const match = exp.exec(simpleTitle);
-    if (match && match.groups) {
+    if (match !== null && match.groups !== undefined) {
       const result = parseMovieMatchCollection(match.groups.title);
       if (result === null) {
         continue;
