@@ -51,7 +51,7 @@ const reportTitleExp = [
   /^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])(?!\W+[0-3][0-9]).+?(?:s?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+)))(?:[ex](?<episode>(?<!\d+)(?:\d{1,3})(?!\d+)))/i,
 
   // Episodes with a title, Single episodes (S01E05, 1x05, etc) & Multi-episode (S01E05E06, S01E05-06, S01E05 E06, etc)
-  /^(?<title>.+?)(?:(?:[-_\W](?<![()[!]))+S?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:[ex]|\W[ex]){1,2}(?<episode>\d{2,3}(?!\d+))(?:(?:-|[ex]|\W[ex]|_){1,2}(?<episode1>\d{2,3}(?!\d+)))*)\W?(?!\\)/i,
+  // /^(?<title>.+?)(?:(?:[-_\W](?<![()[!]))+S?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:[ex]|\W[ex]){1,2}(?<episode>\d{2,3}(?!\d+))(?:(?:-|[ex]|\W[ex]|_){1,2}(?<episode1>\d{2,3}(?!\d+)))*)\W?(?!\\)/i,
 
   // Episodes with a title, 4 digit season number, Single episodes (S2016E05, etc) & Multi-episode (S2016E05E06, S2016E05-06, S2016E05 E06, etc)
   /^(?<title>.+?)(?:(?:[-_\W](?<![()[!]))+S(?<season>(?<!\d+)(?:\d{4})(?!\d+))(?:e|\We|_){1,2}(?<episode>\d{2,3}(?!\d+))(?:(?:-|e|\We|_){1,2}(?<episode1>\d{2,3}(?!\d+)))*)\W?(?!\\)/i,
@@ -192,12 +192,11 @@ export function parseSeason(title: string) {
   }
 
   for (const exp of reportTitleExp) {
-    console.log(exp);
     const match = exp.exec(simpleTitle);
     if (match !== null && match.groups !== undefined) {
       const result = parseMatchCollection(match, simpleTitle);
       console.log(result);
-      // return result;
+      return result;
     }
   }
 
@@ -358,6 +357,9 @@ export function parseMatchCollection(match: RegExpExecArray, simpleTitle: string
   } else {
     result.releaseTokens = simpleTitle.substring(lastSeasonEpisodeStringIndex);
   }
+
+  result.seriesTitle = seriesName;
+  // TODO: seriesTitleInfo
 
   return result;
 }
