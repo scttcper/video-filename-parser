@@ -2,6 +2,7 @@ import { parseResolution } from './resolution';
 import { parseVideoCodec } from './videoCodec';
 import { parseAudioCodec } from './audioCodec';
 import { parseAudioChannels } from './audioChannels';
+import { simplifyTitle } from './simplifyTitle';
 
 const movieTitleRegex = [
   // Special, Despecialized, etc. Edition Movies, e.g: Mission.Impossible.3.Special.Edition.2011
@@ -16,12 +17,6 @@ const movieTitleRegex = [
   /^(?<title>.+?)?(?:(?:[-_\W](?<![)[!]))*(?<year>(1(8|9)|20)\d{2}(?!p|i|\d+|\]|\W\d+)))+(\W+|_|$)(?!\\)/i,
 ];
 
-const websitePrefixRegex = /^\[\s*[a-z]+(\.[a-z]+)+\s*\][- ]*|^www\.[a-z]+\.(?:com|net)[ -]*/i;
-const cleanTorrentSuffixRegex = /\[(?:ettv|rartv|rarbg|cttv)\]$/i;
-
-const simpleTitleRegex = /\s*(?:480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|HVEC|[xh][\W_]?26[45]|DD\W?5\W1|[<>?*:|]|848x480|1280x720|1920x1080|(8|10)b(it)?)/i;
-// const simpleReplaceTitle = /\s*(?:[<>?*:|])/i;
-
 const requestInfoRegex = /\[.+?\]/i;
 const reportMovieTitleLenientRegex = /^(?<title>(?![([]).+?)((\W|_))(?:(?<!(19|20)\d{2}.)(German|French|TrueFrench))(.+?)(?=((19|20)\d{2}|$))(?<year>(19|20)\d{2}(?!p|i|\d+|\]|\W\d+))?(\W+|_|$)(?!\\)/i;
 
@@ -29,9 +24,7 @@ export function parseTitleAndYear(
   title: string,
   isLenient = false,
 ): { title: string; year: string | null } {
-  let simpleTitle = title.replace(simpleTitleRegex, '');
-  simpleTitle = simpleTitle.replace(websitePrefixRegex, '');
-  simpleTitle = simpleTitle.replace(cleanTorrentSuffixRegex, '');
+  const simpleTitle = simplifyTitle(title);
 
   const regexes = [...movieTitleRegex];
   if (isLenient) {
