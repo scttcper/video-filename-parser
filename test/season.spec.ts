@@ -1,4 +1,4 @@
-import { parseSeason } from '../src';
+import { parseSeason, Season } from '../src';
 
 describe('season', () => {
   const fullSeasonRelease: Array<[string, string, number]> = [
@@ -20,8 +20,15 @@ describe('season', () => {
     ['My.Series.S2014.720p.HDTV.x264-ME', 'My Series', 2014],
   ];
   it.each(fullSeasonRelease)('should parse full season release "%s"', (postTitle, title, season) => {
-    const result = parseSeason(postTitle);
+    const result = parseSeason(postTitle) as Season;
     expect(result.seasonNumber).toBe(season);
     expect(result.seriesTitle).toBe(title);
+  });
+
+  it('should parse multi season release', () => {
+    const result = parseSeason('The Wire S01-05 WS BDRip X264-REWARD-No Rars') as Season;
+    expect(result.seasonNumber).toBe(1);
+    expect(result.seriesTitle).toBe('The Wire');
+    expect(result.isMultiSeason).toBe(true);
   });
 });

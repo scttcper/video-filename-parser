@@ -175,7 +175,29 @@ const reportTitleExp = [
 const requestInfoExp = /^(?:\[.+?\])+/;
 const sixDigitAirDateMatchExp = /"(?<=[_.-])(?<airdate>(?<!\d)(?<airyear>[1-9]\d{1})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))(?=[_.-])/i;
 
-export function parseSeason(title: string) {
+export interface Season {
+  releaseTitle: string;
+  seriesTitle: string;
+  seriesTitleInfo: any;
+  quality: any;
+  seasonNumber: number;
+  episodeNumbers: number[];
+  absoluteEpisodeNumbers: number[];
+  specialAbsoluteEpisodeNumbers: number[];
+  airDate: Date | null;
+  // Language: Language;
+  fullSeason: boolean;
+  isPartialSeason: boolean;
+  isMultiSeason: boolean;
+  isSeasonExtra: boolean;
+  special: boolean;
+  releaseGroup: string;
+  releaseHash: string;
+  seasonPart: number;
+  // ReleaseTokens:
+}
+
+export function parseSeason(title: string): Season | null {
   let simpleTitle = simplifyTitle(title);
 
   // parse daily episodes with mmddyy eg `At.Midnight.140722.720p.HDTV.x264-YesTV`
@@ -195,8 +217,31 @@ export function parseSeason(title: string) {
     const match = exp.exec(simpleTitle);
     if (match !== null && match.groups !== undefined) {
       const result = parseMatchCollection(match, simpleTitle);
-      console.log(result);
-      return result;
+
+      if (result === null) {
+        continue;
+      }
+
+      console.log({result});
+      return {
+        releaseTitle: title,
+        seriesTitle: result.seriesName,
+        seriesTitleInfo: 0,
+        quality: 0,
+        seasonNumber: result.seasonNumber || 0,
+        episodeNumbers: [],
+        absoluteEpisodeNumbers: [],
+        specialAbsoluteEpisodeNumbers: [],
+        airDate: null,
+        fullSeason: false,
+        isPartialSeason: false,
+        isMultiSeason: false,
+        isSeasonExtra: false,
+        special: false,
+        releaseGroup: '',
+        releaseHash: '',
+        seasonPart: 0,
+      };
     }
   }
 
@@ -208,7 +253,27 @@ const indexOfEnd = (str1: string, str2: string): number => {
   return io === -1 ? -1 : io + str2.length;
 };
 
-export function parseMatchCollection(match: RegExpExecArray, simpleTitle: string) {
+export interface ParsedMatchCollection {
+  seriesName: string;
+  seriesTitle?: string;
+  seasonNumber?: number;
+  isMultiSeason?: boolean;
+  episodeNumbers?: number[];
+  specialAbsoluteEpisodeNumbers?: number[];
+  special?: boolean;
+  absoluteEpisodeNumbers?: number[];
+  isSeasonExtra?: boolean;
+  seasonPart?: number;
+  isPartialSeason?: boolean;
+  fullSeason?: boolean;
+  airDate?: Date;
+  releaseTokens?: string;
+}
+
+export function parseMatchCollection(
+  match: RegExpExecArray,
+  simpleTitle: string,
+): ParsedMatchCollection | null {
   const { groups } = match;
   if (groups === undefined) {
     throw new Error('No match');
@@ -220,7 +285,8 @@ export function parseMatchCollection(match: RegExpExecArray, simpleTitle: string
     .replace(/_/g, ' ')
     .replace(requestInfoExp, '')
     .trim();
-  const result: any = {
+
+  const result: ParsedMatchCollection = {
     seriesName,
   };
 
@@ -275,7 +341,7 @@ export function parseMatchCollection(match: RegExpExecArray, simpleTitle: string
           return null;
         }
 
-        result.specialAbsoluteEpisodeNumbers = first;
+        result.specialAbsoluteEpisodeNumbers = [first];
         result.special = true;
 
         lastSeasonEpisodeStringIndex = Math.max(
@@ -312,7 +378,7 @@ export function parseMatchCollection(match: RegExpExecArray, simpleTitle: string
       }
     }
 
-    if (result.absoluteEpisodeCaptures && !result.episodeNumbers) {
+    if (absoluteEpisodeCaptures.length !== 0 && !result.episodeNumbers) {
       result.seasonNumber = 0;
     }
   } else {
@@ -367,4 +433,4 @@ export function parseMatchCollection(match: RegExpExecArray, simpleTitle: string
 // parseSeason("The.Handmaid's.Tale.S01E01.Offred.1080p.HULU.WEBRip.DDP5.1.H.264-NTb.mkv");
 // parseSeason("The.Handmaid's.Tale.S12E12.Offred.1080p.HULU.WEBRip.DDP5.1.H.264-NTb.mkv");
 // parseSeason('stephen.colbert.2019.10.07.neil.degrasse.tyson.1080p.hdtv.x264-twerk.mkv');
-parseSeason('Holmes.Makes.It.Right.S02.720p.HDTV.AAC5.1.x265-NOGRP');
+// parseSeason('Holmes.Makes.It.Right.S02.720p.HDTV.AAC5.1.x265-NOGRP');
