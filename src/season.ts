@@ -222,22 +222,26 @@ export function parseSeason(title: string): Season | null {
         continue;
       }
 
-      console.log({result});
+      if (result.fullSeason && result.releaseTokens && /Special/i.test(result.releaseTokens)) {
+        result.fullSeason = false;
+        result.special = true;
+      }
+
       return {
         releaseTitle: title,
         seriesTitle: result.seriesName,
         seriesTitleInfo: 0,
         quality: 0,
         seasonNumber: result.seasonNumber || 0,
-        episodeNumbers: [],
-        absoluteEpisodeNumbers: [],
-        specialAbsoluteEpisodeNumbers: [],
+        episodeNumbers: result.episodeNumbers || [],
+        absoluteEpisodeNumbers: result.absoluteEpisodeNumbers || [],
+        specialAbsoluteEpisodeNumbers: result.specialAbsoluteEpisodeNumbers || [],
         airDate: null,
-        fullSeason: false,
+        fullSeason: result.fullSeason || false,
         isPartialSeason: false,
-        isMultiSeason: false,
+        isMultiSeason: result.isMultiSeason || false,
         isSeasonExtra: false,
-        special: false,
+        special: result.special || false,
         releaseGroup: '',
         releaseHash: '',
         seasonPart: 0,
@@ -304,6 +308,7 @@ export function parseMatchCollection(
         return Number(x);
       });
 
+    console.log({ seasons })
     if (seasons.length === 0) {
       seasons.push(1);
     }

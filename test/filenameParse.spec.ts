@@ -30,6 +30,9 @@ describe('filenameParse', () => {
         group: 'SiNNERS',
         revision: { version: 1, real: 0 },
         qualitySource: QualitySource.NAME,
+        season: null,
+        episodeNumbers: null,
+        isTv: false,
       },
     ],
     [
@@ -46,6 +49,9 @@ describe('filenameParse', () => {
         group: 'Japhson',
         revision: { version: 2, real: 0 },
         qualitySource: QualitySource.NAME,
+        season: null,
+        episodeNumbers: null,
+        isTv: false,
       },
     ],
     [
@@ -62,6 +68,9 @@ describe('filenameParse', () => {
         group: 'Felony',
         revision: { version: 2, real: 0 },
         qualitySource: QualitySource.NAME,
+        season: null,
+        episodeNumbers: null,
+        isTv: false,
       },
     ],
     [
@@ -78,10 +87,20 @@ describe('filenameParse', () => {
         group: 'EVO',
         revision: { version: 1, real: 0 },
         qualitySource: QualitySource.NAME,
+        season: null,
+        episodeNumbers: null,
+        isTv: false,
       },
     ],
   ];
   test.each(cases)('should get filename of "%s"', (title, expected) => {
     expect(filenameParse(title)).toEqual(expected);
+  });
+
+  it('should parse tv shows', () => {
+    const result = filenameParse('Its Always Sunny in Philadelphia S14E04 720p WEB H264-METCON', true);
+    expect(result.title).toBe('Its Always Sunny in Philadelphia');
+    expect(result.season).toBe(14);
+    expect(result.episodeNumbers).toEqual([4]);
   });
 });

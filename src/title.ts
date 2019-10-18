@@ -2,7 +2,7 @@ import { parseResolution } from './resolution';
 import { parseVideoCodec } from './videoCodec';
 import { parseAudioCodec } from './audioCodec';
 import { parseAudioChannels } from './audioChannels';
-import { simplifyTitle } from './simplifyTitle';
+import { simplifyTitle, releaseTitleCleaner } from './simplifyTitle';
 
 const movieTitleRegex = [
   // Special, Despecialized, etc. Edition Movies, e.g: Mission.Impossible.3.Special.Edition.2011
@@ -17,7 +17,6 @@ const movieTitleRegex = [
   /^(?<title>.+?)?(?:(?:[-_\W](?<![)[!]))*(?<year>(1(8|9)|20)\d{2}(?!p|i|\d+|\]|\W\d+)))+(\W+|_|$)(?!\\)/i,
 ];
 
-const requestInfoRegex = /\[.+?\]/i;
 const reportMovieTitleLenientRegex = /^(?<title>(?![([]).+?)((\W|_))(?:(?<!(19|20)\d{2}.)(German|French|TrueFrench))(.+?)(?=((19|20)\d{2}|$))(?<year>(19|20)\d{2}(?!p|i|\d+|\]|\W\d+))?(\W+|_|$)(?!\\)/i;
 
 export function parseTitleAndYear(
@@ -34,7 +33,7 @@ export function parseTitleAndYear(
   for (const exp of regexes) {
     const match = exp.exec(simpleTitle);
     if (match !== null && match.groups !== undefined) {
-      const result = parseMovieMatchCollection(match.groups.title);
+      const result = releaseTitleCleaner(match.groups.title);
       if (result === null) {
         continue;
       }
@@ -63,47 +62,8 @@ export function parseTitleAndYear(
   ].filter(x => x > 0);
   if (positions.length) {
     const firstPosition = Math.min(...positions);
-    return { title: parseMovieMatchCollection(title.slice(0, firstPosition)) || '', year: null };
+    return { title: releaseTitleCleaner(title.slice(0, firstPosition)) || '', year: null };
   }
 
   return { title: title.trim(), year: null };
-}
-
-export function parseMovieMatchCollection(title: string) {
-  if (title.length === 0 || title === '(') {
-    return null;
-  }
-
-  let movieName = title.replace('_', ' ');
-  movieName = movieName.replace(requestInfoRegex, '').trim();
-
-  const parts = movieName.split('.');
-  let result = '';
-  let n = 0;
-  let previousAcronym = false;
-  let nextPart = '';
-  for (const part of parts) {
-    if (parts.length >= n + 2) {
-      nextPart = parts[n + 1];
-    }
-
-    if (part.length === 1 && part.toLowerCase() !== 'a' && Number.isNaN(parseInt(part, 10))) {
-      result += part + '.';
-      previousAcronym = true;
-    } else if (part.toLowerCase() === 'a' && (previousAcronym === true || nextPart.length === 1)) {
-      result += part + '.';
-      previousAcronym = true;
-    } else {
-      if (previousAcronym) {
-        result += ' ';
-        previousAcronym = false;
-      }
-
-      result += part + ' ';
-    }
-
-    n++;
-  }
-
-  return result.trim();
 }

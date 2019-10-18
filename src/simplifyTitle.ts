@@ -8,3 +8,44 @@ export function simplifyTitle(title: string): string {
   simpleTitle = simpleTitle.replace(cleanTorrentSuffixRegex, '');
   return simpleTitle;
 }
+
+const requestInfoRegex = /\[.+?\]/i;
+
+export function releaseTitleCleaner(title: string) {
+  if (title.length === 0 || title === '(') {
+    return null;
+  }
+
+  let trimmedTitle = title.replace('_', ' ');
+  trimmedTitle = trimmedTitle.replace(requestInfoRegex, '').trim();
+
+  const parts = trimmedTitle.split('.');
+  let result = '';
+  let n = 0;
+  let previousAcronym = false;
+  let nextPart = '';
+  for (const part of parts) {
+    if (parts.length >= n + 2) {
+      nextPart = parts[n + 1];
+    }
+
+    if (part.length === 1 && part.toLowerCase() !== 'a' && Number.isNaN(parseInt(part, 10))) {
+      result += part + '.';
+      previousAcronym = true;
+    } else if (part.toLowerCase() === 'a' && (previousAcronym === true || nextPart.length === 1)) {
+      result += part + '.';
+      previousAcronym = true;
+    } else {
+      if (previousAcronym) {
+        result += ' ';
+        previousAcronym = false;
+      }
+
+      result += part + ' ';
+    }
+
+    n++;
+  }
+
+  return result.trim();
+}
