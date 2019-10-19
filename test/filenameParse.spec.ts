@@ -1,4 +1,12 @@
-import { filenameParse, ParsedFilename, Source, Resolution, Edition, VideoCodec, QualitySource } from '../src';
+import {
+  filenameParse,
+  ParsedFilename,
+  Source,
+  Resolution,
+  Edition,
+  VideoCodec,
+  QualitySource,
+} from '../src';
 import { AudioCodec } from '../src/audioCodec';
 
 const noEditions: Edition = {
@@ -15,7 +23,7 @@ const noEditions: Edition = {
 };
 
 describe('filenameParse', () => {
-  const cases: Array<[string, ParsedFilename]> = [
+  const movieCases: Array<[string, ParsedFilename]> = [
     [
       'Whats.Eating.Gilbert.Grape.1993.720p.BluRay.x264-SiNNERS',
       {
@@ -30,7 +38,7 @@ describe('filenameParse', () => {
         group: 'SiNNERS',
         revision: { version: 1, real: 0 },
         qualitySource: QualitySource.NAME,
-        season: null,
+        seasons: [],
         episodeNumbers: null,
         isTv: false,
       },
@@ -49,7 +57,7 @@ describe('filenameParse', () => {
         group: 'Japhson',
         revision: { version: 2, real: 0 },
         qualitySource: QualitySource.NAME,
-        season: null,
+        seasons: [],
         episodeNumbers: null,
         isTv: false,
       },
@@ -68,7 +76,7 @@ describe('filenameParse', () => {
         group: 'Felony',
         revision: { version: 2, real: 0 },
         qualitySource: QualitySource.NAME,
-        season: null,
+        seasons: [],
         episodeNumbers: null,
         isTv: false,
       },
@@ -87,20 +95,38 @@ describe('filenameParse', () => {
         group: 'EVO',
         revision: { version: 1, real: 0 },
         qualitySource: QualitySource.NAME,
-        season: null,
+        seasons: [],
         episodeNumbers: null,
         isTv: false,
       },
     ],
   ];
-  test.each(cases)('should get filename of "%s"', (title, expected) => {
+  test.each(movieCases)('should get filename of "%s"', (title, expected) => {
     expect(filenameParse(title)).toEqual(expected);
   });
 
-  it('should parse tv shows', () => {
-    const result = filenameParse('Its Always Sunny in Philadelphia S14E04 720p WEB H264-METCON', true);
-    expect(result.title).toBe('Its Always Sunny in Philadelphia');
-    expect(result.season).toBe(14);
-    expect(result.episodeNumbers).toEqual([4]);
+  const tvCases: Array<[string, ParsedFilename]> = [
+    [
+      'Its Always Sunny in Philadelphia S14E04 720p WEB H264-METCON',
+      {
+        edition: noEditions,
+        resolution: Resolution.R720P,
+        source: Source.WEBDL,
+        title: 'Its Always Sunny in Philadelphia',
+        year: null,
+        videoCodec: VideoCodec.X264,
+        audioCodec: null,
+        audioChannels: null,
+        group: 'METCON',
+        revision: { version: 1, real: 0 },
+        qualitySource: QualitySource.NAME,
+        seasons: [14],
+        episodeNumbers: [4],
+        isTv: true,
+      },
+    ],
+  ];
+  it.each(tvCases)('should parse tv shows', (title, expected) => {
+    expect(filenameParse(title, true)).toEqual(expected);
   });
 });

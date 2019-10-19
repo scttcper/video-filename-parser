@@ -21,14 +21,20 @@ describe('season', () => {
   ];
   it.each(fullSeasonRelease)('should parse full season release "%s"', (postTitle, title, season) => {
     const result = parseSeason(postTitle) as Season;
-    expect(result.seasonNumber).toBe(season);
+    expect(result.seasonNumber[0]).toBe(season);
     expect(result.seriesTitle).toBe(title);
   });
 
-  it('should parse multi season release', () => {
-    const result = parseSeason('The Wire S01-05 WS BDRip X264-REWARD-No Rars') as Season;
-    expect(result.seasonNumber).toBe(1);
-    expect(result.seriesTitle).toBe('The Wire');
+  const seasonPackCases: Array<[string, string, number[]]> = [
+    ['The Simpsons S01 - S29 FIXED MegaPack x264 AC3-DTS -jlw', 'The Simpsons', [1, 29]],
+    ['The Wire S01-05 WS BDRip X264-REWARD-No Rars', 'The Wire', [1, 5]],
+    ['The Office S01-S09 720p BluRay WEB-DL nHD x264-NhaNc3', 'The Office', [1, 9]],
+    ['[REQ] Reno 911! S01 - 06 Complete DVDRip XviD-Mixed', 'Reno 911!', [1, 6]],
+  ];
+  it.each(seasonPackCases)('should parse multi season release', (postTitle, title, seasons) => {
+    const result = parseSeason(postTitle) as Season;
+    expect(result.seasonNumber).toEqual(seasons);
+    expect(result.seriesTitle).toBe(title);
     expect(result.isMultiSeason).toBe(true);
   });
 });

@@ -60,7 +60,7 @@ const reportTitleExp = [
   /^(?<title>.+?)(?:(?:[-_\W](?<![()[!]))+(?<season>(?<!\d+)(?:\d{4})(?!\d+))(?:x|\Wx){1,2}(?<episode>\d{2,3}(?!\d+))(?:(?:-|x|\Wx|_){1,2}(?<episode1>\d{2,3}(?!\d+)))*)\W?(?!\\)/i,
 
   // Multi-season pack
-  /^(?<title>.+?)[-_. ]+S(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))-(?<season1>(?<!\d+)(?:\d{1,2})(?!\d+))/i,
+  /^(?<title>.+?)[-_. ]+S(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))\W?-\W?S?(?<season1>(?<!\d+)(?:\d{1,2})(?!\d+))/i,
 
   // Partial season pack
   /^(?<title>.+?)(?:\W+S(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<seasonpart>\d{1,2}(?!\d+)))+)/i,
@@ -180,7 +180,7 @@ export interface Season {
   seriesTitle: string;
   seriesTitleInfo: any;
   quality: any;
-  seasonNumber: number;
+  seasonNumber: number[];
   episodeNumbers: number[];
   absoluteEpisodeNumbers: number[];
   specialAbsoluteEpisodeNumbers: number[];
@@ -232,15 +232,15 @@ export function parseSeason(title: string): Season | null {
         seriesTitle: result.seriesName,
         seriesTitleInfo: 0,
         quality: 0,
-        seasonNumber: result.seasonNumber || 0,
+        seasonNumber: result.seasonNumber || [0],
         episodeNumbers: result.episodeNumbers || [],
         absoluteEpisodeNumbers: result.absoluteEpisodeNumbers || [],
         specialAbsoluteEpisodeNumbers: result.specialAbsoluteEpisodeNumbers || [],
-        airDate: null,
+        airDate: result.airDate || null,
         fullSeason: result.fullSeason || false,
-        isPartialSeason: false,
+        isPartialSeason: result.isPartialSeason || false,
         isMultiSeason: result.isMultiSeason || false,
-        isSeasonExtra: false,
+        isSeasonExtra: result.isSeasonExtra || false,
         special: result.special || false,
         releaseGroup: '',
         releaseHash: '',
@@ -260,7 +260,7 @@ const indexOfEnd = (str1: string, str2: string): number => {
 export interface ParsedMatchCollection {
   seriesName: string;
   seriesTitle?: string;
-  seasonNumber?: number;
+  seasonNumber?: number[];
   isMultiSeason?: boolean;
   episodeNumbers?: number[];
   specialAbsoluteEpisodeNumbers?: number[];
@@ -283,7 +283,6 @@ export function parseMatchCollection(
     throw new Error('No match');
   }
 
-  console.log({ groups: { ...groups } });
   const seriesName = (groups.title || '')
     .replace(/\./g, ' ')
     .replace(/_/g, ' ')
@@ -308,18 +307,16 @@ export function parseMatchCollection(
         return Number(x);
       });
 
-    console.log({ seasons })
     if (seasons.length === 0) {
       seasons.push(1);
     }
 
-    result.seasonNumber = seasons[0];
+    result.seasonNumber = seasons;
     if ([...new Set(seasons)].length > 1) {
       result.isMultiSeason = true;
     }
 
     const episodeCaptures = [groups.episode, groups.episode1].filter(x => x);
-    console.log({ episodeCaptures });
     const absoluteEpisodeCaptures = [groups.absoluteepisode, groups.absoluteepisode1].filter(
       x => x,
     );
@@ -384,7 +381,7 @@ export function parseMatchCollection(
     }
 
     if (absoluteEpisodeCaptures.length !== 0 && !result.episodeNumbers) {
-      result.seasonNumber = 0;
+      result.seasonNumber = [0];
     }
   } else {
     let airMonth = parseInt(groups.airmonth, 10);

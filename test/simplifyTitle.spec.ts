@@ -27,6 +27,7 @@ describe('simplifyTitle', () => {
     ['Movie.Title.Imax.2018.1080p.AMZN.WEB-DL.DD5.1.H.264-NTG', 'Movie.Title.Imax.2018..AMZN.WEB-DL.DD5.1.H.264-NTG'],
     ['Thunderbirds.Are.Go.S01E10.Tunnels.Of.Time.720p.HDTV.x264-RDVAS[rartv]', 'Thunderbirds.Are.Go.S01E10.Tunnels.Of.Time..HDTV.x264-RDVAS'],
     ['The.Middle.720p.HEVC.x265-MeGusta-Pre', 'The.Middle..HEVC.x265-MeGusta-Pre'],
+    ['[REQ] The.Middle.720p.HEVC.x265-MeGusta-Pre', 'The.Middle..HEVC.x265-MeGusta-Pre'],
   ];
   it.each(eachCases)(
     'should simplify "%s"',

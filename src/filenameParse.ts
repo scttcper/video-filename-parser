@@ -11,7 +11,7 @@ import { parseSeason } from './season';
 
 export interface ParsedFilename {
   title: string;
-  season: number | null;
+  seasons: number[];
   episodeNumbers: number[] | null;
   year: string | null;
   edition: Edition;
@@ -40,13 +40,13 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
     year = titleAndYear.year;
   }
 
-  let season: ParsedFilename['season'] = null;
+  let seasons: ParsedFilename['seasons'] = [];
   let episodeNumbers: ParsedFilename['episodeNumbers'] = null;
   if (isTv) {
     const seasonResult = parseSeason(name);
     if (seasonResult) {
       title = seasonResult.seriesTitle;
-      season = seasonResult.seasonNumber;
+      seasons = seasonResult.seasonNumber;
       episodeNumbers = seasonResult.episodeNumbers;
     }
   }
@@ -60,7 +60,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
 
   return {
     title,
-    season,
+    seasons,
     episodeNumbers,
     year,
     resolution: quality.resolution,
