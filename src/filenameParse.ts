@@ -8,6 +8,7 @@ import { parseQuality, Revision, QualitySource } from './quality';
 import { parseAudioCodec, AudioCodec } from './audioCodec';
 import { parseAudioChannels, Channels } from './audioChannels';
 import { parseSeason } from './season';
+import { parseLanguage, Language } from './language';
 
 export interface ParsedFilename {
   title: string;
@@ -16,13 +17,14 @@ export interface ParsedFilename {
   year: string | null;
   edition: Edition;
   resolution: Resolution | null;
-  source: Source | null;
+  source: Source[];
   videoCodec: VideoCodec | null;
   audioCodec: AudioCodec | null;
   audioChannels: Channels | null;
   group: string | null;
   revision: Revision;
   qualitySource: QualitySource;
+  language: Language[];
   isTv: boolean;
 }
 
@@ -56,6 +58,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
   const { codec: audioCodec } = parseAudioCodec(name);
   const { channels: audioChannels } = parseAudioChannels(name);
   const group = parseGroup(name);
+  const language = parseLanguage(name);
   const quality = parseQuality(name);
 
   return {
@@ -71,6 +74,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
     revision: quality.revision,
     group,
     edition,
+    language,
     qualitySource: quality.qualitySource,
     isTv,
   };

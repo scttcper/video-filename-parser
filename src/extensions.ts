@@ -83,13 +83,13 @@ export function removeFileExtension(title: string): string {
   });
 }
 
-export function getSourceForExtension(extension: string): Source | null {
+export function getSourceForExtension(extension: string): Source[] {
   const ext = fileExtensions.find(x => x.extension === extension);
   if (ext) {
-    return ext.source;
+    return [ext.source as Source];
   }
 
-  return null;
+  return [];
 }
 
 export function getResolutionForExtension(extension: string): Resolution | null {

@@ -58,47 +58,49 @@ export function parseSourceGroups(title: string) {
   };
 }
 
-export function parseSource(title: string): Source | null {
+export function parseSource(title: string): Source[] {
   const groups = parseSourceGroups(title);
+  const result: Source[] = [];
+
   if (!groups) {
-    return null;
+    return result;
   }
 
   if (groups.bluray || groups.bdrip || groups.brrip) {
-    return Source.BLURAY;
+    result.push(Source.BLURAY);
   }
 
   if (groups.webdl) {
-    return Source.WEBDL;
+    result.push(Source.WEBDL);
   }
 
   if (groups.scr) {
-    return Source.SCREENER;
+    result.push(Source.SCREENER);
   }
 
   if (groups.ppv) {
-    return Source.PPV;
+    result.push(Source.PPV);
   }
 
   if (groups.workprint) {
-    return Source.WORKPRINT;
+    result.push(Source.WORKPRINT);
   }
 
   if (groups.pdtv || groups.sdtv || groups.dsr || groups.tvrip || groups.hdtv) {
-    return Source.TV;
+    result.push(Source.TV);
   }
 
   if (groups.cam) {
-    return Source.CAM;
+    result.push(Source.CAM);
   }
 
   if (groups.ts) {
-    return Source.TELESYNC;
+    result.push(Source.TELESYNC);
   }
 
   if (groups.tc) {
-    return Source.TELECINE;
+    result.push(Source.TELECINE);
   }
 
-  return null;
+  return result;
 }

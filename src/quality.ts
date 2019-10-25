@@ -31,7 +31,7 @@ export enum QualitySource {
 }
 
 export interface QualityModel {
-  source: Source | null;
+  source: Source[];
   modifier: QualityModifier | null;
   resolution: Resolution | null;
   revision: Revision;
@@ -230,7 +230,7 @@ export function parseQuality(title: string): QualityModel {
   const { codec } = parseVideoCodec(title);
 
   const result: QualityModel = {
-    source,
+    source: source,
     resolution,
     revision,
     modifier: null,
@@ -239,27 +239,27 @@ export function parseQuality(title: string): QualityModel {
 
   if (bdiskExp.test(normalizedTitle) && sourceGroups.bluray) {
     result.modifier = QualityModifier.BRDISK;
-    result.source = Source.BLURAY;
+    result.source = [Source.BLURAY];
   }
 
   if (remuxExp.test(normalizedTitle) && !sourceGroups.webdl && !sourceGroups.hdtv) {
     result.modifier = QualityModifier.REMUX;
-    result.source = Source.BLURAY;
+    result.source = [Source.BLURAY];
     return result;
   }
 
   if (rawHdExp.test(normalizedTitle) && result.modifier !== QualityModifier.BRDISK) {
     result.modifier = QualityModifier.RAWHD;
-    result.source = Source.TV;
+    result.source = [Source.TV];
     return result;
   }
 
   if (source !== null) {
     if (sourceGroups.bluray) {
-      result.source = Source.BLURAY;
+      result.source = [Source.BLURAY];
       if (codec === VideoCodec.XVID) {
         result.resolution = Resolution.R480P;
-        result.source = Source.DVD;
+        result.source = [Source.DVD];
       }
 
       if (resolution === null) {
@@ -275,7 +275,7 @@ export function parseQuality(title: string): QualityModel {
     }
 
     if (sourceGroups.webdl) {
-      result.source = Source.WEBDL;
+      result.source = [Source.WEBDL];
       if (resolution === null) {
         result.resolution = Resolution.R480P;
       }
@@ -292,7 +292,7 @@ export function parseQuality(title: string): QualityModel {
     }
 
     if (sourceGroups.hdtv) {
-      result.source = Source.TV;
+      result.source = [Source.TV];
       if (resolution === null) {
         result.resolution = Resolution.R480P;
       }
@@ -305,7 +305,7 @@ export function parseQuality(title: string): QualityModel {
     }
 
     if (sourceGroups.pdtv || sourceGroups.sdtv || sourceGroups.dsr || sourceGroups.tvrip) {
-      result.source = Source.TV;
+      result.source = [Source.TV];
       if (highDefPdtvRegex.test(normalizedTitle)) {
         result.resolution = Resolution.R720P;
         return result;
@@ -318,7 +318,7 @@ export function parseQuality(title: string): QualityModel {
     if (sourceGroups.bdrip || sourceGroups.brrip) {
       if (codec === VideoCodec.XVID) {
         result.resolution = Resolution.R480P;
-        result.source = Source.DVD;
+        result.source = [Source.DVD];
         return result;
       }
 
@@ -327,27 +327,27 @@ export function parseQuality(title: string): QualityModel {
         result.resolution = Resolution.R480P;
       }
 
-      result.source = Source.BLURAY;
+      result.source = [Source.BLURAY];
       return result;
     }
 
     if (sourceGroups.workprint) {
-      result.source = Source.WORKPRINT;
+      result.source = [Source.WORKPRINT];
       return result;
     }
 
     if (sourceGroups.cam) {
-      result.source = Source.CAM;
+      result.source = [Source.CAM];
       return result;
     }
 
     if (sourceGroups.ts) {
-      result.source = Source.TELESYNC;
+      result.source = [Source.TELESYNC];
       return result;
     }
 
     if (sourceGroups.tc) {
-      result.source = Source.TELECINE;
+      result.source = [Source.TELECINE];
       return result;
     }
   }
@@ -357,12 +357,12 @@ export function parseQuality(title: string): QualityModel {
     resolution === Resolution.R1080P ||
     resolution === Resolution.R720P
   ) {
-    result.source = Source.WEBDL;
+    result.source = [Source.WEBDL];
     return result;
   }
 
   // make vague assumptions based on file extension
-  if (result.source === null) {
+  if (result.source.length === 0) {
     const extension = extname(title)
       .trim()
       .toLowerCase();

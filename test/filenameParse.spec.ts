@@ -6,6 +6,7 @@ import {
   Edition,
   VideoCodec,
   QualitySource,
+  Language,
 } from '../src';
 import { AudioCodec } from '../src/audioCodec';
 
@@ -29,7 +30,7 @@ describe('filenameParse', () => {
       {
         edition: noEditions,
         resolution: Resolution.R720P,
-        source: Source.BLURAY,
+        source: [Source.BLURAY],
         title: 'Whats Eating Gilbert Grape',
         year: '1993',
         videoCodec: VideoCodec.X264,
@@ -38,6 +39,7 @@ describe('filenameParse', () => {
         group: 'SiNNERS',
         revision: { version: 1, real: 0 },
         qualitySource: QualitySource.NAME,
+        language: [Language.English],
         seasons: [],
         episodeNumbers: null,
         isTv: false,
@@ -48,7 +50,7 @@ describe('filenameParse', () => {
       {
         edition: noEditions,
         resolution: Resolution.R1080P,
-        source: Source.BLURAY,
+        source: [Source.BLURAY],
         title: 'Timecop',
         year: '1994',
         videoCodec: VideoCodec.X264,
@@ -57,6 +59,7 @@ describe('filenameParse', () => {
         group: 'Japhson',
         revision: { version: 2, real: 0 },
         qualitySource: QualitySource.NAME,
+        language: [Language.English],
         seasons: [],
         episodeNumbers: null,
         isTv: false,
@@ -67,7 +70,7 @@ describe('filenameParse', () => {
       {
         edition: { ...noEditions, unrated: true },
         resolution: Resolution.R720P,
-        source: Source.BLURAY,
+        source: [Source.BLURAY],
         title: 'This is 40',
         year: '2012',
         videoCodec: VideoCodec.X264,
@@ -76,6 +79,7 @@ describe('filenameParse', () => {
         group: 'Felony',
         revision: { version: 2, real: 0 },
         qualitySource: QualitySource.NAME,
+        language: [Language.English],
         seasons: [],
         episodeNumbers: null,
         isTv: false,
@@ -86,7 +90,7 @@ describe('filenameParse', () => {
       {
         edition: noEditions,
         resolution: Resolution.R1080P,
-        source: Source.WEBDL,
+        source: [Source.WEBDL],
         title: 'Spider-Man Far from Home',
         year: '2019',
         videoCodec: VideoCodec.X264,
@@ -95,6 +99,7 @@ describe('filenameParse', () => {
         group: 'EVO',
         revision: { version: 1, real: 0 },
         qualitySource: QualitySource.NAME,
+        language: [Language.English],
         seasons: [],
         episodeNumbers: null,
         isTv: false,
@@ -111,7 +116,7 @@ describe('filenameParse', () => {
       {
         edition: noEditions,
         resolution: Resolution.R720P,
-        source: Source.WEBDL,
+        source: [Source.WEBDL],
         title: 'Its Always Sunny in Philadelphia',
         year: null,
         videoCodec: VideoCodec.X264,
@@ -120,13 +125,14 @@ describe('filenameParse', () => {
         group: 'METCON',
         revision: { version: 1, real: 0 },
         qualitySource: QualitySource.NAME,
+        language: [Language.English],
         seasons: [14],
         episodeNumbers: [4],
         isTv: true,
       },
     ],
   ];
-  it.each(tvCases)('should parse tv shows', (title, expected) => {
+  it.each(tvCases)('should parse tv shows "%s"', (title, expected) => {
     expect(filenameParse(title, true)).toEqual(expected);
   });
 });

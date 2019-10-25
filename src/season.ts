@@ -172,6 +172,34 @@ const reportTitleExp = [
   /^(?<title>.+?)[-_. ](?<season>[0]?\d?)(?:(?<episode>\d{2}){2}(?!\d+))[-_. ]/i,
 ];
 
+const rejectedRegexes = [
+  // Generic match for md5 and mixed-case hashes.
+  /^[0-9a-zA-Z]{32}/i,
+
+  // Generic match for shorter lower-case hashes.
+  /^[a-z0-9]{24}$/i,
+
+  // Format seen on some NZBGeek releases
+  // Be very strict with these coz they are very close to the valid 101 ep numbering.
+  /"^[A-Z]{11}\d{3}$/i,
+  /"^[a-z]{12}\d{3}$/i,
+
+  // Backup filename (Unknown origins)
+  /^Backup_\d{5,}S\d{2}-\d{2}$/i,
+
+  // 123 - Started appearing December 2014
+  /^123$"/,
+
+  // abc - Started appearing January 2015
+  /^abc$"/i,
+
+  // b00bs - Started appearing January 2015
+  /^b00bs$"/i,
+
+  // 170424_26 - Started appearing August 2018
+  /^\d{6}_\d{2}$"/,
+];
+
 const requestInfoExp = /^(?:\[.+?\])+/;
 const sixDigitAirDateMatchExp = /"(?<=[_.-])(?<airdate>(?<!\d)(?<airyear>[1-9]\d{1})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))(?=[_.-])/i;
 
@@ -198,6 +226,10 @@ export interface Season {
 }
 
 export function parseSeason(title: string): Season | null {
+  if (!preValidation(title)) {
+    return null;
+  }
+
   let simpleTitle = simplifyTitle(title);
 
   // parse daily episodes with mmddyy eg `At.Midnight.140722.720p.HDTV.x264-YesTV`
@@ -252,6 +284,31 @@ export function parseSeason(title: string): Season | null {
   return null;
 }
 
+function preValidation(title: string): boolean {
+  for (const exp of rejectedRegexes) {
+    const match = exp.exec(title);
+    if (match !== null) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export const completeRange = (arr: number[]): number[] => {
+  const uniqArr = [...new Set(arr)];
+
+  const first = Number(uniqArr[0]);
+  const last = Number(uniqArr[uniqArr.length - 1]);
+
+  if (first > last) {
+    return arr;
+  }
+
+  const count = last - first + 1;
+  return [...Array(count).keys()].map(k => k + first);
+};
+
 const indexOfEnd = (str1: string, str2: string): number => {
   const io = str1.indexOf(str2);
   return io === -1 ? -1 : io + str2.length;
@@ -297,7 +354,7 @@ export function parseMatchCollection(
 
   const airYear = parseInt(groups.airyear, 10);
   if (airYear < 1900 || Number.isNaN(airYear)) {
-    const seasons = [groups.season, groups.season1]
+    let seasons = [groups.season, groups.season1]
       .filter(x => x !== undefined && x.length > 0)
       .map(x => {
         lastSeasonEpisodeStringIndex = Math.max(
@@ -307,12 +364,16 @@ export function parseMatchCollection(
         return Number(x);
       });
 
+    if (seasons.length > 1) {
+      seasons = completeRange(seasons);
+    }
+
     if (seasons.length === 0) {
       seasons.push(1);
     }
 
     result.seasonNumber = seasons;
-    if ([...new Set(seasons)].length > 1) {
+    if (seasons.length > 1) {
       result.isMultiSeason = true;
     }
 
