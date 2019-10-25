@@ -17,14 +17,14 @@ export interface ParsedFilename {
   year: string | null;
   edition: Edition;
   resolution: Resolution | null;
-  source: Source[];
+  sources: Source[];
   videoCodec: VideoCodec | null;
   audioCodec: AudioCodec | null;
   audioChannels: Channels | null;
   group: string | null;
   revision: Revision;
   qualitySource: QualitySource;
-  language: Language[];
+  languages: Language[];
   isTv: boolean;
 }
 
@@ -58,7 +58,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
   const { codec: audioCodec } = parseAudioCodec(name);
   const { channels: audioChannels } = parseAudioChannels(name);
   const group = parseGroup(name);
-  const language = parseLanguage(name);
+  const languages = parseLanguage(name);
   const quality = parseQuality(name);
 
   return {
@@ -67,14 +67,14 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
     episodeNumbers,
     year,
     resolution: quality.resolution,
-    source: quality.source,
+    sources: quality.sources,
     videoCodec,
     audioCodec,
     audioChannels,
     revision: quality.revision,
     group,
     edition,
-    language,
+    languages,
     qualitySource: quality.qualitySource,
     isTv,
   };

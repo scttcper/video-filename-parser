@@ -31,7 +31,7 @@ export enum QualitySource {
 }
 
 export interface QualityModel {
-  source: Source[];
+  sources: Source[];
   modifier: QualityModifier | null;
   resolution: Resolution | null;
   revision: Revision;
@@ -230,7 +230,7 @@ export function parseQuality(title: string): QualityModel {
   const { codec } = parseVideoCodec(title);
 
   const result: QualityModel = {
-    source: source,
+    sources: source,
     resolution,
     revision,
     modifier: null,
@@ -239,27 +239,27 @@ export function parseQuality(title: string): QualityModel {
 
   if (bdiskExp.test(normalizedTitle) && sourceGroups.bluray) {
     result.modifier = QualityModifier.BRDISK;
-    result.source = [Source.BLURAY];
+    result.sources = [Source.BLURAY];
   }
 
   if (remuxExp.test(normalizedTitle) && !sourceGroups.webdl && !sourceGroups.hdtv) {
     result.modifier = QualityModifier.REMUX;
-    result.source = [Source.BLURAY];
+    result.sources = [Source.BLURAY];
     return result;
   }
 
   if (rawHdExp.test(normalizedTitle) && result.modifier !== QualityModifier.BRDISK) {
     result.modifier = QualityModifier.RAWHD;
-    result.source = [Source.TV];
+    result.sources = [Source.TV];
     return result;
   }
 
   if (source !== null) {
     if (sourceGroups.bluray) {
-      result.source = [Source.BLURAY];
+      result.sources = [Source.BLURAY];
       if (codec === VideoCodec.XVID) {
         result.resolution = Resolution.R480P;
-        result.source = [Source.DVD];
+        result.sources = [Source.DVD];
       }
 
       if (resolution === null) {
@@ -275,7 +275,7 @@ export function parseQuality(title: string): QualityModel {
     }
 
     if (sourceGroups.webdl) {
-      result.source = [Source.WEBDL];
+      result.sources = [Source.WEBDL];
       if (resolution === null) {
         result.resolution = Resolution.R480P;
       }
@@ -292,7 +292,7 @@ export function parseQuality(title: string): QualityModel {
     }
 
     if (sourceGroups.hdtv) {
-      result.source = [Source.TV];
+      result.sources = [Source.TV];
       if (resolution === null) {
         result.resolution = Resolution.R480P;
       }
@@ -305,7 +305,7 @@ export function parseQuality(title: string): QualityModel {
     }
 
     if (sourceGroups.pdtv || sourceGroups.sdtv || sourceGroups.dsr || sourceGroups.tvrip) {
-      result.source = [Source.TV];
+      result.sources = [Source.TV];
       if (highDefPdtvRegex.test(normalizedTitle)) {
         result.resolution = Resolution.R720P;
         return result;
@@ -318,7 +318,7 @@ export function parseQuality(title: string): QualityModel {
     if (sourceGroups.bdrip || sourceGroups.brrip) {
       if (codec === VideoCodec.XVID) {
         result.resolution = Resolution.R480P;
-        result.source = [Source.DVD];
+        result.sources = [Source.DVD];
         return result;
       }
 
@@ -327,27 +327,27 @@ export function parseQuality(title: string): QualityModel {
         result.resolution = Resolution.R480P;
       }
 
-      result.source = [Source.BLURAY];
+      result.sources = [Source.BLURAY];
       return result;
     }
 
     if (sourceGroups.workprint) {
-      result.source = [Source.WORKPRINT];
+      result.sources = [Source.WORKPRINT];
       return result;
     }
 
     if (sourceGroups.cam) {
-      result.source = [Source.CAM];
+      result.sources = [Source.CAM];
       return result;
     }
 
     if (sourceGroups.ts) {
-      result.source = [Source.TELESYNC];
+      result.sources = [Source.TELESYNC];
       return result;
     }
 
     if (sourceGroups.tc) {
-      result.source = [Source.TELECINE];
+      result.sources = [Source.TELECINE];
       return result;
     }
   }
@@ -357,17 +357,17 @@ export function parseQuality(title: string): QualityModel {
     resolution === Resolution.R1080P ||
     resolution === Resolution.R720P
   ) {
-    result.source = [Source.WEBDL];
+    result.sources = [Source.WEBDL];
     return result;
   }
 
   // make vague assumptions based on file extension
-  if (result.source.length === 0) {
+  if (result.sources.length === 0) {
     const extension = extname(title)
       .trim()
       .toLowerCase();
     if (extension.length > 0) {
-      result.source = getSourceForExtension(extension);
+      result.sources = getSourceForExtension(extension);
       result.resolution = getResolutionForExtension(extension);
       result.qualitySource = QualitySource.EXTENSION;
     }
