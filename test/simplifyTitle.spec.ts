@@ -29,10 +29,7 @@ describe('simplifyTitle', () => {
     ['The.Middle.720p.HEVC.x265-MeGusta-Pre', 'The.Middle..HEVC.x265-MeGusta-Pre'],
     ['[REQ] The.Middle.720p.HEVC.x265-MeGusta-Pre', 'The.Middle..HEVC.x265-MeGusta-Pre'],
   ];
-  it.each(eachCases)(
-    'should simplify "%s"',
-    (input, expected) => {
-      expect(simplifyTitle(input)).toBe(expected);
-    }
-  );
+  it.each(eachCases)('should simplify "%s"', (input, expected) => {
+    expect(simplifyTitle(input)).toBe(expected);
+  });
 });
