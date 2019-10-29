@@ -7,13 +7,14 @@ import { parseTitleAndYear } from './title';
 import { parseQuality, Revision, QualitySource } from './quality';
 import { parseAudioCodec, AudioCodec } from './audioCodec';
 import { parseAudioChannels, Channels } from './audioChannels';
-import { parseSeason } from './season';
+import { parseSeason, Season } from './season';
 import { parseLanguage, Language } from './language';
 
-export interface ParsedFilename {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type ParsedTvInfo = Omit<Season, 'releaseTitle' | 'seriesTitle'>;
+
+export interface ParsedFilename extends ParsedTvInfo {
   title: string;
-  seasons: number[];
-  episodeNumbers: number[] | null;
   year: string | null;
   edition: Edition;
   resolution: Resolution | null;
@@ -27,6 +28,20 @@ export interface ParsedFilename {
   languages: Language[];
   isTv: boolean;
 }
+
+const emptySeasonInfo = (): ParsedTvInfo => {
+  return {
+    seasons: [],
+    episodeNumbers: [],
+    airDate: null,
+    fullSeason: false,
+    isPartialSeason: false,
+    isMultiSeason: false,
+    isSeasonExtra: false,
+    isSpecial: false,
+    seasonPart: 0,
+  };
+};
 
 /**
  * @param name release / file name
@@ -42,15 +57,28 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
     year = titleAndYear.year;
   }
 
-  let seasons: ParsedFilename['seasons'] = [];
-  let episodeNumbers: ParsedFilename['episodeNumbers'] = null;
+  let seasonResult: ParsedTvInfo | null = null;
   if (isTv) {
-    const seasonResult = parseSeason(name);
-    if (seasonResult) {
-      title = seasonResult.seriesTitle;
-      seasons = seasonResult.seasonNumber;
-      episodeNumbers = seasonResult.episodeNumbers;
+    const season = parseSeason(name);
+    if (season !== null) {
+      title = season.seriesTitle;
+
+      seasonResult = {
+        seasons: season.seasons,
+        episodeNumbers: season.episodeNumbers,
+        airDate: season.airDate,
+        fullSeason: season.fullSeason,
+        isPartialSeason: season.isPartialSeason,
+        isMultiSeason: season.isMultiSeason,
+        isSeasonExtra: season.isSeasonExtra,
+        isSpecial: season.isSpecial,
+        seasonPart: season.seasonPart,
+      };
     }
+  }
+
+  if (seasonResult === null) {
+    seasonResult = emptySeasonInfo();
   }
 
   const edition = parseEdition(name);
@@ -63,8 +91,6 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
 
   return {
     title,
-    seasons,
-    episodeNumbers,
     year,
     resolution: quality.resolution,
     sources: quality.sources,
@@ -76,6 +102,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
     edition,
     languages,
     qualitySource: quality.qualitySource,
+    ...seasonResult,
     isTv,
   };
 }

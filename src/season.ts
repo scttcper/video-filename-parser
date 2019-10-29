@@ -206,21 +206,16 @@ const sixDigitAirDateMatchExp = /"(?<=[_.-])(?<airdate>(?<!\d)(?<airyear>[1-9]\d
 export interface Season {
   releaseTitle: string;
   seriesTitle: string;
-  seriesTitleInfo: any;
-  quality: any;
-  seasonNumber: number[];
+  // seriesTitleInfo: any;
+  seasons: number[];
   episodeNumbers: number[];
-  absoluteEpisodeNumbers: number[];
-  specialAbsoluteEpisodeNumbers: number[];
   airDate: Date | null;
   // Language: Language;
   fullSeason: boolean;
   isPartialSeason: boolean;
   isMultiSeason: boolean;
   isSeasonExtra: boolean;
-  special: boolean;
-  releaseGroup: string;
-  releaseHash: string;
+  isSpecial: boolean;
   seasonPart: number;
   // ReleaseTokens:
 }
@@ -256,27 +251,22 @@ export function parseSeason(title: string): Season | null {
 
       if (result.fullSeason && result.releaseTokens && /Special/i.test(result.releaseTokens)) {
         result.fullSeason = false;
-        result.special = true;
+        result.isSpecial = true;
       }
 
       return {
         releaseTitle: title,
         seriesTitle: result.seriesName,
-        seriesTitleInfo: 0,
-        quality: 0,
-        seasonNumber: result.seasonNumber || [0],
+        // seriesTitleInfo: 0,
+        seasons: result.seasonNumbers || [],
         episodeNumbers: result.episodeNumbers || [],
-        absoluteEpisodeNumbers: result.absoluteEpisodeNumbers || [],
-        specialAbsoluteEpisodeNumbers: result.specialAbsoluteEpisodeNumbers || [],
         airDate: result.airDate || null,
         fullSeason: result.fullSeason || false,
         isPartialSeason: result.isPartialSeason || false,
         isMultiSeason: result.isMultiSeason || false,
         isSeasonExtra: result.isSeasonExtra || false,
-        special: result.special || false,
-        releaseGroup: '',
-        releaseHash: '',
-        seasonPart: 0,
+        isSpecial: result.isSpecial || false,
+        seasonPart: result.seasonPart || 0,
       };
     }
   }
@@ -317,12 +307,10 @@ const indexOfEnd = (str1: string, str2: string): number => {
 export interface ParsedMatchCollection {
   seriesName: string;
   seriesTitle?: string;
-  seasonNumber?: number[];
+  seasonNumbers?: number[];
   isMultiSeason?: boolean;
   episodeNumbers?: number[];
-  specialAbsoluteEpisodeNumbers?: number[];
-  special?: boolean;
-  absoluteEpisodeNumbers?: number[];
+  isSpecial?: boolean;
   isSeasonExtra?: boolean;
   seasonPart?: number;
   isPartialSeason?: boolean;
@@ -368,19 +356,13 @@ export function parseMatchCollection(
       seasons = completeRange(seasons);
     }
 
-    if (seasons.length === 0) {
-      seasons.push(1);
-    }
-
-    result.seasonNumber = seasons;
+    result.seasonNumbers = seasons;
     if (seasons.length > 1) {
       result.isMultiSeason = true;
     }
 
     const episodeCaptures = [groups.episode, groups.episode1].filter(x => x);
-    const absoluteEpisodeCaptures = [groups.absoluteepisode, groups.absoluteepisode1].filter(
-      x => x,
-    );
+    const absoluteEpisodeCaptures = [groups.absoluteepisode, groups.absoluteepisode1].filter(x => x);
 
     // handle 0 episode possibly indicating a full season release
     if (episodeCaptures.length) {
@@ -395,17 +377,18 @@ export function parseMatchCollection(
       result.episodeNumbers = [...Array(count).keys()].map(k => k + first);
     }
 
-    if (absoluteEpisodeCaptures.some(x => x)) {
+    if (absoluteEpisodeCaptures.length > 0) {
       const first = Number(absoluteEpisodeCaptures[0]);
       const last = Number(absoluteEpisodeCaptures[episodeCaptures.length - 1]);
 
-      if (first % 1 !== 0 || last % 1 !== 0) {
+      if ((first % 1) !== 0 || (last % 1) !== 0) {
         if (absoluteEpisodeCaptures.length !== 1) {
           return null;
         }
 
-        result.specialAbsoluteEpisodeNumbers = [first];
-        result.special = true;
+        // specialAbsoluteEpisodeNumbers in radarr
+        result.episodeNumbers = [first];
+        result.isSpecial = true;
 
         lastSeasonEpisodeStringIndex = Math.max(
           indexOfEnd(simpleTitle, absoluteEpisodeCaptures[0]),
@@ -413,12 +396,13 @@ export function parseMatchCollection(
         );
       } else {
         const count = last - first + 1;
-        result.absoluteEpisodeNumbers = [...Array(Math.floor(count)).keys()].map(
+        // AbsoluteEpisodeNumbers in radarr
+        result.episodeNumbers = [...Array(Math.floor(count)).keys()].map(
           k => k + Math.floor(first),
         );
 
         if (groups.special) {
-          result.special = true;
+          result.isSpecial = true;
         }
       }
     }
@@ -442,7 +426,7 @@ export function parseMatchCollection(
     }
 
     if (absoluteEpisodeCaptures.length !== 0 && !result.episodeNumbers) {
-      result.seasonNumber = [0];
+      result.seasonNumbers = [0];
     }
   } else {
     let airMonth = parseInt(groups.airmonth, 10);
