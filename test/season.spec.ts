@@ -101,6 +101,34 @@ describe('season', () => {
     expect(result.fullSeason).toBe(false);
   });
 
+  const seasonSubpackCases: Array<[string, string, number]> = [
+    ['Lie.to.Me.S03.SUBPACK.DVDRip.XviD-REWARD', 'Lie to Me', 3],
+    ['The.Middle.S02.SUBPACK.DVDRip.XviD-REWARD', 'The Middle', 2],
+    ['CSI.S11.SUBPACK.DVDRip.XviD-REWARD', 'CSI', 11],
+  ];
+  it.each(seasonSubpackCases)('should parse season subpack "%s"', (postTitle, title, season) => {
+    const result = parseSeason(postTitle) as Season;
+    expect(result.seasons[0]).toBe(season);
+    expect(result.seriesTitle).toBe(title);
+    expect(result.isSeasonExtra).toBe(true);
+    expect(result.fullSeason).toBe(true);
+  });
+
+  const seasonExtraCases: Array<[string, string, number]> = [
+    ['Acropolis Now S05 EXTRAS DVDRip XviD RUNNER', 'Acropolis Now', 5],
+    ['Punky Brewster S01 EXTRAS DVDRip XviD RUNNER', 'Punky Brewster', 1],
+    ['Instant Star S03 EXTRAS DVDRip XviD OSiTV', 'Instant Star', 3],
+    ['The.Flash.S03.Extras.01.Deleted.Scenes.720p', 'The Flash', 3],
+    ['The.Flash.S03.Extras.02.720p', 'The Flash', 3],
+  ];
+  it.each(seasonExtraCases)('should parse season extras "%s"', (postTitle, title, season) => {
+    const result = parseSeason(postTitle) as Season;
+    expect(result.seasons[0]).toBe(season);
+    expect(result.seriesTitle).toBe(title);
+    expect(result.isSeasonExtra).toBe(true);
+    expect(result.fullSeason).toBe(true);
+  });
+
   // const animePackCases: Array<[string, string, number]> = [
   //   ['[Vivid] Living Sky Saga S01 [Web][MKV][h264 10-bit][1080p][AAC 2.0]', 'Living Sky Saga', 1],
   // ];

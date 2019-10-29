@@ -214,8 +214,14 @@ export interface Season {
   fullSeason: boolean;
   isPartialSeason: boolean;
   isMultiSeason: boolean;
+  /**
+   * Check to see if this is an "Extras" or "SUBPACK" release, if it is, set
+   */
   isSeasonExtra: boolean;
   isSpecial: boolean;
+  /**
+   * Partial season packs will have a seasonpart group so they can be differentiated from a full season/single episode release
+   */
   seasonPart: number;
   // ReleaseTokens:
 }
