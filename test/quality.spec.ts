@@ -53,7 +53,7 @@ describe('parseQuality', () => {
   ];
   test.each(webdl480pCases)('should parse webdl 480p quality "%s"', (title, proper) => {
     const quality = parseQuality(title);
-    expect(quality.source).toBe(Source.WEBDL);
+    expect(quality.sources[0]).toBe(Source.WEBDL);
     expect(quality.resolution).toBe(Resolution.R480P);
     expect(quality.modifier).toBe(null);
     expect(quality.revision.version).toBe(proper ? 2 : 1);
@@ -85,7 +85,7 @@ describe('parseQuality', () => {
   ];
   test.each(webdl720pCases)('should parse webdl 720 quality "%s"', (title, proper) => {
     const quality = parseQuality(title);
-    expect(quality.source).toBe(Source.WEBDL);
+    expect(quality.sources[0]).toBe(Source.WEBDL);
     expect(quality.resolution).toBe(Resolution.R720P);
     expect(quality.modifier).toBe(null);
     expect(quality.revision.version).toBe(proper ? 2 : 1);
@@ -114,7 +114,7 @@ describe('parseQuality', () => {
   ];
   test.each(webdl1080pCases)('should parse webdl 1080 quality "%s"', (title, proper) => {
     const quality = parseQuality(title);
-    expect(quality.source).toBe(Source.WEBDL);
+    expect(quality.sources[0]).toBe(Source.WEBDL);
     expect(quality.resolution).toBe(Resolution.R1080P);
     expect(quality.modifier).toBe(null);
     expect(quality.revision.version).toBe(proper ? 2 : 1);
@@ -131,7 +131,7 @@ describe('parseQuality', () => {
   ];
   test.each(webdl2160pCases)('should parse webdl 2160 quality "%s"', (title, proper) => {
     const quality = parseQuality(title);
-    expect(quality.source).toBe(Source.WEBDL);
+    expect(quality.sources[0]).toBe(Source.WEBDL);
     expect(quality.resolution).toBe(Resolution.R2160P);
     expect(quality.modifier).toBe(null);
     expect(quality.revision.version).toBe(proper ? 2 : 1);
@@ -157,7 +157,7 @@ describe('parseQuality', () => {
   ];
   test.each(bluray720Cases)('should parse bluray 720p "%s"', (title, proper) => {
     const quality = parseQuality(title);
-    expect(quality.source).toBe(Source.BLURAY);
+    expect(quality.sources[0]).toBe(Source.BLURAY);
     expect(quality.resolution).toBe(Resolution.R720P);
     expect(quality.modifier).toBe(null);
     expect(quality.revision.version).toBe(proper ? 2 : 1);
@@ -179,7 +179,7 @@ describe('parseQuality', () => {
   ];
   test.each(bluray1080Cases)('should parse bluray 1080p "%s"', (title, proper) => {
     const quality = parseQuality(title);
-    expect(quality.source).toBe(Source.BLURAY);
+    expect(quality.sources[0]).toBe(Source.BLURAY);
     expect(quality.resolution).toBe(Resolution.R1080P);
     expect(quality.modifier).toBe(null);
     expect(quality.revision.version).toBe(proper ? 2 : 1);
@@ -191,7 +191,7 @@ describe('parseQuality', () => {
   ];
   test.each(bluray576pQuality)('should parse bluray 576 "%s"', title => {
     const quality = parseQuality(title);
-    expect(quality.source).toBe(Source.BLURAY);
+    expect(quality.sources[0]).toBe(Source.BLURAY);
     expect(quality.resolution).toBe(Resolution.R576P);
     expect(quality.modifier).toBe(null);
   });
@@ -205,7 +205,7 @@ describe('parseQuality', () => {
   ];
   test.each(remux1080pQuality)('should parse remux 1080 "%s"', title => {
     const quality = parseQuality(title);
-    expect(quality.source).toBe(Source.BLURAY);
+    expect(quality.sources[0]).toBe(Source.BLURAY);
     expect(quality.resolution).toBe(Resolution.R1080P);
     expect(quality.modifier).toBe(QualityModifier.REMUX);
   });
@@ -217,7 +217,7 @@ describe('parseQuality', () => {
   ];
   test.each(remux2160pQuality)('should parse remux 2160 "%s"', title => {
     const quality = parseQuality(title);
-    expect(quality.source).toBe(Source.BLURAY);
+    expect(quality.sources[0]).toBe(Source.BLURAY);
     expect(quality.resolution).toBe(Resolution.R2160P);
     expect(quality.modifier).toBe(QualityModifier.REMUX);
   });
@@ -236,7 +236,7 @@ describe('parseQuality', () => {
   ];
   test.each(hdtv720pCases)('should parse hdtv 720p "%s"', (title, proper) => {
     const quality = parseQuality(title);
-    expect(quality.source).toBe(Source.TV);
+    expect(quality.sources[0]).toBe(Source.TV);
     expect(quality.resolution).toBe(Resolution.R720P);
     expect(quality.modifier).toBe(null);
     expect(quality.revision.version).toBe(proper ? 2 : 1);
@@ -252,7 +252,7 @@ describe('parseQuality', () => {
   ];
   test.each(brdisk1080pCases)('should parse brdisk 1080p "%s"', title => {
     const quality = parseQuality(title);
-    expect(quality.source).toBe(Source.BLURAY);
+    expect(quality.sources[0]).toBe(Source.BLURAY);
     expect(quality.resolution).toBe(Resolution.R1080P);
     expect(quality.modifier).toBe(QualityModifier.BRDISK);
   });
@@ -260,7 +260,7 @@ describe('parseQuality', () => {
   const rawHdCases: Array<[string]> = [['Stripes (1981) 1080i HDTV DD5.1 MPEG2-TrollHD']];
   test.each(rawHdCases)('should parse rawhd "%s"', title => {
     const quality = parseQuality(title);
-    expect(quality.source).toBe(Source.TV);
+    expect(quality.sources[0]).toBe(Source.TV);
     expect(quality.resolution).toBe(Resolution.R1080P);
     expect(quality.modifier).toBe(QualityModifier.RAWHD);
   });
@@ -283,7 +283,7 @@ describe('parseQuality', () => {
   ];
   test.each(tsCases)('should parse ts "%s"', (title, proper) => {
     const quality = parseQuality(title);
-    expect(quality.source).toBe(Source.TELESYNC);
+    expect(quality.sources[0]).toBe(Source.TELESYNC);
     expect(quality.resolution).toBe(Resolution.R720P);
     expect(quality.modifier).toBe(null);
     expect(quality.revision.version).toBe(proper ? 2 : 1);

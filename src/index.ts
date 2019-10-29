@@ -8,3 +8,4 @@ export * from './source';
 export * from './title';
 export * from './extensions';
 export * from './group';
+export * from './season';

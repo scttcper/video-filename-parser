@@ -12,6 +12,10 @@ npm install @ctrl/video-filename-parser
 
 ## Use
 
+##### parameters:  
+title - Pass the title or filename of what you are trying to parse
+isTv - indicate if the title should be parsed as a tv show
+
 ```ts
 import { filenameParse } from '@ctrl/video-filename-parse';
 
@@ -37,8 +41,57 @@ console.log(filenameParse(title));
 //   revision: { version: 2, real: 0 },
 //   qualitySource: 'NAME',
 // }
+
+console.log(filenameParse('The Office US S09E06 HDTV XviD-AFG', true));
+// {
+//   "title": "The Office US",
+//   "year": null,
+//   "resolution": "480P",
+//   "sources": [
+//     "TV"
+//   ],
+//   "videoCodec": "xvid",
+//   "audioCodec": null,
+//   "audioChannels": null,
+//   "revision": {
+//     "version": 1,
+//     "real": 0
+//   },
+//   "group": "AFG",
+//   "edition": {
+//     "imax": false,
+//     "remastered": false,
+//     "extended": false,
+//     "theatrical": false,
+//     "directors": false,
+//     "unrated": false,
+//     "fanEdit": false,
+//     "limited": false,
+//     "hdr": false,
+//     "internal": false
+//   },
+//   "languages": [
+//     "English"
+//   ],
+//   "qualitySource": "NAME",
+//   "seasons": [
+//     9
+//   ],
+//   "episodeNumbers": [
+//     6
+//   ],
+//   "airDate": null,
+//   "fullSeason": false,
+//   "isPartialSeason": false,
+//   "isMultiSeason": false,
+//   "isSeasonExtra": false,
+//   "isSpecial": false,
+//   "seasonPart": 0,
+//   "isTv": true
+// }
 ```
 
 ## See also
-[Radarr parser](https://github.com/Radarr/Radarr/blob/01ad015b1433ce792c24f019f701f3a8a59c4b2c/src/NzbDrone.Core/Parser/Parser.cs)  
+[Radarr movie parser](https://github.com/Radarr/Radarr/blob/01ad015b1433ce792c24f019f701f3a8a59c4b2c/src/NzbDrone.Core/Parser/Parser.cs)  
+[sonarr tv parser](https://github.com/Sonarr/Sonarr/blob/phantom-develop/src/NzbDrone.Core/Parser/Parser.cs)  
 [guessit](https://github.com/guessit-io/guessit)
