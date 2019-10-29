@@ -50,6 +50,17 @@ describe('season', () => {
     expect(result.isMultiSeason).toBe(true);
   });
 
+  const partialSeasonPackCases: Array<[string, string, number, number]> = [
+    ['The.Ranch.2016.S02.Part.1.1080p.NF.WEBRip.DD5.1.x264-NTb', 'The Ranch 2016', 2, 1],
+  ];
+  it.each(partialSeasonPackCases)('should parse partial season release "%s"', (postTitle, title, season, seasonPart) => {
+    const result = parseSeason(postTitle) as Season;
+    expect(result.seasons[0]).toEqual(season);
+    expect(result.seasonPart).toBe(seasonPart);
+    expect(result.seriesTitle).toBe(title);
+    expect(result.isPartialSeason).toBe(true);
+  });
+
   const crapCases: Array<[string]> = [
     ['76El6LcgLzqb426WoVFg1vVVVGx4uCYopQkfjmLe'],
     ['Vrq6e1Aba3U amCjuEgV5R2QvdsLEGYF3YQAQkw8'],
