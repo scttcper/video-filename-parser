@@ -44,7 +44,7 @@
     "rollup-plugin-node-globals": "1.4.0",
     "rollup-plugin-serve": "1.0.1",
     "rollup-plugin-terser": "5.1.2",
-    "rollup-plugin-typescript2": "0.25.1",
+    "rollup-plugin-typescript2": "0.24.3",
     "semantic-release": "15.13.28",
     "ts-jest": "24.1.0",
     "typescript": "3.6.4"
