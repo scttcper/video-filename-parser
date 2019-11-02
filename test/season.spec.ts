@@ -50,6 +50,16 @@ describe('season', () => {
     expect(result.isMultiSeason).toBe(true);
   });
 
+  const multiEpisodeCases: Array<[string, string, number[]]> = [
+    ['The Morning Show S01E01-E03 2019 1080p WEBRip X264 AC3-EVO', 'The Morning Show', [1, 2, 3]],
+  ];
+  it.each(multiEpisodeCases)('should parse multi season release "%s"', (postTitle, title, episodes) => {
+    const result = parseSeason(postTitle) as Season;
+    expect(result.episodeNumbers).toEqual(episodes);
+    expect(result.seriesTitle).toBe(title);
+    expect(result.isMultiSeason).toBe(false);
+  });
+
   const partialSeasonPackCases: Array<[string, string, number, number]> = [
     ['The.Ranch.2016.S02.Part.1.1080p.NF.WEBRip.DD5.1.x264-NTb', 'The Ranch 2016', 2, 1],
   ];
