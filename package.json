@@ -30,8 +30,8 @@
   "devDependencies": {
     "@types/jest": "24.0.21",
     "@types/node": "12.12.5",
-    "@typescript-eslint/eslint-plugin": "2.6.0",
-    "@typescript-eslint/parser": "2.6.0",
+    "@typescript-eslint/eslint-plugin": "2.6.1",
+    "@typescript-eslint/parser": "2.6.1",
     "eslint": "6.6.0",
     "eslint-config-xo-space": "0.21.0",
     "eslint-config-xo-typescript": "0.19.0",
@@ -45,7 +45,7 @@
     "rollup-plugin-serve": "1.0.1",
     "rollup-plugin-terser": "5.1.2",
     "rollup-plugin-typescript2": "0.24.3",
-    "semantic-release": "15.13.29",
+    "semantic-release": "15.13.30",
     "ts-jest": "24.1.0",
     "typescript": "3.6.4"
   },
