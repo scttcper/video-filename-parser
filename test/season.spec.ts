@@ -98,6 +98,18 @@ describe('season', () => {
     expect(parseSeason(postTitle)).toBe(null);
   });
 
+  const oddCases: Array<[string, string, number, number]> = [
+    ['Curb Your Enthusiasm - 2x09 - The Baptism.mkv', 'Curb Your Enthusiasm', 2, 9],
+  ];
+  it.each(oddCases)('should not parse "%s"', (postTitle, title, season, episodeNumber) => {
+    const result = parseSeason(postTitle) as Season;
+    expect(result.seriesTitle).toBe(title);
+    expect(result.seasons).toHaveLength(1);
+    expect(result.seasons[0]).toBe(season);
+    expect(result.episodeNumbers).toHaveLength(1);
+    expect(result.episodeNumbers[0]).toBe(episodeNumber);
+  });
+
   const animeSpecialCases: Array<[string, string, number]> = [
     ['[DeadFish] Kenzen Robo Daimidaler - 01 - Special [BD][720p][AAC]', 'Kenzen Robo Daimidaler', 1],
     ['[DeadFish] Kenzen Robo Daimidaler - 01 - OVA [BD][720p][AAC]', 'Kenzen Robo Daimidaler', 1],
