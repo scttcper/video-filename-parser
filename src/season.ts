@@ -238,7 +238,7 @@ export function parseSeason(title: string): Season | null {
 
   // parse daily episodes with mmddyy eg `At.Midnight.140722.720p.HDTV.x264-YesTV`
   const sixDigitAirDateMatch = sixDigitAirDateMatchExp.exec(title);
-  if (sixDigitAirDateMatch !== null && sixDigitAirDateMatch.groups !== undefined) {
+  if (sixDigitAirDateMatch?.groups) {
     const airYear = sixDigitAirDateMatch.groups.airyear;
     const airMonth = sixDigitAirDateMatch.groups.airmonth;
     const airDay = sixDigitAirDateMatch.groups.airday;
@@ -251,7 +251,7 @@ export function parseSeason(title: string): Season | null {
 
   for (const exp of reportTitleExp) {
     const match = exp.exec(simpleTitle);
-    if (match !== null && match.groups !== undefined) {
+    if (match?.groups) {
       const result = parseMatchCollection(match, simpleTitle);
 
       if (result === null) {
@@ -267,15 +267,15 @@ export function parseSeason(title: string): Season | null {
         releaseTitle: title,
         seriesTitle: result.seriesName,
         // seriesTitleInfo: 0,
-        seasons: result.seasonNumbers || [],
-        episodeNumbers: result.episodeNumbers || [],
-        airDate: result.airDate || null,
-        fullSeason: result.fullSeason || false,
-        isPartialSeason: result.isPartialSeason || false,
-        isMultiSeason: result.isMultiSeason || false,
-        isSeasonExtra: result.isSeasonExtra || false,
-        isSpecial: result.isSpecial || false,
-        seasonPart: result.seasonPart || 0,
+        seasons: result.seasonNumbers ?? [],
+        episodeNumbers: result.episodeNumbers ?? [],
+        airDate: result.airDate ?? null,
+        fullSeason: result.fullSeason ?? false,
+        isPartialSeason: result.isPartialSeason ?? false,
+        isMultiSeason: result.isMultiSeason ?? false,
+        isSeasonExtra: result.isSeasonExtra ?? false,
+        isSpecial: result.isSpecial ?? false,
+        seasonPart: result.seasonPart ?? 0,
       };
     }
   }

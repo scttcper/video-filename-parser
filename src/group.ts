@@ -18,7 +18,7 @@ export function parseGroup(title: string) {
   }
 
   const animeResult = animeReleaseGroupExp.exec(trimmed);
-  if (animeResult && animeResult.groups) {
+  if (animeResult?.groups) {
     return animeResult.groups.subgroup;
   }
 

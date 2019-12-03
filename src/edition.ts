@@ -53,7 +53,7 @@ export function parseEditionText(title: string): string {
   const editionGlobalExp = RegExp(editionTextExp.source, 'gi');
   let expResult;
   while ((expResult = editionGlobalExp.exec(normalizedTitle))) {
-    if (expResult && expResult.groups && expResult.groups.edition && expResult.groups.edition.length > 0) {
+    if (expResult?.groups?.edition && expResult.groups.edition.length > 0) {
       result.push(expResult.groups.edition.replace(/\./g, ' '));
     }
   }

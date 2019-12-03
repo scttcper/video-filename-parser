@@ -32,7 +32,7 @@ export function parseTitleAndYear(
 
   for (const exp of regexes) {
     const match = exp.exec(simpleTitle);
-    if (match !== null && match.groups !== undefined) {
+    if (match?.groups) {
       const result = releaseTitleCleaner(match.groups.title);
       if (result === null) {
         continue;
@@ -47,13 +47,13 @@ export function parseTitleAndYear(
   // year not found, attack using codec or resolution
   // attempt to parse using the first found artifact like codec
   const resolutionText = parseResolution(title).source;
-  const resolutionPosition = title.indexOf(resolutionText || '');
+  const resolutionPosition = title.indexOf(resolutionText ?? '');
   const videoCodecTest = parseVideoCodec(title).source;
-  const videoCodecPosition = title.indexOf(videoCodecTest || '');
+  const videoCodecPosition = title.indexOf(videoCodecTest ?? '');
   const channelsTest = parseAudioChannels(title).source;
-  const channelsPosition = title.indexOf(channelsTest || '');
+  const channelsPosition = title.indexOf(channelsTest ?? '');
   const audioCodecTest = parseAudioCodec(title).source;
-  const audioCodecPosition = title.indexOf(audioCodecTest || '');
+  const audioCodecPosition = title.indexOf(audioCodecTest ?? '');
   const positions = [
     resolutionPosition,
     audioCodecPosition,

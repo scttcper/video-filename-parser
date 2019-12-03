@@ -191,7 +191,7 @@ export function parseQualityModifyers(title: string): Revision {
   }
 
   const versionResult = versionExp.exec(normalizedTitle);
-  if (versionResult && versionResult.groups) {
+  if (versionResult?.groups) {
     // get numbers from version regex
     const digits = /\d/i.exec(versionResult.groups.version);
     if (digits) {

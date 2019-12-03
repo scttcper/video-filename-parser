@@ -131,48 +131,48 @@ export function parseLanguage(title: string): Language[] {
   }
 
   const result = languageExp.exec(languageTitle);
-  if (result !== null && result.groups !== undefined) {
-    if (result.groups.italian !== undefined) {
+  if (result?.groups) {
+    if (result.groups.italian) {
       languages.push(Language.Italian);
     }
 
-    if (result.groups.german !== undefined) {
+    if (result.groups.german) {
       languages.push(Language.German);
     }
 
-    if (result.groups.flemish !== undefined) {
+    if (result.groups.flemish) {
       languages.push(Language.Flemish);
     }
 
-    if (result.groups.greek !== undefined) {
+    if (result.groups.greek) {
       languages.push(Language.Greek);
     }
 
-    if (result.groups.french !== undefined) {
+    if (result.groups.french) {
       languages.push(Language.French);
     }
 
-    if (result.groups.russian !== undefined) {
+    if (result.groups.russian) {
       languages.push(Language.Russian);
     }
 
-    if (result.groups.dutch !== undefined) {
+    if (result.groups.dutch) {
       languages.push(Language.Dutch);
     }
 
-    if (result.groups.hungarian !== undefined) {
+    if (result.groups.hungarian) {
       languages.push(Language.Hungarian);
     }
 
-    if (result.groups.hebrew !== undefined) {
+    if (result.groups.hebrew) {
       languages.push(Language.Hebrew);
     }
 
-    if (result.groups.czech !== undefined) {
+    if (result.groups.czech) {
       languages.push(Language.Czech);
     }
 
-    if (result.groups.ukrainian !== undefined) {
+    if (result.groups.ukrainian) {
       languages.push(Language.Ukrainian);
     }
   }
