@@ -6,7 +6,7 @@ const cleanReleaseGroupExp = /^(.*?[-._ ](S\d+E\d+)[-._ ])|(-(RP|1|NZBGeek|Obfus
 const releaseGroupRegexExp = /-(?<releasegroup>[a-z0-9]+)(?<!WEB-DL|480p|720p|1080p|2160p|DTS-HD)(?:\b|[-._ ])/i;
 const animeReleaseGroupExp = /^(?:\[(?<subgroup>(?!\s).+?(?<!\s))\](?:_|-|\s|\.)?)/i;
 
-export function parseGroup(title: string) {
+export function parseGroup(title: string): string | null {
   const nowebsiteTitle = title.replace(websitePrefixExp, '');
   let { title: releaseTitle } = parseTitleAndYear(nowebsiteTitle);
   releaseTitle = releaseTitle.replace(/ /g, '.');

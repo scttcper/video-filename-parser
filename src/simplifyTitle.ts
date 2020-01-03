@@ -13,7 +13,7 @@ export function simplifyTitle(title: string): string {
 
 const requestInfoRegex = /\[.+?\]/i;
 
-export function releaseTitleCleaner(title: string) {
+export function releaseTitleCleaner(title: string): string | null {
   if (title.length === 0 || title === '(') {
     return null;
   }

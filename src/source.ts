@@ -30,7 +30,28 @@ export enum Source {
   TV = 'TV',
 }
 
-export function parseSourceGroups(title: string) {
+interface SourceGroups {
+  bluray: boolean;
+  webdl: boolean;
+  hdtv: boolean;
+  bdrip: boolean;
+  brrip: boolean;
+  scr: boolean;
+  dvdr: boolean;
+  dvd: boolean;
+  dsr: boolean;
+  regional: boolean;
+  ppv: boolean;
+  ts: boolean;
+  tc: boolean;
+  cam: boolean;
+  workprint: boolean;
+  pdtv: boolean;
+  sdtv: boolean;
+  tvrip: boolean;
+}
+
+export function parseSourceGroups(title: string): SourceGroups {
   const normalizedName = title.replace(/_/g, ' ')
     .replace(/\[/g, ' ')
     .replace(/\]/g, ' ')

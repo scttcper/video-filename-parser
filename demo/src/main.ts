@@ -9,11 +9,11 @@ const isTv = document.querySelector<HTMLInputElement>('#isTv');
 input.addEventListener('input', () => update());
 isTv.addEventListener('input', () => update());
 
-function update() {
+function update(): void {
   inputChange(input.value, isTv.checked);
 }
 
-function inputChange(str: string, isTv: boolean) {
+function inputChange(str: string, isTv: boolean): void {
   output.innerHTML = JSON.stringify(filenameParse(str, isTv), null, 2);
 }
 
