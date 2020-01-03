@@ -62,7 +62,7 @@ export function parseTitleAndYear(
   ].filter(x => x > 0);
   if (positions.length) {
     const firstPosition = Math.min(...positions);
-    return { title: releaseTitleCleaner(title.slice(0, firstPosition)) || '', year: null };
+    return { title: releaseTitleCleaner(title.slice(0, firstPosition)) ?? '', year: null };
   }
 
   return { title: title.trim(), year: null };
