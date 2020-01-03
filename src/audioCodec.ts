@@ -2,7 +2,7 @@ const mp3CodecExp = /\b(?<mp3>(LAME(?:\d)+-?(?:\d)+)|(mp3))\b/i;
 const mp2CodecExp = /\b(?<mp2>(mp2))\b/i;
 const dolbyCodecExp = /\b(?<dolby>(Dolby)|(Dolby-?Digital)|(DD)|(AC3D?))\b/i;
 const dolbyAtmosCodecExp = /\b(?<dolbyatmos>(Dolby-?Atmos))\b/i;
-const aacAtmosCodecExp = /\b(?<aac>(AAC(?:ch)?(?=[^\d]|$)?))/i;
+const aacAtmosCodecExp = /\b(?<aac>(AAC))(\d?.?\d?)(ch)?\b/i;
 const eac3CodecExp = /\b(?<eac3>(EAC3|DDP|DD\+))\b/i;
 const flacCodecExp = /\b(?<flac>(FLAC))\b/i;
 const dtsCodecExp = /\b(?<dts>(DTS))\b/i;

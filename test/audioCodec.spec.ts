@@ -17,6 +17,18 @@ describe('parseAudioCodec', () => {
       { codec: AudioCodec.AAC, source: 'AAC' },
     ],
     [
+      'Girl on the Third Floor 2019 BRRip x264 AAC-SSN',
+      { codec: AudioCodec.AAC, source: 'AAC' },
+    ],
+    [
+      'New Eden S01E01 Who Are These Women CRAV WEB-DL AAC2 0 H 264-BTW',
+      { codec: AudioCodec.AAC, source: 'AAC' },
+    ],
+    [
+      'South Park S20E08 Members Only Uncensored 1080p WEB-DL HEVC x265 AAC2ch-NEBO666',
+      { codec: AudioCodec.AAC, source: 'AAC' },
+    ],
+    [
       'Behind the Candelabra 2013 BDRip 1080p DTS-HD extra-HighCode',
       { codec: AudioCodec.DTSHD, source: 'DTS-HD' },
     ],
