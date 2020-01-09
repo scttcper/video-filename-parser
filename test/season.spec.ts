@@ -257,8 +257,10 @@ describe('season', () => {
     ['Abc Abc 484 VOSTFR par Abc-Abc (1280*720) - version MQ', 'Abc Abc', 484, 0],
     ['Abc - Abc Abc Abc - 107 VOSTFR par Fansub-Miracle Sharingan (1920x1080) - HQ_Draft', 'Abc - Abc Abc Abc', 107, 0],
     ['Abc Abc Abc Abc Episode 10 VOSTFR (1920x1080) Miracle Sharingan Fansub.MKV - Team - (� suivre)', 'Abc Abc Abc Abc', 10, 0],
+    ['Great British Railway Journeys S11E03 480p x264-mSD [eztv]', 'Great British Railway Journeys', 3, 11],
+    ['Radiant S02E14 480p x264-mSD [eztv]', 'Radiant', 14, 2],
+    ['This Hour Has 22 Minutes S27E11 480p x264-mSD [eztv]', 'This Hour Has 22 Minutes', 11, 27],
   ];
-  // eslint-disable-next-line max-params
   it.each(absoluteEpisodeCases)('should parse absolute episode numbers "%s"', (postTitle, title, absoluteEpisodeNumber, seasonNumber) => {
     const result = parseSeason(postTitle) as Season;
     expect(result.seriesTitle).toBe(title);
