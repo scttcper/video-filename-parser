@@ -51,7 +51,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
   let title: ParsedFilename['title'] = '';
   let year: ParsedFilename['year'] = null;
 
-  if (isTv === false) {
+  if (!isTv) {
     const titleAndYear = parseTitleAndYear(name);
     title = titleAndYear.title;
     year = titleAndYear.year;

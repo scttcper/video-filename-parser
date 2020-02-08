@@ -51,7 +51,7 @@ export function releaseTitleCleaner(title: string): string | null {
     if (part.length === 1 && part.toLowerCase() !== 'a' && Number.isNaN(parseInt(part, 10))) {
       result += part + '.';
       previousAcronym = true;
-    } else if (part.toLowerCase() === 'a' && (previousAcronym === true || nextPart.length === 1)) {
+    } else if (part.toLowerCase() === 'a' && (previousAcronym || nextPart.length === 1)) {
       result += part + '.';
       previousAcronym = true;
     } else {
