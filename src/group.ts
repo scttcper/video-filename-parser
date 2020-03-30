@@ -31,7 +31,7 @@ export function parseGroup(title: string): string | null {
       continue;
     }
 
-    const group = result.groups.releasegroup;
+    const group = result.groups.releasegroup as string;
 
     if (!Number.isNaN(Number(group))) {
       return null;

@@ -83,6 +83,7 @@ describe('parseEdition', () => {
   test.each(cases)('should get edition of "%s"', (title, expected) => {
     const result = parseEdition(title);
     const trueKeys: Partial<Edition> = {};
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     Object.entries(result).filter(n => n[1]).forEach(([key, value]) => {
       trueKeys[key] = value;
     });
