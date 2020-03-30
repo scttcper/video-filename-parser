@@ -13,8 +13,8 @@ npm install @ctrl/video-filename-parser
 ## Use
 
 ##### parameters:  
-**title** - The title or filename to be parsed  
-**isTv** - parsed as a tv show  
+**title** string - The title or filename to be parsed  
+**isTv** boolean - parsed as a tv show (default false)  
 
 ```ts
 import { filenameParse } from '@ctrl/video-filename-parse';
