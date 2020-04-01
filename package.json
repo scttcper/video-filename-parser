@@ -38,7 +38,7 @@
     "eslint-plugin-import": "2.20.2",
     "jest": "25.2.4",
     "jest-junit": "10.0.0",
-    "rollup": "2.3.0",
+    "rollup": "2.3.2",
     "rollup-plugin-livereload": "1.1.0",
     "rollup-plugin-node-builtins": "2.1.2",
     "rollup-plugin-node-globals": "1.4.0",
