@@ -2,7 +2,7 @@
 
 > A simple file / release name parser based heavily on radarr's movie parsing
 
-__DEMO__: https://video-filename-parser.netlify.com/  
+__DEMO__: https://video-filename-parser.vercel.app  
 
 ## Install
 
