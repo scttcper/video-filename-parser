@@ -1,4 +1,4 @@
-# video-filename-parser [![npm](https://img.shields.io/npm/v/@ctrl/video-filename-parser.svg?maxAge=3600)](https://www.npmjs.com/package/@ctrl/video-filename-parser) [![CircleCI](https://circleci.com/gh/TypeCtrl/video-filename-parser.svg?style=svg)](https://circleci.com/gh/TypeCtrl/video-filename-parser) [![coverage status](https://codecov.io/gh/typectrl/video-filename-parser/branch/master/graph/badge.svg)](https://codecov.io/gh/typectrl/video-filename-parser)
+# video-filename-parser [![npm](https://img.shields.io/npm/v/@ctrl/video-filename-parser.svg?maxAge=3600)](https://www.npmjs.com/package/@ctrl/video-filename-parser) [![CircleCI](https://badgen.net/circleci/github/scttcper/vide-filename-parser)](https://circleci.com/gh/scttcper/video-filename-parser) [![coverage](https://codecov.io/gh/scttcper/video-filename-parser/branch/master/graph/badge.svg)](https://codecov.io/gh/scttcper/video-filename-parser)
 
 > A simple file / release name parser based heavily on radarr's movie parsing
 
