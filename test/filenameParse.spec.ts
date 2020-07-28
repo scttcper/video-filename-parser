@@ -47,7 +47,7 @@ describe('filenameParse', () => {
       }),
     ],
     [
-      'This.is.40.2012.PROPER.UNRATED.720p.BluRay.x264-Felony',
+      'This.is.40.2012.PROPER.UNRATED.720p.BluRay.MULti.x264-Felony',
       expect.objectContaining({
         edition: expect.objectContaining({ unrated: true }),
         resolution: Resolution.R720P,
@@ -61,6 +61,7 @@ describe('filenameParse', () => {
         revision: { version: 2, real: 0 },
         qualitySource: QualitySource.NAME,
         languages: [Language.English],
+        multi: true,
         isTv: false,
       }),
     ],

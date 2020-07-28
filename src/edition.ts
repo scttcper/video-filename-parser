@@ -10,7 +10,6 @@ const fanExp = /\b(Despecialized|Fan.?Edit)\b/i;
 const limitedExp = /\b(LIMITED)\b/i;
 const hdrExp = /\b(HDR)\b/i;
 const internalExp = /\b(INTERNAL)\b/i;
-const multiExp = /\b(MULTi)\b/i;
 
 export interface Edition {
   limited: boolean;
@@ -23,7 +22,6 @@ export interface Edition {
   fanEdit: boolean;
   hdr: boolean;
   internal: boolean;
-  multi: boolean;
 }
 
 export function parseEdition(title: string): Edition {
@@ -40,7 +38,6 @@ export function parseEdition(title: string): Edition {
     limited: limitedExp.test(editionText),
     hdr: hdrExp.test(editionText),
     internal: internalExp.test(editionText),
-    multi: multiExp.test(editionText),
   };
 }
 

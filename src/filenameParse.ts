@@ -8,7 +8,7 @@ import { parseQuality, Revision, QualitySource } from './quality';
 import { parseAudioCodec, AudioCodec } from './audioCodec';
 import { parseAudioChannels, Channels } from './audioChannels';
 import { parseSeason, Season } from './season';
-import { parseLanguage, Language } from './language';
+import { parseLanguage, Language, isMulti } from './language';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type ParsedTvInfo = Omit<Season, 'releaseTitle' | 'seriesTitle'>;
@@ -26,6 +26,7 @@ export interface ParsedFilename extends ParsedTvInfo {
   revision: Revision;
   qualitySource: QualitySource;
   languages: Language[];
+  multi: boolean;
   isTv: boolean;
 }
 
@@ -88,6 +89,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
   const group = parseGroup(name);
   const languages = parseLanguage(name);
   const quality = parseQuality(name);
+  const multi = isMulti(name);
 
   return {
     title,
@@ -101,6 +103,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
     group,
     edition,
     languages,
+    multi,
     qualitySource: quality.qualitySource,
     ...seasonResult,
     isTv,

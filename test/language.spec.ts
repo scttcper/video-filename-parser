@@ -1,4 +1,4 @@
-import { parseLanguage, Language } from '../src';
+import { parseLanguage, Language, isMulti } from '../src';
 
 describe('parseLanguage', () => {
   const tests: Array<[string, Language[]]> = [
@@ -50,5 +50,16 @@ describe('parseLanguage', () => {
   ];
   test.each(tests)('should get language of "%s"', (title, languages) => {
     expect(parseLanguage(title)).toEqual(languages);
+  });
+});
+
+describe('multi', () => {
+  const tests: Array<[string]> = [
+    ['Ouija.Origin.of.Evil.2016.MULTi.TRUEFRENCH.1080p.BluRay.x264-MELBA'],
+    ['Showdown.In.Little.Tokyo.1991.MULTI.VFQ.VFF.DTSHD-MASTER.1080p.BluRay.x264-ZombiE'],
+    ['The.Polar.Express.2004.MULTI.VF2.1080p.BluRay.x264-PopHD'],
+  ];
+  test.each(tests)('should be multi', title => {
+    expect(isMulti(title)).toBeTruthy();
   });
 });

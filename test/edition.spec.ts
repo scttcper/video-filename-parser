@@ -82,10 +82,6 @@ describe('parseEdition', () => {
   ];
   test.each(cases)('should get edition of "%s"', (title, expected) => {
     const result = parseEdition(title);
-    const trueKeys: Partial<Edition> = {};
-    Object.entries(result).filter(n => n[1]).forEach(([key, value]) => {
-      trueKeys[key] = value;
-    });
-    expect(trueKeys).toEqual(expected);
+    expect(result).toEqual(expect.objectContaining(expected));
   });
 });
