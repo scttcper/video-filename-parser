@@ -20,12 +20,14 @@ describe('source', () => {
     ['The Interview 2014 1080p WEB-DL x264 AAC MerryXmas', [Source.WEBDL]],
     ['John Wick Chapter 2 2017 720p WEB-DL X264 AC3-EVO', [Source.WEBDL]],
     ['Into the Storm 720 WEBDL (RUSSiAN & ENGLISH AUDIO)', [Source.WEBDL]],
-    ['Michael 1996 1080p AMZN WEBCap DD+5.1 x264-LEGi0N', [Source.WEBDL]],
-    ['hello 1996 1080p WEBCap DD+5.1 x264-LEGi0N', [Source.WEBDL]],
+    ['Michael 1996 1080p AMZN WEBCap DD+5.1 x264-LEGi0N', [Source.WEBRIP]],
     ['Avengers Infinity War 2018 NEW PROPER 720p HD-CAM X264 HQ-LPG', [Source.CAM]],
     ['The Hunger Games Mockingjay - Part 1 (2014) 576p NEW CAM XViD', [Source.CAM]],
     ['Suicide Squad 2016 CAM UnKnOwN', [Source.CAM]],
     ['Star Trek Beyond (2016) ENG Cam V2 XviD UnKnOwN', [Source.CAM]],
+    ['Parasite.2019.MULTi.VFI.WEBrip.2160p.HDR.x265.True.HD-Tokuchi', [Source.WEBRIP]],
+    ['How You Look At Me 2019 720p AMZN WEBRip AAC2 0 X 264-EVO', [Source.WEBRIP]],
+    ['Series Title - S01E11 2020 1080p Viva MKV WEB', [Source.WEBDL]],
   ];
   test.each(singleCases)('should parse source "%s"', (title, expected) => {
     expect(parseSource(title)).toEqual(expected);

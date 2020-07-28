@@ -1,5 +1,6 @@
 const blurayExp = /\b(?<bluray>M?Blu-?Ray|HDDVD|BD|BDISO|BD25|BD50|BR.?DISK|Bluray(1080|720)p?|BD(1080|720)p?)\b/i;
-const webdlExp = /\b(?<webdl>WEB[-_. ]DL|HDRIP|WEBDL|WebRip|Web-Rip|NETFLIX|AMZN|iTunesHD|WebHD|WEBCap|[. ]WEB[. ](?:[xh]26[45]|DD5[. ]1)|\d+0p[. ]WEB[. ])\b/i;
+const webdlExp = /\b(?<webdl>WEB[-_. ]DL|HDRIP|WEBDL|WEB-DLMux|NETFLIX|NetflixU?HD|DSNY|DSNP|AMZN|AmazonHD|iTunesHD|MaxdomeHD|WebHD|WEB$|[. ]WEB[. ](?:[xh]26[45]|DD5[. ]1)|\d+0p[. ]WEB[. ]|\b\s\/\sWEB\s\/\s\b|AMZN[. ]WEB[. ])\b/i;
+const webripExp = /\b(?<webrip>HDRIP|WebRip|Web-Rip|WEBCap|WEBMux)\b/i;
 const hdtvExp = /\b(?<hdtv>HDTV)\b/i;
 const bdripExp = /\b(?<bdrip>BDRip)\b/i;
 const brripExp = /\b(?<brrip>BRRip)\b/i;
@@ -20,6 +21,7 @@ const tvripExp = /\b(?<tvrip>TVRip)\b/i;
 export enum Source {
   BLURAY = 'BLURAY',
   WEBDL = 'WEBDL',
+  WEBRIP = 'WEBRIP',
   DVD = 'DVD',
   CAM = 'CAM',
   SCREENER = 'SCREENER',
@@ -33,6 +35,7 @@ export enum Source {
 interface SourceGroups {
   bluray: boolean;
   webdl: boolean;
+  webrip: boolean;
   hdtv: boolean;
   bdrip: boolean;
   brrip: boolean;
@@ -60,6 +63,7 @@ export function parseSourceGroups(title: string): SourceGroups {
   return {
     bluray: blurayExp.test(normalizedName),
     webdl: webdlExp.test(normalizedName),
+    webrip: webripExp.test(normalizedName),
     hdtv: hdtvExp.test(normalizedName),
     bdrip: bdripExp.test(normalizedName),
     brrip: brripExp.test(normalizedName),
@@ -91,7 +95,11 @@ export function parseSource(title: string): Source[] {
     result.push(Source.BLURAY);
   }
 
-  if (groups.webdl) {
+  if (groups.webrip) {
+    result.push(Source.WEBRIP);
+  }
+
+  if (!groups.webrip && groups.webdl) {
     result.push(Source.WEBDL);
   }
 
