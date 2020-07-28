@@ -60,7 +60,7 @@ describe('parseQuality', () => {
   });
 
   const webdl720pCases: Array<[string, boolean]> = [
-    ['Arrested.Development.S04E01.720p.WEBRip.AAC2.0.x264-NFRiP', false],
+    ['Arrested.Development.S04E01.720p.WEB.AAC2.0.x264-NFRiP', false],
     ['Vanguard S01E04 Mexicos Death Train 720p WEB DL', false],
     ['Hawaii Five 0 S02E21 720p WEB DL DD5 1 H 264', false],
     ['Castle S04E22 720p WEB DL DD5 1 H 264 NFHD', false],
@@ -94,7 +94,7 @@ describe('parseQuality', () => {
   const webdl1080pCases: Array<[string, boolean]> = [
     ['[HorribleSubs] Yowamushi Pedal - 32 [1080p]', false],
     ['Under the Dome S01E10 Let the Games Begin 1080p', false],
-    ['Arrested.Development.S04E01.iNTERNAL.1080p.WEBRip.x264-QRUS', false],
+    ['Arrested.Development.S04E01.iNTERNAL.1080p.WEB.x264-QRUS', false],
     ['CSI NY S09E03 1080p WEB DL DD5 1 H264 NFHD', false],
     ['Two and a Half Men S10E03 1080p WEB DL DD5 1 H 264 NFHD', false],
     ['Criminal.Minds.S08E01.1080p.WEB-DL.DD5.1.H264-NFHD', false],
@@ -121,10 +121,10 @@ describe('parseQuality', () => {
   });
 
   const webdl2160pCases: Array<[string, boolean]> = [
-    ['CASANOVA S01E01.2160P AMZN WEBRIP DD2.0 HI10P X264-TROLLUHD', false],
-    ['JUST ADD MAGIC S01E01.2160P AMZN WEBRIP DD2.0 X264-TROLLUHD', false],
-    ['The.Man.In.The.High.Castle.S01E01.2160p.AMZN.WEBRip.DD2.0.Hi10p.X264-TrollUHD', false],
-    ['The Man In the High Castle S01E01 2160p AMZN WEBRip DD2.0 Hi10P x264-TrollUHD', false],
+    ['CASANOVA S01E01.2160P AMZN WEB DD2.0 HI10P X264-TROLLUHD', false],
+    ['JUST ADD MAGIC S01E01.2160P AMZN WEB DD2.0 X264-TROLLUHD', false],
+    ['The.Man.In.The.High.Castle.S01E01.2160p.AMZN.WEBDL.DD2.0.Hi10p.X264-TrollUHD', false],
+    ['The Man In the High Castle S01E01 2160p AMZN WEBDL DD2.0 Hi10P x264-TrollUHD', false],
     ['The.Nightly.Show.2016.03.14.2160p.WEB.x264-spamTV', false],
     ['The.Nightly.Show.2016.03.14.2160p.WEB.h264-spamTV', false],
     ['The.Nightly.Show.2016.03.14.2160p.WEB.PROPER.h264-spamTV', true],

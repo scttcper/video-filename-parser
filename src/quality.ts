@@ -274,8 +274,8 @@ export function parseQuality(title: string): QualityModel {
       return result;
     }
 
-    if (sourceGroups.webdl) {
-      result.sources = [Source.WEBDL];
+    if (sourceGroups.webdl || sourceGroups.webrip) {
+      result.sources = source;
       if (resolution === null) {
         result.resolution = Resolution.R480P;
       }

@@ -1,6 +1,6 @@
 const blurayExp = /\b(?<bluray>M?Blu-?Ray|HDDVD|BD|BDISO|BD25|BD50|BR.?DISK|Bluray(1080|720)p?|BD(1080|720)p?)\b/i;
 const webdlExp = /\b(?<webdl>WEB[-_. ]DL|HDRIP|WEBDL|WEB-DLMux|NETFLIX|NetflixU?HD|DSNY|DSNP|AMZN|AmazonHD|iTunesHD|MaxdomeHD|WebHD|WEB$|[. ]WEB[. ](?:[xh]26[45]|DD5[. ]1)|\d+0p[. ]WEB[. ]|\b\s\/\sWEB\s\/\s\b|AMZN[. ]WEB[. ])\b/i;
-const webripExp = /\b(?<webrip>HDRIP|WebRip|Web-Rip|WEBCap|WEBMux)\b/i;
+const webripExp = /\b(?<webrip>WebRip|Web-Rip|WEBCap|WEBMux)\b/i;
 const hdtvExp = /\b(?<hdtv>HDTV)\b/i;
 const bdripExp = /\b(?<bdrip>BDRip)\b/i;
 const brripExp = /\b(?<brrip>BRRip)\b/i;

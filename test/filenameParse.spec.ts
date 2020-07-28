@@ -82,6 +82,16 @@ describe('filenameParse', () => {
         isTv: false,
       }),
     ],
+    [
+      'Togo 2019 2160p HDR DSNP WEBRip DDPAtmos 5 1 X265-TrollUHD',
+      expect.objectContaining({
+        resolution: Resolution.R2160P,
+        sources: [Source.WEBRIP],
+        title: 'Togo',
+        year: '2019',
+        group: 'TrollUHD',
+      }),
+    ],
   ];
   test.each(movieCases)('should get filename of "%s"', (title, expected) => {
     expect(filenameParse(title)).toEqual(expected);
