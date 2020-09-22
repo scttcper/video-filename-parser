@@ -1,4 +1,11 @@
-import { parseQualityModifyers, parseQuality, Source, Resolution, QualityModifier, QualitySource } from '../src';
+import {
+  parseQualityModifyers,
+  parseQuality,
+  Source,
+  Resolution,
+  QualityModifier,
+  QualitySource,
+} from '../src';
 
 describe('parseQualityModifier', () => {
   const versionCases: Array<[string, number]> = [
@@ -102,7 +109,7 @@ describe('parseQuality', () => {
     ['Two and a Half Men S10E03 1080p WEB DL DD5 1 H 264 REPACK NFHD', true],
     ['Glee.S04E09.Swan.Song.1080p.WEB-DL.DD5.1.H.264-ECI', false],
     ['The.Big.Bang.Theory.S06E11.The.Santa.Simulation.1080p.WEB-DL.DD5.1.H.264', false],
-    ['Rosemary\'s.Baby.S01E02.Night.2.[WEBDL-1080p].mkv', false],
+    ["Rosemary's.Baby.S01E02.Night.2.[WEBDL-1080p].mkv", false],
     ['The.Nightly.Show.2016.03.14.1080p.WEB.x264-spamTV', false],
     ['The.Nightly.Show.2016.03.14.1080p.WEB.h264-spamTV', false],
     ['Psych.S01.1080p.WEB-DL.AAC2.0.AVC-TrollHD', false],
@@ -153,7 +160,10 @@ describe('parseQuality', () => {
     ['The.Expanse.S01E07.RERIP.720p.BluRay.x264-DEMAND', true],
     ['John.Carpenter.Live.Retrospective.2016.2018.720p.MBluRay.x264-CRUELTY.mkv', false],
     ['Heart.Live.In.Atlantic.City.2019.720p.MBLURAY.x264-MBLURAYFANS.mkv', false],
-    ['Opeth.Garden.Of.The.Titans.Live.At.Red.Rocks.Amphitheatre.2017.720p.MBluRay.x264-TREBLE.mkv', false],
+    [
+      'Opeth.Garden.Of.The.Titans.Live.At.Red.Rocks.Amphitheatre.2017.720p.MBluRay.x264-TREBLE.mkv',
+      false,
+    ],
   ];
   test.each(bluray720Cases)('should parse bluray 720p "%s"', (title, proper) => {
     const quality = parseQuality(title);
@@ -175,7 +185,10 @@ describe('parseQuality', () => {
     ['[Coalgirls]_Durarara!!_01_(1920x1080_Blu-ray_FLAC)_[8370CB8F].mkv', false],
     ['John.Carpenter.Live.Retrospective.2016.2018.1080p.MBluRay.x264-CRUELTY.mkv', false],
     ['Heart.Live.In.Atlantic.City.2019.1080p.MBLURAY.x264-MBLURAYFANS.mkv', false],
-    ['Opeth.Garden.Of.The.Titans.Live.At.Red.Rocks.Amphitheatre.2017.1080p.MBluRay.x264-TREBLE.mkv', false],
+    [
+      'Opeth.Garden.Of.The.Titans.Live.At.Red.Rocks.Amphitheatre.2017.1080p.MBluRay.x264-TREBLE.mkv',
+      false,
+    ],
   ];
   test.each(bluray1080Cases)('should parse bluray 1080p "%s"', (title, proper) => {
     const quality = parseQuality(title);

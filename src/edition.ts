@@ -42,11 +42,7 @@ export function parseEdition(title: string): Edition {
 }
 
 export function parseEditionText(title: string): string {
-  const normalizedTitle = title
-    .trim()
-    .replace(/\[/g, ' ')
-    .replace(/\]/g, ' ')
-    .trim();
+  const normalizedTitle = title.trim().replace(/\[/g, ' ').replace(/\]/g, ' ').trim();
 
   const result: string[] = [];
 

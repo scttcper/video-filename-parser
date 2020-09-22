@@ -4,7 +4,12 @@ const stereoChannelExp = /(?<stereo>((2[\W]0(?:ch)?)(?=[^\d]|$))|(stereo))/i;
 const monoChannelExp = /(?<mono>(1[\W]0(?:ch)?)(?=[^\\d]|$)|(mono)|(1ch))/i;
 
 const channelExp = new RegExp(
-  [eightChannelExp.source, sixChannelExp.source, stereoChannelExp.source, monoChannelExp.source].join('|'),
+  [
+    eightChannelExp.source,
+    sixChannelExp.source,
+    stereoChannelExp.source,
+    monoChannelExp.source,
+  ].join('|'),
   'i',
 );
 
@@ -15,7 +20,9 @@ export enum Channels {
   MONO = 'mono',
 }
 
-export function parseAudioChannels(title: string): { channels: Channels | null; source: string | null } {
+export function parseAudioChannels(
+  title: string,
+): { channels: Channels | null; source: string | null } {
   const channelResult = channelExp.exec(title);
   if (!channelResult || !channelResult.groups) {
     return { channels: null, source: null };

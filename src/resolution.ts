@@ -16,7 +16,9 @@ const resolutionExp = new RegExp(
   'i',
 );
 
-export function parseResolution(title: string): { resolution: Resolution | null; source: string | null } {
+export function parseResolution(
+  title: string,
+): { resolution: Resolution | null; source: string | null } {
   const result = resolutionExp.exec(title);
   if (!result || !result.groups) {
     return { resolution: null, source: null };

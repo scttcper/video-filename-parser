@@ -49,7 +49,9 @@ export enum AudioCodec {
   LPCM = 'LPCM',
 }
 
-export function parseAudioCodec(title: string): { codec: AudioCodec | null; source: string | null } {
+export function parseAudioCodec(
+  title: string,
+): { codec: AudioCodec | null; source: string | null } {
   const audioResult = audioCodecExp.exec(title);
   if (!audioResult || !audioResult.groups) {
     return { codec: null, source: null };
@@ -111,4 +113,3 @@ export function parseAudioCodec(title: string): { codec: AudioCodec | null; sour
 
   return { codec: null, source: null };
 }
-

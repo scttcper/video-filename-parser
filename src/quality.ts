@@ -175,11 +175,7 @@ export const Quality = {
 } as const;
 
 export function parseQualityModifyers(title: string): Revision {
-  const normalizedTitle = title
-    .trim()
-    .replace(/_/g, ' ')
-    .trim()
-    .toLowerCase();
+  const normalizedTitle = title.trim().replace(/_/g, ' ').trim().toLowerCase();
 
   const result: Revision = {
     version: 1,
@@ -363,9 +359,7 @@ export function parseQuality(title: string): QualityModel {
 
   // make vague assumptions based on file extension
   if (result.sources.length === 0) {
-    const extension = extname(title)
-      .trim()
-      .toLowerCase();
+    const extension = extname(title).trim().toLowerCase();
     if (extension.length > 0) {
       result.sources = getSourceForExtension(extension);
       result.resolution = getResolutionForExtension(extension);

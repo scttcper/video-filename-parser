@@ -371,7 +371,9 @@ export function parseMatchCollection(
     }
 
     const episodeCaptures = [groups.episode, groups.episode1].filter(x => x);
-    const absoluteEpisodeCaptures = [groups.absoluteepisode, groups.absoluteepisode1].filter(x => x);
+    const absoluteEpisodeCaptures = [groups.absoluteepisode, groups.absoluteepisode1].filter(
+      x => x,
+    );
 
     // handle 0 episode possibly indicating a full season release
     if (episodeCaptures.length) {
@@ -390,7 +392,7 @@ export function parseMatchCollection(
       const first = Number(absoluteEpisodeCaptures[0]);
       const last = Number(absoluteEpisodeCaptures[episodeCaptures.length - 1]);
 
-      if ((first % 1) !== 0 || (last % 1) !== 0) {
+      if (first % 1 !== 0 || last % 1 !== 0) {
         if (absoluteEpisodeCaptures.length !== 1) {
           return null;
         }

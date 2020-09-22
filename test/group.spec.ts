@@ -30,7 +30,10 @@ describe('parseGroup', () => {
     ['Aladdin.2019.1080p.BluRay.x264-SPARKS-WhiteRev', 'SPARKS'],
     ['Elvis.Presley.The.Searcher.2018.1080p.BluRay.x264-HANDJOB-BUYMORE', 'HANDJOB'],
     ['Kill.Bill.Vol.2.2004.1080p.BluRay.DTS.x264-CyTSuNee-AsRequested', 'CyTSuNee'],
-    ['The.Good.Doctor.S02E17.Breakdown.1080p.AMZN.WEB-DL.DDP5.1.H.264-SiGMA-AlternativeToRequested', 'SiGMA'],
+    [
+      'The.Good.Doctor.S02E17.Breakdown.1080p.AMZN.WEB-DL.DDP5.1.H.264-SiGMA-AlternativeToRequested',
+      'SiGMA',
+    ],
     ['Mandy.2018.NORDiC.1080p.BluRay.x264-EGEN-GEROV', 'EGEN'],
     ['TheEqualizer.2.2018.1080p.BluRay.DTS.X264-CMRG-Z0iDS3N', 'CMRG'],
     ['Ghosthouse.1988.720p.BluRay.x264-SADPANDA-Chamele0n', 'SADPANDA'],

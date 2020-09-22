@@ -16,10 +16,7 @@ describe('parseAudioCodec', () => {
       'The.Daily.Show.2015.07.01.Kirsten.Gillibrand.Extended.720p.Comedy.Central.WEBRip.AAC2.0.x264-BTW.mkv',
       { codec: AudioCodec.AAC, source: 'AAC' },
     ],
-    [
-      'Girl on the Third Floor 2019 BRRip x264 AAC-SSN',
-      { codec: AudioCodec.AAC, source: 'AAC' },
-    ],
+    ['Girl on the Third Floor 2019 BRRip x264 AAC-SSN', { codec: AudioCodec.AAC, source: 'AAC' }],
     [
       'New Eden S01E01 Who Are These Women CRAV WEB-DL AAC2 0 H 264-BTW',
       { codec: AudioCodec.AAC, source: 'AAC' },

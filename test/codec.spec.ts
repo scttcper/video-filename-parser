@@ -12,7 +12,7 @@ describe('parseVideoCodec', () => {
     ['Bridesmaids[2011][Unrated Edition]DvDrip AC3-aXXo', null],
     ['Get Out 2017 BluRay 10Bit 1080p DD5 1 H265-d3g', VideoCodec.X265],
     ['Minions 2015 720p HC HDRip X265 AC3 TiTAN', VideoCodec.X265],
-    ['Marvel\'s The Avengers 2012 BluRay 1080p DD5 1 10Bit H265-d3g', VideoCodec.X265],
+    ["Marvel's The Avengers 2012 BluRay 1080p DD5 1 10Bit H265-d3g", VideoCodec.X265],
     ['Exodus Gods and Kings 2014 MULTi 2160p UHD BluRay x265-SESKAPiLE', VideoCodec.X265],
     ['The Incredibles 2004 BluRay x264-jlw', VideoCodec.X264],
     ['Jack Reacher 2012 720p BluRay X264-AMIABLE', VideoCodec.X264],
