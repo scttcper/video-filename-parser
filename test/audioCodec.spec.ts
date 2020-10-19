@@ -29,6 +29,10 @@ describe('parseAudioCodec', () => {
       'Behind the Candelabra 2013 BDRip 1080p DTS-HD extra-HighCode',
       { codec: AudioCodec.DTSHD, source: 'DTS-HD' },
     ],
+    [
+      'Ex Machina 2015 UHD BluRay 2160p DTS-X 7 1 HDR x265 10bit-CHD',
+      { codec: AudioCodec.DTSHD, source: 'DTS-X' },
+    ],
   ];
   it.each(audioChannelCases)('should parse channel "%s"', (title, channel) => {
     expect(parseAudioCodec(title)).toEqual(channel);

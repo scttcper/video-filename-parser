@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "moduleResolution": "node",
-    "lib": ["es2019"],
+    "lib": ["es2020"],
     "target": "es2018",
     "module": "commonjs",
     "esModuleInterop": true,
@@ -10,7 +10,7 @@
     "noImplicitAny": false,
     "noUnusedLocals": true,
     "declaration": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "outDir": "dist"
   }
 }

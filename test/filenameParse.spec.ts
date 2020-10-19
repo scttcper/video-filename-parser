@@ -92,6 +92,15 @@ describe('filenameParse', () => {
         group: 'TrollUHD',
       }),
     ],
+    [
+      'Ex Machina 2015 UHD BluRay 2160p DTS-X 7 1 HDR x265 10bit-CHD',
+      expect.objectContaining({
+        title: 'Ex Machina',
+        year: '2015',
+        group: 'CHD',
+        resolution: Resolution.R2160P,
+      }),
+    ],
   ];
   test.each(movieCases)('should get filename of "%s"', (title, expected) => {
     expect(filenameParse(title)).toEqual(expected);

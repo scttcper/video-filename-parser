@@ -6,7 +6,7 @@ const aacAtmosCodecExp = /\b(?<aac>(AAC))(\d?.?\d?)(ch)?\b/i;
 const eac3CodecExp = /\b(?<eac3>(EAC3|DDP|DD\+))\b/i;
 const flacCodecExp = /\b(?<flac>(FLAC))\b/i;
 const dtsCodecExp = /\b(?<dts>(DTS))\b/i;
-const dtsHdCodecExp = /\b(?<dtshd>(DTS-?HD)|(DTS(?=-?MA)))\b/i;
+const dtsHdCodecExp = /\b(?<dtshd>(DTS-?HD)|(DTS(?=-?MA)|(DTS-X)))\b/i;
 const trueHdCodecExp = /\b(?<truehd>(True-?HD))\b/i;
 const opusCodecExp = /\b(?<opus>(Opus))\b/i;
 const vorbisCodecExp = /\b(?<vorbis>(Vorbis))\b/i;
