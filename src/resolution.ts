@@ -16,12 +16,10 @@ const resolutionExp = new RegExp(
   'i',
 );
 
-export function parseResolution(
-  title: string,
-): { resolution: Resolution | null; source: string | null } {
+export function parseResolution(title: string): { resolution?: Resolution; source?: string } {
   const result = resolutionExp.exec(title);
   if (!result || !result.groups) {
-    return { resolution: null, source: null };
+    return {};
   }
 
   for (const key of Object.keys(Resolution)) {
@@ -30,5 +28,5 @@ export function parseResolution(
     }
   }
 
-  return { resolution: null, source: null };
+  return {};
 }

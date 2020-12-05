@@ -7,7 +7,7 @@ describe('parseAudioCodec', () => {
       { codec: AudioCodec.DOLBY, source: 'Dolby' },
     ],
     ['Aladdin 2019 720p BluRay x264 AC3 5 1-OMEGA', { codec: AudioCodec.DOLBY, source: 'AC3' }],
-    ['Trespass Against Us (2017) 1080p BluRay x265 6ch -Dtech mkv', { codec: null, source: null }],
+    ['Trespass Against Us (2017) 1080p BluRay x265 6ch -Dtech mkv', {}],
     [
       'Abbot and Costello Meet Frankenstein 1948 BluRay 1080p HEVC Dts Stereo-D3FiL3R',
       { codec: AudioCodec.DTS, source: 'Dts' },

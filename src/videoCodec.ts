@@ -27,12 +27,10 @@ export enum VideoCodec {
   XVID = 'xvid',
 }
 
-export function parseVideoCodec(
-  title: string,
-): { codec: VideoCodec | null; source: string | null } {
+export function parseVideoCodec(title: string): { codec?: VideoCodec; source?: string } {
   const result = codecExp.exec(title);
   if (result === null || result.groups === undefined) {
-    return { codec: null, source: null };
+    return {};
   }
 
   const { groups } = result;
@@ -49,5 +47,5 @@ export function parseVideoCodec(
     return { codec: VideoCodec.XVID, source: groups.xvidhd || groups.xvid || groups.divx };
   }
 
-  return { codec: null, source: null };
+  return {};
 }

@@ -11,38 +11,27 @@ import { parseSeason, Season } from './season';
 import { parseLanguage, Language, isMulti } from './language';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type ParsedTvInfo = Omit<Season, 'releaseTitle' | 'seriesTitle'>;
+type ParsedTvInfo = Omit<Season, 'releaseTitle' | 'seriesTitle'>;
 
-export interface ParsedFilename extends ParsedTvInfo {
+interface BaseParsed {
   title: string;
   year: string | null;
   edition: Edition;
-  resolution: Resolution | null;
+  resolution?: Resolution;
   sources: Source[];
-  videoCodec: VideoCodec | null;
-  audioCodec: AudioCodec | null;
-  audioChannels: Channels | null;
+  videoCodec?: VideoCodec;
+  audioCodec?: AudioCodec;
+  audioChannels?: Channels;
   group: string | null;
   revision: Revision;
   qualitySource: QualitySource;
   languages: Language[];
-  multi: boolean;
-  isTv: boolean;
+  multi?: boolean;
 }
 
-const emptySeasonInfo = (): ParsedTvInfo => {
-  return {
-    seasons: [],
-    episodeNumbers: [],
-    airDate: null,
-    fullSeason: false,
-    isPartialSeason: false,
-    isMultiSeason: false,
-    isSeasonExtra: false,
-    isSpecial: false,
-    seasonPart: 0,
-  };
-};
+export type ParsedMovie = BaseParsed;
+export type ParsedShow = ParsedTvInfo & BaseParsed & { isTv: true };
+export type ParsedFilename = ParsedMovie | ParsedShow;
 
 /**
  * @param name release / file name
@@ -58,30 +47,6 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
     year = titleAndYear.year;
   }
 
-  let seasonResult: ParsedTvInfo | null = null;
-  if (isTv) {
-    const season = parseSeason(name);
-    if (season !== null) {
-      title = season.seriesTitle;
-
-      seasonResult = {
-        seasons: season.seasons,
-        episodeNumbers: season.episodeNumbers,
-        airDate: season.airDate,
-        fullSeason: season.fullSeason,
-        isPartialSeason: season.isPartialSeason,
-        isMultiSeason: season.isMultiSeason,
-        isSeasonExtra: season.isSeasonExtra,
-        isSpecial: season.isSpecial,
-        seasonPart: season.seasonPart,
-      };
-    }
-  }
-
-  if (seasonResult === null) {
-    seasonResult = emptySeasonInfo();
-  }
-
   const edition = parseEdition(name);
   const { codec: videoCodec } = parseVideoCodec(name);
   const { codec: audioCodec } = parseAudioCodec(name);
@@ -91,7 +56,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
   const quality = parseQuality(name);
   const multi = isMulti(name);
 
-  return {
+  const result: BaseParsed = {
     title,
     year,
     resolution: quality.resolution,
@@ -105,7 +70,31 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
     languages,
     multi,
     qualitySource: quality.qualitySource,
-    ...seasonResult,
-    isTv,
   };
+
+  if (isTv) {
+    const season = parseSeason(name);
+    if (season !== null) {
+      let seasonResult: ParsedTvInfo = {
+        seasons: season.seasons,
+        episodeNumbers: season.episodeNumbers,
+        airDate: season.airDate,
+        fullSeason: season.fullSeason,
+        isPartialSeason: season.isPartialSeason,
+        isMultiSeason: season.isMultiSeason,
+        isSeasonExtra: season.isSeasonExtra,
+        isSpecial: season.isSpecial,
+        seasonPart: season.seasonPart,
+      };
+
+      return {
+        ...result,
+        title: season.seriesTitle ?? title,
+        ...seasonResult,
+        isTv: true,
+      };
+    }
+  }
+
+  return result;
 }

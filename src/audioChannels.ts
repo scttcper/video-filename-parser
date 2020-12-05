@@ -20,12 +20,10 @@ export enum Channels {
   MONO = 'mono',
 }
 
-export function parseAudioChannels(
-  title: string,
-): { channels: Channels | null; source: string | null } {
+export function parseAudioChannels(title: string): { channels?: Channels; source?: string } {
   const channelResult = channelExp.exec(title);
   if (!channelResult || !channelResult.groups) {
-    return { channels: null, source: null };
+    return {};
   }
 
   const { groups } = channelResult;
@@ -46,5 +44,5 @@ export function parseAudioChannels(
     return { channels: Channels.MONO, source: groups.mono };
   }
 
-  return { channels: null, source: null };
+  return {};
 }

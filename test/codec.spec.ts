@@ -1,15 +1,15 @@
 import { parseVideoCodec, VideoCodec } from '../src';
 
 describe('parseVideoCodec', () => {
-  const cases: Array<[string, VideoCodec | null]> = [
+  const cases: Array<[string, ReturnType<typeof parseVideoCodec>['codec']]> = [
     ['Terminator 3 Rise of The Machines 2003 HDDVD XvidHD 720p-NPW', VideoCodec.XVID],
     ['Cloverfield 2008 BRRip XvidHD 720p-NPW', VideoCodec.XVID],
     ['The Interview 2014 1080p WEB-DL x264 AAC MerryXmas', VideoCodec.X264],
     ['Half Baked 1998 HDRip XviD AC3-FLAWL3SS', VideoCodec.XVID],
     ['Hidden Figures 2016 DVDSCR XVID-FrangoAssado', VideoCodec.XVID],
     ['Vice 2018 DVDScr Xvid AC3 HQ Hive-CM8', VideoCodec.XVID],
-    ['The Dark Knight[2008]DvDrip-aXXo [pendhu]', null],
-    ['Bridesmaids[2011][Unrated Edition]DvDrip AC3-aXXo', null],
+    ['The Dark Knight[2008]DvDrip-aXXo [pendhu]', undefined],
+    ['Bridesmaids[2011][Unrated Edition]DvDrip AC3-aXXo', undefined],
     ['Get Out 2017 BluRay 10Bit 1080p DD5 1 H265-d3g', VideoCodec.X265],
     ['Minions 2015 720p HC HDRip X265 AC3 TiTAN', VideoCodec.X265],
     ["Marvel's The Avengers 2012 BluRay 1080p DD5 1 10Bit H265-d3g", VideoCodec.X265],

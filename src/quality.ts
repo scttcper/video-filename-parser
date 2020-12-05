@@ -33,7 +33,7 @@ export enum QualitySource {
 export interface QualityModel {
   sources: Source[];
   modifier: QualityModifier | null;
-  resolution: Resolution | null;
+  resolution?: Resolution;
   revision: Revision;
   qualitySource: QualitySource;
 }
@@ -258,12 +258,12 @@ export function parseQuality(title: string): QualityModel {
         result.sources = [Source.DVD];
       }
 
-      if (resolution === null) {
+      if (!resolution) {
         // assume bluray is at least 720p
         result.resolution = Resolution.R720P;
       }
 
-      if (resolution === null && result.modifier === QualityModifier.BRDISK) {
+      if (!resolution && result.modifier === QualityModifier.BRDISK) {
         result.resolution = Resolution.R1080P;
       }
 
@@ -272,15 +272,15 @@ export function parseQuality(title: string): QualityModel {
 
     if (sourceGroups.webdl || sourceGroups.webrip) {
       result.sources = source;
-      if (resolution === null) {
+      if (!resolution) {
         result.resolution = Resolution.R480P;
       }
 
-      if (resolution === null) {
+      if (!resolution) {
         result.resolution = Resolution.R480P;
       }
 
-      if (resolution === null && title.includes('[WEBDL]')) {
+      if (!resolution && title.includes('[WEBDL]')) {
         result.resolution = Resolution.R720P;
       }
 
@@ -289,11 +289,11 @@ export function parseQuality(title: string): QualityModel {
 
     if (sourceGroups.hdtv) {
       result.sources = [Source.TV];
-      if (resolution === null) {
+      if (!resolution) {
         result.resolution = Resolution.R480P;
       }
 
-      if (resolution === null && title.includes('[HDTV]')) {
+      if (!resolution && title.includes('[HDTV]')) {
         result.resolution = Resolution.R720P;
       }
 
@@ -318,7 +318,7 @@ export function parseQuality(title: string): QualityModel {
         return result;
       }
 
-      if (resolution === null) {
+      if (!resolution) {
         // bdrips are at least 480p
         result.resolution = Resolution.R480P;
       }

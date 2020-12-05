@@ -190,6 +190,6 @@ export function parseLanguage(title: string): Language[] {
 
 // Reviens-moi (2007) [1080p] BluRay MULTi x264-PopHD
 const multiExp = /\b(MULTi)\b/i;
-export function isMulti(title: string): boolean {
-  return multiExp.test(title);
+export function isMulti(title: string): boolean | undefined {
+  return multiExp.test(title) || undefined;
 }

@@ -92,11 +92,9 @@ export function getSourceForExtension(extension: string): Source[] {
   return [];
 }
 
-export function getResolutionForExtension(extension: string): Resolution | null {
+export function getResolutionForExtension(extension: string): Resolution | undefined {
   const ext = resolutionExt.find(x => x.extension === extension);
   if (ext) {
     return ext.resolution;
   }
-
-  return null;
 }
