@@ -262,6 +262,7 @@ describe('parseQuality', () => {
     ['Jurassic Park.1993..BD25.ISO'],
     ['Bait.2012.Bluray.1080p.3D.AVC.DTS-HD.MA.5.1.iso'],
     ['Daylight.1996.Bluray.ISO'],
+    ['Justified.Stagione.2.Parte.2.ITA-ENG.1080p.BDMux.DD5.1.x264-DarkSideMux'],
   ];
   test.each(brdisk1080pCases)('should parse brdisk 1080p "%s"', title => {
     const quality = parseQuality(title);

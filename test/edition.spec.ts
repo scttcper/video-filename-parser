@@ -65,6 +65,9 @@ describe('parseEditionText', () => {
     // TODO: somehow exlude restored at beginning of title
     ['Restored S03E05 Mystery of the English Cottage XviD-AFGLoading', 'Restored'],
     ['Alita Battle Angel 2019 INTERNAL HDR 2160p WEB H265-DEFLATE', 'INTERNAL HDR'],
+    ['The.Christmas.Edition.2020.720p.HDTV.x264-CRiMSON', ''],
+    ['Hannie.Caulder.1971.Signature.Edition.1080p.BluRay.FLAC.2.0.x264-TDD', 'Signature Edition'],
+    ['Caligula.1979.The.Imperial.Edition.BluRay.720p.DTS.x264-CtrlHD', 'Edition'],
   ];
   test.each(cases)('should get edition of "%s"', (title, expected) => {
     expect(parseEditionText(title)).toBe(expected);

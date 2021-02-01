@@ -39,6 +39,7 @@ describe('parseGroup', () => {
     ['Ghosthouse.1988.720p.BluRay.x264-SADPANDA-Chamele0n', 'SADPANDA'],
     ['The.Walking.Dead.S08E08.1080p.BluRay.x264-ROVERS-4P', 'ROVERS'],
     ['Stranger.Things.S01E02.720p.BluRay.X264-REWARD-4Planet', 'REWARD'],
+    ['Stranger.Things.S01E02.720p.BluRay.X264-REWARD-AlteZachen', 'REWARD'],
     ['Spider-Man Far from Home.2019.1080p.HDRip.X264.AC3-EVO', 'EVO'],
   ];
   test.each(cases)('should parse group "%s"', (title, expected) => {
