@@ -1,9 +1,8 @@
-// @ts-expect-error
-import { render, h } from 'preact';
-import { useState } from 'preact/hooks';
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import { filenameParse } from '../src';
 
-render(<Demo />, document.getElementById('root')!);
+ReactDOM.render(<Demo />, document.getElementById('root'));
 
 function Demo() {
   const demoDefault = 'Alita.Battle.Angel.2019.INTERNAL.HDR.2160p.WEB.H265-DEFLATE';
