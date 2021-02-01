@@ -22,7 +22,7 @@ describe('season', () => {
   it.each(fullSeasonRelease)(
     'should parse full season release "%s"',
     (postTitle, title, season) => {
-      const result = parseSeason(postTitle) as Season;
+      const result = parseSeason(postTitle)!;
       expect(result.seasons[0]).toBe(season);
       expect(result.seriesTitle).toBe(title);
     },
@@ -41,7 +41,7 @@ describe('season', () => {
     ],
   ];
   it.each(dayEpisodeCases)('should parse full season release "%s"', (postTitle, title, airDate) => {
-    const result = parseSeason(postTitle) as Season;
+    const result = parseSeason(postTitle)!;
     // expect(result.seasonNumber[0]).toBe(season);
     expect(result.seriesTitle).toBe(title);
     expect(result.airDate).toEqual(airDate);
@@ -65,7 +65,7 @@ describe('season', () => {
   it.each(seasonPackCases)(
     'should parse multi season release "%s"',
     (postTitle, title, seasons) => {
-      const result = parseSeason(postTitle) as Season;
+      const result = parseSeason(postTitle)!;
       expect(result.seasons).toEqual(seasons);
       expect(result.seriesTitle).toBe(title);
       expect(result.isMultiSeason).toBe(true);
@@ -78,7 +78,7 @@ describe('season', () => {
   it.each(multiEpisodeCases)(
     'should parse multi season release "%s"',
     (postTitle, title, episodes) => {
-      const result = parseSeason(postTitle) as Season;
+      const result = parseSeason(postTitle)!;
       expect(result.episodeNumbers).toEqual(episodes);
       expect(result.seriesTitle).toBe(title);
       expect(result.isMultiSeason).toBe(false);
@@ -91,7 +91,7 @@ describe('season', () => {
   it.each(partialSeasonPackCases)(
     'should parse partial season release "%s"',
     (postTitle, title, season, seasonPart) => {
-      const result = parseSeason(postTitle) as Season;
+      const result = parseSeason(postTitle)!;
       expect(result.seasons[0]).toEqual(season);
       expect(result.seasonPart).toBe(seasonPart);
       expect(result.seriesTitle).toBe(title);
@@ -130,7 +130,7 @@ describe('season', () => {
     ['Curb Your Enthusiasm - 2x09 - The Baptism.mkv', 'Curb Your Enthusiasm', 2, 9],
   ];
   it.each(oddCases)('should not parse "%s"', (postTitle, title, season, episodeNumber) => {
-    const result = parseSeason(postTitle) as Season;
+    const result = parseSeason(postTitle)!;
     expect(result.seriesTitle).toBe(title);
     expect(result.seasons).toHaveLength(1);
     expect(result.seasons[0]).toBe(season);
@@ -150,7 +150,7 @@ describe('season', () => {
   it.each(animeSpecialCases)(
     'should handle anime special episodes "%s"',
     (postTitle, title, episodeNumber) => {
-      const result = parseSeason(postTitle) as Season;
+      const result = parseSeason(postTitle)!;
       expect(result.seriesTitle).toBe(title);
       expect(result.episodeNumbers).toHaveLength(1);
       expect(result.episodeNumbers[0]).toBe(episodeNumber);
@@ -164,7 +164,7 @@ describe('season', () => {
   it.each(animeRecapCases)(
     'should handle anime recap episodes "%s"',
     (postTitle, title, specialEpisodeNumber) => {
-      const result = parseSeason(postTitle) as Season;
+      const result = parseSeason(postTitle)!;
       expect(result.seriesTitle).toBe(title);
       expect(result.episodeNumbers).toHaveLength(1);
       expect(result.episodeNumbers[0]).toBe(specialEpisodeNumber);
@@ -178,7 +178,7 @@ describe('season', () => {
     ['CSI.S11.SUBPACK.DVDRip.XviD-REWARD', 'CSI', 11],
   ];
   it.each(seasonSubpackCases)('should parse season subpack "%s"', (postTitle, title, season) => {
-    const result = parseSeason(postTitle) as Season;
+    const result = parseSeason(postTitle)!;
     expect(result.seasons[0]).toBe(season);
     expect(result.seriesTitle).toBe(title);
     expect(result.isSeasonExtra).toBe(true);
@@ -193,7 +193,7 @@ describe('season', () => {
     ['The.Flash.S03.Extras.02.720p', 'The Flash', 3],
   ];
   it.each(seasonExtraCases)('should parse season extras "%s"', (postTitle, title, season) => {
-    const result = parseSeason(postTitle) as Season;
+    const result = parseSeason(postTitle)!;
     expect(result.seasons[0]).toBe(season);
     expect(result.seriesTitle).toBe(title);
     expect(result.isSeasonExtra).toBe(true);
@@ -412,7 +412,7 @@ describe('season', () => {
   it.each(absoluteEpisodeCases)(
     'should parse absolute episode numbers "%s"',
     (postTitle, title, absoluteEpisodeNumber, seasonNumber) => {
-      const result = parseSeason(postTitle) as Season;
+      const result = parseSeason(postTitle)!;
       expect(result.seriesTitle).toBe(title);
       expect(result.episodeNumbers).toHaveLength(1);
       expect(result.episodeNumbers[0]).toBe(absoluteEpisodeNumber);
