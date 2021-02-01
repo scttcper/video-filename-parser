@@ -11,7 +11,7 @@ const realRegex = /\b(?<real>REAL)\b/; // not insensitive
 const versionExp = /(?<version>v\d\b|\[v\d\])/i;
 
 const remuxExp = /\b(?<remux>(BD|UHD)?Remux)\b/i;
-const bdiskExp = /\b(COMPLETE|ISO|BDISO|BD25|BD50|BR.?DISK)\b/i;
+const bdiskExp = /\b(COMPLETE|ISO|BDISO|BDMux|BD25|BD50|BR.?DISK)\b/i;
 const rawHdExp = /\b(?<rawhd>RawHD|1080i[-_. ]HDTV|Raw[-_. ]HD|MPEG[-_. ]?2)\b/i;
 
 const highDefPdtvRegex = /hr[-_. ]ws/i;
