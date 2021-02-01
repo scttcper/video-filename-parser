@@ -2,7 +2,8 @@
   "compileOnSave": false,
   "compilerOptions": {
     "moduleResolution": "node",
-    "lib": ["es2020"],
+    "lib": ["ES2020", "DOM"],
+    "jsx": "preserve",
     "target": "es2019",
     "module": "commonjs",
     "esModuleInterop": true,

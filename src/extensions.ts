@@ -86,7 +86,7 @@ export function removeFileExtension(title: string): string {
 export function getSourceForExtension(extension: string): Source[] {
   const ext = fileExtensions.find(x => x.extension === extension);
   if (ext) {
-    return [ext.source as Source];
+    return [ext.source!];
   }
 
   return [];
