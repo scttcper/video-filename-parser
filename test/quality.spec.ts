@@ -1,11 +1,4 @@
-import {
-  parseQualityModifyers,
-  parseQuality,
-  Source,
-  Resolution,
-  QualityModifier,
-  QualitySource,
-} from '../src';
+import { parseQualityModifyers, parseQuality, Source, Resolution, QualityModifier } from '../src';
 
 describe('parseQualityModifier', () => {
   const versionCases: Array<[string, number]> = [
@@ -82,8 +75,6 @@ describe('parseQuality', () => {
     ['The.Nightly.Show.2016.03.14.720p.WEB.x264-spamTV', false],
     ['The.Nightly.Show.2016.03.14.720p.WEB.h264-spamTV', false],
     ['Sonny.With.a.Chance.S02E15.720p', false],
-    ['S07E23.mkv ', false],
-    ['Sonny.With.a.Chance.S02E15.mkv', false],
     ['[Underwater-FFF] No Game No Life - 01 (720p) [27AAA0A0]', false],
     ['[Doki] Mahouka Koukou no Rettousei - 07 (1280x720 Hi10P AAC) [80AF7DDE]', false],
     ['[Doremi].Yes.Pretty.Cure.5.Go.Go!.31.[1280x720].[C65D4B1F].mkv', false],
@@ -147,7 +138,6 @@ describe('parseQuality', () => {
   const bluray720Cases: Array<[string, boolean]> = [
     ['WEEDS.S03E01-06.DUAL.Bluray.AC3.-HELLYWOOD.avi', false],
     ['Chuck - S01E03 - Come Fly With Me - 720p BluRay.mkv', false],
-    ['The Big Bang Theory.S03E01.The Electric Can Opener Fluctuation.m2ts', false],
     ['Revolution.S01E02.Chained.Heat.[Bluray720p].mkv', false],
     ['[FFF] DATE A LIVE - 01 [BD][720p-AAC][0601BED4]', false],
     ['[coldhell] Pupa v2 [BD720p][03192D4C]', true],
@@ -277,18 +267,6 @@ describe('parseQuality', () => {
     expect(quality.sources[0]).toBe(Source.TV);
     expect(quality.resolution).toBe(Resolution.R1080P);
     expect(quality.modifier).toBe(QualityModifier.RAWHD);
-  });
-
-  const extensionCases: Array<[string]> = [
-    ['Revolution.S01E02.Chained.Heat.mkv'],
-    ['Star.Wars.Episode.VII.The.Force.Awakens.mk3d'],
-    ['Dexter - S01E01 - Title.avi'],
-    ['the_x-files.9x18.sunshine_days.avi'],
-    ['[CR] Sailor Moon - 004 [48CE2D0F].avi'],
-  ];
-  test.each(extensionCases)('should parse extension quality "%s"', title => {
-    const quality = parseQuality(title);
-    expect(quality.qualitySource).toBe(QualitySource.EXTENSION);
   });
 
   const tsCases: Array<[string, boolean]> = [

@@ -4,7 +4,7 @@ import { parseGroup } from './group';
 import { Resolution } from './resolution';
 import { Source } from './source';
 import { parseTitleAndYear } from './title';
-import { parseQuality, Revision, QualitySource } from './quality';
+import { parseQuality, Revision } from './quality';
 import { parseAudioCodec, AudioCodec } from './audioCodec';
 import { parseAudioChannels, Channels } from './audioChannels';
 import { parseSeason, Season } from './season';
@@ -24,7 +24,6 @@ interface BaseParsed {
   audioChannels?: Channels;
   group: string | null;
   revision: Revision;
-  qualitySource: QualitySource;
   languages: Language[];
   multi?: boolean;
 }
@@ -69,7 +68,6 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
     edition,
     languages,
     multi,
-    qualitySource: quality.qualitySource,
   };
 
   if (isTv) {

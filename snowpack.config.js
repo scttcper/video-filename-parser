@@ -7,12 +7,10 @@ module.exports = {
     demo: { url: '/', static: false, resolve: true },
     src: { url: '/src', static: false, resolve: true },
   },
-  plugins: [
-    ['@snowpack/plugin-postcss', { config: './postcss.config.js' }],
-    '@snowpack/plugin-webpack',
-    'snowpack-plugin-hash',
-  ],
-  alias: {
-    path: 'path-browserify',
+  plugins: [['@snowpack/plugin-postcss', { config: './postcss.config.js' }]],
+  optimize: {
+    bundle: true,
+    minify: true,
+    target: 'es2018',
   },
 };

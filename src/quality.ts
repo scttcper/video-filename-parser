@@ -1,10 +1,7 @@
 /* eslint-disable complexity */
-import { extname } from 'path';
-
 import { parseResolution, Resolution } from './resolution';
 import { Source, parseSourceGroups, parseSource } from './source';
 import { parseVideoCodec, VideoCodec } from './videoCodec';
-import { getSourceForExtension, getResolutionForExtension } from './extensions';
 
 const properRegex = /\b(?<proper>proper|repack|rerip)\b/i;
 const realRegex = /\b(?<real>REAL)\b/; // not insensitive
@@ -24,18 +21,11 @@ export enum QualityModifier {
   RAWHD = 'RAWHD',
 }
 
-export enum QualitySource {
-  NAME = 'NAME',
-  EXTENSION = 'EXTENSION',
-  MEDIAINFO = 'MEDIAINFO',
-}
-
 export interface QualityModel {
   sources: Source[];
   modifier: QualityModifier | null;
   resolution?: Resolution;
   revision: Revision;
-  qualitySource: QualitySource;
 }
 
 export interface Revision {
@@ -230,7 +220,6 @@ export function parseQuality(title: string): QualityModel {
     resolution,
     revision,
     modifier: null,
-    qualitySource: QualitySource.NAME,
   };
 
   if (bdiskExp.test(normalizedTitle) && sourceGroups.bluray) {
@@ -355,16 +344,6 @@ export function parseQuality(title: string): QualityModel {
   ) {
     result.sources = [Source.WEBDL];
     return result;
-  }
-
-  // make vague assumptions based on file extension
-  if (result.sources.length === 0) {
-    const extension = extname(title).trim().toLowerCase();
-    if (extension.length > 0) {
-      result.sources = getSourceForExtension(extension);
-      result.resolution = getResolutionForExtension(extension);
-      result.qualitySource = QualitySource.EXTENSION;
-    }
   }
 
   return result;

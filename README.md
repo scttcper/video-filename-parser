@@ -22,24 +22,24 @@ import { filenameParse } from '@ctrl/video-filename-parse';
 const title = 'This.is.40.2012.PROPER.UNRATED.720p.BluRay.x264-Felony';
 console.log(filenameParse(title));
 // {
-//   title: 'This is 40',
-//   year: '2012',
-//   source: 'BLURAY',
-//   resolution: '720P',
-//   codec: 'x264',
-//   group: 'Felony',
-//   edition: {
-//     imax: false,
-//     remastered: false,
-//     extended: false,
-//     theatrical: false,
-//     directors: false,
-//     unrated: true,
-//     fanEdit: false,
-//     limited: false,
+//   "title": "This is 40",
+//   "year": "2012",
+//   "resolution": "720P",
+//   "sources": [
+//     "BLURAY"
+//   ],
+//   "videoCodec": "x264",
+//   "revision": {
+//     "version": 2,
+//     "real": 0
 //   },
-//   revision: { version: 2, real: 0 },
-//   qualitySource: 'NAME',
+//   "group": "Felony",
+//   "edition": {
+//     "unrated": true
+//   },
+//   "languages": [
+//     "English"
+//   ],
 // }
 
 console.log(filenameParse('The Office US S09E06 HDTV XviD-AFG', true));
@@ -51,29 +51,15 @@ console.log(filenameParse('The Office US S09E06 HDTV XviD-AFG', true));
 //     "TV"
 //   ],
 //   "videoCodec": "xvid",
-//   "audioCodec": null,
-//   "audioChannels": null,
 //   "revision": {
 //     "version": 1,
 //     "real": 0
 //   },
 //   "group": "AFG",
-//   "edition": {
-//     "imax": false,
-//     "remastered": false,
-//     "extended": false,
-//     "theatrical": false,
-//     "directors": false,
-//     "unrated": false,
-//     "fanEdit": false,
-//     "limited": false,
-//     "hdr": false,
-//     "internal": false
-//   },
+//   "edition": {},
 //   "languages": [
 //     "English"
 //   ],
-//   "qualitySource": "NAME",
 //   "seasons": [
 //     9
 //   ],

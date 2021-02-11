@@ -1,12 +1,4 @@
-import {
-  filenameParse,
-  ParsedFilename,
-  Source,
-  Resolution,
-  VideoCodec,
-  QualitySource,
-  Language,
-} from '../src';
+import { filenameParse, ParsedFilename, Source, Resolution, VideoCodec, Language } from '../src';
 import { AudioCodec } from '../src/audioCodec';
 
 describe('filenameParse', () => {
@@ -21,7 +13,6 @@ describe('filenameParse', () => {
         videoCodec: VideoCodec.X264,
         group: 'SiNNERS',
         revision: { version: 1, real: 0 },
-        qualitySource: QualitySource.NAME,
         languages: [Language.English],
       }),
     ],
@@ -35,7 +26,6 @@ describe('filenameParse', () => {
         videoCodec: VideoCodec.X264,
         group: 'Japhson',
         revision: { version: 2, real: 0 },
-        qualitySource: QualitySource.NAME,
         languages: [Language.English],
       }),
     ],
@@ -50,7 +40,6 @@ describe('filenameParse', () => {
         videoCodec: VideoCodec.X264,
         group: 'Felony',
         revision: { version: 2, real: 0 },
-        qualitySource: QualitySource.NAME,
         languages: [Language.English],
         multi: true,
       }),
@@ -66,7 +55,6 @@ describe('filenameParse', () => {
         audioCodec: AudioCodec.DOLBY,
         group: 'EVO',
         revision: { version: 1, real: 0 },
-        qualitySource: QualitySource.NAME,
         languages: [Language.English],
       }),
     ],
@@ -104,7 +92,6 @@ describe('filenameParse', () => {
         videoCodec: VideoCodec.X264,
         group: 'METCON',
         revision: { version: 1, real: 0 },
-        qualitySource: QualitySource.NAME,
         languages: [Language.English],
         seasons: [14],
         episodeNumbers: [4],
@@ -126,7 +113,6 @@ describe('filenameParse', () => {
         videoCodec: VideoCodec.X265,
         group: 'MeGusta',
         revision: { version: 1, real: 0 },
-        qualitySource: QualitySource.NAME,
         languages: [Language.English],
         airDate: new Date(2019, 9, 6),
         isTv: true,
