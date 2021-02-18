@@ -17,7 +17,7 @@ npm install @ctrl/video-filename-parser
 **isTv** boolean - parsed as a tv show (default false)  
 
 ```ts
-import { filenameParse } from '@ctrl/video-filename-parse';
+import { filenameParse } from '@ctrl/video-filename-parser';
 
 const title = 'This.is.40.2012.PROPER.UNRATED.720p.BluRay.x264-Felony';
 console.log(filenameParse(title));
