@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals';
+
 import { Channels, parseAudioChannels } from '../src/audioChannels';
 
 describe('parseAudioChannels', () => {

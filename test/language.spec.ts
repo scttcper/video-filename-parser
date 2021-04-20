@@ -1,4 +1,6 @@
-import { parseLanguage, Language, isMulti } from '../src';
+import { describe, expect, test } from '@jest/globals';
+
+import { isMulti, Language, parseLanguage } from '../src';
 
 describe('parseLanguage', () => {
   const tests: Array<[string, Language[]]> = [

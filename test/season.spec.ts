@@ -1,4 +1,6 @@
-import { parseSeason, Season } from '../src';
+import { describe, expect, it } from '@jest/globals';
+
+import { parseSeason } from '../src';
 
 describe('season', () => {
   const fullSeasonRelease: Array<[string, string, number]> = [

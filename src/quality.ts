@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 import { parseResolution, Resolution } from './resolution';
-import { Source, parseSourceGroups, parseSource } from './source';
+import { parseSource, parseSourceGroups, Source } from './source';
 import { parseVideoCodec, VideoCodec } from './videoCodec';
 
 const properRegex = /\b(?<proper>proper|repack|rerip)\b/i;

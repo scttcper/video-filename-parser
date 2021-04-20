@@ -1,4 +1,6 @@
-import { parseAudioCodec, AudioCodec } from '../src/audioCodec';
+import { describe, expect, it } from '@jest/globals';
+
+import { AudioCodec, parseAudioCodec } from '../src/audioCodec';
 
 describe('parseAudioCodec', () => {
   const audioChannelCases: Array<[string, ReturnType<typeof parseAudioCodec>]> = [

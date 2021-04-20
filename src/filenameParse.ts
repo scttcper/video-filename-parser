@@ -1,14 +1,14 @@
-import { VideoCodec, parseVideoCodec } from './videoCodec';
+import { Channels, parseAudioChannels } from './audioChannels';
+import { AudioCodec, parseAudioCodec } from './audioCodec';
 import { Edition, parseEdition } from './edition';
 import { parseGroup } from './group';
+import { isMulti, Language, parseLanguage } from './language';
+import { parseQuality, Revision } from './quality';
 import { Resolution } from './resolution';
+import { parseSeason, Season } from './season';
 import { Source } from './source';
 import { parseTitleAndYear } from './title';
-import { parseQuality, Revision } from './quality';
-import { parseAudioCodec, AudioCodec } from './audioCodec';
-import { parseAudioChannels, Channels } from './audioChannels';
-import { parseSeason, Season } from './season';
-import { parseLanguage, Language, isMulti } from './language';
+import { parseVideoCodec, VideoCodec } from './videoCodec';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type ParsedTvInfo = Omit<Season, 'releaseTitle' | 'seriesTitle'>;
@@ -73,7 +73,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
   if (isTv) {
     const season = parseSeason(name);
     if (season !== null) {
-      let seasonResult: ParsedTvInfo = {
+      const seasonResult: ParsedTvInfo = {
         seasons: season.seasons,
         episodeNumbers: season.episodeNumbers,
         airDate: season.airDate,

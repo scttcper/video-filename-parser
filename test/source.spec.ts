@@ -1,3 +1,5 @@
+import { describe, expect, test } from '@jest/globals';
+
 import { parseSource, Source } from '../src';
 
 describe('source', () => {

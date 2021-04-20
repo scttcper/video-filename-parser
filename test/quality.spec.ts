@@ -1,4 +1,6 @@
-import { parseQualityModifyers, parseQuality, Source, Resolution, QualityModifier } from '../src';
+import { describe, expect, test } from '@jest/globals';
+
+import { parseQuality, parseQualityModifyers, QualityModifier, Resolution, Source } from '../src';
 
 describe('parseQualityModifier', () => {
   const versionCases: Array<[string, number]> = [

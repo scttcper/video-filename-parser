@@ -1,4 +1,6 @@
-import { simplifyTitle, releaseTitleCleaner } from '../src/simplifyTitle';
+import { describe, expect, it } from '@jest/globals';
+
+import { releaseTitleCleaner, simplifyTitle } from '../src/simplifyTitle';
 
 describe('releaseTitleCleaner', () => {
   it('should return null for empty title', () => {

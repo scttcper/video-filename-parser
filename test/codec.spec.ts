@@ -1,3 +1,5 @@
+import { describe, expect, test } from '@jest/globals';
+
 import { parseVideoCodec, VideoCodec } from '../src';
 
 describe('parseVideoCodec', () => {

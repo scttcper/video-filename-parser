@@ -1,8 +1,10 @@
-import { filenameParse, ParsedFilename, Source, Resolution, VideoCodec, Language } from '../src';
+import { describe, expect, it, test } from '@jest/globals';
+
+import { filenameParse, Language, Resolution, Source, VideoCodec } from '../src';
 import { AudioCodec } from '../src/audioCodec';
 
 describe('filenameParse', () => {
-  const movieCases: Array<[string, ParsedFilename]> = [
+  const movieCases: Array<[string, any]> = [
     [
       'Whats.Eating.Gilbert.Grape.1993.720p.BluRay.x264-SiNNERS',
       expect.objectContaining({
@@ -82,7 +84,7 @@ describe('filenameParse', () => {
     expect(filenameParse(title)).toEqual(expected);
   });
 
-  const tvCases: Array<[string, ParsedFilename]> = [
+  const tvCases: Array<[string, any]> = [
     [
       'Its Always Sunny in Philadelphia S14E04 720p WEB H264-METCON',
       expect.objectContaining({
@@ -103,7 +105,7 @@ describe('filenameParse', () => {
     expect(filenameParse(title, true)).toEqual(expected);
   });
 
-  const dailyTvCases: Array<[string, ParsedFilename]> = [
+  const dailyTvCases: Array<[string, any]> = [
     [
       'NFL 2019 10 06 Chicago Bears vs Oakland Raiders Highlights 720p HEVC x265-MeGusta',
       expect.objectContaining({
