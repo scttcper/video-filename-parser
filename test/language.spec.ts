@@ -67,6 +67,10 @@ describe('parseLanguage', () => {
       'Fantastic.Beasts.The.Crimes.Of.Grindelwald.2018.2160p.WEBRip.x265.10bit.HDR.DD5.1-GASMASK',
       [Language.English],
     ],
+    [
+      'Nick.and.Norahs.Infinite.Playlist.2008.CATALAN.MULTi.1080p.BluRay.x264-DESPACiTO',
+      [Language.Catalan, Language.English],
+    ],
   ];
   test.each(tests)('should get language of "%s"', (title, languages) => {
     expect(parseLanguage(title)).toEqual(languages);
