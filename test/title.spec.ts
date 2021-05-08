@@ -66,6 +66,8 @@ describe('parseTitle', () => {
     ],
     ['The.Middle.720p.HEVC.x265-MeGusta-Pre', { title: 'The Middle', year: null }],
     ['The.Middle.HEVC.x265-MeGusta-Pre', { title: 'The Middle', year: null }],
+    ['Blade Runner 2049 2017', { title: 'Blade Runner 2049', year: '2017' }],
+    ['Blade Runner 2049 (2017)', { title: 'Blade Runner 2049', year: '2017' }],
   ];
   test.each(cases)('should parse title %s', (title, expected) => {
     expect(parseTitleAndYear(title, true)).toEqual(expected);
