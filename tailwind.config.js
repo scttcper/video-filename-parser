@@ -1,5 +1,5 @@
 module.exports = {
   theme: {},
   variants: {},
-  plugins: [require('@tailwindcss/ui'), require('@tailwindcss/forms')],
+  plugins: [require('@tailwindcss/forms')],
 };

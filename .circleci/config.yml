@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:current
     steps:
       - checkout
       - run:
@@ -24,7 +24,7 @@ jobs:
           command: bash <(curl -s https://codecov.io/bash)
   release:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:current
     steps:
       - checkout
       - run: npm ci
