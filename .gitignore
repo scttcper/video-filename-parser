@@ -36,5 +36,5 @@ build
 docs
 dist
 yarn.lock
-demo/**/*.js
-demo/**/*.js.map
+
+.parcel-cache
