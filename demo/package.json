@@ -4,7 +4,7 @@
   "app": "index.html",
   "targets": {
     "app": {
-      "distDir": "../dist",
+      "distDir": "../build",
       "engines": {
         "browsers": "> 10%"
       }
