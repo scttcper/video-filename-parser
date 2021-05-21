@@ -1,5 +1,6 @@
 // (?!\.[0-9]{4}\.) At the end attempts to check for the year
-const editionTextExp = /\b(?<edition>((the.?)?((Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Ultimate|Signature|Final|Rogue(?=(.(Cut|Edition|Version)))|Extended|Special|Despecialized|\d{2,3}(th)?.Anniversary)(.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit))?|((LIMITED|Uncensored|INTERNAL|Remastered|Unrated|Uncut|IMAX|Fan.?Edit|Edition|HDR|Restored|((2|3|4)in1))(?!\.[0-9]{4}\.)))))\)?\b/i;
+const editionTextExp =
+  /\b(?<edition>((the.?)?((Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Ultimate|Signature|Final|Rogue(?=(.(Cut|Edition|Version)))|Extended|Special|Despecialized|\d{2,3}(th)?.Anniversary)(.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit))?|((LIMITED|Uncensored|INTERNAL|Remastered|Unrated|Uncut|IMAX|Fan.?Edit|Edition|HDR|Restored|((2|3|4)in1))(?!\.[0-9]{4}\.)))))\)?\b/i;
 
 const remasteredExp = /\b(Remastered|Anniversary|Restored)\b/i;
 const imaxExp = /\b(IMAX)\b/i;
