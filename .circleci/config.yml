@@ -4,7 +4,9 @@ orbs:
   codecov: codecov/codecov@1
 jobs:
   test:
-    executor: node/default
+    executor:
+      name: node/default
+      tag: 'current'
     steps:
       - checkout
       - node/install-packages
@@ -21,7 +23,9 @@ jobs:
           command: npm run lint
       - codecov/upload
   release:
-    executor: node/default
+    executor:
+      name: node/default
+      tag: 'current'
     steps:
       - checkout
       - node/install-packages
