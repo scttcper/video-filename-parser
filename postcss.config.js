@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const purgecss = require('@fullhuman/postcss-purgecss')({
   content: ['./demo/**/*.html', './demo/**/*.jsx', './demo/**/*.tsx'],
