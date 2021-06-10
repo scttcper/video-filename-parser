@@ -28,9 +28,11 @@ export enum Language {
   Czech = 'Czech',
   Ukrainian = 'Ukrainian',
   Catalan = 'Catalan',
+  Chinese = 'Chinese',
 }
 
-export const languageExp = /(?:\W|_|^)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR|VO|VFF|VFQ|VF2|TRUEFRENCH)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)|(?<hungarian>\b(?:HUNDUB|HUN)\b)|(?<hebrew>\bHebDub\b)|(?<czech>\b(?:CZ|SK)\b)|(?<ukrainian>\bukr\b)/i;
+export const languageExp =
+  /(?:\W|_|^)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR|VO|VFF|VFQ|VF2|TRUEFRENCH)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)|(?<hungarian>\b(?:HUNDUB|HUN)\b)|(?<hebrew>\bHebDub\b)|(?<czech>\b(?:CZ|SK)\b)|(?<ukrainian>\bukr\b)|(?<polish>\bPL\b)/i;
 
 export function parseLanguage(title: string): Language[] {
   const parsedTitle = parseTitleAndYear(title, true).title;
@@ -135,6 +137,10 @@ export function parseLanguage(title: string): Language[] {
     languages.push(Language.Catalan);
   }
 
+  if (languageTitle.includes('chinese')) {
+    languages.push(Language.Chinese);
+  }
+
   const result = languageExp.exec(languageTitle);
   if (result?.groups) {
     if (result.groups.italian) {
@@ -180,6 +186,10 @@ export function parseLanguage(title: string): Language[] {
     if (result.groups.ukrainian) {
       languages.push(Language.Ukrainian);
     }
+
+    if (result.groups.polish) {
+      languages.push(Language.Polish);
+    }
   }
 
   if (isMulti(languageTitle)) {
@@ -194,7 +204,7 @@ export function parseLanguage(title: string): Language[] {
 }
 
 // Reviens-moi (2007) [1080p] BluRay MULTi x264-PopHD
-const multiExp = /\b(MULTi)\b/i;
+const multiExp = /\b(MULTi|DUAL)\b/i;
 export function isMulti(title: string): boolean | undefined {
   return multiExp.test(title) || undefined;
 }

@@ -71,6 +71,14 @@ describe('parseLanguage', () => {
       'Nick.and.Norahs.Infinite.Playlist.2008.CATALAN.MULTi.1080p.BluRay.x264-DESPACiTO',
       [Language.Catalan, Language.English],
     ],
+    [
+      'Harry.Potter.And.The.Order.Of.The.Phoenix.2007.CHINESE.2160p.UHD.BluRay.X265-HOA',
+      [Language.Chinese],
+    ],
+    [
+      'Seven.Years.of.Night.2018.PL.DUAL.1080p.BluRay.x264-FLAME',
+      [Language.Polish, Language.English],
+    ],
   ];
   test.each(tests)('should get language of "%s"', (title, languages) => {
     expect(parseLanguage(title)).toEqual(languages);
