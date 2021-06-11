@@ -7,7 +7,7 @@ const hdtvExp = /\b(?<hdtv>HDTV)\b/i;
 const bdripExp = /\b(?<bdrip>BDRip)\b/i;
 const brripExp = /\b(?<brrip>BRRip)\b/i;
 const dvdrExp = /\b(?<dvdr>DVD-R|DVDR)\b/i;
-const dvdExp = /\b(?<dvd>DVD|DVDRip|NTSC|PAL|xvidvd)\b/i;
+const dvdExp = /\b(?<dvd>DVD9?|DVDRip|NTSC|PAL|xvidvd)\b/i;
 const dsrExp = /\b(?<dsr>WS[-_. ]DSR|DSR)\b/i;
 const regionalExp = /\b(?<regional>R[0-9]{1}|REGIONAL)\b/i;
 const ppvExp = /\b(?<ppv>PPV)\b/i;
@@ -82,6 +82,7 @@ export function parseSourceGroups(title: string): SourceGroups {
   };
 }
 
+// eslint-disable-next-line complexity
 export function parseSource(title: string): Source[] {
   const groups = parseSourceGroups(title);
   const result: Source[] = [];
@@ -100,6 +101,10 @@ export function parseSource(title: string): Source[] {
 
   if (!groups.webrip && groups.webdl) {
     result.push(Source.WEBDL);
+  }
+
+  if ((groups.dvd || groups.dvdr) && !groups.scr) {
+    result.push(Source.DVD);
   }
 
   if (groups.scr) {

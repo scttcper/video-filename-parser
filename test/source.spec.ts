@@ -35,6 +35,7 @@ describe('source', () => {
     ['Palmer.2021.1080p.APTV.WEB-RIP.H264.Atmos-EVO', [Source.WEBRIP]],
     ['Finding.Ohana.2021.720p.NF.AAC2.0.X.264-EVO', [Source.WEBDL]],
     ['Finding.Ohana.2021.720p.NF.WEBRIP.AAC2.0.X.264-EVO', [Source.WEBRIP]],
+    ['300.2006.iNTERNAL.NTSC.DVD9-FaiLED', [Source.DVD]],
   ];
   test.each(singleCases)('should parse source "%s"', (title, expected) => {
     expect(parseSource(title)).toEqual(expected);
