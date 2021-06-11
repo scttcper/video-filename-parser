@@ -79,6 +79,26 @@ describe('filenameParse', () => {
         resolution: Resolution.R2160P,
       }),
     ],
+    [
+      'Apprentice.2016.COMPLETE.BLURAY-UNRELiABLE',
+      expect.objectContaining({
+        title: 'Apprentice',
+        year: '2016',
+        group: 'UNRELiABLE',
+        resolution: Resolution.R1080P,
+        complete: true,
+      }),
+    ],
+    [
+      'Indiana.Jones.and.the.Temple.of.Doom.1984.Complete.UHD.Bluray-JONES',
+      expect.objectContaining({
+        title: 'Indiana Jones and the Temple of Doom',
+        year: '1984',
+        group: 'JONES',
+        resolution: Resolution.R2160P,
+        complete: true,
+      }),
+    ],
   ];
   test.each(movieCases)('should get filename of "%s"', (title, expected) => {
     expect(filenameParse(title)).toEqual(expected);

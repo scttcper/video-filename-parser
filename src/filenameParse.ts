@@ -1,5 +1,6 @@
 import { Channels, parseAudioChannels } from './audioChannels';
 import { AudioCodec, parseAudioCodec } from './audioCodec';
+import { isComplete } from './complete';
 import { Edition, parseEdition } from './edition';
 import { parseGroup } from './group';
 import { isMulti, Language, parseLanguage } from './language';
@@ -26,6 +27,7 @@ interface BaseParsed {
   revision: Revision;
   languages: Language[];
   multi?: boolean;
+  complete?: boolean;
 }
 
 export type ParsedMovie = BaseParsed;
@@ -54,6 +56,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
   const languages = parseLanguage(name);
   const quality = parseQuality(name);
   const multi = isMulti(name);
+  const complete = isComplete(name);
 
   const result: BaseParsed = {
     title,
@@ -68,6 +71,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
     edition,
     languages,
     multi,
+    complete,
   };
 
   if (isTv) {

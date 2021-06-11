@@ -19,6 +19,7 @@ describe('parseResolution', () => {
     ['The Martian 2015 2160p Ultra HD BluRay DTS-HD MA 7 1 x264-Whatevs', Resolution.R2160P],
     ['The Revenant 2015 2160p UHD BluRay FLAC 7 1 x264-Whatevs', Resolution.R2160P],
     ['Into the Inferno 2016 2160p Netflix WEBRip DD5 1 x264-Whatevs', Resolution.R2160P],
+    ['Indiana.Jones.and.the.Temple.of.Doom.1984.Complete.UHD.Bluray-JONES', Resolution.R2160P],
   ];
   test.each(cases)('should parse %s', (title, expected) => {
     expect(parseResolution(title).resolution).toBe(expected);
