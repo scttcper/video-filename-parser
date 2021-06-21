@@ -29,6 +29,7 @@ export enum Language {
   Ukrainian = 'Ukrainian',
   Catalan = 'Catalan',
   Chinese = 'Chinese',
+  Thai = 'Thai',
 }
 
 export const languageExp =
@@ -139,6 +140,10 @@ export function parseLanguage(title: string): Language[] {
 
   if (languageTitle.includes('chinese')) {
     languages.push(Language.Chinese);
+  }
+
+  if (languageTitle.includes('thai')) {
+    languages.push(Language.Thai);
   }
 
   const result = languageExp.exec(languageTitle);

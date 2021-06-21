@@ -79,6 +79,7 @@ describe('parseLanguage', () => {
       'Seven.Years.of.Night.2018.PL.DUAL.1080p.BluRay.x264-FLAME',
       [Language.Polish, Language.English],
     ],
+    ['Tenet.2020.THAI.2160p.UHD.BLURAY.x265-HOA', [Language.Thai]],
   ];
   test.each(tests)('should get language of "%s"', (title, languages) => {
     expect(parseLanguage(title)).toEqual(languages);
