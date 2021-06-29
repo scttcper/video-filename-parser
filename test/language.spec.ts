@@ -46,7 +46,7 @@ describe('parseLanguage', () => {
     ['Revolution S01E03 No Quarter 2012 WEB-DL 720p Nordic-philipo mkv', [Language.Norwegian]],
     ['Constantine.2014.S01E01.WEBRiP.H264.AAC.5.1-NL.SUBS', [Language.Dutch]],
     ['Castle.2009.S01E14.HDTV.XviD.HUNDUB-LOL', [Language.Hungarian]],
-    ['Castle.2009.S01E14.HDTV.XviD.ENG.HUN-LOL', [Language.Hungarian]],
+    ['Castle.2009.S01E14.HDTV.XviD.ENG.HUN-LOL', [Language.English, Language.Hungarian]],
     ['Castle.2009.S01E14.HDTV.XviD.HUN-LOL', [Language.Hungarian]],
     ['Castle.2009.S01E14.HDTV.XviD.CZ-LOL', [Language.Czech]],
     ['Passengers.2016.German.DL.AC3.Dubbed.1080p.WebHD.h264.iNTERNAL-PsO', [Language.German]],
@@ -80,19 +80,31 @@ describe('parseLanguage', () => {
       [Language.Polish, Language.English],
     ],
     ['Tenet.2020.THAI.2160p.UHD.BLURAY.x265-HOA', [Language.Thai]],
+    [
+      'Tenet 2020 1080p Multi Eng Hin Tam iMax BluRay 10Bit DD5 1 H265-IPT',
+      [Language.English, Language.Hindi, Language.Tamil],
+    ],
+    [
+      'The Flying Guillotine 1975 CHI ENG DTS-HD DTS 1080p BluRay x264 HQ-TUSAHD',
+      [Language.English, Language.Chinese],
+    ],
+    [
+      'The Incredible Story Of The Giant Pear 2017 SWE DAN DTS-HD DTS MULTISUBS 1080p BluRay x264 HQ-TUSAHD',
+      [Language.Danish, Language.Swedish],
+    ],
   ];
-  test.each(tests)('should get language of "%s"', (title, languages) => {
+  test.each(tests)('should get language "%s"', (title, languages) => {
     expect(parseLanguage(title)).toEqual(languages);
   });
 });
 
-describe('multi', () => {
+describe('isMulti', () => {
   const tests: Array<[string]> = [
     ['Ouija.Origin.of.Evil.2016.MULTi.TRUEFRENCH.1080p.BluRay.x264-MELBA'],
     ['Showdown.In.Little.Tokyo.1991.MULTI.VFQ.VFF.DTSHD-MASTER.1080p.BluRay.x264-ZombiE'],
     ['The.Polar.Express.2004.MULTI.VF2.1080p.BluRay.x264-PopHD'],
   ];
-  test.each(tests)('should be multi', title => {
+  test.each(tests)('should be multi "%s"', title => {
     expect(isMulti(title)).toBeTruthy();
   });
 });

@@ -30,10 +30,9 @@ export enum Language {
   Catalan = 'Catalan',
   Chinese = 'Chinese',
   Thai = 'Thai',
+  Hindi = 'Hindi',
+  Tamil = 'Tamil',
 }
-
-export const languageExp =
-  /(?:\W|_|^)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR|VO|VFF|VFQ|VF2|TRUEFRENCH)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)|(?<hungarian>\b(?:HUNDUB|HUN)\b)|(?<hebrew>\bHebDub\b)|(?<czech>\b(?:CZ|SK)\b)|(?<ukrainian>\bukr\b)|(?<polish>\bPL\b)/i;
 
 export function parseLanguage(title: string): Language[] {
   const parsedTitle = parseTitleAndYear(title, true).title;
@@ -46,24 +45,16 @@ export function parseLanguage(title: string): Language[] {
     }
   }
 
-  if (languageTitle.includes('english')) {
+  if (/\b(english|eng)\b/i.test(languageTitle)) {
     languages.push(Language.English);
-  }
-
-  if (languageTitle.includes('french')) {
-    languages.push(Language.French);
   }
 
   if (languageTitle.includes('spanish')) {
     languages.push(Language.Spanish);
   }
 
-  if (languageTitle.includes('danish')) {
+  if (/\b(DAN|danish)\b/i.test(languageTitle)) {
     languages.push(Language.Danish);
-  }
-
-  if (languageTitle.includes('dutch')) {
-    languages.push(Language.Dutch);
   }
 
   if (languageTitle.includes('japanese')) {
@@ -82,14 +73,6 @@ export function parseLanguage(title: string): Language[] {
     languages.push(Language.Korean);
   }
 
-  if (languageTitle.includes('russian')) {
-    languages.push(Language.Russian);
-  }
-
-  if (languageTitle.includes('polish')) {
-    languages.push(Language.Polish);
-  }
-
   if (languageTitle.includes('vietnamese')) {
     languages.push(Language.Vietnamese);
   }
@@ -98,12 +81,8 @@ export function parseLanguage(title: string): Language[] {
     languages.push(Language.Swedish);
   }
 
-  if (languageTitle.includes('norwegian')) {
-    languages.push(Language.Norwegian);
-  }
-
-  if (languageTitle.includes('nordic')) {
-    languages.push(Language.Norwegian);
+  if (/\b(swe|swedish)\b/i.test(languageTitle)) {
+    languages.push(Language.Swedish);
   }
 
   if (languageTitle.includes('finnish')) {
@@ -116,10 +95,6 @@ export function parseLanguage(title: string): Language[] {
 
   if (languageTitle.includes('portuguese')) {
     languages.push(Language.Portuguese);
-  }
-
-  if (languageTitle.includes('hungarian')) {
-    languages.push(Language.Hungarian);
   }
 
   if (languageTitle.includes('hebrew')) {
@@ -138,7 +113,7 @@ export function parseLanguage(title: string): Language[] {
     languages.push(Language.Catalan);
   }
 
-  if (languageTitle.includes('chinese')) {
+  if (/\b(chi|chinese)\b/i.test(languageTitle)) {
     languages.push(Language.Chinese);
   }
 
@@ -146,55 +121,64 @@ export function parseLanguage(title: string): Language[] {
     languages.push(Language.Thai);
   }
 
-  const result = languageExp.exec(languageTitle);
-  if (result?.groups) {
-    if (result.groups.italian) {
-      languages.push(Language.Italian);
-    }
+  if (/\b(ita|italian)\b/i.test(languageTitle)) {
+    languages.push(Language.Italian);
+  }
 
-    if (result.groups.german) {
-      languages.push(Language.German);
-    }
+  if (/\b(german|videomann)\b/i.test(languageTitle)) {
+    languages.push(Language.German);
+  }
 
-    if (result.groups.flemish) {
-      languages.push(Language.Flemish);
-    }
+  if (/\b(flemish)\b/i.test(languageTitle)) {
+    languages.push(Language.Flemish);
+  }
 
-    if (result.groups.greek) {
-      languages.push(Language.Greek);
-    }
+  if (/\b(greek)\b/i.test(languageTitle)) {
+    languages.push(Language.Greek);
+  }
 
-    if (result.groups.french) {
-      languages.push(Language.French);
-    }
+  if (/\b(FR|FRENCH|VOSTFR|VO|VFF|VFQ|VF2|TRUEFRENCH)\b/i.test(languageTitle)) {
+    languages.push(Language.French);
+  }
 
-    if (result.groups.russian) {
-      languages.push(Language.Russian);
-    }
+  if (/\b(russian|rus)\b/i.test(languageTitle)) {
+    languages.push(Language.Russian);
+  }
 
-    if (result.groups.dutch) {
-      languages.push(Language.Dutch);
-    }
+  if (/\b(nordic|norwegian)\b/i.test(languageTitle)) {
+    languages.push(Language.Norwegian);
+  }
 
-    if (result.groups.hungarian) {
-      languages.push(Language.Hungarian);
-    }
+  if (/\b(nl|dutch)\b/i.test(languageTitle)) {
+    languages.push(Language.Dutch);
+  }
 
-    if (result.groups.hebrew) {
-      languages.push(Language.Hebrew);
-    }
+  if (/\b(HUNDUB|HUN|hungarian)\b/i.test(languageTitle)) {
+    languages.push(Language.Hungarian);
+  }
 
-    if (result.groups.czech) {
-      languages.push(Language.Czech);
-    }
+  if (/\b(HebDub)\b/i.test(languageTitle)) {
+    languages.push(Language.Hebrew);
+  }
 
-    if (result.groups.ukrainian) {
-      languages.push(Language.Ukrainian);
-    }
+  if (/\b(CZ|SK)\b/i.test(languageTitle)) {
+    languages.push(Language.Czech);
+  }
 
-    if (result.groups.polish) {
-      languages.push(Language.Polish);
-    }
+  if (/(?<ukrainian>\bukr\b)/i.test(languageTitle)) {
+    languages.push(Language.Ukrainian);
+  }
+
+  if (/\b(PL|POLISH)\b/i.test(languageTitle)) {
+    languages.push(Language.Polish);
+  }
+
+  if (/\b(HIN|Hindi)\b/i.test(languageTitle)) {
+    languages.push(Language.Hindi);
+  }
+
+  if (/\b(TAM|Tamil)\b/i.test(languageTitle)) {
+    languages.push(Language.Tamil);
   }
 
   if (isMulti(languageTitle)) {

@@ -7,8 +7,8 @@ export enum Resolution {
 }
 
 const R2160pExp = /(?<R2160P>2160p|4k[-_. ](?:UHD|HEVC|BD)|(?:UHD|HEVC|BD)[-_. ]4k|\b(UHD|4k)\b)/i;
-const R1080pExp = /(?<R1080P>1080(i|p)|1920x1080)/i;
-const R720pExp = /(?<R720P>720(i|p)|1280x720)/i;
+const R1080pExp = /(?<R1080P>1080(i|p)|1920x1080)(10bit)?/i;
+const R720pExp = /(?<R720P>720(i|p)|1280x720)(10bit)?/i;
 const R576pExp = /(?<R576P>576(i|p))/i;
 const R480Exp = /(?<R480P>480(i|p)|640x480|848x480)/i;
 const resolutionExp = new RegExp(
