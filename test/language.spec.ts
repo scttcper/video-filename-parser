@@ -92,6 +92,12 @@ describe('parseLanguage', () => {
       'The Incredible Story Of The Giant Pear 2017 SWE DAN DTS-HD DTS MULTISUBS 1080p BluRay x264 HQ-TUSAHD',
       [Language.Danish, Language.Swedish],
     ],
+    [
+      'Wonder.Woman.1984.2020.PLDUB.DUAL.HDR10Plus.2160p.UHD.BluRay.x265.iNTERNAL-PLHD',
+      [Language.Polish, Language.English],
+    ],
+    ['Wadjda.2012.ARABiC.1080p.BluRay.x264-CONSTANT', [Language.Arabic]],
+    ['Arabic.12.1982.1080p.BluRay.x264-ROVERS', [Language.English]],
   ];
   test.each(tests)('should get language "%s"', (title, languages) => {
     expect(parseLanguage(title)).toEqual(languages);
