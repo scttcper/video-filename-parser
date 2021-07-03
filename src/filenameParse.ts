@@ -9,6 +9,7 @@ import { Resolution } from './resolution';
 import { parseSeason, Season } from './season';
 import { Source } from './source';
 import { parseTitleAndYear } from './title';
+import { removeEmpty } from './utils';
 import { parseVideoCodec, VideoCodec } from './videoCodec';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -98,5 +99,5 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
     }
   }
 
-  return result;
+  return removeEmpty(result);
 }
