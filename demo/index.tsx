@@ -6,7 +6,7 @@ import { filenameParse } from '../src';
 ReactDOM.render(<Demo />, document.getElementById('root'));
 
 function Demo() {
-  const demoDefault = 'Alita.Battle.Angel.2019.INTERNAL.HDR.2160p.WEB.H265-DEFLATE';
+  const demoDefault = 'Iron.Man.2008.INTERNAL.REMASTERED.2160p.UHD.BluRay.X265-IAMABLE';
   const [result, setResult] = useState(filenameParse(demoDefault));
   const [input, setInput] = useState(demoDefault);
   const [isTvShow, setTvShow] = useState(false);
@@ -33,13 +33,13 @@ function Demo() {
             <textarea
               id="title"
               name="title"
-              className="max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
+              className="shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
               placeholder="Title"
               defaultValue={demoDefault}
               onChange={handleChange}
             />
           </div>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-2">
             <div className="flex items-center">
               <input
                 id="tvshow"
@@ -55,7 +55,7 @@ function Demo() {
           </div>
         </div>
         <label className="block text-sm font-medium text-gray-700">Output</label>
-        <pre className="bg-gray-100 rounded-lg p-2 md:py-4 text-gray-900">
+        <pre className="bg-gray-100 rounded-lg p-2 md:py-4 text-gray-900 text-xs">
           <code>{JSON.stringify(result, undefined, 2)}</code>
         </pre>
       </div>

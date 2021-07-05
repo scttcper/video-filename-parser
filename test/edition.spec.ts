@@ -54,6 +54,10 @@ describe('parseEdition', () => {
       'Warcraft.The.Beginning.3D.HOU.2016.German.DL.1080p.BluRay.x264-COiNCiDENCE',
       { threeD: true, hou: true },
     ],
+    [
+      'Iron.Man.2008.INTERNAL.REMASTERED.2160p.UHD.BluRay.X265-IAMABLE',
+      { uhd: true, remastered: true, internal: true },
+    ],
   ];
   test.each(cases)('should get edition of "%s"', (title, expected) => {
     const result = parseEdition(title);

@@ -15,6 +15,7 @@ const threeD = /\b(3D)\b/i;
 const hsbs = /\b(Half-?SBS|HSBS)\b/i;
 const sbs = /\b((?<!H|HALF-)SBS)\b/i;
 const hou = /\b(HOU)\b/i;
+const uhd = /\b(UHD)\b/i;
 
 export interface Edition {
   internal?: boolean;
@@ -36,6 +37,8 @@ export interface Edition {
   sbs?: boolean;
   /** half over under 3D */
   hou?: boolean;
+  /** most 2160p should be UHD but there might be some that aren't? */
+  uhd?: boolean;
 }
 
 export function parseEdition(title: string): Edition {
@@ -57,6 +60,7 @@ export function parseEdition(title: string): Edition {
     hsbs: hsbs.test(withoutTitle) || undefined,
     sbs: sbs.test(withoutTitle) || undefined,
     hou: hou.test(withoutTitle) || undefined,
+    uhd: uhd.test(withoutTitle) || undefined,
   };
 
   return removeEmpty(result);
