@@ -111,7 +111,7 @@ describe('filenameParse', () => {
         resolution: Resolution.R720P,
         sources: [Source.WEBDL],
         title: 'Its Always Sunny in Philadelphia',
-        videoCodec: VideoCodec.X264,
+        videoCodec: VideoCodec.H264,
         group: 'METCON',
         revision: { version: 1, real: 0 },
         languages: [Language.English],

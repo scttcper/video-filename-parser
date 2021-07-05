@@ -32,18 +32,13 @@ export enum Language {
   Thai = 'Thai',
   Hindi = 'Hindi',
   Tamil = 'Tamil',
+  Arabic = 'Arabic',
 }
 
 export function parseLanguage(title: string): Language[] {
   const parsedTitle = parseTitleAndYear(title, true).title;
-  const languageTitle = title.replace(parsedTitle, '').toLowerCase();
+  const languageTitle = title.replace('.', ' ').replace(parsedTitle, '').toLowerCase();
   const languages: Language[] = [];
-
-  for (const language of Object.keys(Language)) {
-    if (languageTitle.includes(language.toLowerCase())) {
-      languages.push(Language[language]);
-    }
-  }
 
   if (/\b(english|eng)\b/i.test(languageTitle)) {
     languages.push(Language.English);
@@ -75,10 +70,6 @@ export function parseLanguage(title: string): Language[] {
 
   if (languageTitle.includes('vietnamese')) {
     languages.push(Language.Vietnamese);
-  }
-
-  if (languageTitle.includes('swedish')) {
-    languages.push(Language.Swedish);
   }
 
   if (/\b(swe|swedish)\b/i.test(languageTitle)) {
@@ -149,10 +140,6 @@ export function parseLanguage(title: string): Language[] {
     languages.push(Language.Norwegian);
   }
 
-  if (/\b(nl|dutch)\b/i.test(languageTitle)) {
-    languages.push(Language.Dutch);
-  }
-
   if (/\b(HUNDUB|HUN|hungarian)\b/i.test(languageTitle)) {
     languages.push(Language.Hungarian);
   }
@@ -169,8 +156,12 @@ export function parseLanguage(title: string): Language[] {
     languages.push(Language.Ukrainian);
   }
 
-  if (/\b(PL|POLISH)\b/i.test(languageTitle)) {
+  if (/\b(PL|PLDUB|POLISH)\b/i.test(languageTitle)) {
     languages.push(Language.Polish);
+  }
+
+  if (/\b(nl|dutch)\b/i.test(languageTitle)) {
+    languages.push(Language.Dutch);
   }
 
   if (/\b(HIN|Hindi)\b/i.test(languageTitle)) {
@@ -179,6 +170,10 @@ export function parseLanguage(title: string): Language[] {
 
   if (/\b(TAM|Tamil)\b/i.test(languageTitle)) {
     languages.push(Language.Tamil);
+  }
+
+  if (/\b(Arabic)\b/i.test(languageTitle)) {
+    languages.push(Language.Arabic);
   }
 
   if (isMulti(languageTitle)) {

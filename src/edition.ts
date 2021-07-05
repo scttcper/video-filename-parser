@@ -1,7 +1,7 @@
-// (?!\.[0-9]{4}\.) At the end attempts to check for the year
-const editionTextExp =
-  /\b(?<edition>((the.?)?((Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Ultimate|Signature|Final|Rogue(?=(.(Cut|Edition|Version)))|Extended|Special|Despecialized|\d{2,3}(th)?.Anniversary)(.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit))?|((LIMITED|Uncensored|INTERNAL|Remastered|Unrated|Uncut|IMAX|Fan.?Edit|Edition|HDR|Restored|((2|3|4)in1))(?!\.[0-9]{4}\.)))))\)?\b/i;
+import { parseTitleAndYear } from './title';
+import { removeEmpty } from './utils';
 
+const internalExp = /\b(INTERNAL)\b/i;
 const remasteredExp = /\b(Remastered|Anniversary|Restored)\b/i;
 const imaxExp = /\b(IMAX)\b/i;
 const unratedExp = /\b(Uncensored|Unrated)\b/i;
@@ -11,52 +11,57 @@ const directorsExp = /\b(Directors?)\b/i;
 const fanExp = /\b(Despecialized|Fan.?Edit)\b/i;
 const limitedExp = /\b(LIMITED)\b/i;
 const hdrExp = /\b(HDR)\b/i;
-const internalExp = /\b(INTERNAL)\b/i;
+const threeD = /\b(3D)\b/i;
+const hsbs = /\b(Half-?SBS|HSBS)\b/i;
+const sbs = /\b((?<!H|HALF-)SBS)\b/i;
+const hou = /\b(HOU)\b/i;
+const uhd = /\b(UHD)\b/i;
 
 export interface Edition {
+  internal?: boolean;
   limited?: boolean;
   remastered?: boolean;
   extended?: boolean;
   theatrical?: boolean;
+  /** Directors cut */
   directors?: boolean;
   unrated?: boolean;
   imax?: boolean;
   fanEdit?: boolean;
   hdr?: boolean;
-  internal?: boolean;
+  /** 3D film */
+  threeD?: boolean;
+  /** half side by side 3D */
+  hsbs?: boolean;
+  /** side by side 3D */
+  sbs?: boolean;
+  /** half over under 3D */
+  hou?: boolean;
+  /** most 2160p should be UHD but there might be some that aren't? */
+  uhd?: boolean;
 }
 
 export function parseEdition(title: string): Edition {
-  const editionText = parseEditionText(title);
+  const parsedTitle = parseTitleAndYear(title, true).title;
+  const withoutTitle = title.replace('.', ' ').replace(parsedTitle, '').toLowerCase();
 
   const result: Edition = {
-    imax: imaxExp.test(editionText) || undefined,
-    remastered: remasteredExp.test(editionText) || undefined,
-    extended: extendedExp.test(editionText) || undefined,
-    theatrical: theatricalExp.test(editionText) || undefined,
-    directors: directorsExp.test(editionText) || undefined,
-    unrated: unratedExp.test(editionText) || undefined,
-    fanEdit: fanExp.test(editionText) || undefined,
-    limited: limitedExp.test(editionText) || undefined,
-    hdr: hdrExp.test(editionText) || undefined,
-    internal: internalExp.test(editionText) || undefined,
+    internal: internalExp.test(withoutTitle) || undefined,
+    limited: limitedExp.test(withoutTitle) || undefined,
+    remastered: remasteredExp.test(withoutTitle) || undefined,
+    extended: extendedExp.test(withoutTitle) || undefined,
+    theatrical: theatricalExp.test(withoutTitle) || undefined,
+    directors: directorsExp.test(withoutTitle) || undefined,
+    unrated: unratedExp.test(withoutTitle) || undefined,
+    imax: imaxExp.test(withoutTitle) || undefined,
+    fanEdit: fanExp.test(withoutTitle) || undefined,
+    hdr: hdrExp.test(withoutTitle) || undefined,
+    threeD: threeD.test(withoutTitle) || undefined,
+    hsbs: hsbs.test(withoutTitle) || undefined,
+    sbs: sbs.test(withoutTitle) || undefined,
+    hou: hou.test(withoutTitle) || undefined,
+    uhd: uhd.test(withoutTitle) || undefined,
   };
 
-  return result;
-}
-
-export function parseEditionText(title: string): string {
-  const normalizedTitle = title.trim().replace(/\[/g, ' ').replace(/\]/g, ' ').trim();
-
-  const result: string[] = [];
-
-  const editionGlobalExp = RegExp(editionTextExp.source, 'gi');
-  let expResult: RegExpExecArray | null;
-  while ((expResult = editionGlobalExp.exec(normalizedTitle))) {
-    if (expResult?.groups?.edition && expResult.groups.edition.length > 0) {
-      result.push(expResult.groups.edition.replace(/\./g, ' '));
-    }
-  }
-
-  return result.join(' ');
+  return removeEmpty(result);
 }
