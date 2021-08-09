@@ -33,6 +33,8 @@ export enum Language {
   Hindi = 'Hindi',
   Tamil = 'Tamil',
   Arabic = 'Arabic',
+  Estonian = 'Estonian',
+  Icelandic = 'Icelandic',
 }
 
 export function parseLanguage(title: string): Language[] {
@@ -40,7 +42,7 @@ export function parseLanguage(title: string): Language[] {
   const languageTitle = title.replace('.', ' ').replace(parsedTitle, '').toLowerCase();
   const languages: Language[] = [];
 
-  if (/\b(english|eng)\b/i.test(languageTitle)) {
+  if (/\b(english|eng|EN|FI)\b/i.test(languageTitle)) {
     languages.push(Language.English);
   }
 
@@ -48,7 +50,7 @@ export function parseLanguage(title: string): Language[] {
     languages.push(Language.Spanish);
   }
 
-  if (/\b(DAN|danish)\b/i.test(languageTitle)) {
+  if (/\b(DK|DAN|danish)\b/i.test(languageTitle)) {
     languages.push(Language.Danish);
   }
 
@@ -72,7 +74,7 @@ export function parseLanguage(title: string): Language[] {
     languages.push(Language.Vietnamese);
   }
 
-  if (/\b(swe|swedish)\b/i.test(languageTitle)) {
+  if (/\b(SE|SWE|swedish)\b/i.test(languageTitle)) {
     languages.push(Language.Swedish);
   }
 
@@ -102,6 +104,14 @@ export function parseLanguage(title: string): Language[] {
 
   if (languageTitle.includes('catalan')) {
     languages.push(Language.Catalan);
+  }
+
+  if (languageTitle.includes('estonian')) {
+    languages.push(Language.Estonian);
+  }
+
+  if (/\b(ice|Icelandic)\b/i.test(languageTitle)) {
+    languages.push(Language.Icelandic);
   }
 
   if (/\b(chi|chinese)\b/i.test(languageTitle)) {
@@ -136,7 +146,7 @@ export function parseLanguage(title: string): Language[] {
     languages.push(Language.Russian);
   }
 
-  if (/\b(nordic|norwegian)\b/i.test(languageTitle)) {
+  if (/\b(nordic|norwegian|NO)\b/i.test(languageTitle)) {
     languages.push(Language.Norwegian);
   }
 

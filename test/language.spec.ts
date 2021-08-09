@@ -98,6 +98,12 @@ describe('parseLanguage', () => {
     ],
     ['Wadjda.2012.ARABiC.1080p.BluRay.x264-CONSTANT', [Language.Arabic]],
     ['Arabic.12.1982.1080p.BluRay.x264-ROVERS', [Language.English]],
+    ['Cars.2.2011.ESTONiAN.DVDRip.x264-EMX', [Language.Estonian]],
+    ['Cars.2.2011.EN.SE.FI.PAL.DVDR-AMIRITE', [Language.English, Language.Swedish]],
+    [
+      'Cars.2.2011.ENG.DK.NO.ICE.READ.NFO.PAL.DVDR-WILDER',
+      [Language.English, Language.Danish, Language.Icelandic, Language.Norwegian],
+    ],
   ];
   test.each(tests)('should get language "%s"', (title, languages) => {
     expect(parseLanguage(title)).toEqual(languages);
