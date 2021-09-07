@@ -39,10 +39,6 @@ describe('parseLanguage', () => {
     ['Castle.2009.S01E14.Turkish.HDTV.XviD-LOL', [Language.Turkish]],
     ['Castle.2009.S01E14.Czech.HDTV.XviD-LOL', [Language.Czech]],
     ['Castle.2009.S01E14.Portuguese.HDTV.XviD-LOL', [Language.Portuguese]],
-    [
-      'Burn.Notice.S04E15.Brotherly.Love.GERMAN.DUBBED.WS.WEBRiP.XviD.REPACK-TVP',
-      [Language.German],
-    ],
     ['Revolution S01E03 No Quarter 2012 WEB-DL 720p Nordic-philipo mkv', [Language.Norwegian]],
     ['Constantine.2014.S01E01.WEBRiP.H264.AAC.5.1-NL.SUBS', [Language.Dutch]],
     ['Castle.2009.S01E14.HDTV.XviD.HUNDUB-LOL', [Language.Hungarian]],
@@ -50,12 +46,6 @@ describe('parseLanguage', () => {
     ['Castle.2009.S01E14.HDTV.XviD.HUN-LOL', [Language.Hungarian]],
     ['Castle.2009.S01E14.HDTV.XviD.CZ-LOL', [Language.Czech]],
     ['Passengers.2016.German.DL.AC3.Dubbed.1080p.WebHD.h264.iNTERNAL-PsO', [Language.German]],
-    [
-      'Der.Soldat.James.German.Bluray.FuckYou.Pso.Why.cant.you.follow.scene.rules.1998',
-      [Language.German],
-    ],
-    ['Passengers.German.DL.AC3.Dubbed..BluRay.x264-PsO', [Language.German]],
-    ['Valana la Legende FRENCH BluRay 720p 2016 kjhlj', [Language.French]],
     ['Smurfs.​The.​Lost.​Village.​2017.​1080p.​BluRay.​HebDub.​x264-​iSrael', [Language.Hebrew]],
     ['The Danish Girl 2015', [Language.English]],
     [
@@ -98,12 +88,15 @@ describe('parseLanguage', () => {
     ],
     ['Wadjda.2012.ARABiC.1080p.BluRay.x264-CONSTANT', [Language.Arabic]],
     ['Arabic.12.1982.1080p.BluRay.x264-ROVERS', [Language.English]],
+    ['No.Country.for.Old.Men.1080p.BluRay.x264-HiGHTiMES', [Language.English]],
     ['Cars.2.2011.ESTONiAN.DVDRip.x264-EMX', [Language.Estonian]],
     ['Cars.2.2011.EN.SE.FI.PAL.DVDR-AMIRITE', [Language.English, Language.Swedish]],
     [
       'Cars.2.2011.ENG.DK.NO.ICE.READ.NFO.PAL.DVDR-WILDER',
       [Language.English, Language.Danish, Language.Icelandic, Language.Norwegian],
     ],
+    ['Scarface.1983.CE.UNCUT.DVDRip.XviD.iNT-TURKiSO', [Language.English]],
+    ['Scarface.1983.20th.AE.iNTERNAL.DVDRip.XviD-MHQ', [Language.English]],
   ];
   test.each(tests)('should get language "%s"', (title, languages) => {
     expect(parseLanguage(title)).toEqual(languages);

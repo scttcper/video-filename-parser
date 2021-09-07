@@ -44,6 +44,8 @@ describe('parseGroup', () => {
     ['Stranger.Things.S01E02.720p.BluRay.X264-REWARD-AlteZachen', 'REWARD'],
     ['Spider-Man Far from Home.2019.1080p.HDRip.X264.AC3-EVO', 'EVO'],
     ['13.Reasons.Why.S01E03.1080p10bit.WEB-DL.Hin-Eng.x265.MSub-KatmovieHD.nu.mkv', 'KatmovieHD'],
+    ['The.Fighter.DVDR-MPTDVD', 'MPTDVD'],
+    ['Casino.1995.MULTi.1080p.BluRay.x264-FiDELiO', 'FiDELiO'],
   ];
   test.each(cases)('should parse group "%s"', (title, expected) => {
     expect(parseGroup(title)).toBe(expected);

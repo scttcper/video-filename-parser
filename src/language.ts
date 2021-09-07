@@ -38,8 +38,8 @@ export enum Language {
 }
 
 export function parseLanguage(title: string): Language[] {
-  const parsedTitle = parseTitleAndYear(title, true).title;
-  const languageTitle = title.replace('.', ' ').replace(parsedTitle, '').toLowerCase();
+  const parsedTitle = parseTitleAndYear(title).title;
+  const languageTitle = title.replaceAll('.', ' ').replace(parsedTitle, '').toLowerCase();
   const languages: Language[] = [];
 
   if (/\b(english|eng|EN|FI)\b/i.test(languageTitle)) {

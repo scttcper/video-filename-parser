@@ -6,7 +6,7 @@ import { parseVideoCodec } from './videoCodec';
 
 const movieTitleRegex = [
   // Special, Despecialized, etc. Edition Movies, e.g: Mission.Impossible.3.Special.Edition.2011
-  /^(?<title>(?![([]).+?)?(?:(?:[-_\W](?<![)[!]))*\(?\b(?<edition>(((Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Ultimate|Final(?=(.(Cut|Edition|Version)))|Extended|Rogue|Special|Despecialized|\d{2,3}(th)?.Anniversary)(.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit))?|((Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit|Edition|Restored|((2|3|4)in1))))))\b\)?.{1,3}(?<year>(1(8|9)|20)\d{2}(?!p|i|\d+|\]|\W\d+)))+(\W+|_|$)(?!\\)/i,
+  /^(?<title>(?![([]).+?)?(?:(?:[-_\W](?<![)[!]))*\(?\b(?<edition>(((Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Anniversary|The.Uncut|Ultimate|Final(?=(.(Cut|Edition|Version)))|Extended|Rogue|Special|Despecialized|\d{2,3}(th)?.Anniversary)(.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit))?|((Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit|Edition|Restored|((2|3|4)in1))))))\b\)?.{1,3}(?<year>(1(8|9)|20)\d{2}(?!p|i|\d+|\]|\W\d+)))+(\W+|_|$)(?!\\)/i,
   // Folder movie format, e.g: Blade Runner 2049 (2017)
   /^(?<title>(?![([]).+?)?(?:(?:[-_\W](?<![)[!]))*\((?<year>(1(8|9)|20)\d{2}(?!p|i|(1(8|9)|20)\d{2}|\]|\W(1(8|9)|20)\d{2})))+/i,
   // Normal movie format, e.g: Mission.Impossible.3.2011
@@ -19,22 +19,14 @@ const movieTitleRegex = [
   /^(?<title>.+?)?(?:(?:[-_\W](?<![)[!]))*(?<year>(1(8|9)|20)\d{2}(?!p|i|\d+|\]|\W\d+)))+(\W+|_|$)(?!\\)/i,
 ];
 
-const reportMovieTitleLenientRegex =
-  /^(?<title>(?![([]).+?)((\W|_))(?:(?<!(19|20)\d{2}.)(German|French|TrueFrench))(.+?)(?=((19|20)\d{2}|$))(?<year>(19|20)\d{2}(?!p|i|\d+|\]|\W\d+))?(\W+|_|$)(?!\\)/i;
-
-export function parseTitleAndYear(
-  title: string,
-  isLenient = false,
-): { title: string; year: string | null } {
+export function parseTitleAndYear(title: string): { title: string; year: string | null } {
   const simpleTitle = simplifyTitle(title);
 
-  const regexes = [...movieTitleRegex];
-  if (isLenient) {
-    regexes.unshift(reportMovieTitleLenientRegex);
-  }
+  // Removing the group from the end could be trouble if a title is "title-year"
+  const grouplessTitle = simpleTitle.replace(/-([a-z0-9]+)$/i, '');
 
-  for (const exp of regexes) {
-    const match = exp.exec(simpleTitle);
+  for (const exp of movieTitleRegex) {
+    const match = exp.exec(grouplessTitle);
     if (match?.groups) {
       const result = releaseTitleCleaner(match.groups.title);
       if (result === null) {

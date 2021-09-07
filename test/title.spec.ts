@@ -37,19 +37,6 @@ describe('parseTitle', () => {
       { title: 'Resident Evil The Final Chapter', year: '2016' },
     ],
     [
-      'Der.Soldat.James.German.Bluray.FuckYou.Pso.Why.cant.you.follow.scene.rules.1998',
-      { title: 'Der Soldat James', year: '1998' },
-    ],
-    ['Passengers.German.DL.AC3.Dubbed..BluRay.x264-PsO', { title: 'Passengers', year: null }],
-    [
-      'Valana la Legende FRENCH BluRay 720p 2016 kjhlj',
-      { title: 'Valana la Legende', year: '2016' },
-    ],
-    [
-      'Valana la Legende TRUEFRENCH BluRay 720p 2016 kjhlj',
-      { title: 'Valana la Legende', year: '2016' },
-    ],
-    [
       'Mission Impossible: Rogue Nation (2015)�[XviD - Ita Ac3 - SoftSub Ita]azione, spionaggio, thriller *Prima Visione* Team mulnic Tom Cruise',
       { title: 'Mission Impossible Rogue Nation', year: '2015' },
     ],
@@ -68,8 +55,27 @@ describe('parseTitle', () => {
     ['The.Middle.HEVC.x265-MeGusta-Pre', { title: 'The Middle', year: null }],
     ['Blade Runner 2049 2017', { title: 'Blade Runner 2049', year: '2017' }],
     ['Blade Runner 2049 (2017)', { title: 'Blade Runner 2049', year: '2017' }],
+    [
+      'Scarface.Anniversary.Edition.1983.INTERNAL.DVDRip.XviD-VoMiT',
+      { title: 'Scarface', year: '1983' },
+    ],
+    [
+      'Ouija.Origin.of.Evil.2016.MULTi.TRUEFRENCH.1080p.BluRay.x264-MELBA',
+      { title: 'Ouija Origin of Evil', year: '2016' },
+    ],
+    ['Appaloosa.1080p.Bluray.x264-1920', { title: 'Appaloosa', year: null }],
+    ['Inglorious.Basterds.CAM.XviD-CAMELOT', { title: 'Inglorious Basterds', year: null }],
+    ['Inglourious.Basterds.SCR.XViD-xSCR', { title: 'Inglourious Basterds', year: null }],
+    ['No.Country.for.Old.Men.DVDRip.XviD-DiAMOND', { title: 'No Country for Old Men', year: null }],
+    ['The.Fighter.DVDR-MPTDVD', { title: 'The Fighter', year: null }],
+    ['Sunshine.Cleaning.DVDR-Replica', { title: 'Sunshine Cleaning', year: null }],
+    [
+      'Scarface.The.Uncut.Version.1983.DVDRip.Divx.AC3.iNTERNAL-FFM',
+      { title: 'Scarface', year: '1983' },
+    ],
+    ['Casino.10TH.ANNiVERSARY.1995.iNTERNAL.DVDRiP.XViD-KiSS', { title: 'Casino', year: '1995' }],
   ];
   test.each(cases)('should parse title %s', (title, expected) => {
-    expect(parseTitleAndYear(title, true)).toEqual(expected);
+    expect(parseTitleAndYear(title)).toEqual(expected);
   });
 });

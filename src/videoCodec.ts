@@ -7,6 +7,7 @@ const xvidhdExp = /(?<xvidhd>XvidHD)/i;
 const xvidExp = /(?<xvid>X-?vid)/i;
 const divxExp = /(?<divx>divx)/i;
 const hevcExp = /(?<hevc>HEVC)/i;
+const dvdrExp = /(?<dvdr>DVDR)\b/i;
 
 const codecExp = new RegExp(
   [
@@ -19,6 +20,7 @@ const codecExp = new RegExp(
     xvidExp.source,
     divxExp.source,
     hevcExp.source,
+    dvdrExp.source,
   ].join('|'),
   'i',
 );
@@ -30,6 +32,7 @@ export enum VideoCodec {
   H265 = 'h265',
   WMV = 'WMV',
   XVID = 'xvid',
+  DVDR = 'dvdr',
 }
 
 export function parseVideoCodec(title: string): { codec?: VideoCodec; source?: string } {
@@ -62,6 +65,10 @@ export function parseVideoCodec(title: string): { codec?: VideoCodec; source?: s
 
   if (groups.wmv) {
     return { codec: VideoCodec.WMV, source: groups.wmv };
+  }
+
+  if (groups.dvdr) {
+    return { codec: VideoCodec.DVDR, source: groups.dvdr };
   }
 
   return {};

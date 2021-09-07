@@ -1,3 +1,4 @@
+import { webdlExp } from './source';
 import { parseVideoCodec } from './videoCodec';
 
 const simpleTitleRegex =
@@ -5,12 +6,16 @@ const simpleTitleRegex =
 const websitePrefixRegex = /^\[\s*[a-z]+(\.[a-z]+)+\s*\][- ]*|^www\.[a-z]+\.(?:com|net)[ -]*/i;
 const cleanTorrentPrefixRegex = /^\[(?:REQ)\]/i;
 const cleanTorrentSuffixRegex = /\[(?:ettv|rartv|rarbg|cttv)\]$/i;
+/** Used to help cleanup releases that often emit the year title.SCR-group */
+const commonSourcesRegex = /\b(Bluray|dvd(r|rip)?|HDTV|HDRip|CAM|SCR|xvid|web-?dl)\b/gi;
 
 export function simplifyTitle(title: string): string {
   let simpleTitle = title.replace(simpleTitleRegex, '');
   simpleTitle = simpleTitle.replace(websitePrefixRegex, '');
   simpleTitle = simpleTitle.replace(cleanTorrentPrefixRegex, '');
   simpleTitle = simpleTitle.replace(cleanTorrentSuffixRegex, '');
+  simpleTitle = simpleTitle.replaceAll(commonSourcesRegex, '');
+  simpleTitle = simpleTitle.replace(webdlExp, '');
 
   // allow filtering of up to two codecs.
   // maybe parseVideoCodec should be an array
@@ -38,6 +43,8 @@ export function releaseTitleCleaner(title: string): string | null {
 
   let trimmedTitle = title.replace('_', ' ');
   trimmedTitle = trimmedTitle.replace(requestInfoRegex, '').trim();
+  trimmedTitle = trimmedTitle.replaceAll(commonSourcesRegex, '').trim();
+  trimmedTitle = trimmedTitle.replace(webdlExp, '').trim();
 
   const parts = trimmedTitle.split('.');
   let result = '';

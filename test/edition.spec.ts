@@ -24,7 +24,6 @@ describe('parseEdition', () => {
     ['A Fake Movie 2035 2012 Directors.mkv', { directors: true }],
     ["Blade Runner 2049 Director's Cut.mkv", { directors: true }],
     ['Prometheus 2012 50th Anniversary Edition.mkv', { remastered: true }],
-    // ['Movie 2012 2in1.mkv', '2in1'],
     ['Movie 2012 IMAX.mkv', { imax: true }],
     ['Movie 2012 Restored.mkv', { remastered: true }],
     ['Prometheus.Special.Edition.Fan Edit.2012..BRRip.x264.AAC-m2g', { fanEdit: true }],
