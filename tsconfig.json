@@ -5,6 +5,7 @@
     "outDir": "dist",
     "esModuleInterop": true
   },
+  "exclude": ["demo"],
   "ts-node": {
     "transpileOnly": true,
     "transpiler": "ts-node/transpilers/swc-experimental"
