@@ -1,5 +1,5 @@
-import { parseTitleAndYear } from './title';
-import { removeEmpty } from './utils';
+import { parseTitleAndYear } from './title.js';
+import { removeEmpty } from './utils.js';
 
 const internalExp = /\b(INTERNAL)\b/i;
 const remasteredExp = /\b(Remastered|Anniversary|Restored)\b/i;

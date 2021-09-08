@@ -1,4 +1,4 @@
-import { parseTitleAndYear } from './title';
+import { parseTitleAndYear } from './title.js';
 
 /* eslint-disable complexity */
 export enum Language {

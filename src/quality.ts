@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
-import { parseResolution, Resolution } from './resolution';
-import { parseSource, parseSourceGroups, Source } from './source';
-import { parseVideoCodec, VideoCodec } from './videoCodec';
+import { parseResolution, Resolution } from './resolution.js';
+import { parseSource, parseSourceGroups, Source } from './source.js';
+import { parseVideoCodec, VideoCodec } from './videoCodec.js';
 
 const properRegex = /\b(?<proper>proper|repack|rerip)\b/i;
 const realRegex = /\b(?<real>REAL)\b/; // not insensitive
@@ -179,9 +179,9 @@ export function parseQualityModifyers(title: string): Revision {
   const versionResult = versionExp.exec(normalizedTitle);
   if (versionResult?.groups) {
     // get numbers from version regex
-    const digits = /\d/i.exec(versionResult.groups.version);
+    const digits = /\d/i.exec(versionResult.groups['version'] ?? '');
     if (digits) {
-      const value = parseInt(digits[0], 10);
+      const value = parseInt(digits[0] ?? '', 10);
       if (!Number.isNaN(value)) {
         result.version = value;
       }

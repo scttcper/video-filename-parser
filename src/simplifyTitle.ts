@@ -1,5 +1,5 @@
-import { webdlExp } from './source';
-import { parseVideoCodec } from './videoCodec';
+import { webdlExp } from './source.js';
+import { parseVideoCodec } from './videoCodec.js';
 
 const simpleTitleRegex =
   /\s*(?:480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|HVEC|[xh][\W_]?26[45]|DD\W?5\W1|[<>?*:|]|848x480|1280x720|1920x1080)((8|10)b(it))?/i;
@@ -53,7 +53,7 @@ export function releaseTitleCleaner(title: string): string | null {
   let nextPart = '';
   for (const part of parts) {
     if (parts.length >= n + 2) {
-      nextPart = parts[n + 1];
+      nextPart = parts[n + 1] ?? '';
     }
 
     if (part.length === 1 && part.toLowerCase() !== 'a' && Number.isNaN(parseInt(part, 10))) {

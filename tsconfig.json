@@ -1,17 +1,12 @@
 {
-  "compileOnSave": false,
+  "extends": "@sindresorhus/tsconfig",
   "compilerOptions": {
-    "moduleResolution": "node",
-    "lib": ["ES2020", "DOM"],
-    "jsx": "preserve",
-    "target": "es2019",
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "strict": true,
-    "noImplicitAny": false,
-    "noUnusedLocals": true,
-    "declaration": true,
-    "sourceMap": false,
-    "outDir": "dist"
+    "lib": ["ES2021", "DOM"],
+    "outDir": "dist",
+    "esModuleInterop": true
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "transpiler": "ts-node/transpilers/swc-experimental"
   }
 }

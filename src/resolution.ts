@@ -24,7 +24,7 @@ export function parseResolution(title: string): { resolution?: Resolution; sourc
 
   for (const key of Object.keys(Resolution)) {
     if (result.groups[key] !== undefined) {
-      return { resolution: Resolution[key], source: result.groups[key] };
+      return { resolution: Resolution[key as keyof typeof Resolution], source: result.groups[key] };
     }
   }
 

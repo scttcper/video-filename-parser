@@ -1,8 +1,8 @@
-import { parseAudioChannels } from './audioChannels';
-import { parseAudioCodec } from './audioCodec';
-import { parseResolution } from './resolution';
-import { releaseTitleCleaner, simplifyTitle } from './simplifyTitle';
-import { parseVideoCodec } from './videoCodec';
+import { parseAudioChannels } from './audioChannels.js';
+import { parseAudioCodec } from './audioCodec.js';
+import { parseResolution } from './resolution.js';
+import { releaseTitleCleaner, simplifyTitle } from './simplifyTitle.js';
+import { parseVideoCodec } from './videoCodec.js';
 
 const movieTitleRegex = [
   // Special, Despecialized, etc. Edition Movies, e.g: Mission.Impossible.3.Special.Edition.2011
@@ -28,12 +28,12 @@ export function parseTitleAndYear(title: string): { title: string; year: string 
   for (const exp of movieTitleRegex) {
     const match = exp.exec(grouplessTitle);
     if (match?.groups) {
-      const result = releaseTitleCleaner(match.groups.title);
+      const result = releaseTitleCleaner(match.groups['title'] ?? '');
       if (result === null) {
         continue;
       }
 
-      const year = match.groups.year || null;
+      const year = match.groups['year'] ?? null;
 
       return { title: result, year };
     }

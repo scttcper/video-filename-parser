@@ -1,16 +1,16 @@
-import { Channels, parseAudioChannels } from './audioChannels';
-import { AudioCodec, parseAudioCodec } from './audioCodec';
-import { isComplete } from './complete';
-import { Edition, parseEdition } from './edition';
-import { parseGroup } from './group';
-import { isMulti, Language, parseLanguage } from './language';
-import { parseQuality, Revision } from './quality';
-import { Resolution } from './resolution';
-import { parseSeason, Season } from './season';
-import { Source } from './source';
-import { parseTitleAndYear } from './title';
-import { removeEmpty } from './utils';
-import { parseVideoCodec, VideoCodec } from './videoCodec';
+import { Channels, parseAudioChannels } from './audioChannels.js';
+import { AudioCodec, parseAudioCodec } from './audioCodec.js';
+import { isComplete } from './complete.js';
+import { Edition, parseEdition } from './edition.js';
+import { parseGroup } from './group.js';
+import { isMulti, Language, parseLanguage } from './language.js';
+import { parseQuality, Revision } from './quality.js';
+import { Resolution } from './resolution.js';
+import { parseSeason, Season } from './season.js';
+import { Source } from './source.js';
+import { parseTitleAndYear } from './title.js';
+import { removeEmpty } from './utils.js';
+import { parseVideoCodec, VideoCodec } from './videoCodec.js';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type ParsedTvInfo = Omit<Season, 'releaseTitle' | 'seriesTitle'>;
