@@ -138,7 +138,7 @@ export function parseLanguage(title: string): Language[] {
     languages.push(Language.Greek);
   }
 
-  if (/\b(FR|FRENCH|VOSTFR|VO|VFF|VFQ|VF2|TRUEFRENCH)\b/i.test(languageTitle)) {
+  if (/\b(FR|FRENCH|VOSTFR|VO|VFF|VFQ|VF2|TRUEFRENCH|SUBFRENCH)\b/i.test(languageTitle)) {
     languages.push(Language.French);
   }
 

@@ -93,6 +93,10 @@ const languageCases: Array<[string, Language[]]> = [
   ],
   ['Scarface.1983.CE.UNCUT.DVDRip.XviD.iNT-TURKiSO', [Language.English]],
   ['Scarface.1983.20th.AE.iNTERNAL.DVDRip.XviD-MHQ', [Language.English]],
+  [
+    'The.Conjuring.The.Devil.Made.Me.Do.It.2021.SUBFRENCH.2160p.WEB.H265-McNULTY',
+    [Language.French],
+  ],
 ];
 
 for (const [title, result] of languageCases) {
