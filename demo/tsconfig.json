@@ -12,10 +12,7 @@
     "noEmit": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "paths": {
-      "@ctrl/video-filename-parser": ["../src"]
-    }
+    "noImplicitReturns": true
   },
   "include": ["./src"]
 }
