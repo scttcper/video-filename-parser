@@ -7,6 +7,7 @@ const xvidhdExp = /(?<xvidhd>XvidHD)/i;
 const xvidExp = /(?<xvid>X-?vid)/i;
 const divxExp = /(?<divx>divx)/i;
 const hevcExp = /(?<hevc>HEVC)/i;
+const dvdrExp = /(?<dvdr>DVDR)\b/i;
 
 const codecExp = new RegExp(
   [
@@ -19,6 +20,7 @@ const codecExp = new RegExp(
     xvidExp.source,
     divxExp.source,
     hevcExp.source,
+    dvdrExp.source,
   ].join('|'),
   'i',
 );
@@ -30,6 +32,7 @@ export enum VideoCodec {
   H265 = 'h265',
   WMV = 'WMV',
   XVID = 'xvid',
+  DVDR = 'dvdr',
 }
 
 export function parseVideoCodec(title: string): { codec?: VideoCodec; source?: string } {
@@ -40,28 +43,32 @@ export function parseVideoCodec(title: string): { codec?: VideoCodec; source?: s
 
   const { groups } = result;
 
-  if (groups.h264) {
-    return { codec: VideoCodec.H264, source: groups.h264 };
+  if (groups['h264']) {
+    return { codec: VideoCodec.H264, source: groups['h264'] };
   }
 
-  if (groups.h265) {
-    return { codec: VideoCodec.H265, source: groups.h265 };
+  if (groups['h265']) {
+    return { codec: VideoCodec.H265, source: groups['h265'] };
   }
 
-  if (groups.x265 || groups.hevc) {
-    return { codec: VideoCodec.X265, source: groups.x265 || groups.hevc };
+  if (groups['x265'] || groups['hevc']) {
+    return { codec: VideoCodec.X265, source: groups['x265'] ?? groups['hevc'] };
   }
 
-  if (groups.x264) {
-    return { codec: VideoCodec.X264, source: groups.x264 };
+  if (groups['x264']) {
+    return { codec: VideoCodec.X264, source: groups['x264'] };
   }
 
-  if (groups.xvidhd || groups.xvid || groups.divx) {
-    return { codec: VideoCodec.XVID, source: groups.xvidhd || groups.xvid || groups.divx };
+  if (groups['xvidhd'] || groups['xvid'] || groups['divx']) {
+    return { codec: VideoCodec.XVID, source: groups['xvidhd'] ?? groups['xvid'] ?? groups['divx'] };
   }
 
-  if (groups.wmv) {
-    return { codec: VideoCodec.WMV, source: groups.wmv };
+  if (groups['wmv']) {
+    return { codec: VideoCodec.WMV, source: groups['wmv'] };
+  }
+
+  if (groups['dvdr']) {
+    return { codec: VideoCodec.DVDR, source: groups['dvdr'] };
   }
 
   return {};

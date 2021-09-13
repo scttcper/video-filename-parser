@@ -1,4 +1,4 @@
-import { parseTitleAndYear } from './title';
+import { parseTitleAndYear } from './title.js';
 
 /* eslint-disable complexity */
 export enum Language {
@@ -38,8 +38,8 @@ export enum Language {
 }
 
 export function parseLanguage(title: string): Language[] {
-  const parsedTitle = parseTitleAndYear(title, true).title;
-  const languageTitle = title.replace('.', ' ').replace(parsedTitle, '').toLowerCase();
+  const parsedTitle = parseTitleAndYear(title).title;
+  const languageTitle = title.replace(/\./g, ' ').replace(parsedTitle, '').toLowerCase();
   const languages: Language[] = [];
 
   if (/\b(english|eng|EN|FI)\b/i.test(languageTitle)) {
@@ -138,7 +138,7 @@ export function parseLanguage(title: string): Language[] {
     languages.push(Language.Greek);
   }
 
-  if (/\b(FR|FRENCH|VOSTFR|VO|VFF|VFQ|VF2|TRUEFRENCH)\b/i.test(languageTitle)) {
+  if (/\b(FR|FRENCH|VOSTFR|VO|VFF|VFQ|VF2|TRUEFRENCH|SUBFRENCH)\b/i.test(languageTitle)) {
     languages.push(Language.French);
   }
 

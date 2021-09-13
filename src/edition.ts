@@ -1,5 +1,5 @@
-import { parseTitleAndYear } from './title';
-import { removeEmpty } from './utils';
+import { parseTitleAndYear } from './title.js';
+import { removeEmpty } from './utils.js';
 
 const internalExp = /\b(INTERNAL)\b/i;
 const remasteredExp = /\b(Remastered|Anniversary|Restored)\b/i;
@@ -42,7 +42,7 @@ export interface Edition {
 }
 
 export function parseEdition(title: string): Edition {
-  const parsedTitle = parseTitleAndYear(title, true).title;
+  const parsedTitle = parseTitleAndYear(title).title;
   const withoutTitle = title.replace('.', ' ').replace(parsedTitle, '').toLowerCase();
 
   const result: Edition = {

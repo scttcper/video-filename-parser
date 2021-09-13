@@ -1,3 +1,5 @@
 dist
 build
 demo/public
+demo/tailwind.config.js
+demo/postcss.config.js

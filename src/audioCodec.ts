@@ -57,56 +57,56 @@ export function parseAudioCodec(title: string): { codec?: AudioCodec; source?: s
 
   const { groups } = audioResult;
 
-  if (groups.aac) {
-    return { codec: AudioCodec.AAC, source: groups.aac };
+  if (groups['aac']) {
+    return { codec: AudioCodec.AAC, source: groups['aac'] };
   }
 
-  if (groups.dolbyatmos) {
-    return { codec: AudioCodec.EAC3, source: groups.dolbyatmos };
+  if (groups['dolbyatmos']) {
+    return { codec: AudioCodec.EAC3, source: groups['dolbyatmos'] };
   }
 
-  if (groups.dolby) {
-    return { codec: AudioCodec.DOLBY, source: groups.dolby };
+  if (groups['dolby']) {
+    return { codec: AudioCodec.DOLBY, source: groups['dolby'] };
   }
 
-  if (groups.dtshd) {
-    return { codec: AudioCodec.DTSHD, source: groups.dtshd };
+  if (groups['dtshd']) {
+    return { codec: AudioCodec.DTSHD, source: groups['dtshd'] };
   }
 
-  if (groups.dts) {
-    return { codec: AudioCodec.DTS, source: groups.dts };
+  if (groups['dts']) {
+    return { codec: AudioCodec.DTS, source: groups['dts'] };
   }
 
-  if (groups.flac) {
-    return { codec: AudioCodec.FLAC, source: groups.flac };
+  if (groups['flac']) {
+    return { codec: AudioCodec.FLAC, source: groups['flac'] };
   }
 
-  if (groups.truehd) {
-    return { codec: AudioCodec.TRUEHD, source: groups.truehd };
+  if (groups['truehd']) {
+    return { codec: AudioCodec.TRUEHD, source: groups['truehd'] };
   }
 
-  if (groups.mp3) {
-    return { codec: AudioCodec.MP3, source: groups.mp3 };
+  if (groups['mp3']) {
+    return { codec: AudioCodec.MP3, source: groups['mp3'] };
   }
 
-  if (groups.mp2) {
-    return { codec: AudioCodec.MP2, source: groups.mp2 };
+  if (groups['mp2']) {
+    return { codec: AudioCodec.MP2, source: groups['mp2'] };
   }
 
-  if (groups.pcm) {
-    return { codec: AudioCodec.PCM, source: groups.pcm };
+  if (groups['pcm']) {
+    return { codec: AudioCodec.PCM, source: groups['pcm'] };
   }
 
-  if (groups.lpcm) {
-    return { codec: AudioCodec.LPCM, source: groups.lpcm };
+  if (groups['lpcm']) {
+    return { codec: AudioCodec.LPCM, source: groups['lpcm'] };
   }
 
-  if (groups.opus) {
-    return { codec: AudioCodec.OPUS, source: groups.opus };
+  if (groups['opus']) {
+    return { codec: AudioCodec.OPUS, source: groups['opus'] };
   }
 
-  if (groups.vorbis) {
-    return { codec: AudioCodec.VORBIS, source: groups.vorbis };
+  if (groups['vorbis']) {
+    return { codec: AudioCodec.VORBIS, source: groups['vorbis'] };
   }
 
   return {};

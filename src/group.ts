@@ -1,5 +1,5 @@
-import { removeFileExtension } from './extensions';
-import { parseTitleAndYear } from './title';
+import { removeFileExtension } from './extensions.js';
+import { parseTitleAndYear } from './title.js';
 
 const websitePrefixExp = /^\[\s*[a-z]+(\.[a-z]+)+\s*\][- ]*|^www\.[a-z]+\.(?:com|net)[ -]*/i;
 const cleanReleaseGroupExp =
@@ -21,7 +21,7 @@ export function parseGroup(title: string): string | null {
 
   const animeResult = animeReleaseGroupExp.exec(trimmed);
   if (animeResult?.groups) {
-    return animeResult.groups.subgroup;
+    return animeResult.groups['subgroup'] ?? '';
   }
 
   trimmed = trimmed.replace(cleanReleaseGroupExp, '');
@@ -33,7 +33,7 @@ export function parseGroup(title: string): string | null {
       continue;
     }
 
-    const group = result.groups.releasegroup!;
+    const group = result.groups['releasegroup'] ?? '';
 
     if (!Number.isNaN(Number(group))) {
       return null;
