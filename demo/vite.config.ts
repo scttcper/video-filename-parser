@@ -6,7 +6,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@ctrl/video-filename-parser': '../src/index',
+      '@ctrl/video-filename-parser': '../src/index.ts',
     },
   },
   optimizeDeps: {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
-import { filenameParse } from '@ctrl/video-filename-parser';
+import { filenameParse } from '../../dist/src/index.js';
 
 ReactDOM.render(<Demo />, document.getElementById('root'));
 
