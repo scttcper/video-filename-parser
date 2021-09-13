@@ -14,7 +14,7 @@ export function simplifyTitle(title: string): string {
   simpleTitle = simpleTitle.replace(websitePrefixRegex, '');
   simpleTitle = simpleTitle.replace(cleanTorrentPrefixRegex, '');
   simpleTitle = simpleTitle.replace(cleanTorrentSuffixRegex, '');
-  simpleTitle = simpleTitle.replaceAll(commonSourcesRegex, '');
+  simpleTitle = simpleTitle.replace(commonSourcesRegex, '');
   simpleTitle = simpleTitle.replace(webdlExp, '');
 
   // allow filtering of up to two codecs.
@@ -43,7 +43,7 @@ export function releaseTitleCleaner(title: string): string | null {
 
   let trimmedTitle = title.replace('_', ' ');
   trimmedTitle = trimmedTitle.replace(requestInfoRegex, '').trim();
-  trimmedTitle = trimmedTitle.replaceAll(commonSourcesRegex, '').trim();
+  trimmedTitle = trimmedTitle.replace(commonSourcesRegex, '').trim();
   trimmedTitle = trimmedTitle.replace(webdlExp, '').trim();
 
   const parts = trimmedTitle.split('.');
