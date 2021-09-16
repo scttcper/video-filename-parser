@@ -198,7 +198,8 @@ export function parseLanguage(title: string): Language[] {
 }
 
 // Reviens-moi (2007) [1080p] BluRay MULTi x264-PopHD
-const multiExp = /\b(MULTi|DUAL)\b/i;
+const multiExp = /(?<!(WEB-))\b(MULTi|DUAL|DL)\b/i;
 export function isMulti(title: string): boolean | undefined {
-  return multiExp.test(title) || undefined;
+  const noWebTitle = title.replace(/\bWEB-?DL\b/i, '');
+  return multiExp.test(noWebTitle) || undefined;
 }

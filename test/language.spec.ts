@@ -41,7 +41,10 @@ const languageCases: Array<[string, Language[]]> = [
   ['Castle.2009.S01E14.HDTV.XviD.ENG.HUN-LOL', [Language.English, Language.Hungarian]],
   ['Castle.2009.S01E14.HDTV.XviD.HUN-LOL', [Language.Hungarian]],
   ['Castle.2009.S01E14.HDTV.XviD.CZ-LOL', [Language.Czech]],
-  ['Passengers.2016.German.DL.AC3.Dubbed.1080p.WebHD.h264.iNTERNAL-PsO', [Language.German]],
+  [
+    'Passengers.2016.German.DL.AC3.Dubbed.1080p.WebHD.h264.iNTERNAL-PsO',
+    [Language.German, Language.English],
+  ],
   ['Smurfs.​The.​Lost.​Village.​2017.​1080p.​BluRay.​HebDub.​x264-​iSrael', [Language.Hebrew]],
   ['The Danish Girl 2015', [Language.English]],
   [
@@ -109,6 +112,7 @@ const multiCases: Array<[string]> = [
   ['Ouija.Origin.of.Evil.2016.MULTi.TRUEFRENCH.1080p.BluRay.x264-MELBA'],
   ['Showdown.In.Little.Tokyo.1991.MULTI.VFQ.VFF.DTSHD-MASTER.1080p.BluRay.x264-ZombiE'],
   ['The.Polar.Express.2004.MULTI.VF2.1080p.BluRay.x264-PopHD'],
+  ['Star.Trek.Der.Film.1979.German.DL.2160p.UHD.BluRay.HEVC-UNTHEVC'],
 ];
 
 for (const [title] of multiCases) {
