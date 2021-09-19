@@ -1,4 +1,5 @@
 import { removeFileExtension } from './extensions.js';
+import { simplifyTitle } from './simplifyTitle.js';
 import { parseTitleAndYear } from './title.js';
 
 const websitePrefixExp = /^\[\s*[a-z]+(\.[a-z]+)+\s*\][- ]*|^www\.[a-z]+\.(?:com|net)[ -]*/i;
@@ -12,8 +13,11 @@ export function parseGroup(title: string): string | null {
   const nowebsiteTitle = title.replace(websitePrefixExp, '');
   let { title: releaseTitle } = parseTitleAndYear(nowebsiteTitle);
   releaseTitle = releaseTitle.replace(/ /g, '.');
-  let trimmed = nowebsiteTitle.replace(/ /g, '.').replace(releaseTitle, '');
-  trimmed = removeFileExtension(trimmed.trim());
+  let trimmed = nowebsiteTitle
+    .replace(/ /g, '.')
+    .replace(releaseTitle === nowebsiteTitle ? '' : releaseTitle, '')
+    .replace(/\.-\./g, '.');
+  trimmed = simplifyTitle(removeFileExtension(trimmed.trim()));
 
   if (trimmed.length === 0) {
     return null;
@@ -34,10 +38,6 @@ export function parseGroup(title: string): string | null {
     }
 
     const group = result.groups['releasegroup'] ?? '';
-
-    if (!Number.isNaN(Number(group))) {
-      return null;
-    }
 
     return group;
   }

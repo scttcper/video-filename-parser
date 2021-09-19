@@ -17,9 +17,8 @@ const cases: Array<[string, string | null]> = [
   ['The.Walking.Dead.S04E13.720p.WEB-DL.AAC2.0.H.264-Cyphanix', 'Cyphanix'],
   ['Arrow.S02E01.720p.WEB-DL.DD5.1.H.264.mkv', null],
   ['Series Title S01E01 Episode Title', null],
-  ['The Colbert Report - 2014-06-02 - Thomas Piketty.mkv', null],
   ['Real Time with Bill Maher S12E17 May 23, 2014.mp4', null],
-  // ['Reizen Waes - S01E08 - Transistri\u00EB, Zuid-Osseti\u00EB en Abchazi\u00EB SDTV.avi', null],
+  ['Reizen Waes - S01E08 - Transistri\u00EB, Zuid-Osseti\u00EB en Abchazi\u00EB SDTV.avi', null],
   ['Simpsons 10x11 - Wild Barts Cant Be Broken [rl].avi', null],
   ['[ www.Torrenting.com ] - Revenge.S03E14.720p.HDTV.X264-DIMENSION', 'DIMENSION'],
   ['Seed S02E09 HDTV x264-2HD [eztv]-[rarbg.com]', '2HD'],
@@ -45,6 +44,10 @@ const cases: Array<[string, string | null]> = [
   ['13.Reasons.Why.S01E03.1080p10bit.WEB-DL.Hin-Eng.x265.MSub-KatmovieHD.nu.mkv', 'KatmovieHD'],
   ['The.Fighter.DVDR-MPTDVD', 'MPTDVD'],
   ['Casino.1995.MULTi.1080p.BluRay.x264-FiDELiO', 'FiDELiO'],
+  ['The.Green.Mile.1999.1080p.MULTI.READNFO.BluRay.x264-1080', '1080'],
+  ['STEPHEN.KINGS.SHAWSHANK.REDEMPTION.-.KING.OF.HORROR.CUSTOM.NORDIC.DVD-6POiNT6', '6POiNT6'],
+  ['Inception.PAL.MULTi.DVD9-REVOLTE', 'REVOLTE'],
+  ['The.Green.Mile.1999.DVDRip.XviD.iNT-MOViERUSH', 'MOViERUSH'],
 ];
 
 for (const [title, result] of cases) {
