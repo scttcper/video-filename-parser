@@ -41,6 +41,11 @@ const languageCases: Array<[string, Language[]]> = [
   ['Castle.2009.S01E14.HDTV.XviD.ENG.HUN-LOL', [Language.English, Language.Hungarian]],
   ['Castle.2009.S01E14.HDTV.XviD.HUN-LOL', [Language.Hungarian]],
   ['Castle.2009.S01E14.HDTV.XviD.CZ-LOL', [Language.Czech]],
+  ['Peter.Rabbit.2.The.Runaway.2021.LATViAN.2160p.UHD.BLURAY.x265-UNDERDOG', [Language.Latvian]],
+  [
+    'Peter.Rabbit.2.The.Runaway.2021.LiTHUANiAN.2160p.UHD.BLURAY.x265-UNDERDOG',
+    [Language.Lithuanian],
+  ],
   [
     'Passengers.2016.German.DL.AC3.Dubbed.1080p.WebHD.h264.iNTERNAL-PsO',
     [Language.German, Language.English],
