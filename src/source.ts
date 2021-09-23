@@ -11,7 +11,7 @@ const dvdExp = /\b(?<dvd>DVD9?|DVDRip|NTSC|PAL|xvidvd)\b/i;
 const dsrExp = /\b(?<dsr>WS[-_. ]DSR|DSR)\b/i;
 const regionalExp = /\b(?<regional>R[0-9]{1}|REGIONAL)\b/i;
 const ppvExp = /\b(?<ppv>PPV)\b/i;
-const scrExp = /\b(?<scr>SCR|SCREENER|DVDSCR|DVD.?SCREENER)\b/i;
+const scrExp = /\b(?<scr>SCR|SCREENER|DVDSCR|(DVD|WEB).?SCREENER)\b/i;
 const tsExp = /\b(?<ts>TS|TELESYNC|HD-TS|HDTS|PDVD|TSRip|HDTSRip)\b/i;
 const tcExp = /\b(?<tc>TC|TELECINE|HD-TC|HDTC)\b/i;
 const camExp = /\b(?<cam>CAMRIP|CAM|HDCAM|HD-CAM)\b/i;
@@ -107,10 +107,6 @@ export function parseSource(title: string): Source[] {
     result.push(Source.DVD);
   }
 
-  if (groups.scr) {
-    result.push(Source.SCREENER);
-  }
-
   if (groups.ppv) {
     result.push(Source.PPV);
   }
@@ -133,6 +129,10 @@ export function parseSource(title: string): Source[] {
 
   if (groups.tc) {
     result.push(Source.TELECINE);
+  }
+
+  if (groups.scr) {
+    result.push(Source.SCREENER);
   }
 
   return result;

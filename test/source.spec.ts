@@ -35,6 +35,7 @@ const singleCases: Array<[string, Source[]]> = [
   ['Finding.Ohana.2021.720p.NF.AAC2.0.X.264-EVO', [Source.WEBDL]],
   ['Finding.Ohana.2021.720p.NF.WEBRIP.AAC2.0.X.264-EVO', [Source.WEBRIP]],
   ['300.2006.iNTERNAL.NTSC.DVD9-FaiLED', [Source.DVD]],
+  ['The Card Counter 2021 1080p WEBSCREENER X264-EVO', [Source.SCREENER]],
 ];
 for (const [title, result] of singleCases) {
   test(`parse source "${title}"`, t => {
