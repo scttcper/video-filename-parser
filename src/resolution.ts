@@ -6,7 +6,8 @@ export enum Resolution {
   R480P = '480P',
 }
 
-const R2160pExp = /(?<R2160P>2160p|4k[-_. ](?:UHD|HEVC|BD)|(?:UHD|HEVC|BD)[-_. ]4k|\b(UHD|4k)\b)/i;
+const R2160pExp =
+  /(?<R2160P>2160p|4k[-_. ](?:UHD|HEVC|BD)|(?:UHD|HEVC|BD)[-_. ]4k|\b(4k)\b|COMPLETE.UHD|UHD.COMPLETE)/i;
 const R1080pExp = /(?<R1080P>1080(i|p)|1920x1080)(10bit)?/i;
 const R720pExp = /(?<R720P>720(i|p)|1280x720)(10bit)?/i;
 const R576pExp = /(?<R576P>576(i|p))/i;

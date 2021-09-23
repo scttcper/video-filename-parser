@@ -317,3 +317,17 @@ for (const [title, proper] of tsCases) {
     t.is(quality.revision.version, proper ? 2 : 1);
   });
 }
+
+const bdripCases: Array<[string]> = [
+  ['Schindlers.List.1993.REMASTERED.iNTERNAL.UHD.BDRip.x264-LiBRARiANS'],
+  ['The.Big.Lebowski.1998.REMASTERED.iNTERNAL.UHD.BDRip.x264-LiBRARiANS'],
+  ['Black.Hawk.Down.2001.EXTENDED.PL.UHD.BDRip.x264.INTERNAL-FLAME'],
+];
+for (const [title] of bdripCases) {
+  test(`parse bdrip quality "${title}"`, t => {
+    const quality = parseQuality(title);
+    t.is(quality.sources[0], Source.BLURAY);
+    t.is(quality.resolution, Resolution.R480P);
+    t.is(quality.modifier, null);
+  });
+}
