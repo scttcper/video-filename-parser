@@ -9,14 +9,14 @@ const cleanTorrentPrefixRegex = /^\[(?:REQ)\]/i;
 const cleanTorrentSuffixRegex = /\[(?:ettv|rartv|rarbg|cttv)\]$/i;
 /** Used to help cleanup releases that often emit the year title.SCR-group */
 const commonSourcesRegex =
-  /\b(Bluray|(dvdr?|BD)rip|HDTV|HDRip|TS|R5|CAM|SCR|SCREENER|xvid|web-?dl)\b/gi;
+  /\b(Bluray|(dvdr?|BD)rip|HDTV|HDRip|TS|R5|CAM|SCR|SCREENER|DiVX|xvid|web-?dl)\b/i;
 
 export function simplifyTitle(title: string): string {
   let simpleTitle = title.replace(simpleTitleRegex, '');
   simpleTitle = simpleTitle.replace(websitePrefixRegex, '');
   simpleTitle = simpleTitle.replace(cleanTorrentPrefixRegex, '');
   simpleTitle = simpleTitle.replace(cleanTorrentSuffixRegex, '');
-  simpleTitle = simpleTitle.replace(commonSourcesRegex, '');
+  simpleTitle = simpleTitle.replace(new RegExp(commonSourcesRegex, 'ig'), '');
   simpleTitle = simpleTitle.replace(webdlExp, '');
 
   // allow filtering of up to two codecs.
@@ -40,6 +40,7 @@ const requestInfoRegex = /\[.+?\]/i;
 const editionExp =
   /\b((Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Anniversary|The.Uncut|Ultimate|Final(?=(.(Cut|Edition|Version)))|Extended|Special|Despecialized|unrated|\d{2,3}(th)?.Anniversary)(.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit))?|((Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit|Edition|Restored|((2|3|4)in1)))){1,3}/i;
 const languageExp = /\b(TRUE.?FRENCH|videomann|SUBFRENCH|PLDUB|MULTI)/i;
+const sceneGarbageExp = /\b(PROPER|REAL|READ.NFO)/;
 
 export function releaseTitleCleaner(title: string): string | null {
   if (!title || title.length === 0 || title === '(') {
@@ -48,14 +49,19 @@ export function releaseTitleCleaner(title: string): string | null {
 
   let trimmedTitle = title.replace('_', ' ');
   trimmedTitle = trimmedTitle.replace(requestInfoRegex, '').trim();
-  trimmedTitle = trimmedTitle.replace(commonSourcesRegex, '').trim();
+  trimmedTitle = trimmedTitle.replace(new RegExp(commonSourcesRegex, 'ig'), '').trim();
   trimmedTitle = trimmedTitle.replace(webdlExp, '').trim();
   trimmedTitle = trimmedTitle.replace(editionExp, '').trim();
   trimmedTitle = trimmedTitle.replace(languageExp, '').trim();
+  trimmedTitle = trimmedTitle.replace(new RegExp(sceneGarbageExp, 'ig'), '').trim();
 
   for (const lang of Object.values(Language)) {
     trimmedTitle = trimmedTitle.replace(new RegExp(`\\b${lang.toUpperCase()}`), '').trim();
   }
+
+  // Look for gap formed by removing items
+  trimmedTitle = trimmedTitle.split('   ')[0]!;
+  trimmedTitle = trimmedTitle.split('...')[0]!;
 
   const parts = trimmedTitle.split('.');
   let result = '';
