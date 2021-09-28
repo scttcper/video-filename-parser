@@ -1,3 +1,4 @@
+import { Language } from './language.js';
 import { webdlExp } from './source.js';
 import { parseVideoCodec } from './videoCodec.js';
 
@@ -7,7 +8,8 @@ const websitePrefixRegex = /^\[\s*[a-z]+(\.[a-z]+)+\s*\][- ]*|^www\.[a-z]+\.(?:c
 const cleanTorrentPrefixRegex = /^\[(?:REQ)\]/i;
 const cleanTorrentSuffixRegex = /\[(?:ettv|rartv|rarbg|cttv)\]$/i;
 /** Used to help cleanup releases that often emit the year title.SCR-group */
-const commonSourcesRegex = /\b(Bluray|dvd(r|rip)?|HDTV|HDRip|CAM|SCR|xvid|web-?dl)\b/gi;
+const commonSourcesRegex =
+  /\b(Bluray|(dvdr?|BD)rip|HDTV|HDRip|TS|R5|CAM|SCR|SCREENER|xvid|web-?dl)\b/gi;
 
 export function simplifyTitle(title: string): string {
   let simpleTitle = title.replace(simpleTitleRegex, '');
@@ -35,6 +37,9 @@ export function simplifyTitle(title: string): string {
 }
 
 const requestInfoRegex = /\[.+?\]/i;
+const editionExp =
+  /\b((Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Anniversary|The.Uncut|Ultimate|Final(?=(.(Cut|Edition|Version)))|Extended|Special|Despecialized|unrated|\d{2,3}(th)?.Anniversary)(.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit))?|((Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit|Edition|Restored|((2|3|4)in1)))){1,3}/i;
+const languageExp = /\b(TRUE.?FRENCH|videomann|SUBFRENCH|PLDUB|MULTI)/i;
 
 export function releaseTitleCleaner(title: string): string | null {
   if (!title || title.length === 0 || title === '(') {
@@ -45,6 +50,12 @@ export function releaseTitleCleaner(title: string): string | null {
   trimmedTitle = trimmedTitle.replace(requestInfoRegex, '').trim();
   trimmedTitle = trimmedTitle.replace(commonSourcesRegex, '').trim();
   trimmedTitle = trimmedTitle.replace(webdlExp, '').trim();
+  trimmedTitle = trimmedTitle.replace(editionExp, '').trim();
+  trimmedTitle = trimmedTitle.replace(languageExp, '').trim();
+
+  for (const lang of Object.values(Language)) {
+    trimmedTitle = trimmedTitle.replace(new RegExp(`\\b${lang.toUpperCase()}`), '').trim();
+  }
 
   const parts = trimmedTitle.split('.');
   let result = '';

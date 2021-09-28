@@ -105,6 +105,14 @@ const languageCases: Array<[string, Language[]]> = [
     'The.Conjuring.The.Devil.Made.Me.Do.It.2021.SUBFRENCH.2160p.WEB.H265-McNULTY',
     [Language.French],
   ],
+  ['Get.Him.To.The.Greek.UNRATED.FRENCH.720p.BluRay.x264-NERDHD', [Language.French]],
+  ['Maennertrip.UNRATED.German.AC3.Dubbed.1080p.Bluray.x264-CIS', [Language.German]],
+  ['Maennertrip.TS.MD.German.XViD.iNTERNAL-AOE', [Language.German]],
+  ['Maennertrip.EXTENDED.German.AC3.BDRip.XviD-RedRay', [Language.German]],
+  ['Get.Him.To.The.Greek.TRUEFRENCH.DVDRip.XviD-REVOLTE', [Language.French]],
+  ['The.Social.Network.R5.LD.German.XviD-CinePlexx', [Language.German]],
+  ['The.Social.Network.R5.LiNE.XviD-TWiZTED', [Language.English]],
+  ['Incassable.TRUE.FRENCH.PROPER.READ.NFO.DVDRiP.DiVX.SBC-KFT', [Language.French]],
 ];
 
 for (const [title, result] of languageCases) {

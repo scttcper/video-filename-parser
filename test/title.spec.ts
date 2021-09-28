@@ -70,6 +70,15 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
     { title: 'Scarface', year: '1983' },
   ],
   ['Casino.10TH.ANNiVERSARY.1995.iNTERNAL.DVDRiP.XViD-KiSS', { title: 'Casino', year: '1995' }],
+  [
+    'Get.Him.To.The.Greek.UNRATED.FRENCH.720p.BluRay.x264-NERDHD',
+    { title: 'Get Him To The Greek', year: null },
+  ],
+  [
+    'The.Social.Network.German.720p.BluRay.x264-DECENT',
+    // Not sure what to do about this case. You would need to know the movie title
+    { title: 'The Social Network German', year: null },
+  ],
 ];
 
 for (const [title, result] of cases) {

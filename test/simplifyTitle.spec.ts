@@ -16,6 +16,10 @@ const cleanupCases: Array<[string, string]> = [
   ['V.H.S.2', 'V.H.S. 2'],
   ['The.Man.from.U.N.C.L.E', 'The Man from U.N.C.L.E.'],
   ['The.Middle.', 'The Middle'],
+  [
+    'Incassable.TRUE.FRENCH.PROPER.READ.NFO.DVDRiP.DiVX.SBC-KFT',
+    'Incassable  PROPER READ NFO  DiVX SBC-KFT',
+  ],
 ];
 for (const [title, result] of cleanupCases) {
   test(`cleanup movie title "${title}"`, t => {
