@@ -4,7 +4,7 @@ import { parseResolution } from './resolution.js';
 import { releaseTitleCleaner, simplifyTitle } from './simplifyTitle.js';
 import { parseVideoCodec } from './videoCodec.js';
 
-const movieTitleRegex = [
+const movieTitleYearRegex = [
   // Special, Despecialized, etc. Edition Movies, e.g: Mission.Impossible.3.Special.Edition.2011
   /^(?<title>(?![([]).+?)?(?:(?:[-_\W](?<![)[!]))*\(?\b(?<edition>(((Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Anniversary|The.Uncut|Ultimate|Final(?=(.(Cut|Edition|Version)))|Extended|Rogue|Special|Despecialized|\d{2,3}(th)?.Anniversary)(.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit))?|((Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit|Edition|Restored|((2|3|4)in1))))))\b\)?.{1,3}(?<year>(1(8|9)|20)\d{2}(?!p|i|\d+|\]|\W\d+)))+(\W+|_|$)(?!\\)/i,
   // Folder movie format, e.g: Blade Runner 2049 (2017)
@@ -25,7 +25,7 @@ export function parseTitleAndYear(title: string): { title: string; year: string 
   // Removing the group from the end could be trouble if a title is "title-year"
   const grouplessTitle = simpleTitle.replace(/-([a-z0-9]+)$/i, '');
 
-  for (const exp of movieTitleRegex) {
+  for (const exp of movieTitleYearRegex) {
     const match = exp.exec(grouplessTitle);
     if (match?.groups) {
       const result = releaseTitleCleaner(match.groups['title'] ?? '');
