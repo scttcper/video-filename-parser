@@ -79,6 +79,10 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
     // Not sure what to do about this case. You would need to know the movie title
     { title: 'The Social Network German', year: null },
   ],
+  [
+    'The.Outsiders.DC.German.1983.AC3.BDRip.XviD.INTERNAL-ARC',
+    { title: 'The Outsiders', year: '1983' },
+  ],
 ];
 
 for (const [title, result] of cases) {

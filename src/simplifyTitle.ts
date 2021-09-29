@@ -38,7 +38,7 @@ export function simplifyTitle(title: string): string {
 
 const requestInfoRegex = /\[.+?\]/i;
 const editionExp =
-  /\b((Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Anniversary|The.Uncut|Ultimate|Final(?=(.(Cut|Edition|Version)))|Extended|Special|Despecialized|unrated|\d{2,3}(th)?.Anniversary)(.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit))?|((Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit|Edition|Restored|((2|3|4)in1)))){1,3}/i;
+  /\b((Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Anniversary|The.Uncut|DC|Ultimate|Final(?=(.(Cut|Edition|Version)))|Extended|Special|Despecialized|unrated|\d{2,3}(th)?.Anniversary)(.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit))?|((Uncensored|Remastered|Unrated|Uncut|IMAX|Fan.?Edit|Edition|Restored|((2|3|4)in1)))){1,3}/i;
 const languageExp = /\b(TRUE.?FRENCH|videomann|SUBFRENCH|PLDUB|MULTI)/i;
 const sceneGarbageExp = /\b(PROPER|REAL|READ.NFO)/;
 
@@ -60,8 +60,8 @@ export function releaseTitleCleaner(title: string): string | null {
   }
 
   // Look for gap formed by removing items
-  trimmedTitle = trimmedTitle.split('   ')[0]!;
-  trimmedTitle = trimmedTitle.split('...')[0]!;
+  trimmedTitle = trimmedTitle.split('  ')[0]!;
+  trimmedTitle = trimmedTitle.split('..')[0]!;
 
   const parts = trimmedTitle.split('.');
   let result = '';
