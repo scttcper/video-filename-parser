@@ -113,6 +113,8 @@ const languageCases: Array<[string, Language[]]> = [
   ['The.Social.Network.R5.LD.German.XviD-CinePlexx', [Language.German]],
   ['The.Social.Network.R5.LiNE.XviD-TWiZTED', [Language.English]],
   ['Incassable.TRUE.FRENCH.PROPER.READ.NFO.DVDRiP.DiVX.SBC-KFT', [Language.French]],
+  ['Space.Jam.A.New.Legacy.2021.ROMANiAN.2160p.UHD.BLURAY.x265-UNDERDOG', [Language.Romanian]],
+  ['Space.Jam.A.New.Legacy.2021.RO.2160p.UHD.BLURAY.x265-UNDERDOG', [Language.Romanian]],
 ];
 
 for (const [title, result] of languageCases) {
