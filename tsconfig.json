@@ -5,7 +5,7 @@
     "outDir": "dist",
     "esModuleInterop": true
   },
-  "exclude": ["demo"],
+  "exclude": ["node_modules", "demo", "dist"],
   "ts-node": {
     "transpileOnly": true
   }

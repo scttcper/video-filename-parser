@@ -25,22 +25,20 @@
     "lint": "eslint --ext .js,.ts, .",
     "lint:fix": "eslint --fix --ext .js,.ts, .",
     "prepare": "npm run build",
-    "prebuild": "del-cli dist",
     "build": "tsc",
     "test": "ava",
     "test:watch": "ava --watch",
     "test:ci": "c8 --reporter=text --reporter=lcov ava"
   },
   "devDependencies": {
-    "@ctrl/eslint-config": "2.1.0",
+    "@ctrl/eslint-config": "3.1.2",
     "@sindresorhus/tsconfig": "2.0.0",
-    "@types/node": "16.10.1",
-    "ava": "4.0.0-alpha.2",
-    "c8": "7.9.0",
-    "del-cli": "4.0.1",
-    "expect": "27.2.2",
-    "ts-node": "10.2.1",
-    "typescript": "4.4.3"
+    "@types/node": "16.11.10",
+    "ava": "4.0.0-rc.1",
+    "c8": "7.10.0",
+    "expect": "27.3.1",
+    "tsm": "2.1.4",
+    "typescript": "4.5.2"
   },
   "ava": {
     "files": [
@@ -50,7 +48,7 @@
       "ts": "module"
     },
     "nodeArguments": [
-      "--loader=ts-node/esm"
+      "--loader=tsm"
     ]
   },
   "workspaces": [
