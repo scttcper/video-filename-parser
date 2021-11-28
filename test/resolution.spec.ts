@@ -20,6 +20,8 @@ const cases: Array<[string, ReturnType<typeof parseResolution>['resolution']]> =
   ['Into the Inferno 2016 2160p Netflix WEBRip DD5 1 x264-Whatevs', Resolution.R2160P],
   ['Indiana.Jones.and.the.Temple.of.Doom.1984.Complete.UHD.Bluray-JONES', Resolution.R2160P],
   ['Orphan Black S05E09 WEBRip 1080p10bit DD5 1 x265 HEVC D0ct0rLew', Resolution.R1080P],
+  ['[SubsPlease] Movie Title (540p) [AB649D32]', Resolution.R540P],
+  ['Series.Title.S04E13.960p.WEB-DL.AAC2.0.H.264-squalor', Resolution.R720P],
 ];
 
 for (const [title, result] of cases) {
