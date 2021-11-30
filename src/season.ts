@@ -157,7 +157,7 @@ const reportTitleExp = [
   /^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)(?:_|\s|\.)+(?:e|ep)(?<absoluteepisode>\d{2,3}(\.\d{1,2})?)-(?<absoluteepisode1>(?<!\d+)\d{1,2}(\.\d{1,2})?(?!\d+|-)).*?(?<hash>\[\w{8}\])?(?:$|\.)/i,
 
   // Anime - Title Absolute Episode Number (e66)
-  /^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)(?:(?:_|-|\s|\.)+(?:e|ep)(?<absoluteepisode>\d{2,3}(\.\d{1,2})?))+.*?(?<hash>\[\w{8}\])?(?:$|\.)/i,
+  /^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)(?:(?:_|-|\s|\.)+(?:e|ep)(?<absoluteepisode>\d{2,4}(\.\d{1,2})?))+.*?(?<hash>\[\w{8}\])?(?:$|\.)/i,
 
   // Anime - Title Episode Absolute Episode Number (Series Title Episode 01)
   /^(?<title>.+?)[-_. ](?:Episode)(?:[-_. ]+(?<absoluteepisode>(?<!\d+)\d{2,3}(\.\d{1,2})?(?!\d+)))+(?:_|-|\s|\.)*?(?<hash>\[.{8}\])?(?:$|\.)?/i,
@@ -488,8 +488,3 @@ export function parseMatchCollection(
 
   return result;
 }
-
-// parseSeason("The.Handmaid's.Tale.S01E01.Offred.1080p.HULU.WEBRip.DDP5.1.H.264-NTb.mkv");
-// parseSeason("The.Handmaid's.Tale.S12E12.Offred.1080p.HULU.WEBRip.DDP5.1.H.264-NTb.mkv");
-// parseSeason('stephen.colbert.2019.10.07.neil.degrasse.tyson.1080p.hdtv.x264-twerk.mkv');
-// parseSeason('Holmes.Makes.It.Right.S02.720p.HDTV.AAC5.1.x265-NOGRP');

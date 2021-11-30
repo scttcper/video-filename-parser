@@ -405,6 +405,7 @@ const absoluteEpisodeCases: Array<[string, string, number, number]> = [
   ],
   ['Radiant S02E14 480p x264-mSD [eztv]', 'Radiant', 14, 2],
   ['This Hour Has 22 Minutes S27E11 480p x264-mSD [eztv]', 'This Hour Has 22 Minutes', 11, 27],
+  ['Tatort.E1003.Dunkelfeld.GERMAN.1080p.WEBRip.x264-TMSF', 'Tatort', 1003, 0],
 ];
 for (const [postTitle, title, absoluteEpisodeNumber, seasonNumber] of absoluteEpisodeCases) {
   test(`parse absolute episode numbers ${postTitle}`, t => {
