@@ -31,14 +31,14 @@
     "test:ci": "c8 --reporter=text --reporter=lcov ava"
   },
   "devDependencies": {
-    "@ctrl/eslint-config": "3.1.2",
+    "@ctrl/eslint-config": "3.1.3",
     "@sindresorhus/tsconfig": "2.0.0",
-    "@types/node": "16.11.10",
+    "@types/node": "16.11.12",
     "ava": "4.0.0-rc.1",
     "c8": "7.10.0",
-    "expect": "27.3.1",
-    "tsm": "2.1.4",
-    "typescript": "4.5.2"
+    "expect": "27.4.2",
+    "tsm": "2.2.1",
+    "typescript": "4.5.4"
   },
   "ava": {
     "files": [
