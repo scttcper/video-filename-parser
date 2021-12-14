@@ -42,6 +42,7 @@ const simplifyCases: Array<[string, string]> = [
   ],
   ['Inglorious.Basterds.CAM.XviD-CAMELOT', 'Inglorious.Basterds..-CAMELOT'],
   ['The.Fighter.DVDR-MPTDVD', 'The.Fighter.-MPTDVD'],
+  ['The Card Counter WEBSCREENER XviD-EVO', 'The Card Counter  -EVO'],
 ];
 for (const [title, result] of simplifyCases) {
   test(`cleanup simplify "${title}"`, t => {

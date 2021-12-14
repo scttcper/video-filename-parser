@@ -9,7 +9,7 @@ const cleanTorrentPrefixRegex = /^\[(?:REQ)\]/i;
 const cleanTorrentSuffixRegex = /\[(?:ettv|rartv|rarbg|cttv)\]$/i;
 /** Used to help cleanup releases that often emit the year title.SCR-group */
 const commonSourcesRegex =
-  /\b(Bluray|(dvdr?|BD)rip|HDTV|HDRip|TS|R5|CAM|SCR|SCREENER|DiVX|xvid|web-?dl)\b/i;
+  /\b(Bluray|(dvdr?|BD)rip|HDTV|HDRip|TS|R5|CAM|SCR|(WEB|DVD)?.?SCREENER|DiVX|xvid|web-?dl)\b/i;
 
 export function simplifyTitle(title: string): string {
   let simpleTitle = title.replace(simpleTitleRegex, '');
