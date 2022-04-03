@@ -16,6 +16,7 @@ const hsbs = /\b(Half-?SBS|HSBS)\b/i;
 const sbs = /\b((?<!H|HALF-)SBS)\b/i;
 const hou = /\b(HOU)\b/i;
 const uhd = /\b(UHD)\b/i;
+const dolbyVision = /\b(DV(\b(HDR10|HLG|SDR))?)\b/i;
 
 export interface Edition {
   internal?: boolean;
@@ -39,6 +40,7 @@ export interface Edition {
   hou?: boolean;
   /** most 2160p should be UHD but there might be some that aren't? */
   uhd?: boolean;
+  dolbyVision?: boolean;
 }
 
 export function parseEdition(title: string): Edition {
@@ -61,6 +63,7 @@ export function parseEdition(title: string): Edition {
     sbs: sbs.test(withoutTitle) || undefined,
     hou: hou.test(withoutTitle) || undefined,
     uhd: uhd.test(withoutTitle) || undefined,
+    dolbyVision: dolbyVision.test(withoutTitle) || undefined,
   };
 
   return removeEmpty(result);

@@ -56,6 +56,11 @@ const cases: Array<[string, Partial<Edition>]> = [
     'Iron.Man.2008.INTERNAL.REMASTERED.2160p.UHD.BluRay.X265-IAMABLE',
     { uhd: true, remastered: true, internal: true },
   ],
+  ['Long Shot 2019 DV 2160p WEB H265-SLOT', { dolbyVision: true }],
+  [
+    'Sicario 2015 Hybrid 2160p UHD BluRay REMUX DV HDR10+ HEVC TrueHD 7.1 Atmos-WiLDCAT',
+    { uhd: true, dolbyVision: true },
+  ],
 ];
 
 for (const [title, result] of cases) {
