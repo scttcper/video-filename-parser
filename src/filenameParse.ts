@@ -12,7 +12,6 @@ import { parseTitleAndYear } from './title.js';
 import { removeEmpty } from './utils.js';
 import { parseVideoCodec, VideoCodec } from './videoCodec.js';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 type ParsedTvInfo = Omit<Season, 'releaseTitle' | 'seriesTitle'>;
 
 interface BaseParsed {
