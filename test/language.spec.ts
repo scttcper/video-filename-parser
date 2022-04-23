@@ -115,6 +115,7 @@ const languageCases: Array<[string, Language[]]> = [
   ['Incassable.TRUE.FRENCH.PROPER.READ.NFO.DVDRiP.DiVX.SBC-KFT', [Language.French]],
   ['Space.Jam.A.New.Legacy.2021.ROMANiAN.2160p.UHD.BLURAY.x265-UNDERDOG', [Language.Romanian]],
   ['Space.Jam.A.New.Legacy.2021.RO.2160p.UHD.BLURAY.x265-UNDERDOG', [Language.Romanian]],
+  ['Spider-Man.No.Way.Home.2021.SLOVAK.2160p.UHD.BLURAY.x265-UNDERDOG', [Language.Slovak]]
 ];
 
 for (const [title, result] of languageCases) {

@@ -38,6 +38,7 @@ export enum Language {
   Latvian = 'Latvian',
   Lithuanian = 'Lithuanian',
   Romanian = 'Romanian',
+  Slovak = 'Slovak',
 }
 
 export function parseLanguage(title: string): Language[] {
@@ -199,6 +200,10 @@ export function parseLanguage(title: string): Language[] {
 
   if (/\b(RO|Romanian)\b/i.test(languageTitle)) {
     languages.push(Language.Romanian);
+  }
+
+  if (/\b(SK|Slovak)\b/i.test(languageTitle)) {
+    languages.push(Language.Slovak);
   }
 
   if (isMulti(languageTitle)) {
