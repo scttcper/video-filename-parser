@@ -1,4 +1,4 @@
-import test from 'ava';
+import { expect, it } from 'vitest';
 
 import { AudioCodec, parseAudioCodec } from '../src/audioCodec.js';
 
@@ -37,7 +37,7 @@ const audioCodecCases: Array<[string, ReturnType<typeof parseAudioCodec>]> = [
 ];
 
 for (const [title, result] of audioCodecCases) {
-  test(`parse audio codec from "${title}"`, t => {
-    t.deepEqual(parseAudioCodec(title), result);
+  it(`parse audio codec from "${title}"`, () => {
+    expect(parseAudioCodec(title)).toEqual(result);
   });
 }

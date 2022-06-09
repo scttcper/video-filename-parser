@@ -1,4 +1,4 @@
-import test from 'ava';
+import { expect, it } from 'vitest';
 
 import { parseTitleAndYear } from '../src/index.js';
 
@@ -86,7 +86,7 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
 ];
 
 for (const [title, result] of cases) {
-  test(`parse title "${title}"`, t => {
-    t.deepEqual(parseTitleAndYear(title), result);
+  it(`parse title "${title}"`, () => {
+    expect(parseTitleAndYear(title)).toEqual(result);
   });
 }

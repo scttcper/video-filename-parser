@@ -1,4 +1,4 @@
-import test from 'ava';
+import { expect, it } from 'vitest';
 
 import { parseVideoCodec, VideoCodec } from '../src/index.js';
 
@@ -24,7 +24,7 @@ const cases: Array<[string, ReturnType<typeof parseVideoCodec>['codec']]> = [
 ];
 
 for (const [title, result] of cases) {
-  test(`parse codec for "${title}"`, t => {
-    t.is(parseVideoCodec(title).codec, result);
+  it(`parse codec for "${title}"`, () => {
+    expect(parseVideoCodec(title).codec).toEqual(result);
   });
 }

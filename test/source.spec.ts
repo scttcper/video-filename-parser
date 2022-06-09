@@ -1,4 +1,4 @@
-import test from 'ava';
+import { expect, it } from 'vitest';
 
 import { parseSource, Source } from '../src/index.js';
 
@@ -39,8 +39,8 @@ const singleCases: Array<[string, Source[]]> = [
   ['Movie.Name.2016.German.DTS.DL.1080p.UHDBD.x265-TDO', [Source.BLURAY]],
 ];
 for (const [title, result] of singleCases) {
-  test(`parse source "${title}"`, t => {
-    t.deepEqual(parseSource(title), result);
+  it(`parse source "${title}"`, () => {
+    expect(parseSource(title)).toEqual(result);
   });
 }
 
@@ -48,7 +48,7 @@ const multipeSourceCases: Array<[string, Source[]]> = [
   ['The Office S01-S09 720p BluRay WEB-DL nHD x264-NhaNc3', [Source.BLURAY, Source.WEBDL]],
 ];
 for (const [title, result] of multipeSourceCases) {
-  test(`parse multi source "${title}"`, t => {
-    t.deepEqual(parseSource(title), result);
+  it(`parse multi source "${title}"`, () => {
+    expect(parseSource(title)).toEqual(result);
   });
 }

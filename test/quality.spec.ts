@@ -1,4 +1,4 @@
-import test from 'ava';
+import { expect, it } from 'vitest';
 
 import {
   parseQuality,
@@ -28,8 +28,8 @@ const versionCases: Array<[string, number]> = [
 ];
 
 for (const [title, result] of versionCases) {
-  test(`parse version "${title}"`, t => {
-    t.is(parseQualityModifyers(title).version, result);
+  it(`parse version "${title}"`, () => {
+    expect(parseQualityModifyers(title).version).toBe(result);
   });
 }
 
@@ -51,8 +51,8 @@ const realCases: Array<[string, number]> = [
 ];
 
 for (const [title, result] of realCases) {
-  test(`parse real version "${title}"`, t => {
-    t.is(parseQualityModifyers(title).real, result);
+  it(`parse real version "${title}"`, () => {
+    expect(parseQualityModifyers(title).real).toBe(result);
   });
 }
 
@@ -63,12 +63,12 @@ const webdl480pCases: Array<[string, boolean]> = [
   ['Da.Vincis.Demons.S02E04.480p.WEB.DL.nSD.x264-NhaNc3', false],
 ];
 for (const [title, proper] of webdl480pCases) {
-  test(`parse 480p quality "${title}"`, t => {
+  it(`parse 480p quality "${title}"`, () => {
     const quality = parseQuality(title);
-    t.is(quality.sources[0], Source.WEBDL);
-    t.is(quality.resolution, Resolution.R480P);
-    t.is(quality.modifier, null);
-    t.is(quality.revision.version, proper ? 2 : 1);
+    expect(quality.sources[0]).toBe(Source.WEBDL);
+    expect(quality.resolution).toBe(Resolution.R480P);
+    expect(quality.modifier).toBe(null);
+    expect(quality.revision.version).toBe(proper ? 2 : 1);
   });
 }
 
@@ -95,12 +95,12 @@ const webdl720pCases: Array<[string, boolean]> = [
   ['[Eveyuu] No Game No Life - 10 [Hi10P 1280x720 H264][10B23BD8]', false],
 ];
 for (const [title, proper] of webdl720pCases) {
-  test(`parse webdl 720 quality "${title}"`, t => {
+  it(`parse webdl 720 quality "${title}"`, () => {
     const quality = parseQuality(title);
-    t.is(quality.sources[0], Source.WEBDL);
-    t.is(quality.resolution, Resolution.R720P);
-    t.is(quality.modifier, null);
-    t.is(quality.revision.version, proper ? 2 : 1);
+    expect(quality.sources[0]).toBe(Source.WEBDL);
+    expect(quality.resolution).toBe(Resolution.R720P);
+    expect(quality.modifier).toBe(null);
+    expect(quality.revision.version).toBe(proper ? 2 : 1);
   });
 }
 
@@ -126,12 +126,12 @@ const webdl1080pCases: Array<[string, boolean]> = [
   ['The.Simpsons.2017.1080p.WEB-DL.DD5.1.H.264.Remux.-NTb', false],
 ];
 for (const [title, proper] of webdl1080pCases) {
-  test(`parse webdl 1080 quality "${title}"`, t => {
+  it(`parse webdl 1080 quality "${title}"`, () => {
     const quality = parseQuality(title);
-    t.is(quality.sources[0], Source.WEBDL);
-    t.is(quality.resolution, Resolution.R1080P);
-    t.is(quality.modifier, null);
-    t.is(quality.revision.version, proper ? 2 : 1);
+    expect(quality.sources[0]).toBe(Source.WEBDL);
+    expect(quality.resolution).toBe(Resolution.R1080P);
+    expect(quality.modifier).toBe(null);
+    expect(quality.revision.version).toBe(proper ? 2 : 1);
   });
 }
 
@@ -145,12 +145,12 @@ const webdl2160pCases: Array<[string, boolean]> = [
   ['The.Nightly.Show.2016.03.14.2160p.WEB.PROPER.h264-spamTV', true],
 ];
 for (const [title, proper] of webdl2160pCases) {
-  test(`parse webdl 2160 quality "${title}"`, t => {
+  it(`parse webdl 2160 quality "${title}"`, () => {
     const quality = parseQuality(title);
-    t.is(quality.sources[0], Source.WEBDL);
-    t.is(quality.resolution, Resolution.R2160P);
-    t.is(quality.modifier, null);
-    t.is(quality.revision.version, proper ? 2 : 1);
+    expect(quality.sources[0]).toBe(Source.WEBDL);
+    expect(quality.resolution).toBe(Resolution.R2160P);
+    expect(quality.modifier).toBe(null);
+    expect(quality.revision.version).toBe(proper ? 2 : 1);
   });
 }
 
@@ -175,12 +175,12 @@ const bluray720Cases: Array<[string, boolean]> = [
   ],
 ];
 for (const [title, proper] of bluray720Cases) {
-  test(`parse bluray 720p quality "${title}"`, t => {
+  it(`parse bluray 720p quality "${title}"`, () => {
     const quality = parseQuality(title);
-    t.is(quality.sources[0], Source.BLURAY);
-    t.is(quality.resolution, Resolution.R720P);
-    t.is(quality.modifier, null);
-    t.is(quality.revision.version, proper ? 2 : 1);
+    expect(quality.sources[0]).toBe(Source.BLURAY);
+    expect(quality.resolution).toBe(Resolution.R720P);
+    expect(quality.modifier).toBe(null);
+    expect(quality.revision.version).toBe(proper ? 2 : 1);
   });
 }
 
@@ -202,12 +202,12 @@ const bluray1080Cases: Array<[string, boolean]> = [
   ],
 ];
 for (const [title, proper] of bluray1080Cases) {
-  test(`parse bluray 1080p quality "${title}"`, t => {
+  it(`parse bluray 1080p quality "${title}"`, () => {
     const quality = parseQuality(title);
-    t.is(quality.sources[0], Source.BLURAY);
-    t.is(quality.resolution, Resolution.R1080P);
-    t.is(quality.modifier, null);
-    t.is(quality.revision.version, proper ? 2 : 1);
+    expect(quality.sources[0]).toBe(Source.BLURAY);
+    expect(quality.resolution).toBe(Resolution.R1080P);
+    expect(quality.modifier).toBe(null);
+    expect(quality.revision.version).toBe(proper ? 2 : 1);
   });
 }
 
@@ -216,11 +216,11 @@ const bluray576pQuality: Array<[string]> = [
   ['Hannibal.S01E05.576p.BluRay.DD5.1.x264-HiSD'],
 ];
 for (const [title] of bluray576pQuality) {
-  test(`parse bluray 576 quality "${title}"`, t => {
+  it(`parse bluray 576 quality "${title}"`, () => {
     const quality = parseQuality(title);
-    t.is(quality.sources[0], Source.BLURAY);
-    t.is(quality.resolution, Resolution.R576P);
-    t.is(quality.modifier, null);
+    expect(quality.sources[0]).toBe(Source.BLURAY);
+    expect(quality.resolution).toBe(Resolution.R576P);
+    expect(quality.modifier).toBe(null);
   });
 }
 
@@ -232,11 +232,11 @@ const remux1080pQuality: Array<[string]> = [
   ['Wildling.2018.1080p.BluRay.REMUX.MPEG-2.DTS-HD.MA.5.1-EPSiLON'],
 ];
 for (const [title] of remux1080pQuality) {
-  test(`parse bluray 1080p remux quality "${title}"`, t => {
+  it(`parse bluray 1080p remux quality "${title}"`, () => {
     const quality = parseQuality(title);
-    t.is(quality.sources[0], Source.BLURAY);
-    t.is(quality.resolution, Resolution.R1080P);
-    t.is(quality.modifier, QualityModifier.REMUX);
+    expect(quality.sources[0]).toBe(Source.BLURAY);
+    expect(quality.resolution).toBe(Resolution.R1080P);
+    expect(quality.modifier).toBe(QualityModifier.REMUX);
   });
 }
 
@@ -246,11 +246,11 @@ const remux2160pQuality: Array<[string]> = [
   ['Los Vengadores (2012) [UHDRemux HDR HEVC 2160p][Dolby Atmos TrueHD 7 1 Eng DTS 5 1 Esp]'],
 ];
 for (const [title] of remux2160pQuality) {
-  test(`parse bluray 2160P remux quality "${title}"`, t => {
+  it(`parse bluray 2160P remux quality "${title}"`, () => {
     const quality = parseQuality(title);
-    t.is(quality.sources[0], Source.BLURAY);
-    t.is(quality.resolution, Resolution.R2160P);
-    t.is(quality.modifier, QualityModifier.REMUX);
+    expect(quality.sources[0]).toBe(Source.BLURAY);
+    expect(quality.resolution).toBe(Resolution.R2160P);
+    expect(quality.modifier).toBe(QualityModifier.REMUX);
   });
 }
 
@@ -267,12 +267,12 @@ const hdtv720pCases: Array<[string, boolean]> = [
   ['Survivorman.The.Lost.Pilots.Summer.HR.WS.PDTV.x264-DHD', false],
 ];
 for (const [title, proper] of hdtv720pCases) {
-  test(`parse hdtv 720p quality "${title}"`, t => {
+  it(`parse hdtv 720p quality "${title}"`, () => {
     const quality = parseQuality(title);
-    t.is(quality.sources[0], Source.TV);
-    t.is(quality.resolution, Resolution.R720P);
-    t.is(quality.modifier, null);
-    t.is(quality.revision.version, proper ? 2 : 1);
+    expect(quality.sources[0]).toBe(Source.TV);
+    expect(quality.resolution).toBe(Resolution.R720P);
+    expect(quality.modifier).toBe(null);
+    expect(quality.revision.version).toBe(proper ? 2 : 1);
   });
 }
 
@@ -286,21 +286,21 @@ const brdisk1080pCases: Array<[string]> = [
   ['Justified.Stagione.2.Parte.2.ITA-ENG.1080p.BDMux.DD5.1.x264-DarkSideMux'],
 ];
 for (const [title] of brdisk1080pCases) {
-  test(`parse brdisk 1080p quality "${title}"`, t => {
+  it(`parse brdisk 1080p quality "${title}"`, () => {
     const quality = parseQuality(title);
-    t.is(quality.sources[0], Source.BLURAY);
-    t.is(quality.resolution, Resolution.R1080P);
-    t.is(quality.modifier, QualityModifier.BRDISK);
+    expect(quality.sources[0]).toBe(Source.BLURAY);
+    expect(quality.resolution).toBe(Resolution.R1080P);
+    expect(quality.modifier).toBe(QualityModifier.BRDISK);
   });
 }
 
 const rawHdCases: Array<[string]> = [['Stripes (1981) 1080i HDTV DD5.1 MPEG2-TrollHD']];
 for (const [title] of rawHdCases) {
-  test(`parse brdisk 1080p RAWHD quality "${title}"`, t => {
+  it(`parse brdisk 1080p RAWHD quality "${title}"`, () => {
     const quality = parseQuality(title);
-    t.is(quality.sources[0], Source.TV);
-    t.is(quality.resolution, Resolution.R1080P);
-    t.is(quality.modifier, QualityModifier.RAWHD);
+    expect(quality.sources[0]).toBe(Source.TV);
+    expect(quality.resolution).toBe(Resolution.R1080P);
+    expect(quality.modifier).toBe(QualityModifier.RAWHD);
   });
 }
 
@@ -309,12 +309,12 @@ const tsCases: Array<[string, boolean]> = [
   ['The Equalizer 2 2018 720p HD-TS x264-24HD', false],
 ];
 for (const [title, proper] of tsCases) {
-  test(`parse telesync quality "${title}"`, t => {
+  it(`parse telesync quality "${title}"`, () => {
     const quality = parseQuality(title);
-    t.is(quality.sources[0], Source.TELESYNC);
-    t.is(quality.resolution, Resolution.R720P);
-    t.is(quality.modifier, null);
-    t.is(quality.revision.version, proper ? 2 : 1);
+    expect(quality.sources[0]).toBe(Source.TELESYNC);
+    expect(quality.resolution).toBe(Resolution.R720P);
+    expect(quality.modifier).toBe(null);
+    expect(quality.revision.version).toBe(proper ? 2 : 1);
   });
 }
 
@@ -324,10 +324,10 @@ const bdripCases: Array<[string]> = [
   ['Black.Hawk.Down.2001.EXTENDED.PL.UHD.BDRip.x264.INTERNAL-FLAME'],
 ];
 for (const [title] of bdripCases) {
-  test(`parse bdrip quality "${title}"`, t => {
+  it(`parse bdrip quality "${title}"`, () => {
     const quality = parseQuality(title);
-    t.is(quality.sources[0], Source.BLURAY);
-    t.is(quality.resolution, Resolution.R480P);
-    t.is(quality.modifier, null);
+    expect(quality.sources[0]).toBe(Source.BLURAY);
+    expect(quality.resolution).toBe(Resolution.R480P);
+    expect(quality.modifier).toBe(null);
   });
 }

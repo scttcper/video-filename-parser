@@ -1,4 +1,4 @@
-import test from 'ava';
+import { expect, it } from 'vitest';
 
 import { Edition, parseEdition } from '../src/index.js';
 
@@ -64,7 +64,7 @@ const cases: Array<[string, Partial<Edition>]> = [
 ];
 
 for (const [title, result] of cases) {
-  test(`get edition from "${title}"`, t => {
-    t.deepEqual(parseEdition(title), result);
+  it(`get edition from "${title}"`, () => {
+    expect(parseEdition(title)).toEqual(result);
   });
 }

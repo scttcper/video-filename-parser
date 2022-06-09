@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
-import { filenameParse } from '../../dist/src/index.js';
+// eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
+// @ts-ignore
+import { filenameParse } from '../../src/index.js';
 
 ReactDOM.render(<Demo />, document.getElementById('root'));
 

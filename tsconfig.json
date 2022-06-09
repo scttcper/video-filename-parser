@@ -1,12 +1,6 @@
 {
   "extends": "@sindresorhus/tsconfig",
   "compilerOptions": {
-    "lib": ["ES2021", "DOM"],
-    "outDir": "dist",
-    "esModuleInterop": true
-  },
-  "exclude": ["node_modules", "demo", "dist"],
-  "ts-node": {
-    "transpileOnly": true
+    "outDir": "dist"
   }
 }

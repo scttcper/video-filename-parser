@@ -1,4 +1,4 @@
-import test from 'ava';
+import { expect, it } from 'vitest';
 
 import { isMulti, Language, parseLanguage } from '../src/index.js';
 
@@ -119,8 +119,8 @@ const languageCases: Array<[string, Language[]]> = [
 ];
 
 for (const [title, result] of languageCases) {
-  test(`parse language "${title}"`, t => {
-    t.deepEqual(parseLanguage(title), result);
+  it(`parse language "${title}"`, () => {
+    expect(parseLanguage(title)).toEqual(result);
   });
 }
 
@@ -132,7 +132,7 @@ const multiCases: Array<[string]> = [
 ];
 
 for (const [title] of multiCases) {
-  test(`parse multi language "${title}"`, t => {
-    t.true(isMulti(title));
+  it(`parse multi language "${title}"`, () => {
+    expect(isMulti(title)).toBe(true);
   });
 }

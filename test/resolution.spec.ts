@@ -1,4 +1,4 @@
-import test from 'ava';
+import { expect, it } from 'vitest';
 
 import { parseResolution, Resolution } from '../src/index.js';
 
@@ -25,7 +25,7 @@ const cases: Array<[string, ReturnType<typeof parseResolution>['resolution']]> =
 ];
 
 for (const [title, result] of cases) {
-  test(`parse resolution "${title}"`, t => {
-    t.is(parseResolution(title).resolution, result);
+  it(`parse resolution "${title}"`, () => {
+    expect(parseResolution(title).resolution).toBe(result);
   });
 }
