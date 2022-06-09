@@ -1,4 +1,4 @@
-import test from 'ava';
+import { expect, it } from 'vitest';
 
 import { parseSeason } from '../src/index.js';
 
@@ -21,10 +21,10 @@ const fullSeasonRelease: Array<[string, string, number]> = [
   ['My.Series.S2014.720p.HDTV.x264-ME', 'My Series', 2014],
 ];
 for (const [postTitle, title, season] of fullSeasonRelease) {
-  test(`parse full season release "${postTitle}"`, t => {
+  it(`parse full season release "${postTitle}"`, () => {
     const result = parseSeason(postTitle)!;
-    t.is(result.seasons[0], season);
-    t.is(result.seriesTitle, title);
+    expect(result.seasons[0]).toBe(season);
+    expect(result.seriesTitle).toBe(title);
   });
 }
 
@@ -41,11 +41,11 @@ const dayEpisodeCases: Array<[string, string, Date]> = [
   ],
 ];
 for (const [postTitle, title, airDate] of dayEpisodeCases) {
-  test(`parse day season release "${postTitle}"`, t => {
+  it(`parse day season release "${postTitle}"`, () => {
     const result = parseSeason(postTitle)!;
-    t.is(result.seriesTitle, title);
-    t.deepEqual(result.airDate, airDate);
-    t.is(result.seasons.length, 0);
+    expect(result.seriesTitle).toBe(title);
+    expect(result.airDate).toEqual(airDate);
+    expect(result.seasons.length).toBe(0);
   });
 }
 
@@ -64,11 +64,11 @@ const seasonPackCases: Array<[string, string, number[]]> = [
   ['[REQ] Reno 911! S01 - 06 Complete DVDRip XviD-Mixed', 'Reno 911!', [1, 2, 3, 4, 5, 6]],
 ];
 for (const [postTitle, title, seasons] of seasonPackCases) {
-  test(`parse multi season release "${postTitle}"`, t => {
+  it(`parse multi season release "${postTitle}"`, () => {
     const result = parseSeason(postTitle)!;
-    t.deepEqual(result.seasons, seasons);
-    t.is(result.seriesTitle, title);
-    t.is(result.isMultiSeason, true);
+    expect(result.seasons).toEqual(seasons);
+    expect(result.seriesTitle).toBe(title);
+    expect(result.isMultiSeason).toBe(true);
   });
 }
 
@@ -76,11 +76,11 @@ const multiEpisodeCases: Array<[string, string, number[]]> = [
   ['The Morning Show S01E01-E03 2019 1080p WEBRip X264 AC3-EVO', 'The Morning Show', [1, 2, 3]],
 ];
 for (const [postTitle, title, episodes] of multiEpisodeCases) {
-  test(`parse multi season release "${postTitle}"`, t => {
+  it(`parse multi season release "${postTitle}"`, () => {
     const result = parseSeason(postTitle)!;
-    t.deepEqual(result.episodeNumbers, episodes);
-    t.is(result.seriesTitle, title);
-    t.is(result.isMultiSeason, false);
+    expect(result.episodeNumbers).toEqual(episodes);
+    expect(result.seriesTitle).toBe(title);
+    expect(result.isMultiSeason).toBe(false);
   });
 }
 
@@ -88,12 +88,12 @@ const partialSeasonPackCases: Array<[string, string, number, number]> = [
   ['The.Ranch.2016.S02.Part.1.1080p.NF.WEBRip.DD5.1.x264-NTb', 'The Ranch 2016', 2, 1],
 ];
 for (const [postTitle, title, season, seasonPart] of partialSeasonPackCases) {
-  test(`parse partial season release "${postTitle}"`, t => {
+  it(`parse partial season release "${postTitle}"`, () => {
     const result = parseSeason(postTitle)!;
-    t.deepEqual(result.seasons[0], season);
-    t.is(result.seasonPart, seasonPart);
-    t.is(result.seriesTitle, title);
-    t.is(result.isPartialSeason, true);
+    expect(result.seasons[0]).toEqual(season);
+    expect(result.seasonPart).toBe(seasonPart);
+    expect(result.seriesTitle).toBe(title);
+    expect(result.isPartialSeason).toBe(true);
   });
 }
 
@@ -121,8 +121,8 @@ const crapCases: Array<[string]> = [
   ['QZC4HDl7ncmzyUj9amucWe1ddKU1oFMZDd8r0dEDUsTd'],
 ];
 for (const [title] of crapCases) {
-  test(`should not parse ${title}`, t => {
-    t.is(parseSeason(title), null);
+  it(`should not parse ${title}`, () => {
+    expect(parseSeason(title)).toBeNull();
   });
 }
 
@@ -130,13 +130,13 @@ const oddCases: Array<[string, string, number, number]> = [
   ['Curb Your Enthusiasm - 2x09 - The Baptism.mkv', 'Curb Your Enthusiasm', 2, 9],
 ];
 for (const [postTitle, title, season, episodeNumber] of oddCases) {
-  test(`should not parse ${postTitle}`, t => {
+  it(`should not parse ${postTitle}`, () => {
     const result = parseSeason(postTitle)!;
-    t.is(result.seriesTitle, title);
-    t.is(result.seasons.length, 1);
-    t.is(result.seasons[0], season);
-    t.is(result.episodeNumbers.length, 1);
-    t.is(result.episodeNumbers[0], episodeNumber);
+    expect(result.seriesTitle).toBe(title);
+    expect(result.seasons.length).toBe(1);
+    expect(result.seasons[0]).toBe(season);
+    expect(result.episodeNumbers.length).toBe(1);
+    expect(result.episodeNumbers[0]).toBe(episodeNumber);
   });
 }
 
@@ -146,12 +146,12 @@ const animeSpecialCases: Array<[string, string, number]> = [
   ['[DeadFish] Kenzen Robo Daimidaler - 01 - OVD [BD][720p][AAC]', 'Kenzen Robo Daimidaler', 1],
 ];
 for (const [postTitle, title, episodeNumber] of animeSpecialCases) {
-  test(`parse anime title ${postTitle}`, t => {
+  it(`parse anime title ${postTitle}`, () => {
     const result = parseSeason(postTitle)!;
-    t.is(result.seriesTitle, title);
-    t.is(result.episodeNumbers.length, 1);
-    t.is(result.episodeNumbers[0], episodeNumber);
-    t.is(result.isSpecial, true);
+    expect(result.seriesTitle).toBe(title);
+    expect(result.episodeNumbers.length).toBe(1);
+    expect(result.episodeNumbers[0]).toBe(episodeNumber);
+    expect(result.isSpecial).toBe(true);
   });
 }
 
@@ -159,12 +159,12 @@ const animeRecapCases: Array<[string, string, number]> = [
   ['[HorribleSubs] Goblin Slayer - 10.5 [1080p].mkv', 'Goblin Slayer', 10.5],
 ];
 for (const [postTitle, title, specialEpisodeNumber] of animeRecapCases) {
-  test(`handle anime recap episodes ${postTitle}`, t => {
+  it(`handle anime recap episodes ${postTitle}`, () => {
     const result = parseSeason(postTitle)!;
-    t.is(result.seriesTitle, title);
-    t.is(result.episodeNumbers.length, 1);
-    t.is(result.episodeNumbers[0], specialEpisodeNumber);
-    t.is(result.fullSeason, false);
+    expect(result.seriesTitle).toBe(title);
+    expect(result.episodeNumbers.length).toBe(1);
+    expect(result.episodeNumbers[0]).toBe(specialEpisodeNumber);
+    expect(result.fullSeason).toBe(false);
   });
 }
 
@@ -174,12 +174,12 @@ const seasonSubpackCases: Array<[string, string, number]> = [
   ['CSI.S11.SUBPACK.DVDRip.XviD-REWARD', 'CSI', 11],
 ];
 for (const [postTitle, title, season] of seasonSubpackCases) {
-  test(`parse season subpack ${postTitle}`, t => {
+  it(`parse season subpack ${postTitle}`, () => {
     const result = parseSeason(postTitle)!;
-    t.is(result.seasons[0], season);
-    t.is(result.seriesTitle, title);
-    t.is(result.isSeasonExtra, true);
-    t.is(result.fullSeason, true);
+    expect(result.seasons[0]).toBe(season);
+    expect(result.seriesTitle).toBe(title);
+    expect(result.isSeasonExtra).toBe(true);
+    expect(result.fullSeason).toBe(true);
   });
 }
 
@@ -191,12 +191,12 @@ const seasonExtraCases: Array<[string, string, number]> = [
   ['The.Flash.S03.Extras.02.720p', 'The Flash', 3],
 ];
 for (const [postTitle, title, season] of seasonExtraCases) {
-  test(`parse season extras ${postTitle}`, t => {
+  it(`parse season extras ${postTitle}`, () => {
     const result = parseSeason(postTitle)!;
-    t.is(result.seasons[0], season);
-    t.is(result.seriesTitle, title);
-    t.is(result.isSeasonExtra, true);
-    t.is(result.fullSeason, true);
+    expect(result.seasons[0]).toBe(season);
+    expect(result.seriesTitle).toBe(title);
+    expect(result.isSeasonExtra).toBe(true);
+    expect(result.fullSeason).toBe(true);
   });
 }
 
@@ -204,7 +204,7 @@ for (const [postTitle, title, season] of seasonExtraCases) {
 //   ['[Vivid] Living Sky Saga S01 [Web][MKV][h264 10-bit][1080p][AAC 2.0]', 'Living Sky Saga', 1],
 // ];
 // for (const [postTitle, title, seasonNumber] of animePackCases) {
-//   test(`parse anime season packs ${postTitle}`, t => {
+//   it(`parse anime season packs ${postTitle}`, () =>  {
 //     const result = parseSeason(postTitle)!;
 //     t.is(result.seriesTitle, title);
 //     t.is(result.fullSeason, true);
@@ -408,12 +408,12 @@ const absoluteEpisodeCases: Array<[string, string, number, number]> = [
   ['Tatort.E1003.Dunkelfeld.GERMAN.1080p.WEBRip.x264-TMSF', 'Tatort', 1003, 0],
 ];
 for (const [postTitle, title, absoluteEpisodeNumber, seasonNumber] of absoluteEpisodeCases) {
-  test(`parse absolute episode numbers ${postTitle}`, t => {
+  it(`parse absolute episode numbers ${postTitle}`, () => {
     const result = parseSeason(postTitle)!;
-    t.is(result.seriesTitle, title);
-    t.is(result.episodeNumbers.length, 1);
-    t.is(result.episodeNumbers[0], absoluteEpisodeNumber);
-    t.is(result.seasons[0] ?? 0, seasonNumber);
-    t.is(result.fullSeason, false);
+    expect(result.seriesTitle).toBe(title);
+    expect(result.episodeNumbers.length).toBe(1);
+    expect(result.episodeNumbers[0]).toBe(absoluteEpisodeNumber);
+    expect(result.seasons[0] ?? 0).toBe(seasonNumber);
+    expect(result.fullSeason).toBe(false);
   });
 }

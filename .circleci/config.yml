@@ -16,6 +16,8 @@ jobs:
       - run:
           name: lint
           command: npm run lint
+      - store_test_results:
+          path: ./junit.xml
       - codecov/upload
   release:
     executor:

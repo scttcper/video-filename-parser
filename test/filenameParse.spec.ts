@@ -1,4 +1,4 @@
-import test from 'ava';
+import { expect, it } from 'vitest';
 
 import { AudioCodec } from '../src/audioCodec.js';
 import { filenameParse, Language, Resolution, Source, VideoCodec } from '../src/index.js';
@@ -101,8 +101,8 @@ const movieCases: Array<[string, any]> = [
 ];
 
 for (const [title, result] of movieCases) {
-  test(`parse movie title "${title}"`, t => {
-    t.like(filenameParse(title), result);
+  it(`parse movie title "${title}"`, () => {
+    expect(filenameParse(title)).toEqual(expect.objectContaining(result));
   });
 }
 
@@ -124,8 +124,8 @@ const tvCases: Array<[string, any]> = [
   ],
 ];
 for (const [title, result] of tvCases) {
-  test(`parse tv show title "${title}"`, t => {
-    t.like(filenameParse(title, true), result);
+  it(`parse tv show title "${title}"`, () => {
+    expect(filenameParse(title, true)).toEqual(expect.objectContaining(result));
   });
 }
 
@@ -146,7 +146,7 @@ const dailyTvCases: Array<[string, any]> = [
   ],
 ];
 for (const [title, result] of dailyTvCases) {
-  test(`parse daily tv show title "${title}"`, t => {
-    t.like(filenameParse(title, true), result);
+  it(`parse daily tv show title "${title}"`, () => {
+    expect(filenameParse(title, true)).toEqual(expect.objectContaining(result));
   });
 }

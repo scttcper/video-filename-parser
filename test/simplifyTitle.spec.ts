@@ -1,9 +1,9 @@
-import test from 'ava';
+import { expect, it } from 'vitest';
 
 import { releaseTitleCleaner, simplifyTitle } from '../src/simplifyTitle.js';
 
-test('return null for empty title', t => {
-  t.is(releaseTitleCleaner(''), null);
+it('return null for empty title', () => {
+  expect(releaseTitleCleaner('')).toBe(null);
 });
 
 const cleanupCases: Array<[string, string]> = [
@@ -19,8 +19,8 @@ const cleanupCases: Array<[string, string]> = [
   ['Incassable.TRUE.FRENCH.PROPER.READ.NFO.DVDRiP.DiVX.SBC-KFT', 'Incassable'],
 ];
 for (const [title, result] of cleanupCases) {
-  test(`cleanup movie title "${title}"`, t => {
-    t.is(releaseTitleCleaner(title), result);
+  it(`cleanup movie title "${title}"`, () => {
+    expect(releaseTitleCleaner(title)).toBe(result);
   });
 }
 
@@ -45,7 +45,7 @@ const simplifyCases: Array<[string, string]> = [
   ['The Card Counter WEBSCREENER XviD-EVO', 'The Card Counter  -EVO'],
 ];
 for (const [title, result] of simplifyCases) {
-  test(`cleanup simplify "${title}"`, t => {
-    t.is(simplifyTitle(title), result);
+  it(`cleanup simplify "${title}"`, () => {
+    expect(simplifyTitle(title)).toBe(result);
   });
 }

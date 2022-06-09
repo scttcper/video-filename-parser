@@ -5,8 +5,5 @@
     "node": true,
     "jest": true
   },
-  "parserOptions": {
-		"project": "tsconfig.eslint.json"
-	},
   "extends": ["@ctrl/eslint-config"]
 }

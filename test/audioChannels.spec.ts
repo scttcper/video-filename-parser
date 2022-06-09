@@ -1,4 +1,4 @@
-import test from 'ava';
+import { expect, it } from 'vitest';
 
 import { Channels, parseAudioChannels } from '../src/audioChannels.js';
 
@@ -23,7 +23,7 @@ const audioChannelCases: Array<[string, ReturnType<typeof parseAudioChannels>]> 
 ];
 
 for (const [title, result] of audioChannelCases) {
-  test(`parse audio channel "${title}"`, t => {
-    t.deepEqual(parseAudioChannels(title), result);
+  it(`parse audio channel "${title}"`, () => {
+    expect(parseAudioChannels(title)).toEqual(result);
   });
 }

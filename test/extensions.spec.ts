@@ -1,4 +1,4 @@
-import test from 'ava';
+import { expect, it } from 'vitest';
 
 import { removeFileExtension } from '../src/index.js';
 
@@ -11,7 +11,7 @@ const cases: Array<[string, string]> = [
 ];
 
 for (const [title, result] of cases) {
-  test(`remove extension of "${title}"`, t => {
-    t.is(removeFileExtension(title), result);
+  it(`remove extension of "${title}"`, () => {
+    expect(removeFileExtension(title)).toBe(result);
   });
 }

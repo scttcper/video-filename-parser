@@ -1,4 +1,4 @@
-import test from 'ava';
+import { expect, it } from 'vitest';
 
 import { parseGroup } from '../src/index.js';
 
@@ -51,7 +51,7 @@ const cases: Array<[string, string | null]> = [
 ];
 
 for (const [title, result] of cases) {
-  test(`parse group "${title}"`, t => {
-    t.is(parseGroup(title), result);
+  it(`parse group "${title}"`, () => {
+    expect(parseGroup(title)).toBe(result);
   });
 }

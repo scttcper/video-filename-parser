@@ -1,4 +1,4 @@
-import test from 'ava';
+import { expect, it } from 'vitest';
 
 import { isComplete } from '../src/complete.js';
 
@@ -9,7 +9,7 @@ const cases: Array<[string, boolean]> = [
 ];
 
 for (const [title, result] of cases) {
-  test(`get isComplete from "${title}"`, t => {
-    t.is(isComplete(title), result);
+  it(`get isComplete from "${title}"`, () => {
+    expect(isComplete(title)).toBe(result);
   });
 }
