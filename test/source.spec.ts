@@ -37,6 +37,7 @@ const singleCases: Array<[string, Source[]]> = [
   ['300.2006.iNTERNAL.NTSC.DVD9-FaiLED', [Source.DVD]],
   ['The Card Counter 2021 1080p WEBSCREENER X264-EVO', [Source.SCREENER]],
   ['Movie.Name.2016.German.DTS.DL.1080p.UHDBD.x265-TDO', [Source.BLURAY]],
+  ['127.Hours.DVDSCR.NTSC.DVDR-GALAXY', [Source.DVD, Source.SCREENER]],
 ];
 for (const [title, result] of singleCases) {
   it(`parse source "${title}"`, () => {

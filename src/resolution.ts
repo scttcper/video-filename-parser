@@ -1,3 +1,5 @@
+import { parseSource, Source } from './source.js';
+
 export enum Resolution {
   R2160P = '2160P',
   R1080P = '1080P',
@@ -28,14 +30,23 @@ const resolutionExp = new RegExp(
 
 export function parseResolution(title: string): { resolution?: Resolution; source?: string } {
   const result = resolutionExp.exec(title);
-  if (!result || !result.groups) {
-    return {};
+
+  if (result?.groups) {
+    for (const key of Object.keys(Resolution)) {
+      if (result.groups[key] !== undefined) {
+        return {
+          resolution: Resolution[key as keyof typeof Resolution],
+          source: result.groups[key],
+        };
+      }
+    }
   }
 
-  for (const key of Object.keys(Resolution)) {
-    if (result.groups[key] !== undefined) {
-      return { resolution: Resolution[key as keyof typeof Resolution], source: result.groups[key] };
-    }
+  // Fallback to guessing from some sources
+  // Make safe assumptions like dvdrip is probably 480p
+  const source = parseSource(title);
+  if (source.includes(Source.DVD)) {
+    return { resolution: Resolution.R480P };
   }
 
   return {};

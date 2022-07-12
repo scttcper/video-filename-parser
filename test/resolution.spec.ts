@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 
 import { parseResolution, Resolution } from '../src/index.js';
 
-const cases: Array<[string, ReturnType<typeof parseResolution>['resolution']]> = [
+const cases: Array<[string, Resolution?]> = [
   ['Oceans.Thirteen.2007.iNTERNAL.720p.BluRay.x264-MHQ', Resolution.R720P],
   ['Rocketman 2019 2160p UHD BluRay x265-TERMiNAL', Resolution.R2160P],
   ['Alita Battle Angel 2019 1080p BluRay x264-SPARKS', Resolution.R1080P],
@@ -23,9 +23,19 @@ const cases: Array<[string, ReturnType<typeof parseResolution>['resolution']]> =
   ['[SubsPlease] Movie Title (540p) [AB649D32]', Resolution.R540P],
   ['Series.Title.S04E13.960p.WEB-DL.AAC2.0.H.264-squalor', Resolution.R720P],
 ];
-
 for (const [title, result] of cases) {
   it(`parse resolution "${title}"`, () => {
+    expect(parseResolution(title).resolution).toBe(result);
+  });
+}
+
+const assumeCases: Array<[string, Resolution]> = [
+  ['127.Hours.DVDSCR.NTSC.DVDR-GALAXY', Resolution.R480P],
+  ['127.Hours.GERMAN.2010.DL.PAL.DVDR-OldsMan', Resolution.R480P],
+  ['12.Angry.Men.1957.DvDivX-SMB', Resolution.R480P],
+];
+for (const [title, result] of assumeCases) {
+  it(`assumes resolution from source "${title}"`, () => {
     expect(parseResolution(title).resolution).toBe(result);
   });
 }
