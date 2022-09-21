@@ -35,7 +35,7 @@ const languageCases: Array<[string, Language[]]> = [
   ['Castle.2009.S01E14.Turkish.HDTV.XviD-LOL', [Language.Turkish]],
   ['Castle.2009.S01E14.Czech.HDTV.XviD-LOL', [Language.Czech]],
   ['Castle.2009.S01E14.Portuguese.HDTV.XviD-LOL', [Language.Portuguese]],
-  ['Revolution S01E03 No Quarter 2012 WEB-DL 720p Nordic-philipo mkv', [Language.Norwegian]],
+  ['Revolution S01E03 No Quarter 2012 WEB-DL 720p Nordic-philipo mkv', [Language.Nordic]],
   ['Constantine.2014.S01E01.WEBRiP.H264.AAC.5.1-NL.SUBS', [Language.Dutch]],
   ['Castle.2009.S01E14.HDTV.XviD.HUNDUB-LOL', [Language.Hungarian]],
   ['Castle.2009.S01E14.HDTV.XviD.ENG.HUN-LOL', [Language.English, Language.Hungarian]],
@@ -118,7 +118,7 @@ const languageCases: Array<[string, Language[]]> = [
   ['Spider-Man.No.Way.Home.2021.SLOVAK.2160p.UHD.BLURAY.x265-UNDERDOG', [Language.Slovak]],
   [
     'A.Serbian.Film.2010.SERBIAN.UnCut.DTS-HD.DTS.NORDICSUBS.1080p.BluRay.x264.HQ-TUSAHD',
-    [Language.Serbian],
+    [Language.Serbian, Language.Nordic],
   ],
 ];
 

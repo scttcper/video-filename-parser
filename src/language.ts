@@ -15,6 +15,7 @@ export enum Language {
   Russian = 'Russian',
   Polish = 'Polish',
   Vietnamese = 'Vietnamese',
+  Nordic = 'Nordic',
   Swedish = 'Swedish',
   Norwegian = 'Norwegian',
   Finnish = 'Finnish',
@@ -151,7 +152,7 @@ export function parseLanguage(title: string): Language[] {
     languages.push(Language.Russian);
   }
 
-  if (/\b(nordic|norwegian|NO)\b/i.test(languageTitle)) {
+  if (/\b(norwegian|NO)\b/i.test(languageTitle)) {
     languages.push(Language.Norwegian);
   }
 
@@ -209,6 +210,10 @@ export function parseLanguage(title: string): Language[] {
 
   if (/\b(Serbian)\b/i.test(languageTitle)) {
     languages.push(Language.Serbian);
+  }
+
+  if (/\b(nordic|NORDICSUBS)\b/i.test(languageTitle)) {
+    languages.push(Language.Nordic);
   }
 
   if (isMulti(languageTitle)) {
