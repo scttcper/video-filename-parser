@@ -93,6 +93,8 @@ const webdl720pCases: Array<[string, boolean]> = [
   ['[Doremi].Yes.Pretty.Cure.5.Go.Go!.31.[1280x720].[C65D4B1F].mkv', false],
   ['[HorribleSubs]_Fairy_Tail_-_145_[720p]', false],
   ['[Eveyuu] No Game No Life - 10 [Hi10P 1280x720 H264][10B23BD8]', false],
+  ['Movie.Title.2013.960p.WEB-DL.AAC2.0.H.264-squalor', false],
+  ['Movie.Title.2021.DP.WEB.720p.DDP.5.1.H.264.PLEX', false],
 ];
 for (const [title, proper] of webdl720pCases) {
   it(`parse webdl 720 quality "${title}"`, () => {
@@ -124,11 +126,44 @@ const webdl1080pCases: Array<[string, boolean]> = [
   ['Series Title S06E08 No One PROPER 1080p WEB H 264-EXCLUSIVE', true],
   ['The.Simpsons.S25E21.Pay.Pal.1080p.WEB-DL.DD5.1.H.264-NTb', false],
   ['The.Simpsons.2017.1080p.WEB-DL.DD5.1.H.264.Remux.-NTb', false],
+  ['Movie.Name.2019.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTG', false],
+  ['Movie.Name.2020.1080p.AMZN.WEB...', false],
+  ['Movie.Name.2020.1080p.AMZN.WEB.', false],
+  ['Movie Title - 2020 1080p Viva MKV WEB', false],
+  [
+    '[HorribleSubs] Movie Title! 2018 [Web][MKV][h264][1080p][AAC 2.0][Softsubs (HorribleSubs)]',
+    false,
+  ],
+  ['Movie.Title.2020.MULTi.1080p.WEB.H264-ALLDAYiN (S:285/L:11)', false],
+  ['Movie Title (2020) MULTi WEB 1080p x264-JiHEFF (S:317/L:28)', false],
+  ['Movie.Titles.2020.1080p.NF.WEB.DD2.0.x264-SNEAkY', false],
+  ['The.Movie.2022.NORDiC.1080p.DV.HDR.WEB.H 265-NiDHUG', false],
+  ['Movie Title 2018 [WEB 1080p HEVC Opus] [Netaro]', false],
+  ['Movie Title 2018 (WEB 1080p HEVC Opus) [Netaro]', false],
 ];
 for (const [title, proper] of webdl1080pCases) {
   it(`parse webdl 1080 quality "${title}"`, () => {
     const quality = parseQuality(title);
     expect(quality.sources[0]).toBe(Source.WEBDL);
+    expect(quality.resolution).toBe(Resolution.R1080P);
+    expect(quality.modifier).toBe(null);
+    expect(quality.revision.version).toBe(proper ? 2 : 1);
+  });
+}
+
+const webrip1080pCases: Array<[string, boolean]> = [
+  ['Movie.Name.S04E01.iNTERNAL.1080p.WEBRip.x264-QRUS', false],
+  ['Movie.Name.1x04.ITA.1080p.WEBMux.x264-NovaRip', false],
+  [
+    'Movie.Name.2019.S02E07.Chapter.15.The.Believer.4Kto1080p.DSNYP.Webrip.x265.10bit.EAC3.5.1.Atmos.GokiTAoE',
+    false,
+  ],
+  ['Movie.Title.2019.1080p.AMZN.WEB-Rip.DDP.5.1.HEVC', false],
+];
+for (const [title, proper] of webrip1080pCases) {
+  it(`parse webrip 1080 quality "${title}"`, () => {
+    const quality = parseQuality(title);
+    expect(quality.sources[0]).toBe(Source.WEBRIP);
     expect(quality.resolution).toBe(Resolution.R1080P);
     expect(quality.modifier).toBe(null);
     expect(quality.revision.version).toBe(proper ? 2 : 1);
@@ -244,6 +279,12 @@ const remux2160pQuality: Array<[string]> = [
   ['Contract.to.Kill.2016.REMUX.2160p.BluRay.AVC.DTS-HD.MA.5.1-iFT'],
   ['27.Dresses.2008.REMUX.2160p.Bluray.AVC.DTS-HR.MA.5.1-LEGi0N'],
   ['Los Vengadores (2012) [UHDRemux HDR HEVC 2160p][Dolby Atmos TrueHD 7 1 Eng DTS 5 1 Esp]'],
+  ['Movie.Name.2008.REMUX.2160p.Bluray.AVC.DTS-HR.MA.5.1-LEGi0N'],
+  ['Movie.Title.1980.2160p.UHD.BluRay.Remux.HDR.HEVC.DTS-HD.MA.5.1-PmP.mkv'],
+  ['Movie.Title.2016.T1.UHDRemux.2160p.HEVC.Dual.AC3.5.1-TrueHD.5.1.Sub'],
+  ['[Dolby Vision] Movie.Title.S07.MULTi.UHD.BLURAY.REMUX.DV-NoTag'],
+  ['Movie.Name.2020.German.UHDBD.2160p.HDR10.HEVC.EAC3.DL.Remux-pmHD.mkv'],
+  ['Movie Name (2021) [Remux-2160p x265 HDR 10-BIT DTS-HD MA 7.1]-FraMeSToR.mkv'],
 ];
 for (const [title] of remux2160pQuality) {
   it(`parse bluray 2160P remux quality "${title}"`, () => {

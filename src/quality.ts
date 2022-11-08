@@ -97,13 +97,15 @@ export function parseQuality(title: string): QualityModel {
   if (remuxExp.test(normalizedTitle) && !sourceGroups.webdl && !sourceGroups.hdtv) {
     result.modifier = QualityModifier.REMUX;
     result.sources = [Source.BLURAY];
-    return result;
   }
 
-  if (rawHdExp.test(normalizedTitle) && result.modifier !== QualityModifier.BRDISK) {
+  if (
+    rawHdExp.test(normalizedTitle) &&
+    result.modifier !== QualityModifier.BRDISK &&
+    result.modifier !== QualityModifier.REMUX
+  ) {
     result.modifier = QualityModifier.RAWHD;
     result.sources = [Source.TV];
-    return result;
   }
 
   if (source !== null) {
@@ -121,6 +123,10 @@ export function parseQuality(title: string): QualityModel {
 
       if (!resolution && result.modifier === QualityModifier.BRDISK) {
         result.resolution = Resolution.R1080P;
+      }
+
+      if (!resolution && result.modifier === QualityModifier.REMUX) {
+        result.resolution = Resolution.R2160P;
       }
 
       return result;
@@ -205,9 +211,10 @@ export function parseQuality(title: string): QualityModel {
   }
 
   if (
-    resolution === Resolution.R2160P ||
-    resolution === Resolution.R1080P ||
-    resolution === Resolution.R720P
+    !result.modifier &&
+    (resolution === Resolution.R2160P ||
+      resolution === Resolution.R1080P ||
+      resolution === Resolution.R720P)
   ) {
     result.sources = [Source.WEBDL];
     return result;

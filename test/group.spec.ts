@@ -48,6 +48,24 @@ const cases: Array<[string, string | null]> = [
   ['STEPHEN.KINGS.SHAWSHANK.REDEMPTION.-.KING.OF.HORROR.CUSTOM.NORDIC.DVD-6POiNT6', '6POiNT6'],
   ['Inception.PAL.MULTi.DVD9-REVOLTE', 'REVOLTE'],
   ['The.Green.Mile.1999.DVDRip.XviD.iNT-MOViERUSH', 'MOViERUSH'],
+  ['Some.Movie.2013.1080p.BluRay.REMUX.AVC.DTS-X.MA.5.1', null],
+  ['Some.Movie.2013.1080p.BluRay.REMUX.AVC.DTS-MA.5.1', null],
+  ['Movie.Name.2013.1080p.BluRay.REMUX.AVC.DTS-ES.MA.5.1', null],
+  ['SomeMovie.1080p.BluRay.DTS-X.264.-D-Z0N3.mkv', 'D-Z0N3'],
+  ['SomeMovie.1080p.BluRay.DTS.x264.-Blu-bits.mkv', 'Blu-bits'],
+  ['SomeMovie.1080p.BluRay.DTS.x264.-DX-TV.mkv', 'DX-TV'],
+  ['SomeMovie.1080p.BluRay.DTS.x264.-FTW-HS.mkv', 'FTW-HS'],
+  ['SomeMovie.1080p.BluRay.DTS.x264.-VH-PROD.mkv', 'VH-PROD'],
+  ['Some.Dead.Movie.2006.1080p.BluRay.DTS.x264.D-Z0N3', 'D-Z0N3'],
+  ['Movie.Title.2010.720p.BluRay.x264.-[YTS.LT]', 'YTS.LT'],
+  ['The.Movie.Title.2013.720p.BluRay.x264-ROUGH [PublicHD]', 'ROUGH'],
+  [
+    'Some.Really.Bad.Movie.Title.[2021].1080p.WEB-HDRip.Dual.Audio.[Hindi.[Clean]. .English].x264.AAC.DD.2.0.By.Full4Movies.mkv-xpost',
+    null,
+  ],
+  ['The.Movie.Title.2013.1080p.10bit.AMZN.WEB-DL.DDP5.1.HEVC-Vyndros', 'Vyndros'],
+  ['Movie.Name.2022.1080p.BluRay.x264-[YTS.AG]', 'YTS.AG'],
+  ['Movie.Title.2019.1080p.AMZN.WEB-Rip.DDP.5.1.HEVC', null],
 ];
 
 for (const [title, result] of cases) {
