@@ -25,6 +25,10 @@ export enum Language {
   Greek = 'Greek',
   Korean = 'Korean',
   Hungarian = 'Hungarian',
+  Persian = 'Persian',
+  Bengali = 'Bengali',
+  Bulgarian = 'Bulgarian',
+  Brazilian = 'Brazilian',
   Hebrew = 'Hebrew',
   Czech = 'Czech',
   Ukrainian = 'Ukrainian',
@@ -206,6 +210,22 @@ export function parseLanguage(title: string): Language[] {
 
   if (/\b(SK|Slovak)\b/i.test(languageTitle)) {
     languages.push(Language.Slovak);
+  }
+
+  if (/\b(Brazilian)\b/i.test(languageTitle)) {
+    languages.push(Language.Brazilian);
+  }
+
+  if (/\b(Persian)\b/i.test(languageTitle)) {
+    languages.push(Language.Persian);
+  }
+
+  if (/\b(Bengali)\b/i.test(languageTitle)) {
+    languages.push(Language.Bengali);
+  }
+
+  if (/\b(Bulgarian)\b/i.test(languageTitle)) {
+    languages.push(Language.Bulgarian);
   }
 
   if (/\b(Serbian)\b/i.test(languageTitle)) {
