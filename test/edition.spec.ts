@@ -61,6 +61,7 @@ const cases: Array<[string, Partial<Edition>]> = [
     'Sicario 2015 Hybrid 2160p UHD BluRay REMUX DV HDR10+ HEVC TrueHD 7.1 Atmos-WiLDCAT',
     { uhd: true, dolbyVision: true },
   ],
+  ['Babylon.2022.OAR.1080p.WEB.H264-SLOT', { oar: true }],
 ];
 
 for (const [title, result] of cases) {
