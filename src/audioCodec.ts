@@ -51,7 +51,7 @@ export enum AudioCodec {
 
 export function parseAudioCodec(title: string): { codec?: AudioCodec; source?: string } {
   const audioResult = audioCodecExp.exec(title);
-  if (!audioResult || !audioResult.groups) {
+  if (!audioResult?.groups) {
     return {};
   }
 

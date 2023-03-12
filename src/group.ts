@@ -40,7 +40,7 @@ export function parseGroup(title: string): string | null {
   const globalReleaseGroupExp = new RegExp(releaseGroupRegexExp.source, 'ig');
   let result: RegExpExecArray | null;
   while ((result = globalReleaseGroupExp.exec(trimmed))) {
-    if (!result || !result.groups) {
+    if (!result?.groups) {
       continue;
     }
 

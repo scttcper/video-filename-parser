@@ -82,7 +82,6 @@ export function parseSourceGroups(title: string): SourceGroups {
   };
 }
 
-// eslint-disable-next-line complexity
 export function parseSource(title: string): Source[] {
   const groups = parseSourceGroups(title);
   const result: Source[] = [];

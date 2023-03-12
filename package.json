@@ -31,13 +31,13 @@
     "test:ci": "vitest run --coverage --reporter=default --reporter=junit --outputFile=./junit.xml"
   },
   "devDependencies": {
-    "@ctrl/eslint-config": "3.5.10",
+    "@ctrl/eslint-config": "3.6.2",
     "@sindresorhus/tsconfig": "3.0.1",
-    "@types/node": "18.11.18",
-    "@vitest/coverage-c8": "0.28.3",
-    "c8": "7.12.0",
+    "@types/node": "18.15.0",
+    "@vitest/coverage-c8": "0.29.2",
+    "c8": "7.13.0",
     "typescript": "4.9.5",
-    "vitest": "0.28.3"
+    "vitest": "0.29.2"
   },
   "workspaces": [
     "demo"

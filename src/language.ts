@@ -1,6 +1,5 @@
 import { parseTitleAndYear } from './title.js';
 
-/* eslint-disable complexity */
 export enum Language {
   English = 'English',
   French = 'French',

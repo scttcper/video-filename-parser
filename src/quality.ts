@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { parseResolution, Resolution } from './resolution.js';
 import { parseSource, parseSourceGroups, Source } from './source.js';
 import { parseVideoCodec, VideoCodec } from './videoCodec.js';

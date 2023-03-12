@@ -23,7 +23,7 @@ export enum Channels {
 
 export function parseAudioChannels(title: string): { channels?: Channels; source?: string } {
   const channelResult = channelExp.exec(title);
-  if (!channelResult || !channelResult.groups) {
+  if (!channelResult?.groups) {
     return {};
   }
 

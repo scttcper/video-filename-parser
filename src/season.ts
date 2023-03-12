@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { simplifyTitle } from './simplifyTitle.js';
 
 const reportTitleExp = [
