@@ -43,7 +43,8 @@
     "demo"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "release": {
     "branches": [
