@@ -24,7 +24,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: codecov/codecov-action
+      - uses: Atrox/codecov-action@master
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   publish:
     needs: build
