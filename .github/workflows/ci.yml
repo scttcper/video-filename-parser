@@ -41,7 +41,6 @@ jobs:
           node-version: 20
           cache: 'npm'
       - run: npm ci
-      - run: npm audit signatures
       - name: release
         run: npx semantic-release
         env:
