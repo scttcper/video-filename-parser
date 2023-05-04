@@ -6,50 +6,40 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@master
-      - name: setup node
-        uses: actions/setup-node@master
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 20
           cache: 'npm'
-      - name: install dependencies
-        run: npm ci
+      - run: npm ci
       - name: lint
         run: npm run lint
       - name: test
         run: npm run test:ci
-
-  coverage:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: Atrox/codecov-action@master
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - name: coverage
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   publish:
     needs: build
     runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'master' && github.event.build.conclusion == 'success' }}
     permissions:
       contents: write # to be able to publish a GitHub release
       issues: write # to be able to comment on released issues
       pull-requests: write # to be able to comment on released pull requests
       id-token: write # to enable use of OIDC for npm provenance
     steps:
-      - name: checkout
-        uses: actions/checkout@master
-      - name: setup node
-        uses: actions/setup-node@master
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 20
           cache: 'npm'
-      - name: install dependencies
-        run: npm ci
-      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
-        run: npm audit signatures
+      - run: npm ci
+      - run: npm audit signatures
       - name: release
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release
