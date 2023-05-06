@@ -203,7 +203,7 @@ export function parseLanguage(title: string): Language[] {
     languages.push(Language.Lithuanian);
   }
 
-  if (/\b(RO|Romanian)\b/i.test(languageTitle)) {
+  if (/\b(RO|Romanian|rodubbed)\b/i.test(languageTitle)) {
     languages.push(Language.Romanian);
   }
 
