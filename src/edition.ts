@@ -18,6 +18,7 @@ const hou = /\b(HOU)\b/i;
 const uhd = /\b(UHD)\b/i;
 const oar = /\b(OAR)\b/i;
 const dolbyVision = /\b(DV(\b(HDR10|HLG|SDR))?)\b/i;
+const hardcodedSubsExp = /\b((?<hcsub>(\w+(?<!SOFT|HORRIBLE)SUBS?))|(?<hc>(HC|SUBBED)))\b/i;
 
 export interface Edition {
   internal?: boolean;
@@ -44,6 +45,7 @@ export interface Edition {
   /** original aspect ratio */
   oar?: boolean;
   dolbyVision?: boolean;
+  hardcodedSubs?: boolean;
 }
 
 export function parseEdition(title: string): Edition {
@@ -68,6 +70,7 @@ export function parseEdition(title: string): Edition {
     uhd: uhd.test(withoutTitle) || undefined,
     oar: oar.test(withoutTitle) || undefined,
     dolbyVision: dolbyVision.test(withoutTitle) || undefined,
+    hardcodedSubs: hardcodedSubsExp.test(withoutTitle) || undefined,
   };
 
   return removeEmpty(result);

@@ -69,3 +69,21 @@ for (const [title, result] of cases) {
     expect(parseEdition(title)).toEqual(result);
   });
 }
+
+const hardcodedSubsCases: Array<[string, true | undefined]> = [
+  ['Movie.Title.2016.1080p.KORSUB.WEBRip.x264.AAC2.0-RADARR', true],
+  ['Movie.Title.2016.1080p.KORSUBS.WEBRip.x264.AAC2.0-RADARR', true],
+  ['Movie Title 2017 HC 720p HDRiP DD5 1 x264-LEGi0N', true],
+  ['Movie.Title.2017.720p.SUBBED.HDRip.V2.XViD-26k.avi', true],
+  ['Movie.Title.2000.1080p.BlueRay.x264.DTS.RoSubbed-playHD', undefined],
+  ['Movie Title! 2018 [Web][MKV][h264][480p][AAC 2.0][Softsubs]', undefined],
+  [
+    'Movie Title! 2019 [HorribleSubs][Web][MKV][h264][848x480][AAC 2.0][Softsubs(HorribleSubs)]',
+    undefined,
+  ],
+];
+for (const [title, result] of hardcodedSubsCases) {
+  it(`get hardcoded subs from "${title}"`, () => {
+    expect(parseEdition(title).hardcodedSubs).toEqual(result);
+  });
+}
