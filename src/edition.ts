@@ -19,6 +19,9 @@ const uhd = /\b(UHD)\b/i;
 const oar = /\b(OAR)\b/i;
 const dolbyVision = /\b(DV(\b(HDR10|HLG|SDR))?)\b/i;
 const hardcodedSubsExp = /\b((?<hcsub>(\w+(?<!SOFT|HORRIBLE)SUBS?))|(?<hc>(HC|SUBBED)))\b/i;
+const deletedScenes = /\b((Bonus.)?Deleted.Scenes)\b/i;
+const bonusContent =
+  /\b((Bonus|Extras|Behind.the.Scenes|Making.of|Interviews|Featurettes|Outtakes|Bloopers|Gag.Reel).(?!(Deleted.Scenes)))\b/i;
 
 export interface Edition {
   internal?: boolean;
@@ -46,6 +49,8 @@ export interface Edition {
   oar?: boolean;
   dolbyVision?: boolean;
   hardcodedSubs?: boolean;
+  deletedScenes?: boolean;
+  bonusContent?: boolean;
 }
 
 export function parseEdition(title: string): Edition {
@@ -71,6 +76,8 @@ export function parseEdition(title: string): Edition {
     oar: oar.test(withoutTitle) || undefined,
     dolbyVision: dolbyVision.test(withoutTitle) || undefined,
     hardcodedSubs: hardcodedSubsExp.test(withoutTitle) || undefined,
+    deletedScenes: deletedScenes.test(withoutTitle) || undefined,
+    bonusContent: bonusContent.test(withoutTitle) || undefined,
   };
 
   return removeEmpty(result);

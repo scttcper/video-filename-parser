@@ -62,6 +62,11 @@ const cases: Array<[string, Partial<Edition>]> = [
     { uhd: true, dolbyVision: true },
   ],
   ['Babylon.2022.OAR.1080p.WEB.H264-SLOT', { oar: true }],
+  [
+    'Solo.A.Star.Wars.Story.2018.BONUS.DELETED.SCENES.1080p.BluRay.x264-PussyFoot',
+    { deletedScenes: true },
+  ],
+  ['The.Golden.Compass.2007.BONUS.1080p.BluRay.H264-REFRACTiON', { bonusContent: true }],
 ];
 
 for (const [title, result] of cases) {
