@@ -37,7 +37,7 @@ export enum VideoCodec {
 
 export function parseVideoCodec(title: string): { codec?: VideoCodec; source?: string } {
   const result = codecExp.exec(title);
-  if (result === null || result.groups === undefined) {
+  if (result?.groups === undefined) {
     return {};
   }
 
