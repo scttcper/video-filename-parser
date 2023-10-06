@@ -67,6 +67,7 @@ const cases: Array<[string, Partial<Edition>]> = [
     { deletedScenes: true },
   ],
   ['The.Golden.Compass.2007.BONUS.1080p.BluRay.H264-REFRACTiON', { bonusContent: true }],
+  ['The.Mist.2007.BW.2160p.UHD.BluRay.x265-GUHZER', { bw: true, uhd: true }],
 ];
 
 for (const [title, result] of cases) {

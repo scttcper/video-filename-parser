@@ -22,6 +22,7 @@ const hardcodedSubsExp = /\b((?<hcsub>(\w+(?<!SOFT|HORRIBLE)SUBS?))|(?<hc>(HC|SU
 const deletedScenes = /\b((Bonus.)?Deleted.Scenes)\b/i;
 const bonusContent =
   /\b((Bonus|Extras|Behind.the.Scenes|Making.of|Interviews|Featurettes|Outtakes|Bloopers|Gag.Reel).(?!(Deleted.Scenes)))\b/i;
+const bw = /\b(BW)\b/i;
 
 export interface Edition {
   internal?: boolean;
@@ -35,6 +36,8 @@ export interface Edition {
   imax?: boolean;
   fanEdit?: boolean;
   hdr?: boolean;
+  /** black and white */
+  bw?: boolean;
   /** 3D film */
   threeD?: boolean;
   /** half side by side 3D */
@@ -78,6 +81,7 @@ export function parseEdition(title: string): Edition {
     hardcodedSubs: hardcodedSubsExp.test(withoutTitle) || undefined,
     deletedScenes: deletedScenes.test(withoutTitle) || undefined,
     bonusContent: bonusContent.test(withoutTitle) || undefined,
+    bw: bw.test(withoutTitle) || undefined,
   };
 
   return removeEmpty(result);
