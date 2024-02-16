@@ -109,5 +109,9 @@ export function parseAudioCodec(title: string): { codec?: AudioCodec; source?: s
     return { codec: AudioCodec.VORBIS, source: groups['vorbis'] };
   }
 
+  if (groups['eac3']) {
+    return { codec: AudioCodec.EAC3, source: groups['eac3'] };
+  }
+
   return {};
 }
