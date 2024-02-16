@@ -34,6 +34,10 @@ const audioCodecCases: Array<[string, ReturnType<typeof parseAudioCodec>]> = [
     'Ex Machina 2015 UHD BluRay 2160p DTS-X 7 1 HDR x265 10bit-CHD',
     { codec: AudioCodec.DTSHD, source: 'DTS-X' },
   ],
+  [
+    'Frozen.2.2019.German.DL.EAC3.1080p.DSNP.WEB.H265-ZeroTwo',
+    { codec: AudioCodec.EAC3, source: 'EAC3' }
+  ]
 ];
 
 for (const [title, result] of audioCodecCases) {
