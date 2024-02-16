@@ -36,8 +36,8 @@ const audioCodecCases: Array<[string, ReturnType<typeof parseAudioCodec>]> = [
   ],
   [
     'Frozen.2.2019.German.DL.EAC3.1080p.DSNP.WEB.H265-ZeroTwo',
-    { codec: AudioCodec.EAC3, source: 'EAC3' }
-  ]
+    { codec: AudioCodec.EAC3, source: 'EAC3' },
+  ],
 ];
 
 for (const [title, result] of audioCodecCases) {
