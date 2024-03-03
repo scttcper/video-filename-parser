@@ -1,27 +1,28 @@
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 // eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
 // @ts-ignore
 import { filenameParse } from '../../src/index.js';
 
-ReactDOM.render(<Demo />, document.getElementById('root'));
+const root = createRoot(document.getElementById('root')!);
+root.render(<Demo />);
 
 function Demo() {
   const demoDefault = 'Iron.Man.2008.INTERNAL.REMASTERED.2160p.UHD.BluRay.X265-IAMABLE';
   const [result, setResult] = useState(filenameParse(demoDefault));
   const [input, setInput] = useState(demoDefault);
-  const [isTvShow, setTvShow] = useState(false);
+  const [isTvShow, setIsTvShow] = useState(false);
 
-  function handleChange(event: any) {
+  const handleChange = (event: any) => {
     setInput(event.target.value);
     setResult(filenameParse(event.target.value, isTvShow));
-  }
+  };
 
-  function handleToggleTvShow(event: any) {
-    setTvShow(event.target.checked);
+  const handleToggleTvShow = (event: any) => {
+    setIsTvShow(event.target.checked);
     setResult(filenameParse(input, event.target.checked));
-  }
+  };
 
   return (
     <div className="py-6">
