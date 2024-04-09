@@ -9,16 +9,9 @@
   "type": "module",
   "exports": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
-  "files": [
-    "dist/src"
-  ],
+  "files": ["dist/src"],
   "sideEffects": false,
-  "keywords": [
-    "scene",
-    "release",
-    "radarr",
-    "sonarr"
-  ],
+  "keywords": ["scene", "release", "radarr", "sonarr"],
   "scripts": {
     "demo:build": "pnpm run -r build",
     "demo:watch": "pnpm run -r dev",
@@ -35,25 +28,23 @@
     "test:ci": "vitest run --no-isolate --coverage --reporter=default --reporter=junit --outputFile=./junit.xml"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.5.3",
-    "@ctrl/eslint-config-react-biome": "2.0.0",
+    "@biomejs/biome": "1.6.4",
+    "@ctrl/eslint-config-biome": "2.4.1",
+    "@ctrl/eslint-config-react-biome": "2.1.0",
     "@sindresorhus/tsconfig": "5.0.0",
-    "@types/node": "20.11.24",
-    "@vitest/coverage-v8": "1.3.1",
-    "typescript": "5.3.3",
-    "vitest": "1.3.1"
+    "@types/node": "20.12.6",
+    "@vitest/coverage-v8": "1.4.0",
+    "eslint": "8.57.0",
+    "typescript": "5.4.4",
+    "vitest": "1.4.0"
   },
-  "workspaces": [
-    "demo"
-  ],
+  "workspaces": ["demo"],
   "publishConfig": {
     "access": "public",
     "provenance": true
   },
   "release": {
-    "branches": [
-      "master"
-    ]
+    "branches": ["master"]
   },
   "engines": {
     "node": ">=18"

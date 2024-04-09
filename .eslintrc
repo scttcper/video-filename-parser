@@ -3,5 +3,5 @@
   "env": {
     "node": true
   },
-  "extends": ["@ctrl/eslint-config-react-biome"]
+  "extends": ["@ctrl/eslint-config-biome", "@ctrl/eslint-config-react-biome"]
 }
