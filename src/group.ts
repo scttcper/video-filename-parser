@@ -26,25 +26,26 @@ export function parseGroup(title: string): string | null {
   }
 
   const exceptionResult = exceptionReleaseGroupRegex.exec(trimmed);
-  if (exceptionResult?.groups?.['releasegroup']) {
-    return exceptionResult.groups['releasegroup'];
+  if (exceptionResult?.groups?.releasegroup) {
+    return exceptionResult.groups.releasegroup;
   }
 
   const animeResult = animeReleaseGroupExp.exec(trimmed);
   if (animeResult?.groups) {
-    return animeResult.groups['subgroup'] ?? '';
+    return animeResult.groups.subgroup ?? '';
   }
 
   trimmed = trimmed.replace(cleanReleaseGroupExp, '');
 
   const globalReleaseGroupExp = new RegExp(releaseGroupRegexExp.source, 'ig');
   let result: RegExpExecArray | null;
+  // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
   while ((result = globalReleaseGroupExp.exec(trimmed))) {
     if (!result?.groups) {
       continue;
     }
 
-    const group = result.groups['releasegroup'] ?? '';
+    const group = result.groups.releasegroup ?? '';
 
     return group;
   }

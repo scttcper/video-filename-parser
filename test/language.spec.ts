@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 
 import { isMulti, Language, parseLanguage } from '../src/index.js';
 
-const languageCases: Array<[string, Language[]]> = [
+const languageCases: [string, Language[]][] = [
   ['Castle.2009.S01E14.English.HDTV.XviD-LOL', [Language.English]],
   ['Castle.2009.S01E14.French.HDTV.XviD-LOL', [Language.French]],
   [
@@ -129,7 +129,7 @@ for (const [title, result] of languageCases) {
   });
 }
 
-const multiCases: Array<[string]> = [
+const multiCases: [string][] = [
   ['Ouija.Origin.of.Evil.2016.MULTi.TRUEFRENCH.1080p.BluRay.x264-MELBA'],
   ['Showdown.In.Little.Tokyo.1991.MULTI.VFQ.VFF.DTSHD-MASTER.1080p.BluRay.x264-ZombiE'],
   ['The.Polar.Express.2004.MULTI.VF2.1080p.BluRay.x264-PopHD'],

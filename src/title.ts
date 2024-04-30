@@ -28,12 +28,12 @@ export function parseTitleAndYear(title: string): { title: string; year: string 
   for (const exp of movieTitleYearRegex) {
     const match = exp.exec(grouplessTitle);
     if (match?.groups) {
-      const result = releaseTitleCleaner(match.groups['title'] ?? '');
+      const result = releaseTitleCleaner(match.groups.title ?? '');
       if (result === null) {
         continue;
       }
 
-      const year = match.groups['year'] ?? null;
+      const year = match.groups.year ?? null;
 
       return { title: result, year };
     }

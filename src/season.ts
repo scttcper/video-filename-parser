@@ -239,13 +239,13 @@ export function parseSeason(title: string): Season | null {
   // parse daily episodes with mmddyy eg `At.Midnight.140722.720p.HDTV.x264-YesTV`
   const sixDigitAirDateMatch = sixDigitAirDateMatchExp.exec(title);
   if (sixDigitAirDateMatch?.groups) {
-    const airYear = sixDigitAirDateMatch.groups['airyear'] ?? '';
-    const airMonth = sixDigitAirDateMatch.groups['airmonth'] ?? '';
-    const airDay = sixDigitAirDateMatch.groups['airday'] ?? '';
+    const airYear = sixDigitAirDateMatch.groups.airyear ?? '';
+    const airMonth = sixDigitAirDateMatch.groups.airmonth ?? '';
+    const airDay = sixDigitAirDateMatch.groups.airday ?? '';
     if (airMonth !== '00' || airDay !== '00') {
       const fixedDate = `20${airYear}.${airMonth}.${airDay}`;
 
-      simpleTitle = simpleTitle.replace(sixDigitAirDateMatch.groups['airdate'] ?? '', fixedDate);
+      simpleTitle = simpleTitle.replace(sixDigitAirDateMatch.groups.airdate ?? '', fixedDate);
     }
   }
 
@@ -337,7 +337,7 @@ export function parseMatchCollection(
     throw new Error('No match');
   }
 
-  const seriesName = (groups['title'] ?? '')
+  const seriesName = (groups.title ?? '')
     .replace(/\./g, ' ')
     .replace(/_/g, ' ')
     .replace(requestInfoExp, '')
@@ -347,11 +347,11 @@ export function parseMatchCollection(
     seriesName,
   };
 
-  let lastSeasonEpisodeStringIndex = indexOfEnd(simpleTitle, groups['title'] ?? '');
+  let lastSeasonEpisodeStringIndex = indexOfEnd(simpleTitle, groups.title ?? '');
 
-  const airYear = parseInt(groups['airyear'] ?? '', 10);
+  const airYear = parseInt(groups.airyear ?? '', 10);
   if (airYear < 1900 || Number.isNaN(airYear)) {
-    let seasons = [groups['season'], groups['season1']]
+    let seasons = [groups.season, groups.season1]
       .filter(x => x !== undefined && x.length > 0)
       .map(x => {
         lastSeasonEpisodeStringIndex = Math.max(
@@ -370,8 +370,8 @@ export function parseMatchCollection(
       result.isMultiSeason = true;
     }
 
-    const episodeCaptures = [groups['episode'], groups['episode1']].filter(x => x);
-    const absoluteEpisodeCaptures = [groups['absoluteepisode'], groups['absoluteepisode1']].filter(
+    const episodeCaptures = [groups.episode, groups.episode1].filter(x => x);
+    const absoluteEpisodeCaptures = [groups.absoluteepisode, groups.absoluteepisode1].filter(
       x => x,
     );
 
@@ -412,7 +412,7 @@ export function parseMatchCollection(
           k => k + Math.floor(first),
         );
 
-        if (groups['special']) {
+        if (groups.special) {
           result.isSpecial = true;
         }
       }
@@ -421,13 +421,13 @@ export function parseMatchCollection(
     if (episodeCaptures.length === 0 && absoluteEpisodeCaptures.length === 0) {
       // Check to see if this is an "Extras" or "SUBPACK" release, if it is, set
       // IsSeasonExtra so they can be filtered out
-      if (groups['extras']) {
+      if (groups.extras) {
         result.isSeasonExtra = true;
       }
 
       // Partial season packs will have a seasonpart group so they can be differentiated
       // from a full season/single episode release
-      const seasonPart = groups['seasonpart'];
+      const seasonPart = groups.seasonpart;
       if (seasonPart) {
         result.seasonPart = parseInt(seasonPart, 10);
         result.isPartialSeason = true;
@@ -440,8 +440,8 @@ export function parseMatchCollection(
       result.seasonNumbers = [0];
     }
   } else {
-    let airMonth = parseInt(groups['airmonth'] ?? '', 10);
-    let airDay = parseInt(groups['airday'] ?? '', 10);
+    let airMonth = parseInt(groups.airmonth ?? '', 10);
+    let airDay = parseInt(groups.airday ?? '', 10);
 
     // Swap day and month if month is bigger than 12 (scene fail)
     if (airMonth > 12) {
@@ -462,15 +462,15 @@ export function parseMatchCollection(
     }
 
     lastSeasonEpisodeStringIndex = Math.max(
-      indexOfEnd(simpleTitle, groups['airyear'] ?? ''),
+      indexOfEnd(simpleTitle, groups.airyear ?? ''),
       lastSeasonEpisodeStringIndex,
     );
     lastSeasonEpisodeStringIndex = Math.max(
-      indexOfEnd(simpleTitle, groups['airmonth'] ?? ''),
+      indexOfEnd(simpleTitle, groups.airmonth ?? ''),
       lastSeasonEpisodeStringIndex,
     );
     lastSeasonEpisodeStringIndex = Math.max(
-      indexOfEnd(simpleTitle, groups['airday'] ?? ''),
+      indexOfEnd(simpleTitle, groups.airday ?? ''),
       lastSeasonEpisodeStringIndex,
     );
     result.airDate = airDate;

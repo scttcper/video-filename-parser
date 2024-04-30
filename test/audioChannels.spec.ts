@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 
 import { Channels, parseAudioChannels } from '../src/audioChannels.js';
 
-const audioChannelCases: Array<[string, ReturnType<typeof parseAudioChannels>]> = [
+const audioChannelCases: [string, ReturnType<typeof parseAudioChannels>][] = [
   [
     'Hannibal 2001 4K UHD Dolby Vision MP4 DD+5 1 H265-d3g',
     { channels: Channels.SIX, source: '5 1' },

@@ -45,7 +45,7 @@ export function parseQualityModifyers(title: string): Revision {
   const versionResult = versionExp.exec(normalizedTitle);
   if (versionResult?.groups) {
     // get numbers from version regex
-    const digits = /\d/i.exec(versionResult.groups['version'] ?? '');
+    const digits = /\d/i.exec(versionResult.groups.version ?? '');
     if (digits) {
       const value = parseInt(digits[0] ?? '', 10);
       if (!Number.isNaN(value)) {

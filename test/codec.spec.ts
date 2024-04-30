@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 
 import { parseVideoCodec, VideoCodec } from '../src/index.js';
 
-const cases: Array<[string, ReturnType<typeof parseVideoCodec>['codec']]> = [
+const cases: [string, ReturnType<typeof parseVideoCodec>['codec']][] = [
   ['Terminator 3 Rise of The Machines 2003 HDDVD XvidHD 720p-NPW', VideoCodec.XVID],
   ['Cloverfield 2008 BRRip XvidHD 720p-NPW', VideoCodec.XVID],
   ['The Interview 2014 1080p WEB-DL x264 AAC MerryXmas', VideoCodec.X264],

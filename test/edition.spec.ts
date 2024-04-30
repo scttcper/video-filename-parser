@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 
 import { Edition, parseEdition } from '../src/index.js';
 
-const cases: Array<[string, Partial<Edition>]> = [
+const cases: [string, Partial<Edition>][] = [
   ['Prometheus 2012 Directors Cut', { directors: true }],
   ['Star Wars Episode IV - A New Hope 1999 (Despecialized).mkv', { fanEdit: true }],
   ['Prometheus.2012.(Special.Edition.Remastered).[Bluray-1080p].mkv', { remastered: true }],
@@ -76,7 +76,7 @@ for (const [title, result] of cases) {
   });
 }
 
-const hardcodedSubsCases: Array<[string, true | undefined]> = [
+const hardcodedSubsCases: [string, true | undefined][] = [
   ['Movie.Title.2016.1080p.KORSUB.WEBRip.x264.AAC2.0-RADARR', true],
   ['Movie.Title.2016.1080p.KORSUBS.WEBRip.x264.AAC2.0-RADARR', true],
   ['Movie Title 2017 HC 720p HDRiP DD5 1 x264-LEGi0N', true],

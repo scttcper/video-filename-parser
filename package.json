@@ -28,15 +28,15 @@
     "test:ci": "vitest run --no-isolate --coverage --reporter=default --reporter=junit --outputFile=./junit.xml"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.6.4",
-    "@ctrl/eslint-config-biome": "2.4.1",
-    "@ctrl/eslint-config-react-biome": "2.1.0",
+    "@biomejs/biome": "1.7.1",
+    "@ctrl/eslint-config-biome": "2.6.7",
+    "@ctrl/eslint-config-react-biome": "2.2.0",
     "@sindresorhus/tsconfig": "5.0.0",
-    "@types/node": "20.12.6",
-    "@vitest/coverage-v8": "1.4.0",
+    "@types/node": "20.12.7",
+    "@vitest/coverage-v8": "1.5.2",
     "eslint": "8.57.0",
-    "typescript": "5.4.4",
-    "vitest": "1.4.0"
+    "typescript": "5.4.5",
+    "vitest": "1.5.2"
   },
   "workspaces": ["demo"],
   "publishConfig": {

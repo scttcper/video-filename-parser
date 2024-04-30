@@ -29,20 +29,20 @@ export function parseAudioChannels(title: string): { channels?: Channels; source
 
   const { groups } = channelResult;
 
-  if (groups['eight']) {
-    return { channels: Channels.SEVEN, source: groups['eight'] };
+  if (groups.eight) {
+    return { channels: Channels.SEVEN, source: groups.eight };
   }
 
-  if (groups['six']) {
-    return { channels: Channels.SIX, source: groups['six'] };
+  if (groups.six) {
+    return { channels: Channels.SIX, source: groups.six };
   }
 
-  if (groups['stereo']) {
-    return { channels: Channels.STEREO, source: groups['stereo'] };
+  if (groups.stereo) {
+    return { channels: Channels.STEREO, source: groups.stereo };
   }
 
-  if (groups['mono']) {
-    return { channels: Channels.MONO, source: groups['mono'] };
+  if (groups.mono) {
+    return { channels: Channels.MONO, source: groups.mono };
   }
 
   return {};
