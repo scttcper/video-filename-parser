@@ -55,7 +55,7 @@ export function parseQualityModifyers(title: string): Revision {
   }
 
   let realCount = 0;
-  const realGlobalExp = RegExp(realRegex.source, 'g');
+  const realGlobalExp = new RegExp(realRegex.source, 'g');
   // use non normalized title to prevent insensitive REAL matching
   while (realGlobalExp.exec(title)) {
     realCount += 1;

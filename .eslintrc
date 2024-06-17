@@ -1,7 +1,0 @@
-{
-  "root": true,
-  "env": {
-    "node": true
-  },
-  "extends": ["@ctrl/eslint-config-biome", "@ctrl/eslint-config-react-biome"]
-}

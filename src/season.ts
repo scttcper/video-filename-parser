@@ -305,7 +305,7 @@ export const completeRange = (arr: number[]): number[] => {
   }
 
   const count = last - first + 1;
-  return [...Array(count).keys()].map(k => k + first);
+  return [...new Array(count).keys()].map(k => k + first);
 };
 
 const indexOfEnd = (str1: string, str2: string): number => {
@@ -385,7 +385,7 @@ export function parseMatchCollection(
       }
 
       const count = last - first + 1;
-      result.episodeNumbers = [...Array(count).keys()].map(k => k + first);
+      result.episodeNumbers = [...new Array(count).keys()].map(k => k + first);
     }
 
     if (absoluteEpisodeCaptures.length > 0) {
@@ -408,7 +408,7 @@ export function parseMatchCollection(
       } else {
         const count = last - first + 1;
         // AbsoluteEpisodeNumbers in radarr
-        result.episodeNumbers = [...Array(Math.floor(count)).keys()].map(
+        result.episodeNumbers = [...new Array(Math.floor(count)).keys()].map(
           k => k + Math.floor(first),
         );
 

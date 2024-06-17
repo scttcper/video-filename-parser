@@ -33,7 +33,7 @@ jspm_packages
 !.vscode/settings.json
 
 # build
-build
+build/
 docs
 dist
 yarn.lock
