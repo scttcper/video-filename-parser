@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-// eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
-// @ts-ignore
 import { filenameParse } from '../../src/index.js';
 
 const root = createRoot(document.getElementById('root')!);

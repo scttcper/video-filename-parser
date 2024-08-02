@@ -20,7 +20,7 @@
     "lint:eslint": "eslint .",
     "lint:fix": "pnpm run '/^(lint:biome|lint:eslint):fix$/'",
     "lint:eslint:fix": "eslint . --fix",
-    "lint:biome:fix": "biome check . --apply",
+    "lint:biome:fix": "biome check . --write",
     "prepare": "npm run build",
     "build": "tsc",
     "test": "vitest run --no-isolate",
@@ -28,15 +28,15 @@
     "test:ci": "vitest run --no-isolate --coverage --reporter=default --reporter=junit --outputFile=./junit.xml"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.8.1",
-    "@ctrl/eslint-config-biome": "3.0.3",
-    "@eslint/compat": "1.1.0",
-    "@sindresorhus/tsconfig": "5.0.0",
-    "@types/node": "20.14.2",
-    "@vitest/coverage-v8": "1.6.0",
-    "eslint": "9.5.0",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "@biomejs/biome": "1.8.3",
+    "@ctrl/eslint-config-biome": "4.1.0",
+    "@eslint/compat": "1.1.1",
+    "@sindresorhus/tsconfig": "6.0.0",
+    "@types/node": "22.1.0",
+    "@vitest/coverage-v8": "2.0.5",
+    "eslint": "9.8.0",
+    "typescript": "5.5.4",
+    "vitest": "2.0.5"
   },
   "workspaces": ["demo"],
   "publishConfig": {
