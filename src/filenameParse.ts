@@ -1,16 +1,16 @@
-import { Channels, parseAudioChannels } from './audioChannels.js';
-import { AudioCodec, parseAudioCodec } from './audioCodec.js';
+import { type Channels, parseAudioChannels } from './audioChannels.js';
+import { type AudioCodec, parseAudioCodec } from './audioCodec.js';
 import { isComplete } from './complete.js';
-import { Edition, parseEdition } from './edition.js';
+import { type Edition, parseEdition } from './edition.js';
 import { parseGroup } from './group.js';
-import { isMulti, Language, parseLanguage } from './language.js';
-import { parseQuality, Revision } from './quality.js';
-import { Resolution } from './resolution.js';
-import { parseSeason, Season } from './season.js';
-import { Source } from './source.js';
+import { isMulti, type Language, parseLanguage } from './language.js';
+import { parseQuality, type Revision } from './quality.js';
+import type { Resolution } from './resolution.js';
+import { parseSeason, type Season } from './season.js';
+import type { Source } from './source.js';
 import { parseTitleAndYear } from './title.js';
 import { removeEmpty } from './utils.js';
-import { parseVideoCodec, VideoCodec } from './videoCodec.js';
+import { parseVideoCodec, type VideoCodec } from './videoCodec.js';
 
 type ParsedTvInfo = Omit<Season, 'releaseTitle' | 'seriesTitle'>;
 

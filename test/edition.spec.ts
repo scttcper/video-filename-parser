@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 
-import { Edition, parseEdition } from '../src/index.js';
+import { type Edition, parseEdition } from '../src/index.js';
 
 const cases: [string, Partial<Edition>][] = [
   ['Prometheus 2012 Directors Cut', { directors: true }],
