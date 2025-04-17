@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import type React from 'react';
+import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import { filenameParse } from '../../src/index.js';
@@ -12,62 +13,64 @@ function Demo() {
   const [input, setInput] = useState(demoDefault);
   const [isTvShow, setIsTvShow] = useState(false);
 
-  const handleChange = (event: any) => {
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(event.target.value);
     setResult(filenameParse(event.target.value, isTvShow));
   };
 
-  const handleToggleTvShow = (event: any) => {
+  const handleToggleTvShow = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsTvShow(event.target.checked);
     setResult(filenameParse(input, event.target.checked));
   };
 
   return (
-    <div className="py-6">
-      <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200 mb-3">Demo</h3>
-      <div className="mt-2 text-sm leading-5 text-gray-600">
+    <>
+      <h2 className="text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+        Try it out!
+      </h2>
+      <p className="mt-4 text-center text-lg text-gray-300">
+        Enter a video release name below to see the parsed metadata.
+      </p>
+      <div className="mx-auto mt-10">
         <div className="mb-4">
-          <label
-            htmlFor="title"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-          >
-            Title of release
+          <label htmlFor="title" className="sr-only">
+            Release Name
           </label>
-          <div className="mb-2">
-            <textarea
-              id="title"
-              name="title"
-              className="shadow-xs block w-full focus:ring-blue-500 focus:border-blue-500 sm:text-sm border-gray-300 dark:text-gray-200 dark:border-gray-700 dark:bg-gray-900 rounded-md"
-              placeholder="Title"
-              defaultValue={demoDefault}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center">
-              <input
-                id="tvshow"
-                name="tvshow"
-                type="checkbox"
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded-sm"
-                onChange={handleToggleTvShow}
-              />
-              <label
-                htmlFor="tvshow"
-                className="ml-2 block text-sm text-gray-900 dark:text-gray-300"
-              >
-                Parse as TV Show
-              </label>
-            </div>
-          </div>
+          <textarea
+            id="title"
+            name="title"
+            rows={3}
+            className="min-w-0 flex-auto rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-white sm:text-sm/6 w-full"
+            placeholder="Enter release name"
+            value={input}
+            onChange={handleChange}
+          />
         </div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Output
-        </label>
-        <pre className="bg-gray-100 dark:bg-gray-900 rounded-lg p-2 md:py-4 text-gray-900 dark:text-gray-300 text-xs">
-          <code>{JSON.stringify(result, undefined, 2)}</code>
-        </pre>
+
+        <div className="flex items-center justify-start mb-6">
+          <input
+            id="tvshow"
+            name="tvshow"
+            type="checkbox"
+            className="h-4 w-4 rounded border-gray-300 bg-white/10 text-indigo-500 focus:ring-indigo-500 focus:ring-offset-gray-900 cursor-pointer"
+            checked={isTvShow}
+            onChange={handleToggleTvShow}
+          />
+          <label
+            htmlFor="tvshow"
+            className="ml-3 block text-sm leading-6 text-gray-300 cursor-pointer select-none"
+          >
+            Parse as TV Show
+          </label>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium leading-6 text-gray-300 mb-2">Output</label>
+          <pre className="bg-white/10 rounded-lg p-4 text-gray-300 text-xs overflow-x-auto">
+            <code>{JSON.stringify(result, undefined, 2)}</code>
+          </pre>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

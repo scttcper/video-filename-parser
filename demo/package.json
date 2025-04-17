@@ -9,11 +9,9 @@
     "serve": "vite preview"
   },
   "devDependencies": {
-    "@tailwindcss/forms": "0.5.10",
-    "@tailwindcss/postcss": "^4.1.4",
+    "@tailwindcss/vite": "4.1.4",
     "@types/react": "19.1.2",
     "@types/react-dom": "19.1.2",
-    "postcss": "8.5.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "tailwindcss": "4.1.4",

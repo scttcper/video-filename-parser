@@ -1,6 +1,7 @@
 {
   "extends": "@sindresorhus/tsconfig",
   "compilerOptions": {
+    "jsx": "react-jsx",
     "noPropertyAccessFromIndexSignature": false,
     "noEmit": true
   },
