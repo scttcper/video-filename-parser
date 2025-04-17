@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: wyvox/action-setup-pnpm@v3
-        with: { node-version: 22, pnpm-version: 9 }
+        with: { node-version: 22 }
 
       - name: lint
         run: pnpm run lint
@@ -21,8 +21,9 @@ jobs:
       - name: test
         run: pnpm run test:ci
 
+      # https://github.com/codecov/codecov-action
       - name: coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -41,7 +42,7 @@ jobs:
           fetch-depth: 0
 
       - uses: wyvox/action-setup-pnpm@v3
-        with: { node-version: 22, pnpm-version: 9 }
+        with: { node-version: 22 }
 
       - name: release
         run: npx semantic-release

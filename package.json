@@ -29,14 +29,14 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@ctrl/eslint-config-biome": "4.2.17",
-    "@eslint/compat": "1.2.4",
+    "@ctrl/eslint-config-biome": "4.3.5",
+    "@eslint/compat": "1.2.8",
     "@sindresorhus/tsconfig": "7.0.0",
-    "@types/node": "22.10.2",
-    "@vitest/coverage-v8": "2.1.8",
-    "eslint": "9.17.0",
-    "typescript": "5.7.2",
-    "vitest": "2.1.8"
+    "@types/node": "22.14.1",
+    "@vitest/coverage-v8": "3.1.1",
+    "eslint": "9.24.0",
+    "typescript": "5.8.3",
+    "vitest": "3.1.1"
   },
   "workspaces": ["demo"],
   "publishConfig": {
@@ -48,5 +48,6 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "packageManager": "pnpm@10.8.0"
 }
