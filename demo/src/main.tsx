@@ -1,6 +1,8 @@
 import type React from 'react';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import { filenameParse } from '../../src/index.js';
 
@@ -66,9 +68,18 @@ function Demo() {
 
         <div>
           <label className="block text-sm font-medium leading-6 text-gray-300 mb-2">Output</label>
-          <pre className="bg-white/10 rounded-lg p-4 text-gray-300 text-xs overflow-x-auto">
-            <code>{JSON.stringify(result, undefined, 2)}</code>
-          </pre>
+          <SyntaxHighlighter
+            language="json"
+            style={atomDark}
+            customStyle={{
+              borderRadius: '0.5rem',
+              background: 'rgba(255, 255, 255, 0.1)',
+              padding: '1rem',
+              fontSize: '0.75rem',
+            }}
+          >
+            {JSON.stringify(result, undefined, 2)}
+          </SyntaxHighlighter>
         </div>
       </div>
     </>
