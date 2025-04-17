@@ -37,7 +37,7 @@ function Demo() {
             <textarea
               id="title"
               name="title"
-              className="shadow-sm block w-full focus:ring-blue-500 focus:border-blue-500 sm:text-sm border-gray-300 dark:text-gray-200 dark:border-gray-700 dark:bg-gray-900 rounded-md"
+              className="shadow-xs block w-full focus:ring-blue-500 focus:border-blue-500 sm:text-sm border-gray-300 dark:text-gray-200 dark:border-gray-700 dark:bg-gray-900 rounded-md"
               placeholder="Title"
               defaultValue={demoDefault}
               onChange={handleChange}
@@ -49,7 +49,7 @@ function Demo() {
                 id="tvshow"
                 name="tvshow"
                 type="checkbox"
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded-sm"
                 onChange={handleToggleTvShow}
               />
               <label
