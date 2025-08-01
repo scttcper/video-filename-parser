@@ -2,7 +2,7 @@
 
 > A simple file / release name parser based heavily on radarr's movie parsing
 
-__DEMO__: https://video-filename-parser.vercel.app  
+**DEMO**: https://video-filename-parser.vercel.app
 
 ## Install
 
@@ -12,9 +12,10 @@ npm install @ctrl/video-filename-parser
 
 ## Use
 
-##### parameters:  
+##### parameters:
+
 **title** string - The title or filename to be parsed  
-**isTv** boolean - parsed as a tv show (default false)  
+**isTv** boolean - parsed as a tv show (default false)
 
 ```ts
 import { filenameParse } from '@ctrl/video-filename-parser';
@@ -78,6 +79,7 @@ console.log(filenameParse('The Office US S09E06 HDTV XviD-AFG', true));
 ```
 
 ## See also
+
 [Radarr movie parser](https://github.com/Radarr/Radarr/blob/01ad015b1433ce792c24f019f701f3a8a59c4b2c/src/NzbDrone.Core/Parser/Parser.cs)  
 [sonarr tv parser](https://github.com/Sonarr/Sonarr/blob/phantom-develop/src/NzbDrone.Core/Parser/Parser.cs)  
 [guessit](https://github.com/guessit-io/guessit)

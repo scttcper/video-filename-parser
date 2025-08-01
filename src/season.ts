@@ -209,7 +209,6 @@ const sixDigitAirDateMatchExp =
 export interface Season {
   releaseTitle: string;
   seriesTitle: string;
-  // seriesTitleInfo: any;
   seasons: number[];
   episodeNumbers: number[];
   airDate: Date | null;
@@ -266,7 +265,6 @@ export function parseSeason(title: string): Season | null {
       return {
         releaseTitle: title,
         seriesTitle: result.seriesName,
-        // seriesTitleInfo: 0,
         seasons: result.seasonNumbers ?? [],
         episodeNumbers: result.episodeNumbers ?? [],
         airDate: result.airDate ?? null,
@@ -305,7 +303,7 @@ export const completeRange = (arr: number[]): number[] => {
   }
 
   const count = last - first + 1;
-  return [...new Array(count).keys()].map(k => k + first);
+  return [...Array.from({ length: count }).keys()].map(k => k + first);
 };
 
 const indexOfEnd = (str1: string, str2: string): number => {
@@ -385,7 +383,7 @@ export function parseMatchCollection(
       }
 
       const count = last - first + 1;
-      result.episodeNumbers = [...new Array(count).keys()].map(k => k + first);
+      result.episodeNumbers = [...Array.from({ length: count }).keys()].map(k => k + first);
     }
 
     if (absoluteEpisodeCaptures.length > 0) {
@@ -408,7 +406,7 @@ export function parseMatchCollection(
       } else {
         const count = last - first + 1;
         // AbsoluteEpisodeNumbers in radarr
-        result.episodeNumbers = [...new Array(Math.floor(count)).keys()].map(
+        result.episodeNumbers = [...Array.from({ length: Math.floor(count) }).keys()].map(
           k => k + Math.floor(first),
         );
 
@@ -483,7 +481,6 @@ export function parseMatchCollection(
   }
 
   result.seriesTitle = seriesName;
-  // TODO: seriesTitleInfo
 
   return result;
 }
