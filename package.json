@@ -22,7 +22,7 @@
   "scripts": {
     "demo:build": "pnpm run -r build",
     "demo:watch": "pnpm run -r dev",
-    "lint": "oxlint . && prettier --write . --log-level=error --experimental-cli",
+    "lint": "oxlint . && prettier --check . --log-level=error --experimental-cli",
     "lint:fix": "oxlint . --fix && prettier --write . --log-level=error --experimental-cli",
     "prepare": "npm run build",
     "build": "tsc",
