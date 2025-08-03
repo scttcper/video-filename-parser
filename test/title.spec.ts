@@ -83,6 +83,10 @@ const cases: [string, { title: string; year: string | null }][] = [
     'The.Outsiders.DC.German.1983.AC3.BDRip.XviD.INTERNAL-ARC',
     { title: 'The Outsiders', year: '1983' },
   ],
+  [
+    'The.Girl.in.the.Spiders.Web.2018.2160p.UHD.BluRay.x265-VALiS',
+    { title: 'The Girl in the Spiders Web', year: '2018' },
+  ],
 ];
 
 for (const [title, result] of cases) {

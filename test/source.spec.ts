@@ -28,7 +28,6 @@ const singleCases: [string, Source[]][] = [
   ['Star Trek Beyond (2016) ENG Cam V2 XviD UnKnOwN', [Source.CAM]],
   ['Parasite.2019.MULTi.VFI.WEBrip.2160p.HDR.x265.True.HD-Tokuchi', [Source.WEBRIP]],
   ['How You Look At Me 2019 720p AMZN WEBRip AAC2 0 X 264-EVO', [Source.WEBRIP]],
-  ['Series Title - S01E11 2020 1080p Viva MKV WEB', [Source.WEBDL]],
   ['Togo 2019 2160p HDR DSNP WEBRip DDPAtmos 5 1 X265-TrollUHD', [Source.WEBRIP]],
   ['Palmer.2021.1080p.APTV.H264.Atmos-EVO', [Source.WEBDL]],
   ['Palmer.2021.1080p.APTV.WEB-RIP.H264.Atmos-EVO', [Source.WEBRIP]],

@@ -26,9 +26,9 @@
     "lint:fix": "oxlint . --fix && prettier --write . --log-level=error --experimental-cli",
     "prepare": "npm run build",
     "build": "tsc",
-    "test": "vitest run --no-isolate",
-    "test:watch": "vitest --no-isolate",
-    "test:ci": "vitest run --no-isolate --coverage --reporter=default --reporter=junit --outputFile=./junit.xml"
+    "test": "vitest",
+    "test:watch": "vitest",
+    "test:ci": "vitest run --coverage --reporter=default --reporter=junit --outputFile=./junit.xml"
   },
   "devDependencies": {
     "@sindresorhus/tsconfig": "7.0.0",
