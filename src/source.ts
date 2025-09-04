@@ -4,7 +4,7 @@ export const webdlExp =
   /\b(?<webdl>WEB[-_. ]DL|HDRIP|WEBDL|WEB-DLMux|NF|APTV|NETFLIX|NetflixU?HD|DSNY|DSNP|HMAX|AMZN|AmazonHD|iTunesHD|MaxdomeHD|WebHD\b|[. ]WEB[. ](?:[xh]26[45]|DD5[. ]1)|\d+0p[. ]WEB[. ]|\b\s\/\sWEB\s\/\s\b|AMZN[. ]WEB[. ])\b/i;
 const webripExp = /\b(?<webrip>WebRip|Web-Rip|WEBCap|WEBMux)\b/i;
 const hdtvExp = /\b(?<hdtv>HDTV)\b/i;
-const bdripExp = /\b(?<bdrip>BDRip|UHDBDRip)\b/i;
+const bdripExp = /\b(?<bdrip>BDRip|UHDBDRip|HD[-_. ]?DVDRip)\b/i;
 const brripExp = /\b(?<brrip>BRRip)\b/i;
 const dvdrExp = /\b(?<dvdr>DVD-R|DVDR)\b/i;
 const dvdExp = /\b(?<dvd>DVD9?|DVDRip|NTSC|PAL|xvidvd|DvDivX)\b/i;

@@ -239,6 +239,7 @@ const bluray1080Cases: [string, boolean][] = [
   ['Movie.Title.2014.German.OPUS.DL.1080p.UHDBDRiP.HDR.AV1-GROUP', false],
   ['Movie.Title.1999.German.DL.1080p.HDR.UHDBDRip.AV1-GROUP', false],
   ['Movie.Title.1993.Uncut.German.DL.1080p.HDR.UHDBDRip.h265-GROUP', false],
+  ['Movie.Title.2005.1080p.HDDVDRip.x264', false],
 ];
 for (const [title, proper] of bluray1080Cases) {
   it(`parse bluray 1080p quality "${title}"`, () => {
