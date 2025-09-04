@@ -3,7 +3,8 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "noPropertyAccessFromIndexSignature": false,
-    "noEmit": true
+    "noEmit": true,
+    "erasableSyntaxOnly": false
   },
   "include": ["./src"]
 }
