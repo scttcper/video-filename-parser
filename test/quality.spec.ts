@@ -235,6 +235,10 @@ const bluray1080Cases: [string, boolean][] = [
     'Opeth.Garden.Of.The.Titans.Live.At.Red.Rocks.Amphitheatre.2017.1080p.MBluRay.x264-TREBLE.mkv',
     false,
   ],
+  ['Movie.Title.2019.German.DL.1080p.HDR.UHDBDRip.AV1-GROUP', false],
+  ['Movie.Title.2014.German.OPUS.DL.1080p.UHDBDRiP.HDR.AV1-GROUP', false],
+  ['Movie.Title.1999.German.DL.1080p.HDR.UHDBDRip.AV1-GROUP', false],
+  ['Movie.Title.1993.Uncut.German.DL.1080p.HDR.UHDBDRip.h265-GROUP', false],
 ];
 for (const [title, proper] of bluray1080Cases) {
   it(`parse bluray 1080p quality "${title}"`, () => {
@@ -286,6 +290,20 @@ const remux2160pQuality: [string][] = [
   ['Movie.Name.2020.German.UHDBD.2160p.HDR10.HEVC.EAC3.DL.Remux-pmHD.mkv'],
   ['Movie Name (2021) [Remux-2160p x265 HDR 10-BIT DTS-HD MA 7.1]-FraMeSToR.mkv'],
 ];
+const bluray2160Cases: [string][] = [
+  ['Movie.Title.2014.2160p.UHD.BluRay.X265-IAMABLE.mkv'],
+  ['Movie.Title.1956.German.DL.2160p.HDR.UHDBDRip.h266-GROUP'],
+  ['Movie.Title.2021.4K.HDR.2160P.UHDBDRip.HEVC-10bit.GROUP'],
+];
+for (const [title] of bluray2160Cases) {
+  it(`parse bluray 2160p quality "${title}"`, () => {
+    const quality = parseQuality(title);
+    expect(quality.sources[0]).toBe(Source.BLURAY);
+    expect(quality.resolution).toBe(Resolution.R2160P);
+    expect(quality.modifier).toBe(null);
+  });
+}
+
 for (const [title] of remux2160pQuality) {
   it(`parse bluray 2160P remux quality "${title}"`, () => {
     const quality = parseQuality(title);
