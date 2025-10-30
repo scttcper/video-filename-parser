@@ -4,5 +4,5 @@
     "node": true
   },
   "plugins": ["react", "unicorn", "typescript", "oxc", "import"],
-  "extends": ["@ctrl/oxlint-config"]
+  "extends": ["./node_modules/@ctrl/oxlint-config/.oxlintrc.json"]
 }
