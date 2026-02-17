@@ -34,7 +34,8 @@
     "prepare": "pnpm run build",
     "build": "tsc",
     "test": "vitest run",
-    "test:watch": "vitest watch"
+    "test:watch": "vitest watch",
+    "bench": "vitest bench ./test/bench.bench.ts"
   },
   "devDependencies": {
     "@ctrl/oxlint-config": "1.4.0",
