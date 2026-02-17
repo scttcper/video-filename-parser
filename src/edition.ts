@@ -56,8 +56,8 @@ export interface Edition {
   bonusContent?: boolean;
 }
 
-export function parseEdition(title: string): Edition {
-  const parsedTitle = parseTitleAndYear(title).title;
+export function parseEdition(title: string, parsedTitle?: string): Edition {
+  parsedTitle ??= parseTitleAndYear(title).title;
   const withoutTitle = title.replace('.', ' ').replace(parsedTitle, '').toLowerCase();
 
   const result: Edition = {

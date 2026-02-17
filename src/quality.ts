@@ -4,6 +4,7 @@ import { parseVideoCodec, VideoCodec } from './videoCodec.js';
 
 const properRegex = /\b(?<proper>proper|repack|rerip)\b/i;
 const realRegex = /\b(?<real>REAL)\b/; // not insensitive
+const realGlobalExp = new RegExp(realRegex.source, 'g');
 const versionExp = /(?<version>v\d\b|\[v\d\])/i;
 
 const remuxExp = /\b(?<remux>(BD|UHD)?Remux)\b/i;
@@ -55,7 +56,6 @@ export function parseQualityModifyers(title: string): Revision {
   }
 
   let realCount = 0;
-  const realGlobalExp = new RegExp(realRegex.source, 'g');
   // use non normalized title to prevent insensitive REAL matching
   while (realGlobalExp.test(title)) {
     realCount += 1;
@@ -78,7 +78,7 @@ export function parseQuality(title: string): QualityModel {
   const revision = parseQualityModifyers(title);
   const { resolution } = parseResolution(normalizedTitle);
   const sourceGroups = parseSourceGroups(normalizedTitle);
-  const source = parseSource(normalizedTitle);
+  const source = parseSource(normalizedTitle, sourceGroups);
   const { codec } = parseVideoCodec(title);
 
   const result: QualityModel = {

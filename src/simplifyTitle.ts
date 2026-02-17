@@ -1,6 +1,6 @@
 import { Language } from './language.js';
 import { webdlExp } from './source.js';
-import { parseVideoCodec } from './videoCodec.js';
+import { codecExp } from './videoCodec.js';
 
 const simpleTitleRegex =
   /\s*(?:480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|HVEC|[xh][\W_]?26[45]|DD\W?5\W1|[<>?*:|]|848x480|1280x720|1920x1080)((8|10)b(it))?/i;
@@ -11,27 +11,20 @@ const cleanTorrentSuffixRegex = /\[(?:ettv|rartv|rarbg|cttv)\]$/i;
 const commonSourcesRegex =
   /\b(Bluray|(dvdr?|BD)rip|HDTV|HDRip|TS|R5|CAM|SCR|(WEB|DVD)?.?SCREENER|DiVX|xvid|web-?dl)\b/i;
 
+// Hoisted global variants (avoid re-creating RegExp on every call)
+const commonSourcesGlobalExp = new RegExp(commonSourcesRegex.source, 'ig');
+const codecGlobalExp = new RegExp(codecExp.source, 'ig');
+
 export function simplifyTitle(title: string): string {
   let simpleTitle = title.replace(simpleTitleRegex, '');
   simpleTitle = simpleTitle.replace(websitePrefixRegex, '');
   simpleTitle = simpleTitle.replace(cleanTorrentPrefixRegex, '');
   simpleTitle = simpleTitle.replace(cleanTorrentSuffixRegex, '');
-  simpleTitle = simpleTitle.replace(new RegExp(commonSourcesRegex, 'ig'), '');
+  simpleTitle = simpleTitle.replace(commonSourcesGlobalExp, '');
   simpleTitle = simpleTitle.replace(webdlExp, '');
 
-  // allow filtering of up to two codecs.
-  // maybe parseVideoCodec should be an array
-  const { source: videoCodec1 } = parseVideoCodec(simpleTitle);
-
-  if (videoCodec1) {
-    simpleTitle = simpleTitle.replace(videoCodec1, '');
-  }
-
-  const { source: videoCodec2 } = parseVideoCodec(simpleTitle);
-
-  if (videoCodec2) {
-    simpleTitle = simpleTitle.replace(videoCodec2, '');
-  }
+  // Single-pass removal of up to all codec mentions (replaces two parseVideoCodec calls)
+  simpleTitle = simpleTitle.replace(codecGlobalExp, '');
 
   return simpleTitle.trim();
 }
@@ -42,6 +35,15 @@ const editionExp =
 const languageExp = /\b(TRUE.?FRENCH|videomann|SUBFRENCH|PLDUB|MULTI)/i;
 const sceneGarbageExp = /\b(PROPER|REAL|READ.NFO)/;
 
+// Hoisted global variants
+const sceneGarbageGlobalExp = new RegExp(sceneGarbageExp.source, 'ig');
+
+// Precomputed combined regex for all language names (replaces loop creating ~45 regexes per call)
+const allLanguagesGlobalExp = new RegExp(
+  `\\b(${Object.values(Language).map(l => l.toUpperCase()).join('|')})`,
+  'g',
+);
+
 export function releaseTitleCleaner(title: string): string | null {
   if (!title || title.length === 0 || title === '(') {
     return null;
@@ -49,15 +51,14 @@ export function releaseTitleCleaner(title: string): string | null {
 
   let trimmedTitle = title.replace('_', ' ');
   trimmedTitle = trimmedTitle.replace(requestInfoRegex, '').trim();
-  trimmedTitle = trimmedTitle.replace(new RegExp(commonSourcesRegex, 'ig'), '').trim();
+  trimmedTitle = trimmedTitle.replace(commonSourcesGlobalExp, '').trim();
   trimmedTitle = trimmedTitle.replace(webdlExp, '').trim();
   trimmedTitle = trimmedTitle.replace(editionExp, '').trim();
   trimmedTitle = trimmedTitle.replace(languageExp, '').trim();
-  trimmedTitle = trimmedTitle.replace(new RegExp(sceneGarbageExp, 'ig'), '').trim();
+  trimmedTitle = trimmedTitle.replace(sceneGarbageGlobalExp, '').trim();
 
-  for (const lang of Object.values(Language)) {
-    trimmedTitle = trimmedTitle.replace(new RegExp(`\\b${lang.toUpperCase()}`), '').trim();
-  }
+  // Single-pass removal of all language names (replaces loop of ~45 new RegExp() calls)
+  trimmedTitle = trimmedTitle.replace(allLanguagesGlobalExp, '').trim();
 
   // Look for gap formed by removing items
   trimmedTitle = trimmedTitle.split('  ')[0]!;

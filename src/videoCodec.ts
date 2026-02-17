@@ -9,7 +9,7 @@ const divxExp = /(?<divx>divx)/i;
 const hevcExp = /(?<hevc>HEVC)/i;
 const dvdrExp = /(?<dvdr>DVDR)\b/i;
 
-const codecExp = new RegExp(
+export const codecExp = new RegExp(
   [
     x265Exp.source,
     h265Exp.source,

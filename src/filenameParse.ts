@@ -39,21 +39,24 @@ export type ParsedFilename = ParsedMovie | ParsedShow;
  * @param isTV
  */
 export function filenameParse(name: string, isTv = false): ParsedFilename {
+  // Compute once and share with sub-parsers to avoid 3 redundant calls
+  const titleAndYear = parseTitleAndYear(name);
+  const parsedTitle = titleAndYear.title;
+
   let title: ParsedFilename['title'] = '';
   let year: ParsedFilename['year'] = null;
 
   if (!isTv) {
-    const titleAndYear = parseTitleAndYear(name);
     title = titleAndYear.title;
     year = titleAndYear.year;
   }
 
-  const edition = parseEdition(name);
+  const edition = parseEdition(name, parsedTitle);
   const { codec: videoCodec } = parseVideoCodec(name);
   const { codec: audioCodec } = parseAudioCodec(name);
   const { channels: audioChannels } = parseAudioChannels(name);
-  const group = parseGroup(name);
-  const languages = parseLanguage(name);
+  const group = parseGroup(name, parsedTitle);
+  const languages = parseLanguage(name, parsedTitle);
   const quality = parseQuality(name);
   const multi = isMulti(name);
   const complete = isComplete(name);

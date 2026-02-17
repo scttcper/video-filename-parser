@@ -10,10 +10,11 @@ const releaseGroupRegexExp =
 const animeReleaseGroupExp = /^(?:\[(?<subgroup>(?!\s).+?(?<!\s))\](?:_|-|\s|\.)?)/i;
 const exceptionReleaseGroupRegex =
   /(\[)?(?<releasegroup>(Joy|YIFY|YTS.(MX|LT|AG)|FreetheFish|VH-PROD|FTW-HS|DX-TV|Blu-bits|afm72|Anna|Bandi|Ghost|Kappa|MONOLITH|Qman|RZeroX|SAMPA|Silence|theincognito|D-Z0N3|t3nzin|Vyndros|HDO|DusIctv|DHD|SEV|CtrlHD|-ZR-|ADC|XZVN|RH|Kametsu|r00t|HONE))(\])?$/i;
+const globalReleaseGroupExp = new RegExp(releaseGroupRegexExp.source, 'ig');
 
-export function parseGroup(title: string): string | null {
+export function parseGroup(title: string, parsedTitle?: string): string | null {
   const nowebsiteTitle = title.replace(websitePrefixExp, '');
-  let { title: releaseTitle } = parseTitleAndYear(nowebsiteTitle);
+  let releaseTitle = parsedTitle ?? parseTitleAndYear(nowebsiteTitle).title;
   releaseTitle = releaseTitle.replace(/ /g, '.');
   let trimmed = nowebsiteTitle
     .replace(/ /g, '.')
@@ -37,7 +38,7 @@ export function parseGroup(title: string): string | null {
 
   trimmed = trimmed.replace(cleanReleaseGroupExp, '');
 
-  const globalReleaseGroupExp = new RegExp(releaseGroupRegexExp.source, 'ig');
+  globalReleaseGroupExp.lastIndex = 0;
   let result: RegExpExecArray | null;
   // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
   while ((result = globalReleaseGroupExp.exec(trimmed))) {

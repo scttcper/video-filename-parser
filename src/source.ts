@@ -82,8 +82,8 @@ export function parseSourceGroups(title: string): SourceGroups {
   };
 }
 
-export function parseSource(title: string): Source[] {
-  const groups = parseSourceGroups(title);
+export function parseSource(title: string, groups?: SourceGroups): Source[] {
+  groups ??= parseSourceGroups(title);
   const result: Source[] = [];
 
   if (!groups) {

@@ -46,8 +46,8 @@ export enum Language {
   Serbian = 'Serbian',
 }
 
-export function parseLanguage(title: string): Language[] {
-  const parsedTitle = parseTitleAndYear(title).title;
+export function parseLanguage(title: string, parsedTitle?: string): Language[] {
+  parsedTitle ??= parseTitleAndYear(title).title;
   const languageTitle = title.replace(/\./g, ' ').replace(parsedTitle, '').toLowerCase();
   const languages: Language[] = [];
 
