@@ -66,7 +66,7 @@ export function parseQualityModifyers(title: string): Revision {
   return result;
 }
 
-export function parseQuality(title: string): QualityModel {
+export function parseQuality(title: string, codec?: VideoCodec): QualityModel {
   const normalizedTitle = title
     .trim()
     .replace(/_/g, ' ')
@@ -76,10 +76,10 @@ export function parseQuality(title: string): QualityModel {
     .toLowerCase();
 
   const revision = parseQualityModifyers(title);
-  const { resolution } = parseResolution(normalizedTitle);
   const sourceGroups = parseSourceGroups(normalizedTitle);
   const source = parseSource(normalizedTitle, sourceGroups);
-  const { codec } = parseVideoCodec(title);
+  const { resolution } = parseResolution(normalizedTitle, source);
+  codec ??= parseVideoCodec(title).codec;
 
   const result: QualityModel = {
     sources: source,

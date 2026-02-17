@@ -57,7 +57,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
   const { channels: audioChannels } = parseAudioChannels(name);
   const group = parseGroup(name, parsedTitle);
   const languages = parseLanguage(name, parsedTitle);
-  const quality = parseQuality(name);
+  const quality = parseQuality(name, videoCodec);
   const multi = isMulti(name);
   const complete = isComplete(name);
 

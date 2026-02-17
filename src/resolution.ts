@@ -28,7 +28,10 @@ const resolutionExp = new RegExp(
   'i',
 );
 
-export function parseResolution(title: string): { resolution?: Resolution; source?: string } {
+export function parseResolution(
+  title: string,
+  precomputedSource?: Source[],
+): { resolution?: Resolution; source?: string } {
   const result = resolutionExp.exec(title);
 
   if (result?.groups) {
@@ -44,7 +47,7 @@ export function parseResolution(title: string): { resolution?: Resolution; sourc
 
   // Fallback to guessing from some sources
   // Make safe assumptions like dvdrip is probably 480p
-  const source = parseSource(title);
+  const source = precomputedSource ?? parseSource(title);
   if (source.includes(Source.DVD)) {
     return { resolution: Resolution.R480P };
   }
