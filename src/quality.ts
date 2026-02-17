@@ -47,7 +47,7 @@ export function parseQualityModifyers(title: string): Revision {
     // get numbers from version regex
     const digits = /\d/i.exec(versionResult.groups.version ?? '');
     if (digits) {
-      const value = parseInt(digits[0] ?? '', 10);
+      const value = Number.parseInt(digits[0] ?? '', 10);
       if (!Number.isNaN(value)) {
         result.version = value;
       }
@@ -57,7 +57,7 @@ export function parseQualityModifyers(title: string): Revision {
   let realCount = 0;
   const realGlobalExp = new RegExp(realRegex.source, 'g');
   // use non normalized title to prevent insensitive REAL matching
-  while (realGlobalExp.exec(title)) {
+  while (realGlobalExp.test(title)) {
     realCount += 1;
   }
 

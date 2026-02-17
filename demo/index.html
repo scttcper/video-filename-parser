@@ -1,15 +1,17 @@
 <!doctype html>
-<html lang="en" class="h-full">
+<html lang="en" class="min-h-full">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Video Filename Parser</title>
     <link rel="stylesheet" href="/src/style.css" />
   </head>
-  <body class="h-full bg-gradient-to-br from-gray-900 via-blue-950 to-indigo-950">
-    <div class="flex flex-col justify-center items-center min-h-full px-6 py-16 lg:px-8">
-      <div class="text-center max-w-4xl w-full mx-auto">
-        <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl mb-4">
+  <body
+    class="min-h-screen bg-gradient-to-br from-black via-slate-950 to-gray-900 bg-fixed bg-no-repeat"
+  >
+    <div class="flex min-h-screen flex-col items-center justify-center px-6 py-16 lg:px-8">
+      <div class="mx-auto w-full max-w-4xl text-center">
+        <h1 class="mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
           Video Filename Parser
         </h1>
         <p class="mt-4 text-lg leading-8 text-gray-300">Parse release names into metadata</p>
@@ -29,10 +31,10 @@
         </div>
       </div>
 
-      <div class="mt-12 max-w-2xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto mt-12 w-full max-w-2xl px-4 sm:px-6 lg:px-8">
         <div class="pt-6 text-white">
-          <h3 class="text-lg leading-6 font-medium mb-3">Install</h3>
-          <div class="mt-2 text-sm leading-5 text-gray-300 font-mono bg-white/10 p-3 rounded-md">
+          <h3 class="mb-3 text-lg leading-6 font-medium">Install</h3>
+          <div class="mt-2 rounded-md bg-white/10 p-3 font-mono text-sm leading-5 text-gray-300">
             <code>npm install @ctrl/video-filename-parser</code>
           </div>
         </div>

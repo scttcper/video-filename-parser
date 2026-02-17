@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 
 import { parseResolution, Resolution } from '../src/index.js';
 
-const cases: [string, Resolution?][] = [
+const cases: Array<[string, Resolution?]> = [
   ['Oceans.Thirteen.2007.iNTERNAL.720p.BluRay.x264-MHQ', Resolution.R720P],
   ['Rocketman 2019 2160p UHD BluRay x265-TERMiNAL', Resolution.R2160P],
   ['Alita Battle Angel 2019 1080p BluRay x264-SPARKS', Resolution.R1080P],
@@ -29,7 +29,7 @@ for (const [title, result] of cases) {
   });
 }
 
-const assumeCases: [string, Resolution][] = [
+const assumeCases: Array<[string, Resolution]> = [
   ['127.Hours.DVDSCR.NTSC.DVDR-GALAXY', Resolution.R480P],
   ['127.Hours.GERMAN.2010.DL.PAL.DVDR-OldsMan', Resolution.R480P],
   ['12.Angry.Men.1957.DvDivX-SMB', Resolution.R480P],

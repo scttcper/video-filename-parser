@@ -8,7 +8,7 @@ import {
   Source,
 } from '../src/index.js';
 
-const versionCases: [string, number][] = [
+const versionCases: Array<[string, number]> = [
   ['Chuck.S04E05.HDTV.XviD-LOL', 1],
   ['Gold.Rush.S04E05.Garnets.or.Gold.REAL.REAL.PROPER.HDTV.x264-W4F', 2],
   ['Chuck.S03E17.REAL.PROPER.720p.HDTV.x264-ORENJI-RP', 2],
@@ -33,7 +33,7 @@ for (const [title, result] of versionCases) {
   });
 }
 
-const realCases: [string, number][] = [
+const realCases: Array<[string, number]> = [
   ['Chuck.S04E05.HDTV.XviD-LOL', 0],
   ['Gold.Rush.S04E05.Garnets.or.Gold.REAL.REAL.PROPER.HDTV.x264-W4F', 2],
   ['Chuck.S03E17.REAL.PROPER.720p.HDTV.x264-ORENJI-RP', 1],
@@ -56,7 +56,7 @@ for (const [title, result] of realCases) {
   });
 }
 
-const webdl480pCases: [string, boolean][] = [
+const webdl480pCases: Array<[string, boolean]> = [
   ['Elementary.S01E10.The.Leviathan.480p.WEB-DL.x264-mSD', false],
   ['Glee.S04E10.Glee.Actually.480p.WEB-DL.x264-mSD', false],
   ['The.Big.Bang.Theory.S06E11.The.Santa.Simulation.480p.WEB-DL.x264-mSD', false],
@@ -72,7 +72,7 @@ for (const [title, proper] of webdl480pCases) {
   });
 }
 
-const webdl720pCases: [string, boolean][] = [
+const webdl720pCases: Array<[string, boolean]> = [
   ['Arrested.Development.S04E01.720p.WEB.AAC2.0.x264-NFRiP', false],
   ['Vanguard S01E04 Mexicos Death Train 720p WEB DL', false],
   ['Hawaii Five 0 S02E21 720p WEB DL DD5 1 H 264', false],
@@ -106,7 +106,7 @@ for (const [title, proper] of webdl720pCases) {
   });
 }
 
-const webdl1080pCases: [string, boolean][] = [
+const webdl1080pCases: Array<[string, boolean]> = [
   ['[HorribleSubs] Yowamushi Pedal - 32 [1080p]', false],
   ['Under the Dome S01E10 Let the Games Begin 1080p', false],
   ['Arrested.Development.S04E01.iNTERNAL.1080p.WEB.x264-QRUS', false],
@@ -151,7 +151,7 @@ for (const [title, proper] of webdl1080pCases) {
   });
 }
 
-const webrip1080pCases: [string, boolean][] = [
+const webrip1080pCases: Array<[string, boolean]> = [
   ['Movie.Name.S04E01.iNTERNAL.1080p.WEBRip.x264-QRUS', false],
   ['Movie.Name.1x04.ITA.1080p.WEBMux.x264-NovaRip', false],
   [
@@ -170,7 +170,7 @@ for (const [title, proper] of webrip1080pCases) {
   });
 }
 
-const webdl2160pCases: [string, boolean][] = [
+const webdl2160pCases: Array<[string, boolean]> = [
   ['CASANOVA S01E01.2160P AMZN WEB DD2.0 HI10P X264-TROLLUHD', false],
   ['JUST ADD MAGIC S01E01.2160P AMZN WEB DD2.0 X264-TROLLUHD', false],
   ['The.Man.In.The.High.Castle.S01E01.2160p.AMZN.WEBDL.DD2.0.Hi10p.X264-TrollUHD', false],
@@ -189,7 +189,7 @@ for (const [title, proper] of webdl2160pCases) {
   });
 }
 
-const bluray720Cases: [string, boolean][] = [
+const bluray720Cases: Array<[string, boolean]> = [
   ['WEEDS.S03E01-06.DUAL.Bluray.AC3.-HELLYWOOD.avi', false],
   ['Chuck - S01E03 - Come Fly With Me - 720p BluRay.mkv', false],
   ['Revolution.S01E02.Chained.Heat.[Bluray720p].mkv', false],
@@ -219,7 +219,7 @@ for (const [title, proper] of bluray720Cases) {
   });
 }
 
-const bluray1080Cases: [string, boolean][] = [
+const bluray1080Cases: Array<[string, boolean]> = [
   ['Chuck - S01E03 - Come Fly With Me - 1080p BluRay.mkv', false],
   ['Sons.Of.Anarchy.S02E13.1080p.BluRay.x264-AVCDVD', false],
   ['Revolution.S01E02.Chained.Heat.[Bluray1080p].mkv', false],
@@ -251,7 +251,7 @@ for (const [title, proper] of bluray1080Cases) {
   });
 }
 
-const bluray576pQuality: [string][] = [
+const bluray576pQuality: Array<[string]> = [
   ['Movie.Name.2004.576p.BDRip.x264-HANDJOB'],
   ['Hannibal.S01E05.576p.BluRay.DD5.1.x264-HiSD'],
 ];
@@ -264,7 +264,7 @@ for (const [title] of bluray576pQuality) {
   });
 }
 
-const remux1080pQuality: [string][] = [
+const remux1080pQuality: Array<[string]> = [
   ['Contract.to.Kill.2016.REMUX.1080p.BluRay.AVC.DTS-HD.MA.5.1-iFT'],
   ['27.Dresses.2008.REMUX.1080p.Bluray.AVC.DTS-HR.MA.5.1-LEGi0N'],
   ['27.Dresses.2008.BDREMUX.1080p.Bluray.AVC.DTS-HR.MA.5.1-LEGi0N'],
@@ -280,7 +280,7 @@ for (const [title] of remux1080pQuality) {
   });
 }
 
-const remux2160pQuality: [string][] = [
+const remux2160pQuality: Array<[string]> = [
   ['Contract.to.Kill.2016.REMUX.2160p.BluRay.AVC.DTS-HD.MA.5.1-iFT'],
   ['27.Dresses.2008.REMUX.2160p.Bluray.AVC.DTS-HR.MA.5.1-LEGi0N'],
   ['Los Vengadores (2012) [UHDRemux HDR HEVC 2160p][Dolby Atmos TrueHD 7 1 Eng DTS 5 1 Esp]'],
@@ -291,7 +291,7 @@ const remux2160pQuality: [string][] = [
   ['Movie.Name.2020.German.UHDBD.2160p.HDR10.HEVC.EAC3.DL.Remux-pmHD.mkv'],
   ['Movie Name (2021) [Remux-2160p x265 HDR 10-BIT DTS-HD MA 7.1]-FraMeSToR.mkv'],
 ];
-const bluray2160Cases: [string][] = [
+const bluray2160Cases: Array<[string]> = [
   ['Movie.Title.2014.2160p.UHD.BluRay.X265-IAMABLE.mkv'],
   ['Movie.Title.1956.German.DL.2160p.HDR.UHDBDRip.h266-GROUP'],
   ['Movie.Title.2021.4K.HDR.2160P.UHDBDRip.HEVC-10bit.GROUP'],
@@ -314,7 +314,7 @@ for (const [title] of remux2160pQuality) {
   });
 }
 
-const hdtv720pCases: [string, boolean][] = [
+const hdtv720pCases: Array<[string, boolean]> = [
   ['Dexter - S01E01 - Title [HDTV]', false],
   ['Dexter - S01E01 - Title [HDTV-720p]', false],
   ['Pawn Stars S04E87 REPACK 720p HDTV x264 aAF', true],
@@ -336,7 +336,7 @@ for (const [title, proper] of hdtv720pCases) {
   });
 }
 
-const brdisk1080pCases: [string][] = [
+const brdisk1080pCases: Array<[string]> = [
   ['G.I.Joe.Retaliation.2013.BDISO'],
   ['Star.Wars.Episode.III.Revenge.Of.The.Sith.2005.MULTi.COMPLETE.BLURAY-VLS'],
   ['The Dark Knight Rises (2012) Bluray ISO [USENET-TURK]'],
@@ -354,7 +354,7 @@ for (const [title] of brdisk1080pCases) {
   });
 }
 
-const rawHdCases: [string][] = [['Stripes (1981) 1080i HDTV DD5.1 MPEG2-TrollHD']];
+const rawHdCases: Array<[string]> = [['Stripes (1981) 1080i HDTV DD5.1 MPEG2-TrollHD']];
 for (const [title] of rawHdCases) {
   it(`parse brdisk 1080p RAWHD quality "${title}"`, () => {
     const quality = parseQuality(title);
@@ -364,7 +364,7 @@ for (const [title] of rawHdCases) {
   });
 }
 
-const tsCases: [string, boolean][] = [
+const tsCases: Array<[string, boolean]> = [
   ['Despicable.Me.3.2017.720p.TSRip.x264.AAC-Ozlem', false],
   ['The Equalizer 2 2018 720p HD-TS x264-24HD', false],
 ];
@@ -378,7 +378,7 @@ for (const [title, proper] of tsCases) {
   });
 }
 
-const bdripCases: [string][] = [
+const bdripCases: Array<[string]> = [
   ['Schindlers.List.1993.REMASTERED.iNTERNAL.UHD.BDRip.x264-LiBRARiANS'],
   ['The.Big.Lebowski.1998.REMASTERED.iNTERNAL.UHD.BDRip.x264-LiBRARiANS'],
   ['Black.Hawk.Down.2001.EXTENDED.PL.UHD.BDRip.x264.INTERNAL-FLAME'],

@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 
 import { AudioCodec, parseAudioCodec } from '../src/audioCodec.js';
 
-const audioCodecCases: [string, ReturnType<typeof parseAudioCodec>][] = [
+const audioCodecCases: Array<[string, ReturnType<typeof parseAudioCodec>]> = [
   [
     'Hannibal 2001 4K UHD Dolby Vision MP4 DD+5 1 H265-d3g',
     { codec: AudioCodec.DOLBY, source: 'Dolby' },

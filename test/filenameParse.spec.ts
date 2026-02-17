@@ -3,7 +3,7 @@ import { expect, it } from 'vitest';
 import { AudioCodec } from '../src/audioCodec.js';
 import { filenameParse, Language, Resolution, Source, VideoCodec } from '../src/index.js';
 
-const movieCases: [string, any][] = [
+const movieCases: Array<[string, any]> = [
   [
     'Whats.Eating.Gilbert.Grape.1993.720p.BluRay.x264-SiNNERS',
     {
@@ -106,7 +106,7 @@ for (const [title, result] of movieCases) {
   });
 }
 
-const tvCases: [string, any][] = [
+const tvCases: Array<[string, any]> = [
   [
     'Its Always Sunny in Philadelphia S14E04 720p WEB H264-METCON',
     {
@@ -129,7 +129,7 @@ for (const [title, result] of tvCases) {
   });
 }
 
-const dailyTvCases: [string, any][] = [
+const dailyTvCases: Array<[string, any]> = [
   [
     'NFL 2019 10 06 Chicago Bears vs Oakland Raiders Highlights 720p HEVC x265-MeGusta',
     {

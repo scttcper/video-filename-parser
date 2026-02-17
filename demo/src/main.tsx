@@ -1,5 +1,4 @@
-import type React from 'react';
-import { useState } from 'react';
+import { type default as React, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -27,13 +26,10 @@ function Demo() {
 
   return (
     <>
-      <h2 className="text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-        Try it out!
-      </h2>
-      <p className="mt-4 text-center text-lg text-gray-300">
+      <h3 className="mb-3 text-lg leading-6 font-medium text-white">
         Enter a video release name below to see the parsed metadata.
-      </p>
-      <div className="mx-auto mt-10">
+      </h3>
+      <div className="mx-auto mt-2">
         <div className="mb-4">
           <label htmlFor="title" className="sr-only">
             Release Name
@@ -42,32 +38,32 @@ function Demo() {
             id="title"
             name="title"
             rows={3}
-            className="min-w-0 flex-auto rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-white sm:text-sm/6 w-full"
+            className="w-full min-w-0 flex-auto rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-white sm:text-sm/6"
             placeholder="Enter release name"
             value={input}
             onChange={handleChange}
           />
         </div>
 
-        <div className="flex items-center justify-start mb-6">
+        <div className="mb-6 flex items-center justify-start">
           <input
             id="tvshow"
             name="tvshow"
             type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 bg-white/10 text-indigo-500 focus:ring-indigo-500 focus:ring-offset-gray-900 cursor-pointer"
+            className="h-4 w-4 cursor-pointer rounded border-gray-300 bg-white/10 text-indigo-500 focus:ring-indigo-500 focus:ring-offset-gray-900"
             checked={isTvShow}
             onChange={handleToggleTvShow}
           />
           <label
             htmlFor="tvshow"
-            className="ml-3 block text-sm leading-6 text-gray-300 cursor-pointer select-none"
+            className="ml-3 block cursor-pointer text-sm leading-6 text-gray-300 select-none"
           >
             Parse as TV Show
           </label>
         </div>
 
         <div>
-          <label className="block text-sm font-medium leading-6 text-gray-300 mb-2">Output</label>
+          <label className="mb-2 block text-sm leading-6 font-medium text-gray-300">Output</label>
           <SyntaxHighlighter
             language="json"
             style={atomDark}

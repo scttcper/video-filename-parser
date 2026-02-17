@@ -347,7 +347,7 @@ export function parseMatchCollection(
 
   let lastSeasonEpisodeStringIndex = indexOfEnd(simpleTitle, groups.title ?? '');
 
-  const airYear = parseInt(groups.airyear ?? '', 10);
+  const airYear = Number.parseInt(groups.airyear ?? '', 10);
   if (airYear < 1900 || Number.isNaN(airYear)) {
     let seasons = [groups.season, groups.season1]
       .filter(x => x !== undefined && x.length > 0)
@@ -374,7 +374,7 @@ export function parseMatchCollection(
     );
 
     // handle 0 episode possibly indicating a full season release
-    if (episodeCaptures.length) {
+    if (episodeCaptures.length > 0) {
       const first = Number(episodeCaptures[0]);
       const last = Number(episodeCaptures[episodeCaptures.length - 1]);
 
@@ -427,19 +427,19 @@ export function parseMatchCollection(
       // from a full season/single episode release
       const seasonPart = groups.seasonpart;
       if (seasonPart) {
-        result.seasonPart = parseInt(seasonPart, 10);
+        result.seasonPart = Number.parseInt(seasonPart, 10);
         result.isPartialSeason = true;
       } else {
         result.fullSeason = true;
       }
     }
 
-    if (absoluteEpisodeCaptures.length !== 0 && !result.episodeNumbers) {
+    if (absoluteEpisodeCaptures.length > 0 && !result.episodeNumbers) {
       result.seasonNumbers = [0];
     }
   } else {
-    let airMonth = parseInt(groups.airmonth ?? '', 10);
-    let airDay = parseInt(groups.airday ?? '', 10);
+    let airMonth = Number.parseInt(groups.airmonth ?? '', 10);
+    let airDay = Number.parseInt(groups.airday ?? '', 10);
 
     // Swap day and month if month is bigger than 12 (scene fail)
     if (airMonth > 12) {
@@ -451,7 +451,7 @@ export function parseMatchCollection(
     const airDate = new Date(airYear, airMonth - 1, airDay);
 
     // dates in the future is most likely parser error
-    if (airDate.getTime() > new Date().getTime()) {
+    if (airDate.getTime() > Date.now()) {
       throw new Error('Parsed date is in the future');
     }
 
@@ -477,7 +477,7 @@ export function parseMatchCollection(
   if (lastSeasonEpisodeStringIndex === simpleTitle.length || lastSeasonEpisodeStringIndex === -1) {
     result.releaseTokens = simpleTitle;
   } else {
-    result.releaseTokens = simpleTitle.substring(lastSeasonEpisodeStringIndex);
+    result.releaseTokens = simpleTitle.slice(lastSeasonEpisodeStringIndex);
   }
 
   result.seriesTitle = seriesName;

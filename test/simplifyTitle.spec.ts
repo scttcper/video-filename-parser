@@ -6,7 +6,7 @@ it('return null for empty title', () => {
   expect(releaseTitleCleaner('')).toBe(null);
 });
 
-const cleanupCases: [string, string][] = [
+const cleanupCases: Array<[string, string]> = [
   ['Mission Impossible Rogue Nation', 'Mission Impossible Rogue Nation'],
   ['Passengers', 'Passengers'],
   ['1941', '1941'],
@@ -24,7 +24,7 @@ for (const [title, result] of cleanupCases) {
   });
 }
 
-const simplifyCases: [string, string][] = [
+const simplifyCases: Array<[string, string]> = [
   ['The.Man.from.U.N.C.L.E.2015.1080p.BluRay.x264-SPARKS', 'The.Man.from.U.N.C.L.E.2015...-SPARKS'],
   [
     'Movie.Title.Imax.2018.1080p.AMZN.WEB-DL.DD5.1.H.264-NTG',

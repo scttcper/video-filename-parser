@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 100,
+  "singleQuote": true,
+  "arrowParens": "avoid",
+  "experimentalSortImports": {
+    "groups": ["side_effect", "builtin", "external", "internal", "parent", "index", "sibling"],
+    "newlinesBetween": true
+  },
+  "experimentalSortPackageJson": true,
+  "experimentalTailwindcss": {
+    "classOrder": "shadcn"
+  }
+}

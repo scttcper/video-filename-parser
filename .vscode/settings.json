@@ -1,11 +1,5 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "biome.enabled": false,
-  "[javascript][typescript][javascriptreact][typescriptreact]": {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.fixAll.oxc": "explicit"
-    }
-  }
+  "oxc.fmt.configPath": ".oxfmtrc.json",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true
 }

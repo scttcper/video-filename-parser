@@ -2,50 +2,48 @@
   "name": "@ctrl/video-filename-parser",
   "version": "0.0.0-placeholder",
   "description": "A radarr style release name parser",
-  "author": "Scott Cooper <scttcper@gmail.com>",
-  "license": "MIT",
-  "repository": "scttcper/video-filename-parser",
-  "homepage": "https://video-filename-parser.vercel.app",
-  "type": "module",
-  "exports": "./dist/src/index.js",
-  "types": "./dist/src/index.d.ts",
-  "files": [
-    "dist/src"
-  ],
-  "sideEffects": false,
   "keywords": [
-    "scene",
-    "release",
     "radarr",
+    "release",
+    "scene",
     "sonarr"
   ],
-  "scripts": {
-    "demo:build": "pnpm run -r build",
-    "demo:watch": "pnpm run -r dev",
-    "lint": "oxlint . && prettier --check . --log-level=error --experimental-cli",
-    "lint:fix": "oxlint . --fix && prettier --write . --log-level=error --experimental-cli",
-    "prepare": "npm run build",
-    "build": "tsc",
-    "test": "vitest",
-    "test:watch": "vitest",
-    "test:ci": "vitest run --coverage --reporter=default --reporter=junit --outputFile=./junit.xml"
-  },
-  "devDependencies": {
-    "@sindresorhus/tsconfig": "8.0.1",
-    "@trivago/prettier-plugin-sort-imports": "5.2.2",
-    "@types/node": "24.9.2",
-    "@vitest/coverage-v8": "4.0.5",
-    "oxlint": "1.24.0",
-    "prettier": "3.6.2",
-    "typescript": "5.9.3",
-    "vitest": "4.0.5"
-  },
+  "homepage": "https://video-filename-parser.ep.workers.dev",
+  "license": "MIT",
+  "author": "Scott Cooper <scttcper@gmail.com>",
+  "repository": "scttcper/video-filename-parser",
   "workspaces": [
     "demo"
   ],
+  "files": [
+    "dist/src"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "types": "./dist/src/index.d.ts",
+  "exports": "./dist/src/index.js",
   "publishConfig": {
     "access": "public",
     "provenance": true
+  },
+  "scripts": {
+    "demo:build": "pnpm run -r build",
+    "demo:watch": "pnpm run -r dev",
+    "lint": "oxlint . && oxfmt --check",
+    "lint:fix": "oxlint . --fix && oxfmt",
+    "prepare": "pnpm run build",
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "devDependencies": {
+    "@ctrl/oxlint-config": "1.4.0",
+    "@sindresorhus/tsconfig": "8.1.0",
+    "@types/node": "25.2.3",
+    "oxfmt": "0.33.0",
+    "oxlint": "1.48.0",
+    "typescript": "5.9.3",
+    "vitest": "4.0.18"
   },
   "release": {
     "branches": [
@@ -53,27 +51,7 @@
     ]
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "all",
-    "arrowParens": "avoid",
-    "semi": true,
-    "printWidth": 100,
-    "plugins": [
-      "@trivago/prettier-plugin-sort-imports"
-    ],
-    "importOrder": [
-      "^node:.*$",
-      "^react",
-      "^(@ctrl)(/.*|$)",
-      "^\\.\\./(?!.*\\.css$)",
-      "^\\./(?!.*\\.css$)(?=.*/)",
-      "^\\./(?!.*\\.css$)(?!.*/)"
-    ],
-    "importOrderSeparation": true,
-    "importOrderSortSpecifiers": false
-  },
-  "packageManager": "pnpm@10.20.0"
+  "packageManager": "pnpm@10.29.3"
 }

@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 
 import { parseSeason } from '../src/index.js';
 
-const fullSeasonRelease: [string, string, number][] = [
+const fullSeasonRelease: Array<[string, string, number]> = [
   ['30.Rock.Season.04.HDTV.XviD-DIMENSION', '30 Rock', 4],
   ['Parks.and.Recreation.S02.720p.x264-DIMENSION', 'Parks and Recreation', 2],
   ['The.Office.US.S03.720p.x264-DIMENSION', 'The Office US', 3],
@@ -28,7 +28,7 @@ for (const [postTitle, title, season] of fullSeasonRelease) {
   });
 }
 
-const dayEpisodeCases: [string, string, Date][] = [
+const dayEpisodeCases: Array<[string, string, Date]> = [
   [
     'Jimmy Fallon 2019 10 23 Michael Douglas 1080p HEVC x265-MeGusta',
     'Jimmy Fallon',
@@ -49,7 +49,7 @@ for (const [postTitle, title, airDate] of dayEpisodeCases) {
   });
 }
 
-const seasonPackCases: [string, string, number[]][] = [
+const seasonPackCases: Array<[string, string, number[]]> = [
   [
     'The Simpsons S01 - S10 FIXED MegaPack x264 AC3-DTS -jlw',
     'The Simpsons',
@@ -72,7 +72,7 @@ for (const [postTitle, title, seasons] of seasonPackCases) {
   });
 }
 
-const multiEpisodeCases: [string, string, number[]][] = [
+const multiEpisodeCases: Array<[string, string, number[]]> = [
   ['The Morning Show S01E01-E03 2019 1080p WEBRip X264 AC3-EVO', 'The Morning Show', [1, 2, 3]],
 ];
 for (const [postTitle, title, episodes] of multiEpisodeCases) {
@@ -84,7 +84,7 @@ for (const [postTitle, title, episodes] of multiEpisodeCases) {
   });
 }
 
-const partialSeasonPackCases: [string, string, number, number][] = [
+const partialSeasonPackCases: Array<[string, string, number, number]> = [
   ['The.Ranch.2016.S02.Part.1.1080p.NF.WEBRip.DD5.1.x264-NTb', 'The Ranch 2016', 2, 1],
 ];
 for (const [postTitle, title, season, seasonPart] of partialSeasonPackCases) {
@@ -97,7 +97,7 @@ for (const [postTitle, title, season, seasonPart] of partialSeasonPackCases) {
   });
 }
 
-const crapCases: [string][] = [
+const crapCases: Array<[string]> = [
   ['76El6LcgLzqb426WoVFg1vVVVGx4uCYopQkfjmLe'],
   ['Vrq6e1Aba3U amCjuEgV5R2QvdsLEGYF3YQAQkw8'],
   ['TDAsqTea7k4o6iofVx3MQGuDK116FSjPobMuh8oB'],
@@ -126,7 +126,7 @@ for (const [title] of crapCases) {
   });
 }
 
-const oddCases: [string, string, number, number][] = [
+const oddCases: Array<[string, string, number, number]> = [
   ['Curb Your Enthusiasm - 2x09 - The Baptism.mkv', 'Curb Your Enthusiasm', 2, 9],
 ];
 for (const [postTitle, title, season, episodeNumber] of oddCases) {
@@ -140,7 +140,7 @@ for (const [postTitle, title, season, episodeNumber] of oddCases) {
   });
 }
 
-const animeSpecialCases: [string, string, number][] = [
+const animeSpecialCases: Array<[string, string, number]> = [
   ['[DeadFish] Kenzen Robo Daimidaler - 01 - Special [BD][720p][AAC]', 'Kenzen Robo Daimidaler', 1],
   ['[DeadFish] Kenzen Robo Daimidaler - 01 - OVA [BD][720p][AAC]', 'Kenzen Robo Daimidaler', 1],
   ['[DeadFish] Kenzen Robo Daimidaler - 01 - OVD [BD][720p][AAC]', 'Kenzen Robo Daimidaler', 1],
@@ -155,7 +155,7 @@ for (const [postTitle, title, episodeNumber] of animeSpecialCases) {
   });
 }
 
-const animeRecapCases: [string, string, number][] = [
+const animeRecapCases: Array<[string, string, number]> = [
   ['[HorribleSubs] Goblin Slayer - 10.5 [1080p].mkv', 'Goblin Slayer', 10.5],
 ];
 for (const [postTitle, title, specialEpisodeNumber] of animeRecapCases) {
@@ -168,7 +168,7 @@ for (const [postTitle, title, specialEpisodeNumber] of animeRecapCases) {
   });
 }
 
-const seasonSubpackCases: [string, string, number][] = [
+const seasonSubpackCases: Array<[string, string, number]> = [
   ['Lie.to.Me.S03.SUBPACK.DVDRip.XviD-REWARD', 'Lie to Me', 3],
   ['The.Middle.S02.SUBPACK.DVDRip.XviD-REWARD', 'The Middle', 2],
   ['CSI.S11.SUBPACK.DVDRip.XviD-REWARD', 'CSI', 11],
@@ -183,7 +183,7 @@ for (const [postTitle, title, season] of seasonSubpackCases) {
   });
 }
 
-const seasonExtraCases: [string, string, number][] = [
+const seasonExtraCases: Array<[string, string, number]> = [
   ['Acropolis Now S05 EXTRAS DVDRip XviD RUNNER', 'Acropolis Now', 5],
   ['Punky Brewster S01 EXTRAS DVDRip XviD RUNNER', 'Punky Brewster', 1],
   ['Instant Star S03 EXTRAS DVDRip XviD OSiTV', 'Instant Star', 3],
@@ -213,7 +213,7 @@ for (const [postTitle, title, season] of seasonExtraCases) {
 //   });
 // }
 
-const absoluteEpisodeCases: [string, string, number, number][] = [
+const absoluteEpisodeCases: Array<[string, string, number, number]> = [
   ['[SubDESU]_High_School_DxD_07_(1280x720_x264-AAC)_[6B7FD717]', 'High School DxD', 7, 0],
   ['[Chihiro]_Working!!_-_06_[848x480_H.264_AAC][859EEAFA]', 'Working!!', 6, 0],
   ['[Commie]_Senki_Zesshou_Symphogear_-_11_[65F220B4]', 'Senki Zesshou Symphogear', 11, 0],

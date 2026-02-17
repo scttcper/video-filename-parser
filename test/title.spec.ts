@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 
 import { parseTitleAndYear } from '../src/index.js';
 
-const cases: [string, { title: string; year: string | null }][] = [
+const cases: Array<[string, { title: string; year: string | null }]> = [
   [
     'The.Man.from.U.N.C.L.E.2015.1080p.BluRay.x264-SPARKS',
     { title: 'The Man from U.N.C.L.E.', year: '2015' },

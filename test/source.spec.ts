@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 
 import { parseSource, Source } from '../src/index.js';
 
-const singleCases: [string, Source[]][] = [
+const singleCases: Array<[string, Source[]]> = [
   ['Whats.Eating.Gilbert.Grape.1993.720p.BluRay', [Source.BLURAY]],
   ['Whats.Eating.Gilbert.Grape.1993.720p.BluRay.x264-SiNNERS', [Source.BLURAY]],
   ['Oceans.Thirteen.2007.iNTERNAL.720p.BluRay.x264-MHQ', [Source.BLURAY]],
@@ -45,7 +45,7 @@ for (const [title, result] of singleCases) {
   });
 }
 
-const multipeSourceCases: [string, Source[]][] = [
+const multipeSourceCases: Array<[string, Source[]]> = [
   ['The Office S01-S09 720p BluRay WEB-DL nHD x264-NhaNc3', [Source.BLURAY, Source.WEBDL]],
 ];
 for (const [title, result] of multipeSourceCases) {

@@ -55,7 +55,7 @@ export function parseTitleAndYear(title: string): { title: string; year: string 
     channelsPosition,
     videoCodecPosition,
   ].filter(x => x > 0);
-  if (positions.length) {
+  if (positions.length > 0) {
     const firstPosition = Math.min(...positions);
     return { title: releaseTitleCleaner(title.slice(0, firstPosition)) ?? '', year: null };
   }

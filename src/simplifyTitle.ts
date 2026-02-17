@@ -73,11 +73,15 @@ export function releaseTitleCleaner(title: string): string | null {
       nextPart = parts[n + 1] ?? '';
     }
 
-    if (part.length === 1 && part.toLowerCase() !== 'a' && Number.isNaN(parseInt(part, 10))) {
-      result += part + '.';
+    if (
+      part.length === 1 &&
+      part.toLowerCase() !== 'a' &&
+      Number.isNaN(Number.parseInt(part, 10))
+    ) {
+      result += `${part}.`;
       previousAcronym = true;
     } else if (part.toLowerCase() === 'a' && (previousAcronym || nextPart.length === 1)) {
-      result += part + '.';
+      result += `${part}.`;
       previousAcronym = true;
     } else {
       if (previousAcronym) {
@@ -85,7 +89,7 @@ export function releaseTitleCleaner(title: string): string | null {
         previousAcronym = false;
       }
 
-      result += part + ' ';
+      result += `${part} `;
     }
 
     n++;

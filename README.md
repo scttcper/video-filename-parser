@@ -1,8 +1,8 @@
-# video-filename-parser [![npm](https://img.shields.io/npm/v/@ctrl/video-filename-parser.svg?maxAge=3600)](https://www.npmjs.com/package/@ctrl/video-filename-parser) [![coverage](https://codecov.io/gh/scttcper/video-filename-parser/branch/master/graph/badge.svg)](https://codecov.io/gh/scttcper/video-filename-parser)
+# video-filename-parser [![npm](https://img.shields.io/npm/v/@ctrl/video-filename-parser.svg?maxAge=3600)](https://www.npmjs.com/package/@ctrl/video-filename-parser)
 
 > A simple file / release name parser based heavily on radarr's movie parsing
 
-**DEMO**: https://video-filename-parser.vercel.app
+**DEMO**: https://video-filename-parser.ep.workers.dev
 
 ## Install
 

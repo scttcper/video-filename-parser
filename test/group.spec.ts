@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 
 import { parseGroup } from '../src/index.js';
 
-const cases: [string, string | null][] = [
+const cases: Array<[string, string | null]> = [
   ['Whats.Eating.Gilbert.Grape.1993.720p.BluRay.x264-SiNNERS.mkv', 'SiNNERS'],
   ['Up.REPACK.720p.Bluray.x264-CBGB', 'CBGB'],
   ['Castle.2009.S01E14.English.HDTV.XviD-LOL', 'LOL'],
