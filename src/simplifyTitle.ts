@@ -40,7 +40,9 @@ const sceneGarbageGlobalExp = new RegExp(sceneGarbageExp.source, 'ig');
 
 // Precomputed combined regex for all language names (replaces loop creating ~45 regexes per call)
 const allLanguagesGlobalExp = new RegExp(
-  `\\b(${Object.values(Language).map(l => l.toUpperCase()).join('|')})`,
+  `\\b(${Object.values(Language)
+    .map(l => l.toUpperCase())
+    .join('|')})`,
   'g',
 );
 
