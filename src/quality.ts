@@ -31,6 +31,22 @@ export interface Revision {
   real: number;
 }
 
+interface QualityContext {
+  title: string;
+  normalizedTitle: string;
+  sourceGroups: ReturnType<typeof parseSourceGroups>;
+  parsedSources: Source[];
+  parsedResolution?: Resolution;
+  codec?: VideoCodec;
+  revision: Revision;
+  modifier: QualityModifier | null;
+}
+
+type QualityPolicy = {
+  matches: (context: QualityContext) => boolean;
+  apply: (context: QualityContext) => QualityModel;
+};
+
 export function parseQualityModifyers(title: string): Revision {
   const normalizedTitle = title.trim().replaceAll('_', ' ').trim().toLowerCase();
 
@@ -77,147 +93,188 @@ export function parseQuality(title: string, codec?: VideoCodec): QualityModel {
 
   const revision = parseQualityModifyers(title);
   const sourceGroups = parseSourceGroups(normalizedTitle);
-  const source = parseSource(normalizedTitle, sourceGroups);
-  const { resolution } = parseResolution(normalizedTitle, source);
+  const parsedSources = parseSource(normalizedTitle, sourceGroups);
+  const { resolution } = parseResolution(normalizedTitle, parsedSources);
   codec ??= parseVideoCodec(title).codec;
 
-  const result: QualityModel = {
-    sources: source,
-    resolution,
+  const context: QualityContext = {
+    title,
+    normalizedTitle,
+    sourceGroups,
+    parsedSources,
+    parsedResolution: resolution,
+    codec,
     revision,
-    modifier: null,
+    modifier: parseQualityModifier(normalizedTitle, sourceGroups),
   };
 
-  if (bdiskExp.test(normalizedTitle) && sourceGroups.bluray) {
-    result.modifier = QualityModifier.BRDISK;
-    result.sources = [Source.BLURAY];
-  }
-
-  if (remuxExp.test(normalizedTitle) && !sourceGroups.webdl && !sourceGroups.hdtv) {
-    result.modifier = QualityModifier.REMUX;
-    result.sources = [Source.BLURAY];
-  }
-
-  if (
-    rawHdExp.test(normalizedTitle) &&
-    result.modifier !== QualityModifier.BRDISK &&
-    result.modifier !== QualityModifier.REMUX
-  ) {
-    result.modifier = QualityModifier.RAWHD;
-    result.sources = [Source.TV];
-  }
-
-  if (source !== null) {
-    if (sourceGroups.bluray) {
-      result.sources = [Source.BLURAY];
-      if (codec === VideoCodec.XVID) {
-        result.resolution = Resolution.R480P;
-        result.sources = [Source.DVD];
-      }
-
-      if (!resolution) {
-        // assume bluray is at least 720p
-        result.resolution = Resolution.R720P;
-      }
-
-      if (!resolution && result.modifier === QualityModifier.BRDISK) {
-        result.resolution = Resolution.R1080P;
-      }
-
-      if (!resolution && result.modifier === QualityModifier.REMUX) {
-        result.resolution = Resolution.R2160P;
-      }
-
-      return result;
-    }
-
-    if (sourceGroups.webdl || sourceGroups.webrip) {
-      result.sources = source;
-      if (!resolution) {
-        result.resolution = Resolution.R480P;
-      }
-
-      if (!resolution) {
-        result.resolution = Resolution.R480P;
-      }
-
-      if (!resolution && title.includes('[WEBDL]')) {
-        result.resolution = Resolution.R720P;
-      }
-
-      return result;
-    }
-
-    if (sourceGroups.hdtv) {
-      result.sources = [Source.TV];
-      if (!resolution) {
-        result.resolution = Resolution.R480P;
-      }
-
-      if (!resolution && title.includes('[HDTV]')) {
-        result.resolution = Resolution.R720P;
-      }
-
-      return result;
-    }
-
-    if (sourceGroups.pdtv || sourceGroups.sdtv || sourceGroups.dsr || sourceGroups.tvrip) {
-      result.sources = [Source.TV];
-      if (highDefPdtvRegex.test(normalizedTitle)) {
-        result.resolution = Resolution.R720P;
-        return result;
-      }
-
-      result.resolution = Resolution.R480P;
-      return result;
-    }
-
-    if (sourceGroups.bdrip || sourceGroups.brrip) {
-      if (codec === VideoCodec.XVID) {
-        result.resolution = Resolution.R480P;
-        result.sources = [Source.DVD];
-        return result;
-      }
-
-      if (!resolution) {
-        // bdrips are at least 480p
-        result.resolution = Resolution.R480P;
-      }
-
-      result.sources = [Source.BLURAY];
-      return result;
-    }
-
-    if (sourceGroups.workprint) {
-      result.sources = [Source.WORKPRINT];
-      return result;
-    }
-
-    if (sourceGroups.cam) {
-      result.sources = [Source.CAM];
-      return result;
-    }
-
-    if (sourceGroups.ts) {
-      result.sources = [Source.TELESYNC];
-      return result;
-    }
-
-    if (sourceGroups.tc) {
-      result.sources = [Source.TELECINE];
-      return result;
+  for (const policy of qualityPolicies) {
+    if (policy.matches(context)) {
+      return policy.apply(context);
     }
   }
 
   if (
-    !result.modifier &&
+    !context.modifier &&
     (resolution === Resolution.R2160P ||
       resolution === Resolution.R1080P ||
       resolution === Resolution.R720P)
   ) {
-    result.sources = [Source.WEBDL];
-    return result;
+    return createQualityResult(context, { sources: [Source.WEBDL] });
   }
 
-  return result;
+  return createQualityResult(context);
+}
+
+function parseQualityModifier(
+  normalizedTitle: string,
+  sourceGroups: ReturnType<typeof parseSourceGroups>,
+): QualityModifier | null {
+  if (bdiskExp.test(normalizedTitle) && sourceGroups.bluray) {
+    return QualityModifier.BRDISK;
+  }
+
+  if (remuxExp.test(normalizedTitle) && !sourceGroups.webdl && !sourceGroups.hdtv) {
+    return QualityModifier.REMUX;
+  }
+
+  if (rawHdExp.test(normalizedTitle)) {
+    return QualityModifier.RAWHD;
+  }
+
+  return null;
+}
+
+function createQualityResult(
+  context: QualityContext,
+  overrides: Partial<Pick<QualityModel, 'sources' | 'resolution' | 'modifier'>> = {},
+): QualityModel {
+  return {
+    sources: overrides.sources ?? getDefaultSources(context),
+    resolution: overrides.resolution ?? context.parsedResolution,
+    revision: context.revision,
+    modifier: overrides.modifier ?? context.modifier,
+  };
+}
+
+function getDefaultSources(context: QualityContext): Source[] {
+  if (context.modifier === QualityModifier.BRDISK || context.modifier === QualityModifier.REMUX) {
+    return [Source.BLURAY];
+  }
+
+  if (context.modifier === QualityModifier.RAWHD) {
+    return [Source.TV];
+  }
+
+  return context.parsedSources;
+}
+
+const qualityPolicies: QualityPolicy[] = [
+  {
+    matches: ({ sourceGroups }) => sourceGroups.bluray,
+    apply: context => {
+      if (context.codec === VideoCodec.XVID) {
+        return createQualityResult(context, {
+          sources: [Source.DVD],
+          resolution: Resolution.R480P,
+        });
+      }
+
+      return createQualityResult(context, {
+        sources: [Source.BLURAY],
+        resolution: getBlurayResolution(context),
+      });
+    },
+  },
+  {
+    matches: ({ sourceGroups }) => sourceGroups.webdl || sourceGroups.webrip,
+    apply: context =>
+      createQualityResult(context, {
+        sources: context.parsedSources,
+        resolution: getWebResolution(context),
+      }),
+  },
+  {
+    matches: ({ sourceGroups }) => sourceGroups.hdtv,
+    apply: context =>
+      createQualityResult(context, {
+        sources: [Source.TV],
+        resolution: getHdtvResolution(context),
+      }),
+  },
+  {
+    matches: ({ sourceGroups }) =>
+      sourceGroups.pdtv || sourceGroups.sdtv || sourceGroups.dsr || sourceGroups.tvrip,
+    apply: context =>
+      createQualityResult(context, {
+        sources: [Source.TV],
+        resolution: highDefPdtvRegex.test(context.normalizedTitle)
+          ? Resolution.R720P
+          : Resolution.R480P,
+      }),
+  },
+  {
+    matches: ({ sourceGroups }) => sourceGroups.bdrip || sourceGroups.brrip,
+    apply: context => {
+      if (context.codec === VideoCodec.XVID) {
+        return createQualityResult(context, {
+          sources: [Source.DVD],
+          resolution: Resolution.R480P,
+        });
+      }
+
+      return createQualityResult(context, {
+        sources: [Source.BLURAY],
+        resolution: context.parsedResolution ?? Resolution.R480P,
+      });
+    },
+  },
+  {
+    matches: ({ sourceGroups }) => sourceGroups.workprint,
+    apply: context => createQualityResult(context, { sources: [Source.WORKPRINT] }),
+  },
+  {
+    matches: ({ sourceGroups }) => sourceGroups.cam,
+    apply: context => createQualityResult(context, { sources: [Source.CAM] }),
+  },
+  {
+    matches: ({ sourceGroups }) => sourceGroups.ts,
+    apply: context => createQualityResult(context, { sources: [Source.TELESYNC] }),
+  },
+  {
+    matches: ({ sourceGroups }) => sourceGroups.tc,
+    apply: context => createQualityResult(context, { sources: [Source.TELECINE] }),
+  },
+];
+
+function getBlurayResolution(context: QualityContext): Resolution | undefined {
+  if (context.parsedResolution) {
+    return context.parsedResolution;
+  }
+
+  if (context.modifier === QualityModifier.BRDISK) {
+    return Resolution.R1080P;
+  }
+
+  if (context.modifier === QualityModifier.REMUX) {
+    return Resolution.R2160P;
+  }
+
+  return Resolution.R720P;
+}
+
+function getWebResolution(context: QualityContext): Resolution | undefined {
+  if (context.parsedResolution) {
+    return context.parsedResolution;
+  }
+
+  return context.title.includes('[WEBDL]') ? Resolution.R720P : Resolution.R480P;
+}
+
+function getHdtvResolution(context: QualityContext): Resolution | undefined {
+  if (context.parsedResolution) {
+    return context.parsedResolution;
+  }
+
+  return context.title.includes('[HDTV]') ? Resolution.R720P : Resolution.R480P;
 }
