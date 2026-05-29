@@ -38,13 +38,13 @@
     "bench": "vitest bench ./test/bench.bench.ts"
   },
   "devDependencies": {
-    "@ctrl/oxlint-config": "1.4.0",
+    "@ctrl/oxlint-config": "1.5.0",
     "@sindresorhus/tsconfig": "8.1.0",
-    "@types/node": "25.2.3",
-    "oxfmt": "0.33.0",
-    "oxlint": "1.48.0",
-    "typescript": "5.9.3",
-    "vitest": "4.0.18"
+    "@types/node": "25.9.1",
+    "oxfmt": "0.52.0",
+    "oxlint": "1.67.0",
+    "typescript": "6.0.3",
+    "vitest": "4.1.7"
   },
   "release": {
     "branches": [
@@ -54,5 +54,5 @@
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "pnpm@10.29.3"
+  "packageManager": "pnpm@11.4.0"
 }

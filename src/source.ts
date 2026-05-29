@@ -57,7 +57,11 @@ interface SourceGroups {
 }
 
 export function parseSourceGroups(title: string): SourceGroups {
-  const normalizedName = title.replace(/_/g, ' ').replace(/\[/g, ' ').replace(/\]/g, ' ').trim();
+  const normalizedName = title
+    .replaceAll('_', ' ')
+    .replaceAll('[', ' ')
+    .replaceAll(']', ' ')
+    .trim();
 
   return {
     bluray: blurayExp.test(normalizedName),

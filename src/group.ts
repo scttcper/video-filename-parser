@@ -15,11 +15,11 @@ const globalReleaseGroupExp = new RegExp(releaseGroupRegexExp.source, 'ig');
 export function parseGroup(title: string, parsedTitle?: string): string | null {
   const nowebsiteTitle = title.replace(websitePrefixExp, '');
   let releaseTitle = parsedTitle ?? parseTitleAndYear(nowebsiteTitle).title;
-  releaseTitle = releaseTitle.replace(/ /g, '.');
+  releaseTitle = releaseTitle.replaceAll(' ', '.');
   let trimmed = nowebsiteTitle
-    .replace(/ /g, '.')
+    .replaceAll(' ', '.')
     .replace(releaseTitle === nowebsiteTitle ? '' : releaseTitle, '')
-    .replace(/\.-\./g, '.');
+    .replaceAll('.-.', '.');
   trimmed = simplifyTitle(removeFileExtension(trimmed.trim()));
 
   if (trimmed.length === 0) {

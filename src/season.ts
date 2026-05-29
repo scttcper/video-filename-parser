@@ -336,8 +336,8 @@ export function parseMatchCollection(
   }
 
   const seriesName = (groups.title ?? '')
-    .replace(/\./g, ' ')
-    .replace(/_/g, ' ')
+    .replaceAll('.', ' ')
+    .replaceAll('_', ' ')
     .replace(requestInfoExp, '')
     .trim();
 
