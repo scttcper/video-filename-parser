@@ -32,7 +32,7 @@ export interface Revision {
 }
 
 export function parseQualityModifyers(title: string): Revision {
-  const normalizedTitle = title.trim().replace(/_/g, ' ').trim().toLowerCase();
+  const normalizedTitle = title.trim().replaceAll('_', ' ').trim().toLowerCase();
 
   const result: Revision = {
     version: 1,
@@ -69,9 +69,9 @@ export function parseQualityModifyers(title: string): Revision {
 export function parseQuality(title: string, codec?: VideoCodec): QualityModel {
   const normalizedTitle = title
     .trim()
-    .replace(/_/g, ' ')
-    .replace(/\[/g, ' ')
-    .replace(/\]/g, ' ')
+    .replaceAll('_', ' ')
+    .replaceAll('[', ' ')
+    .replaceAll(']', ' ')
     .trim()
     .toLowerCase();
 

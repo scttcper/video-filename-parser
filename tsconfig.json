@@ -3,6 +3,7 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "outDir": "dist",
+    "types": ["node"],
     "noPropertyAccessFromIndexSignature": false,
     "erasableSyntaxOnly": false
   }

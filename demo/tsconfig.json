@@ -2,9 +2,11 @@
   "extends": "@sindresorhus/tsconfig",
   "compilerOptions": {
     "jsx": "react-jsx",
+    "rootDir": "..",
+    "types": ["vite/client"],
     "noPropertyAccessFromIndexSignature": false,
     "noEmit": true,
     "erasableSyntaxOnly": false
   },
-  "include": ["./src"]
+  "include": ["./src", "../src"]
 }
