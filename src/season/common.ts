@@ -242,8 +242,8 @@ function createBaseResult(
   lastTokenIndex: number;
 } {
   const seriesName = (groups.title ?? '')
-    .replace(/\./g, ' ')
-    .replace(/_/g, ' ')
+    .replaceAll('.', ' ')
+    .replaceAll('_', ' ')
     .replace(requestInfoExp, '')
     .trim();
 
