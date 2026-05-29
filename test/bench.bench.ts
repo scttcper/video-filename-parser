@@ -1,10 +1,6 @@
 import { bench, describe } from 'vitest';
 
-import {
-  filenameParse,
-  parseQuality,
-  parseSeason,
-} from '../src/index.js';
+import { filenameParse, parseQuality, parseSeason } from '../src/index.js';
 
 const movieTitles = [
   'Whats.Eating.Gilbert.Grape.1993.720p.BluRay.x264-SiNNERS',
