@@ -46,194 +46,64 @@ export enum Language {
   Serbian = 'Serbian',
 }
 
+const languagePatterns: Array<{ language: Language; pattern: RegExp | string }> = [
+  { language: Language.English, pattern: /\b(english|eng|EN|FI)\b/i },
+  { language: Language.Spanish, pattern: 'spanish' },
+  { language: Language.Danish, pattern: /\b(DK|DAN|danish)\b/i },
+  { language: Language.Japanese, pattern: 'japanese' },
+  { language: Language.Cantonese, pattern: 'cantonese' },
+  { language: Language.Mandarin, pattern: 'mandarin' },
+  { language: Language.Korean, pattern: 'korean' },
+  { language: Language.Vietnamese, pattern: 'vietnamese' },
+  { language: Language.Swedish, pattern: /\b(SE|SWE|swedish)\b/i },
+  { language: Language.Finnish, pattern: 'finnish' },
+  { language: Language.Turkish, pattern: 'turkish' },
+  { language: Language.Portuguese, pattern: 'portuguese' },
+  { language: Language.Hebrew, pattern: 'hebrew' },
+  { language: Language.Czech, pattern: 'czech' },
+  { language: Language.Ukrainian, pattern: 'ukrainian' },
+  { language: Language.Catalan, pattern: 'catalan' },
+  { language: Language.Estonian, pattern: 'estonian' },
+  { language: Language.Icelandic, pattern: /\b(ice|Icelandic)\b/i },
+  { language: Language.Chinese, pattern: /\b(chi|chinese)\b/i },
+  { language: Language.Thai, pattern: 'thai' },
+  { language: Language.Italian, pattern: /\b(ita|italian)\b/i },
+  { language: Language.German, pattern: /\b(german|videomann)\b/i },
+  { language: Language.Flemish, pattern: /\b(flemish)\b/i },
+  { language: Language.Greek, pattern: /\b(greek)\b/i },
+  {
+    language: Language.French,
+    pattern: /\b(FR|FRENCH|VOSTFR|VO|VFF|VFQ|VF2|TRUEFRENCH|SUBFRENCH)\b/i,
+  },
+  { language: Language.Russian, pattern: /\b(russian|rus)\b/i },
+  { language: Language.Norwegian, pattern: /\b(norwegian|NO)\b/i },
+  { language: Language.Hungarian, pattern: /\b(HUNDUB|HUN|hungarian)\b/i },
+  { language: Language.Hebrew, pattern: /\b(HebDub)\b/i },
+  { language: Language.Czech, pattern: /\b(CZ|SK)\b/i },
+  { language: Language.Ukrainian, pattern: /\bukr\b/i },
+  { language: Language.Polish, pattern: /\b(PL|PLDUB|POLISH)\b/i },
+  { language: Language.Dutch, pattern: /\b(nl|dutch)\b/i },
+  { language: Language.Hindi, pattern: /\b(HIN|Hindi)\b/i },
+  { language: Language.Tamil, pattern: /\b(TAM|Tamil)\b/i },
+  { language: Language.Arabic, pattern: /\b(Arabic)\b/i },
+  { language: Language.Latvian, pattern: /\b(Latvian)\b/i },
+  { language: Language.Lithuanian, pattern: /\b(Lithuanian)\b/i },
+  { language: Language.Romanian, pattern: /\b(RO|Romanian|rodubbed)\b/i },
+  { language: Language.Slovak, pattern: /\b(SK|Slovak)\b/i },
+  { language: Language.Brazilian, pattern: /\b(Brazilian)\b/i },
+  { language: Language.Persian, pattern: /\b(Persian)\b/i },
+  { language: Language.Bengali, pattern: /\b(Bengali)\b/i },
+  { language: Language.Bulgarian, pattern: /\b(Bulgarian)\b/i },
+  { language: Language.Serbian, pattern: /\b(Serbian)\b/i },
+  { language: Language.Nordic, pattern: /\b(nordic|NORDICSUBS)\b/i },
+];
+
 export function parseLanguage(title: string, parsedTitle?: string): Language[] {
   parsedTitle ??= parseTitleAndYear(title).title;
   const languageTitle = title.replaceAll('.', ' ').replace(parsedTitle, '').toLowerCase();
-  const languages: Language[] = [];
-
-  if (/\b(english|eng|EN|FI)\b/i.test(languageTitle)) {
-    languages.push(Language.English);
-  }
-
-  if (languageTitle.includes('spanish')) {
-    languages.push(Language.Spanish);
-  }
-
-  if (/\b(DK|DAN|danish)\b/i.test(languageTitle)) {
-    languages.push(Language.Danish);
-  }
-
-  if (languageTitle.includes('japanese')) {
-    languages.push(Language.Japanese);
-  }
-
-  if (languageTitle.includes('cantonese')) {
-    languages.push(Language.Cantonese);
-  }
-
-  if (languageTitle.includes('mandarin')) {
-    languages.push(Language.Mandarin);
-  }
-
-  if (languageTitle.includes('korean')) {
-    languages.push(Language.Korean);
-  }
-
-  if (languageTitle.includes('vietnamese')) {
-    languages.push(Language.Vietnamese);
-  }
-
-  if (/\b(SE|SWE|swedish)\b/i.test(languageTitle)) {
-    languages.push(Language.Swedish);
-  }
-
-  if (languageTitle.includes('finnish')) {
-    languages.push(Language.Finnish);
-  }
-
-  if (languageTitle.includes('turkish')) {
-    languages.push(Language.Turkish);
-  }
-
-  if (languageTitle.includes('portuguese')) {
-    languages.push(Language.Portuguese);
-  }
-
-  if (languageTitle.includes('hebrew')) {
-    languages.push(Language.Hebrew);
-  }
-
-  if (languageTitle.includes('czech')) {
-    languages.push(Language.Czech);
-  }
-
-  if (languageTitle.includes('ukrainian')) {
-    languages.push(Language.Ukrainian);
-  }
-
-  if (languageTitle.includes('catalan')) {
-    languages.push(Language.Catalan);
-  }
-
-  if (languageTitle.includes('estonian')) {
-    languages.push(Language.Estonian);
-  }
-
-  if (/\b(ice|Icelandic)\b/i.test(languageTitle)) {
-    languages.push(Language.Icelandic);
-  }
-
-  if (/\b(chi|chinese)\b/i.test(languageTitle)) {
-    languages.push(Language.Chinese);
-  }
-
-  if (languageTitle.includes('thai')) {
-    languages.push(Language.Thai);
-  }
-
-  if (/\b(ita|italian)\b/i.test(languageTitle)) {
-    languages.push(Language.Italian);
-  }
-
-  if (/\b(german|videomann)\b/i.test(languageTitle)) {
-    languages.push(Language.German);
-  }
-
-  if (/\b(flemish)\b/i.test(languageTitle)) {
-    languages.push(Language.Flemish);
-  }
-
-  if (/\b(greek)\b/i.test(languageTitle)) {
-    languages.push(Language.Greek);
-  }
-
-  if (/\b(FR|FRENCH|VOSTFR|VO|VFF|VFQ|VF2|TRUEFRENCH|SUBFRENCH)\b/i.test(languageTitle)) {
-    languages.push(Language.French);
-  }
-
-  if (/\b(russian|rus)\b/i.test(languageTitle)) {
-    languages.push(Language.Russian);
-  }
-
-  if (/\b(norwegian|NO)\b/i.test(languageTitle)) {
-    languages.push(Language.Norwegian);
-  }
-
-  if (/\b(HUNDUB|HUN|hungarian)\b/i.test(languageTitle)) {
-    languages.push(Language.Hungarian);
-  }
-
-  if (/\b(HebDub)\b/i.test(languageTitle)) {
-    languages.push(Language.Hebrew);
-  }
-
-  if (/\b(CZ|SK)\b/i.test(languageTitle)) {
-    languages.push(Language.Czech);
-  }
-
-  if (/(?<ukrainian>\bukr\b)/i.test(languageTitle)) {
-    languages.push(Language.Ukrainian);
-  }
-
-  if (/\b(PL|PLDUB|POLISH)\b/i.test(languageTitle)) {
-    languages.push(Language.Polish);
-  }
-
-  if (/\b(nl|dutch)\b/i.test(languageTitle)) {
-    languages.push(Language.Dutch);
-  }
-
-  if (/\b(HIN|Hindi)\b/i.test(languageTitle)) {
-    languages.push(Language.Hindi);
-  }
-
-  if (/\b(TAM|Tamil)\b/i.test(languageTitle)) {
-    languages.push(Language.Tamil);
-  }
-
-  if (/\b(Arabic)\b/i.test(languageTitle)) {
-    languages.push(Language.Arabic);
-  }
-
-  if (/\b(Latvian)\b/i.test(languageTitle)) {
-    languages.push(Language.Latvian);
-  }
-
-  if (/\b(Lithuanian)\b/i.test(languageTitle)) {
-    languages.push(Language.Lithuanian);
-  }
-
-  if (/\b(RO|Romanian|rodubbed)\b/i.test(languageTitle)) {
-    languages.push(Language.Romanian);
-  }
-
-  if (/\b(SK|Slovak)\b/i.test(languageTitle)) {
-    languages.push(Language.Slovak);
-  }
-
-  if (/\b(Brazilian)\b/i.test(languageTitle)) {
-    languages.push(Language.Brazilian);
-  }
-
-  if (/\b(Persian)\b/i.test(languageTitle)) {
-    languages.push(Language.Persian);
-  }
-
-  if (/\b(Bengali)\b/i.test(languageTitle)) {
-    languages.push(Language.Bengali);
-  }
-
-  if (/\b(Bulgarian)\b/i.test(languageTitle)) {
-    languages.push(Language.Bulgarian);
-  }
-
-  if (/\b(Serbian)\b/i.test(languageTitle)) {
-    languages.push(Language.Serbian);
-  }
-
-  if (/\b(nordic|NORDICSUBS)\b/i.test(languageTitle)) {
-    languages.push(Language.Nordic);
-  }
+  const languages = languagePatterns
+    .filter(({ pattern }) => matchesLanguagePattern(languageTitle, pattern))
+    .map(({ language }) => language);
 
   if (isMulti(languageTitle)) {
     languages.push(Language.English);
@@ -244,6 +114,14 @@ export function parseLanguage(title: string, parsedTitle?: string): Language[] {
   }
 
   return [...new Set(languages)];
+}
+
+function matchesLanguagePattern(languageTitle: string, pattern: RegExp | string): boolean {
+  if (typeof pattern === 'string') {
+    return languageTitle.includes(pattern);
+  }
+
+  return pattern.test(languageTitle);
 }
 
 // Reviens-moi (2007) [1080p] BluRay MULTi x264-PopHD
