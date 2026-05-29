@@ -97,6 +97,41 @@ for (const [postTitle, title, season, seasonPart] of partialSeasonPackCases) {
   });
 }
 
+it('keeps representative season parser shapes working', () => {
+  expect(
+    parseSeason('Jimmy Fallon 2019 10 23 Michael Douglas 1080p HEVC x265-MeGusta'),
+  ).toMatchObject({
+    seriesTitle: 'Jimmy Fallon',
+    airDate: new Date(2019, 9, 23),
+  });
+  expect(parseSeason('The Simpsons S01 - S10 FIXED MegaPack x264 AC3-DTS -jlw')).toMatchObject({
+    seriesTitle: 'The Simpsons',
+    seasons: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    isMultiSeason: true,
+  });
+  expect(parseSeason('The.Ranch.2016.S02.Part.1.1080p.NF.WEBRip.DD5.1.x264-NTb')).toMatchObject({
+    seriesTitle: 'The Ranch 2016',
+    seasons: [2],
+    isPartialSeason: true,
+    seasonPart: 1,
+  });
+  expect(parseSeason('Lie.to.Me.S03.SUBPACK.DVDRip.XviD-REWARD')).toMatchObject({
+    seriesTitle: 'Lie to Me',
+    seasons: [3],
+    fullSeason: true,
+    isSeasonExtra: true,
+  });
+  expect(parseSeason('Great British Railway Journeys S11E03 480p x264-mSD [eztv]')).toMatchObject({
+    seriesTitle: 'Great British Railway Journeys',
+    seasons: [11],
+    episodeNumbers: [3],
+  });
+  expect(parseSeason('[HorribleSubs] Shirobako - 20 [720p].mkv')).toMatchObject({
+    seriesTitle: 'Shirobako',
+    episodeNumbers: [20],
+  });
+});
+
 const crapCases: Array<[string]> = [
   ['76El6LcgLzqb426WoVFg1vVVVGx4uCYopQkfjmLe'],
   ['Vrq6e1Aba3U amCjuEgV5R2QvdsLEGYF3YQAQkw8'],
@@ -164,6 +199,7 @@ for (const [postTitle, title, specialEpisodeNumber] of animeRecapCases) {
     expect(result.seriesTitle).toBe(title);
     expect(result.episodeNumbers.length).toBe(1);
     expect(result.episodeNumbers[0]).toBe(specialEpisodeNumber);
+    expect(result.isSpecial).toBe(true);
     expect(result.fullSeason).toBe(false);
   });
 }
@@ -212,6 +248,23 @@ for (const [postTitle, title, season] of seasonExtraCases) {
 //     t.is(result.seasons[0], seasonNumber);
 //   });
 // }
+
+const absoluteEpisodeRangeCases: Array<[string, string, number[]]> = [
+  ['Anime Range ep01-12 [ABCDEF12]', 'Anime Range', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]],
+  ['Anime Range 1-10 [ABCDEF12]', 'Anime Range', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]],
+];
+for (const [postTitle, title, episodeNumbers] of absoluteEpisodeRangeCases) {
+  it(`expands absolute episode ranges ${postTitle}`, () => {
+    const result = parseSeason(postTitle)!;
+    expect(result.seriesTitle).toBe(title);
+    expect(result.episodeNumbers).toEqual(episodeNumbers);
+  });
+}
+
+it('does not expand descending absolute episode ranges', () => {
+  const result = parseSeason('Anime Range ep12-01 [ABCDEF12]');
+  expect(result?.episodeNumbers).not.toEqual([12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
+});
 
 const absoluteEpisodeCases: Array<[string, string, number, number]> = [
   ['[SubDESU]_High_School_DxD_07_(1280x720_x264-AAC)_[6B7FD717]', 'High School DxD', 7, 0],
@@ -414,6 +467,7 @@ for (const [postTitle, title, absoluteEpisodeNumber, seasonNumber] of absoluteEp
     expect(result.episodeNumbers.length).toBe(1);
     expect(result.episodeNumbers[0]).toBe(absoluteEpisodeNumber);
     expect(result.seasons[0] ?? 0).toBe(seasonNumber);
+    expect(result.isSpecial).toBe(false);
     expect(result.fullSeason).toBe(false);
   });
 }
