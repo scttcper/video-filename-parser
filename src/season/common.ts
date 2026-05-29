@@ -217,15 +217,12 @@ function parseAbsoluteEpisodeGroups(
 ): ParsedMatchCollection | null {
   const { result, lastTokenIndex } = createBaseResult(groups, simpleTitle);
   let nextIndex = applySeasonNumbers(result, groups, simpleTitle, lastTokenIndex);
-  const hasEpisodeCaptures = Boolean(groups.episode || groups.episode1);
   const episodeResult = applyEpisodeNumbers(result, groups);
   if (episodeResult === null) {
     return null;
   }
 
-  const absoluteResult = applyAbsoluteEpisodeNumbers(result, groups, {
-    preserveSingleAbsoluteAsSpecial: !hasEpisodeCaptures,
-  });
+  const absoluteResult = applyAbsoluteEpisodeNumbers(result, groups);
   if (absoluteResult === null) {
     return null;
   }
@@ -305,7 +302,6 @@ function applyEpisodeNumbers(result: ParsedMatchCollection, groups: MatchGroups)
 function applyAbsoluteEpisodeNumbers(
   result: ParsedMatchCollection,
   groups: MatchGroups,
-  options: { preserveSingleAbsoluteAsSpecial: boolean },
 ): { lastCapture?: string } | null {
   const absoluteEpisodeCaptures = [groups.absoluteepisode, groups.absoluteepisode1].filter(x => x);
   if (absoluteEpisodeCaptures.length === 0) {
@@ -335,10 +331,7 @@ function applyAbsoluteEpisodeNumbers(
     k => k + Math.floor(first),
   );
 
-  if (
-    groups.special ||
-    (options.preserveSingleAbsoluteAsSpecial && absoluteEpisodeCaptures.length === 1)
-  ) {
+  if (groups.special) {
     result.isSpecial = true;
   }
 

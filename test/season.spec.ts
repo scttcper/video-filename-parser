@@ -199,6 +199,7 @@ for (const [postTitle, title, specialEpisodeNumber] of animeRecapCases) {
     expect(result.seriesTitle).toBe(title);
     expect(result.episodeNumbers.length).toBe(1);
     expect(result.episodeNumbers[0]).toBe(specialEpisodeNumber);
+    expect(result.isSpecial).toBe(true);
     expect(result.fullSeason).toBe(false);
   });
 }
@@ -466,6 +467,7 @@ for (const [postTitle, title, absoluteEpisodeNumber, seasonNumber] of absoluteEp
     expect(result.episodeNumbers.length).toBe(1);
     expect(result.episodeNumbers[0]).toBe(absoluteEpisodeNumber);
     expect(result.seasons[0] ?? 0).toBe(seasonNumber);
+    expect(result.isSpecial).toBe(false);
     expect(result.fullSeason).toBe(false);
   });
 }
