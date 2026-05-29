@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 
-import { parseSeason } from '../src/index.js';
+import { parseMatchCollection, parseSeason } from '../src/index.js';
 
 const fullSeasonRelease: Array<[string, string, number]> = [
   ['30.Rock.Season.04.HDTV.XviD-DIMENSION', '30 Rock', 4],
@@ -260,6 +260,17 @@ for (const [postTitle, title, episodeNumbers] of absoluteEpisodeRangeCases) {
     expect(result.episodeNumbers).toEqual(episodeNumbers);
   });
 }
+
+it('maps absolute-only range captures using the absolute range end', () => {
+  const title = 'Anime Range ep01-12';
+  const match = /^(?<title>.+?)\s+ep(?<absoluteepisode>\d{2})-(?<absoluteepisode1>\d{2})/i.exec(
+    title,
+  )!;
+
+  expect(parseMatchCollection(match, title)?.episodeNumbers).toEqual([
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  ]);
+});
 
 it('does not expand descending absolute episode ranges', () => {
   const result = parseSeason('Anime Range ep12-01 [ABCDEF12]');
