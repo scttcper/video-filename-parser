@@ -34,7 +34,7 @@ export interface Revision {
 interface QualityContext {
   title: string;
   normalizedTitle: string;
-  sourceGroups: ReturnType<typeof parseSourceGroups>;
+  sourceGroups: SourceGroups;
   parsedSources: Source[];
   parsedResolution?: Resolution;
   codec?: VideoCodec;
@@ -42,9 +42,12 @@ interface QualityContext {
   modifier: QualityModifier | null;
 }
 
+type SourceGroups = ReturnType<typeof parseSourceGroups>;
+type QualityResultOverrides = Partial<Pick<QualityModel, 'sources' | 'resolution' | 'modifier'>>;
+
 type QualityPolicy = {
   matches: (context: QualityContext) => boolean;
-  apply: (context: QualityContext) => QualityModel;
+  getOverrides: (context: QualityContext) => QualityResultOverrides;
 };
 
 export function parseQualityModifyers(title: string): Revision {
@@ -110,17 +113,8 @@ export function parseQuality(title: string, codec?: VideoCodec): QualityModel {
 
   for (const policy of qualityPolicies) {
     if (policy.matches(context)) {
-      return policy.apply(context);
+      return createQualityResult(context, policy.getOverrides(context));
     }
-  }
-
-  if (
-    !context.modifier &&
-    (resolution === Resolution.R2160P ||
-      resolution === Resolution.R1080P ||
-      resolution === Resolution.R720P)
-  ) {
-    return createQualityResult(context, { sources: [Source.WEBDL] });
   }
 
   return createQualityResult(context);
@@ -128,7 +122,7 @@ export function parseQuality(title: string, codec?: VideoCodec): QualityModel {
 
 function parseQualityModifier(
   normalizedTitle: string,
-  sourceGroups: ReturnType<typeof parseSourceGroups>,
+  sourceGroups: SourceGroups,
 ): QualityModifier | null {
   if (bdiskExp.test(normalizedTitle) && sourceGroups.bluray) {
     return QualityModifier.BRDISK;
@@ -147,7 +141,7 @@ function parseQualityModifier(
 
 function createQualityResult(
   context: QualityContext,
-  overrides: Partial<Pick<QualityModel, 'sources' | 'resolution' | 'modifier'>> = {},
+  overrides: QualityResultOverrides = {},
 ): QualityModel {
   return {
     sources: overrides.sources ?? getDefaultSources(context),
@@ -172,80 +166,82 @@ function getDefaultSources(context: QualityContext): Source[] {
 const qualityPolicies: QualityPolicy[] = [
   {
     matches: ({ sourceGroups }) => sourceGroups.bluray,
-    apply: context => {
-      if (context.codec === VideoCodec.XVID) {
-        return createQualityResult(context, {
-          sources: [Source.DVD],
-          resolution: Resolution.R480P,
-        });
-      }
-
-      return createQualityResult(context, {
+    getOverrides: context =>
+      getXvidDvdOverrides(context) ?? {
         sources: [Source.BLURAY],
         resolution: getBlurayResolution(context),
-      });
-    },
+      },
   },
   {
     matches: ({ sourceGroups }) => sourceGroups.webdl || sourceGroups.webrip,
-    apply: context =>
-      createQualityResult(context, {
-        sources: context.parsedSources,
-        resolution: getWebResolution(context),
-      }),
+    getOverrides: context => ({
+      sources: context.parsedSources,
+      resolution: getWebResolution(context),
+    }),
   },
   {
     matches: ({ sourceGroups }) => sourceGroups.hdtv,
-    apply: context =>
-      createQualityResult(context, {
-        sources: [Source.TV],
-        resolution: getHdtvResolution(context),
-      }),
+    getOverrides: context => ({
+      sources: [Source.TV],
+      resolution: getHdtvResolution(context),
+    }),
   },
   {
     matches: ({ sourceGroups }) =>
       sourceGroups.pdtv || sourceGroups.sdtv || sourceGroups.dsr || sourceGroups.tvrip,
-    apply: context =>
-      createQualityResult(context, {
-        sources: [Source.TV],
-        resolution: highDefPdtvRegex.test(context.normalizedTitle)
-          ? Resolution.R720P
-          : Resolution.R480P,
-      }),
+    getOverrides: context => ({
+      sources: [Source.TV],
+      resolution: highDefPdtvRegex.test(context.normalizedTitle)
+        ? Resolution.R720P
+        : Resolution.R480P,
+    }),
   },
   {
     matches: ({ sourceGroups }) => sourceGroups.bdrip || sourceGroups.brrip,
-    apply: context => {
-      if (context.codec === VideoCodec.XVID) {
-        return createQualityResult(context, {
-          sources: [Source.DVD],
-          resolution: Resolution.R480P,
-        });
-      }
-
-      return createQualityResult(context, {
+    getOverrides: context =>
+      getXvidDvdOverrides(context) ?? {
         sources: [Source.BLURAY],
         resolution: context.parsedResolution ?? Resolution.R480P,
-      });
-    },
+      },
   },
-  {
-    matches: ({ sourceGroups }) => sourceGroups.workprint,
-    apply: context => createQualityResult(context, { sources: [Source.WORKPRINT] }),
-  },
-  {
-    matches: ({ sourceGroups }) => sourceGroups.cam,
-    apply: context => createQualityResult(context, { sources: [Source.CAM] }),
-  },
-  {
-    matches: ({ sourceGroups }) => sourceGroups.ts,
-    apply: context => createQualityResult(context, { sources: [Source.TELESYNC] }),
-  },
-  {
-    matches: ({ sourceGroups }) => sourceGroups.tc,
-    apply: context => createQualityResult(context, { sources: [Source.TELECINE] }),
-  },
+  sourcePolicy(({ sourceGroups }) => sourceGroups.workprint, Source.WORKPRINT),
+  sourcePolicy(({ sourceGroups }) => sourceGroups.cam, Source.CAM),
+  sourcePolicy(({ sourceGroups }) => sourceGroups.ts, Source.TELESYNC),
+  sourcePolicy(({ sourceGroups }) => sourceGroups.tc, Source.TELECINE),
+  sourcePolicy(
+    context => !context.modifier && isHighDefinition(context.parsedResolution),
+    Source.WEBDL,
+  ),
 ];
+
+function sourcePolicy(
+  matches: (context: QualityContext) => boolean,
+  source: Source,
+): QualityPolicy {
+  return {
+    matches,
+    getOverrides: () => ({ sources: [source] }),
+  };
+}
+
+function getXvidDvdOverrides(context: QualityContext): QualityResultOverrides | null {
+  if (context.codec !== VideoCodec.XVID) {
+    return null;
+  }
+
+  return {
+    sources: [Source.DVD],
+    resolution: Resolution.R480P,
+  };
+}
+
+function isHighDefinition(resolution?: Resolution): boolean {
+  return (
+    resolution === Resolution.R2160P ||
+    resolution === Resolution.R1080P ||
+    resolution === Resolution.R720P
+  );
+}
 
 function getBlurayResolution(context: QualityContext): Resolution | undefined {
   if (context.parsedResolution) {
