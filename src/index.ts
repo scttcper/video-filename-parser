@@ -5,7 +5,7 @@ export * from './language.js';
 export * from './quality.js';
 export * from './resolution.js';
 export * from './source.js';
-export * from './title.js';
+export * from './title/index.js';
 export * from './extensions.js';
 export * from './group.js';
 export * from './season/index.js';

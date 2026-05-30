@@ -8,7 +8,7 @@ import { parseQuality, type Revision } from './quality.js';
 import type { Resolution } from './resolution.js';
 import { parseSeason, type Season } from './season/index.js';
 import type { Source } from './source.js';
-import { parseTitleAndYear } from './title.js';
+import { parseTitleAndYear } from './title/index.js';
 import { removeEmpty } from './utils.js';
 import { parseVideoCodec, type VideoCodec } from './videoCodec.js';
 

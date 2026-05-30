@@ -1,4 +1,4 @@
-import { parseTitleAndYear } from './title.js';
+import { parseTitleAndYear } from './title/index.js';
 
 export interface Edition {
   internal?: boolean;

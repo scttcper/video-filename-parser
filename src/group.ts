@@ -1,6 +1,6 @@
 import { removeFileExtension } from './extensions.js';
 import { simplifyTitle } from './simplifyTitle.js';
-import { parseTitleAndYear } from './title.js';
+import { parseTitleAndYear } from './title/index.js';
 
 const websitePrefixExp = /^\[\s*[a-z]+(\.[a-z]+)+\s*\][- ]*|^www\.[a-z]+\.(?:com|net)[ -]*/i;
 const cleanReleaseGroupExp =
