@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 
-import { releaseTitleCleaner, simplifyTitle } from '../src/simplifyTitle.js';
+import { releaseTitleCleaner, simplifyTitle } from '../src/title/cleanup.js';
 
 it('return null for empty title', () => {
   expect(releaseTitleCleaner('')).toBe(null);

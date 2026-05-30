@@ -21,6 +21,11 @@ const cases: Array<[string, ReturnType<typeof parseVideoCodec>['codec']]> = [
   ['The.Middle.720p.HEVC-MeGusta-Pre', VideoCodec.X265],
   ['Cloud.Atlas.2012.BluRay.1080p.VC1.5.1.WMV-INSECTS', VideoCodec.WMV],
   ['The.Book.Of.Eli.2010.Bluray.VC1.1080P.5.1.WMV-NOVO', VideoCodec.WMV],
+  ['Codec variants HEVC x265', VideoCodec.X265],
+  ['Codec variants X-vid DivX', VideoCodec.XVID],
+  ['Codec variants DVDR', VideoCodec.DVDR],
+  ['Codec precedence x264 before H264', VideoCodec.H264],
+  ['Codec precedence x265 before H265', VideoCodec.H265],
 ];
 
 for (const [title, result] of cases) {

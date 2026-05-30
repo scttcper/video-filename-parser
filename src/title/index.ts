@@ -1,6 +1,5 @@
-import { releaseTitleCleaner, simplifyTitle } from '../simplifyTitle.js';
-
 import { getFirstTitleBoundaryPosition } from './boundaries.js';
+import { releaseTitleCleaner, simplifyTitle } from './cleanup.js';
 import { movieTitleYearPatterns, releaseGroupSuffixExp } from './patterns.js';
 import type { TitleAndYear, TitleYearPattern } from './types.js';
 

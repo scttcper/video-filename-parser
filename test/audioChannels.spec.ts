@@ -20,6 +20,13 @@ const audioChannelCases: Array<[string, ReturnType<typeof parseAudioChannels>]> 
     'The.Daily.Show.2015.07.01.Kirsten.Gillibrand.Extended.720p.Comedy.Central.WEBRip.AAC2.0.x264-BTW.mkv',
     { channels: Channels.STEREO, source: '2.0' },
   ],
+  ['Movie.Title.DTS.7.1.5.1', { channels: Channels.SEVEN, source: '7.1' }],
+  ['Movie.Title.AC3.5.1.6ch', { channels: Channels.SIX, source: '5.1' }],
+  ['Movie.Title.AAC.6ch', { channels: Channels.SIX, source: '6ch' }],
+  ['Movie.Title.AAC.2.0.stereo', { channels: Channels.STEREO, source: '2.0' }],
+  ['Movie.Title.Audio.stereo', { channels: Channels.STEREO, source: 'stereo' }],
+  ['Movie.Title.AAC.1.0.mono', { channels: Channels.MONO, source: '1.0' }],
+  ['Movie.Title.Audio.mono', { channels: Channels.MONO, source: 'mono' }],
 ];
 
 for (const [title, result] of audioChannelCases) {

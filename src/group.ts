@@ -1,5 +1,5 @@
 import { removeFileExtension } from './extensions.js';
-import { simplifyTitle } from './simplifyTitle.js';
+import { simplifyTitle } from './title/cleanup.js';
 import { parseTitleAndYear } from './title/index.js';
 
 const websitePrefixExp = /^\[\s*[a-z]+(\.[a-z]+)+\s*\][- ]*|^www\.[a-z]+\.(?:com|net)[ -]*/i;
@@ -13,35 +13,72 @@ const exceptionReleaseGroupRegex =
 const globalReleaseGroupExp = new RegExp(releaseGroupRegexExp.source, 'ig');
 
 export function parseGroup(title: string, parsedTitle?: string): string | null {
-  const nowebsiteTitle = title.replace(websitePrefixExp, '');
-  let releaseTitle = parsedTitle ?? parseTitleAndYear(nowebsiteTitle).title;
-  releaseTitle = releaseTitle.replaceAll(' ', '.');
-  let trimmed = nowebsiteTitle
-    .replaceAll(' ', '.')
-    .replace(releaseTitle === nowebsiteTitle ? '' : releaseTitle, '')
-    .replaceAll('.-.', '.');
-  trimmed = simplifyTitle(removeFileExtension(trimmed.trim()));
+  const nowebsiteTitle = removeWebsitePrefix(title);
+  const releaseTitle = normalizeReleaseTitle(nowebsiteTitle, parsedTitle);
+  let trimmed = buildGroupCandidateTitle(nowebsiteTitle, releaseTitle);
 
   if (trimmed.length === 0) {
     return null;
   }
 
-  const exceptionResult = exceptionReleaseGroupRegex.exec(trimmed);
+  const exceptionGroup = matchExceptionReleaseGroup(trimmed);
+  if (exceptionGroup !== null) {
+    return exceptionGroup;
+  }
+
+  const animeSubgroup = matchAnimeSubgroup(trimmed);
+  if (animeSubgroup !== null) {
+    return animeSubgroup;
+  }
+
+  trimmed = stripCleanupSuffixes(trimmed);
+
+  return matchGenericReleaseGroup(trimmed);
+}
+
+function removeWebsitePrefix(title: string): string {
+  return title.replace(websitePrefixExp, '');
+}
+
+function normalizeReleaseTitle(title: string, parsedTitle?: string): string {
+  return (parsedTitle ?? parseTitleAndYear(title).title).replaceAll(' ', '.');
+}
+
+function buildGroupCandidateTitle(title: string, releaseTitle: string): string {
+  const trimmed = title
+    .replaceAll(' ', '.')
+    .replace(releaseTitle === title ? '' : releaseTitle, '')
+    .replaceAll('.-.', '.');
+
+  return simplifyTitle(removeFileExtension(trimmed.trim()));
+}
+
+function matchExceptionReleaseGroup(title: string): string | null {
+  const exceptionResult = exceptionReleaseGroupRegex.exec(title);
   if (exceptionResult?.groups?.releasegroup) {
     return exceptionResult.groups.releasegroup;
   }
 
-  const animeResult = animeReleaseGroupExp.exec(trimmed);
+  return null;
+}
+
+function matchAnimeSubgroup(title: string): string | null {
+  const animeResult = animeReleaseGroupExp.exec(title);
   if (animeResult?.groups) {
     return animeResult.groups.subgroup ?? '';
   }
 
-  trimmed = trimmed.replace(cleanReleaseGroupExp, '');
+  return null;
+}
 
+function stripCleanupSuffixes(title: string): string {
+  return title.replace(cleanReleaseGroupExp, '');
+}
+
+function matchGenericReleaseGroup(title: string): string | null {
   globalReleaseGroupExp.lastIndex = 0;
-  let result: RegExpExecArray | null;
-  // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
-  while ((result = globalReleaseGroupExp.exec(trimmed))) {
+
+  for (const result of title.matchAll(globalReleaseGroupExp)) {
     if (!result?.groups) {
       continue;
     }

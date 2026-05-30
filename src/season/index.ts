@@ -1,10 +1,11 @@
+import { simplifyTitle } from '../title/cleanup.js';
+
 import {
   normalizeSixDigitAirDate,
   parseGenericMatchCollection,
   type ParsedMatchCollection,
 } from './common.js';
 import { rejectedPatterns, seasonPatterns } from './patterns.js';
-import { simplifyTitle } from '../simplifyTitle.js';
 
 export interface Season {
   releaseTitle: string;

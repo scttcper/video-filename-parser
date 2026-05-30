@@ -1,6 +1,6 @@
-import { Language } from './language.js';
-import { webdlExp } from './source.js';
-import { codecExp } from './videoCodec.js';
+import { Language } from '../language.js';
+import { webdlExp } from '../source.js';
+import { codecExp } from '../videoCodec.js';
 
 const simpleTitleRegex =
   /\s*(?:480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|HVEC|[xh][\W_]?26[45]|DD\W?5\W1|[<>?*:|]|848x480|1280x720|1920x1080)((8|10)b(it))?/i;
@@ -15,18 +15,54 @@ const commonSourcesRegex =
 const commonSourcesGlobalExp = new RegExp(commonSourcesRegex.source, 'ig');
 const codecGlobalExp = new RegExp(codecExp.source, 'ig');
 
+type CleanupPass = {
+  name: string;
+  clean: (title: string) => string;
+};
+
+function applyCleanupPasses(title: string, passes: readonly CleanupPass[]): string {
+  let cleanedTitle = title;
+
+  for (const pass of passes) {
+    cleanedTitle = pass.clean(cleanedTitle);
+  }
+
+  return cleanedTitle;
+}
+
+const simplifyTitleCleanupPasses: readonly CleanupPass[] = [
+  {
+    name: 'remove resolution and first codec details',
+    clean: title => title.replace(simpleTitleRegex, ''),
+  },
+  {
+    name: 'remove website prefix',
+    clean: title => title.replace(websitePrefixRegex, ''),
+  },
+  {
+    name: 'remove torrent request prefix',
+    clean: title => title.replace(cleanTorrentPrefixRegex, ''),
+  },
+  {
+    name: 'remove torrent tracker suffix',
+    clean: title => title.replace(cleanTorrentSuffixRegex, ''),
+  },
+  {
+    name: 'remove common source markers',
+    clean: title => title.replace(commonSourcesGlobalExp, ''),
+  },
+  {
+    name: 'remove web download marker',
+    clean: title => title.replace(webdlExp, ''),
+  },
+  {
+    name: 'remove remaining codec markers',
+    clean: title => title.replace(codecGlobalExp, ''),
+  },
+];
+
 export function simplifyTitle(title: string): string {
-  let simpleTitle = title.replace(simpleTitleRegex, '');
-  simpleTitle = simpleTitle.replace(websitePrefixRegex, '');
-  simpleTitle = simpleTitle.replace(cleanTorrentPrefixRegex, '');
-  simpleTitle = simpleTitle.replace(cleanTorrentSuffixRegex, '');
-  simpleTitle = simpleTitle.replace(commonSourcesGlobalExp, '');
-  simpleTitle = simpleTitle.replace(webdlExp, '');
-
-  // Single-pass removal of up to all codec mentions (replaces two parseVideoCodec calls)
-  simpleTitle = simpleTitle.replace(codecGlobalExp, '');
-
-  return simpleTitle.trim();
+  return applyCleanupPasses(title, simplifyTitleCleanupPasses).trim();
 }
 
 const requestInfoRegex = /\[.+?\]/i;
@@ -46,25 +82,55 @@ const allLanguagesGlobalExp = new RegExp(
   'g',
 );
 
+const releaseTitleCleanupPasses: readonly CleanupPass[] = [
+  {
+    name: 'replace first underscore',
+    clean: title => title.replace('_', ' '),
+  },
+  {
+    name: 'remove request info',
+    clean: title => title.replace(requestInfoRegex, '').trim(),
+  },
+  {
+    name: 'remove common source markers',
+    clean: title => title.replace(commonSourcesGlobalExp, '').trim(),
+  },
+  {
+    name: 'remove web download marker',
+    clean: title => title.replace(webdlExp, '').trim(),
+  },
+  {
+    name: 'remove edition marker',
+    clean: title => title.replace(editionExp, '').trim(),
+  },
+  {
+    name: 'remove language marker',
+    clean: title => title.replace(languageExp, '').trim(),
+  },
+  {
+    name: 'remove scene garbage marker',
+    clean: title => title.replace(sceneGarbageGlobalExp, '').trim(),
+  },
+  {
+    name: 'remove language names',
+    clean: title => title.replace(allLanguagesGlobalExp, '').trim(),
+  },
+  {
+    name: 'truncate at double space gap',
+    clean: title => title.split('  ')[0]!,
+  },
+  {
+    name: 'truncate at double dot gap',
+    clean: title => title.split('..')[0]!,
+  },
+];
+
 export function releaseTitleCleaner(title: string): string | null {
   if (!title || title.length === 0 || title === '(') {
     return null;
   }
 
-  let trimmedTitle = title.replace('_', ' ');
-  trimmedTitle = trimmedTitle.replace(requestInfoRegex, '').trim();
-  trimmedTitle = trimmedTitle.replace(commonSourcesGlobalExp, '').trim();
-  trimmedTitle = trimmedTitle.replace(webdlExp, '').trim();
-  trimmedTitle = trimmedTitle.replace(editionExp, '').trim();
-  trimmedTitle = trimmedTitle.replace(languageExp, '').trim();
-  trimmedTitle = trimmedTitle.replace(sceneGarbageGlobalExp, '').trim();
-
-  // Single-pass removal of all language names (replaces loop of ~45 new RegExp() calls)
-  trimmedTitle = trimmedTitle.replace(allLanguagesGlobalExp, '').trim();
-
-  // Look for gap formed by removing items
-  trimmedTitle = trimmedTitle.split('  ')[0]!;
-  trimmedTitle = trimmedTitle.split('..')[0]!;
+  const trimmedTitle = applyCleanupPasses(title, releaseTitleCleanupPasses);
 
   const parts = trimmedTitle.split('.');
   let result = '';

@@ -47,9 +47,21 @@ for (const [title, result] of singleCases) {
 
 const multipeSourceCases: Array<[string, Source[]]> = [
   ['The Office S01-S09 720p BluRay WEB-DL nHD x264-NhaNc3', [Source.BLURAY, Source.WEBDL]],
+  ['127.Hours.DVDSCR.NTSC.DVDR-GALAXY', [Source.DVD, Source.SCREENER]],
 ];
 for (const [title, result] of multipeSourceCases) {
   it(`parse multi source "${title}"`, () => {
+    expect(parseSource(title)).toEqual(result);
+  });
+}
+
+const precedenceCases: Array<[string, Source[]]> = [
+  ['Movie.Title.2020.1080p.WEBRip.WEB-DL.x264-GROUP', [Source.WEBRIP]],
+  ['Movie.Title.2020.1080p.BDRip.x264-GROUP', [Source.BLURAY]],
+  ['Movie.Title.2020.1080p.BRRip.x264-GROUP', [Source.BLURAY]],
+];
+for (const [title, result] of precedenceCases) {
+  it(`preserves source precedence for "${title}"`, () => {
     expect(parseSource(title)).toEqual(result);
   });
 }

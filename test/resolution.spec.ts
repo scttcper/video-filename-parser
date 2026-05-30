@@ -22,6 +22,12 @@ const cases: Array<[string, Resolution?]> = [
   ['Orphan Black S05E09 WEBRip 1080p10bit DD5 1 x265 HEVC D0ct0rLew', Resolution.R1080P],
   ['[SubsPlease] Movie Title (540p) [AB649D32]', Resolution.R540P],
   ['Series.Title.S04E13.960p.WEB-DL.AAC2.0.H.264-squalor', Resolution.R720P],
+  ['Movie.Title.4K.2160p.1080p', Resolution.R2160P],
+  ['Movie.Title.1080p.720p', Resolution.R1080P],
+  ['Movie.Title.720p.576p', Resolution.R720P],
+  ['Movie.Title.576p.540p', Resolution.R576P],
+  ['Movie.Title.540p.480p', Resolution.R540P],
+  ['Movie.Title.848x480', Resolution.R480P],
 ];
 for (const [title, result] of cases) {
   it(`parse resolution "${title}"`, () => {
@@ -33,6 +39,7 @@ const assumeCases: Array<[string, Resolution]> = [
   ['127.Hours.DVDSCR.NTSC.DVDR-GALAXY', Resolution.R480P],
   ['127.Hours.GERMAN.2010.DL.PAL.DVDR-OldsMan', Resolution.R480P],
   ['12.Angry.Men.1957.DvDivX-SMB', Resolution.R480P],
+  ['Movie.Title.DVDRip.No.Resolution', Resolution.R480P],
 ];
 for (const [title, result] of assumeCases) {
   it(`assumes resolution from source "${title}"`, () => {

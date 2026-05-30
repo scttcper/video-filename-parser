@@ -9,39 +9,30 @@ export enum Resolution {
   R480P = '480P',
 }
 
-const R2160pExp =
-  /(?<R2160P>2160p|4k[-_. ](?:UHD|HEVC|BD)|(?:UHD|HEVC|BD)[-_. ]4k|\b(4k)\b|COMPLETE.UHD|UHD.COMPLETE)/i;
-const R1080pExp = /(?<R1080P>1080(i|p)|1920x1080)(10bit)?/i;
-const R720pExp = /(?<R720P>720(i|p)|1280x720|960p)(10bit)?/i;
-const R576pExp = /(?<R576P>576(i|p))/i;
-const R540pExp = /(?<R540P>540(i|p))/i;
-const R480Exp = /(?<R480P>480(i|p)|640x480|848x480)/i;
-const resolutionExp = new RegExp(
-  [
-    R2160pExp.source,
-    R1080pExp.source,
-    R720pExp.source,
-    R576pExp.source,
-    R540pExp.source,
-    R480Exp.source,
-  ].join('|'),
-  'i',
-);
+const resolutionPatterns: Array<{ resolution: Resolution; regex: RegExp }> = [
+  {
+    resolution: Resolution.R2160P,
+    regex:
+      /2160p|4k[-_. ](?:UHD|HEVC|BD)|(?:UHD|HEVC|BD)[-_. ]4k|\b(4k)\b|COMPLETE.UHD|UHD.COMPLETE/i,
+  },
+  { resolution: Resolution.R1080P, regex: /(1080(i|p)|1920x1080)(10bit)?/i },
+  { resolution: Resolution.R720P, regex: /(720(i|p)|1280x720|960p)(10bit)?/i },
+  { resolution: Resolution.R576P, regex: /576(i|p)/i },
+  { resolution: Resolution.R540P, regex: /540(i|p)/i },
+  { resolution: Resolution.R480P, regex: /480(i|p)|640x480|848x480/i },
+];
 
 export function parseResolution(
   title: string,
   precomputedSource?: Source[],
 ): { resolution?: Resolution; source?: string } {
-  const result = resolutionExp.exec(title);
-
-  if (result?.groups) {
-    for (const key of Object.keys(Resolution)) {
-      if (result.groups[key] !== undefined) {
-        return {
-          resolution: Resolution[key as keyof typeof Resolution],
-          source: result.groups[key],
-        };
-      }
+  for (const { resolution, regex } of resolutionPatterns) {
+    const match = regex.exec(title);
+    if (match) {
+      return {
+        resolution,
+        source: match[0],
+      };
     }
   }
 
