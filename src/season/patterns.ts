@@ -10,12 +10,14 @@ import {
 export interface SeasonPattern {
   name: string;
   regex: RegExp;
+  stopOnNull?: boolean;
   parse: (match: RegExpExecArray, simpleTitle: string) => ParsedMatchCollection | null;
 }
 
 const airDate = (name: string, regex: RegExp): SeasonPattern => ({
   name,
   regex,
+  stopOnNull: true,
   parse: parseAirDateMatch,
 });
 

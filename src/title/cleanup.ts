@@ -2,29 +2,46 @@ import { Language } from '../language.js';
 import { webdlExp } from '../source.js';
 import { codecExp } from '../videoCodec.js';
 
-const simpleTitleRegex =
+const resolutionOrCodecDetailsExp =
   /\s*(?:480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|HVEC|[xh][\W_]?26[45]|DD\W?5\W1|[<>?*:|]|848x480|1280x720|1920x1080)((8|10)b(it))?/i;
 const websitePrefixRegex = /^\[\s*[a-z]+(\.[a-z]+)+\s*\][- ]*|^www\.[a-z]+\.(?:com|net)[ -]*/i;
 const cleanTorrentPrefixRegex = /^\[(?:REQ)\]/i;
 const cleanTorrentSuffixRegex = /\[(?:ettv|rartv|rarbg|cttv)\]$/i;
 /** Used to help cleanup releases that often emit the year title.SCR-group */
-const commonSourcesRegex =
+const commonSourceMarkerExp =
   /\b(Bluray|(dvdr?|BD)rip|HDTV|HDRip|TS|R5|CAM|SCR|(WEB|DVD)?.?SCREENER|DiVX|xvid|web-?dl)\b/i;
 
 // Hoisted global variants (avoid re-creating RegExp on every call)
-const commonSourcesGlobalExp = new RegExp(commonSourcesRegex.source, 'ig');
+const commonSourceMarkersGlobalExp = new RegExp(commonSourceMarkerExp.source, 'ig');
 const codecGlobalExp = new RegExp(codecExp.source, 'ig');
 
-type CleanupPass = {
-  name: string;
-  clean: (title: string) => string;
+type RegexCleanupPass = {
+  readonly name: string;
+  readonly pattern: RegExp;
+  readonly replacement?: string;
+  readonly trimAfter?: boolean;
 };
+
+type FunctionCleanupPass = {
+  readonly name: string;
+  readonly clean: (title: string) => string;
+  readonly trimAfter?: boolean;
+};
+
+type CleanupPass = RegexCleanupPass | FunctionCleanupPass;
+
+function applyCleanupPass(title: string, pass: CleanupPass): string {
+  const cleanedTitle =
+    'pattern' in pass ? title.replace(pass.pattern, pass.replacement ?? '') : pass.clean(title);
+
+  return pass.trimAfter === true ? cleanedTitle.trim() : cleanedTitle;
+}
 
 function applyCleanupPasses(title: string, passes: readonly CleanupPass[]): string {
   let cleanedTitle = title;
 
   for (const pass of passes) {
-    cleanedTitle = pass.clean(cleanedTitle);
+    cleanedTitle = applyCleanupPass(cleanedTitle, pass);
   }
 
   return cleanedTitle;
@@ -33,31 +50,31 @@ function applyCleanupPasses(title: string, passes: readonly CleanupPass[]): stri
 const simplifyTitleCleanupPasses: readonly CleanupPass[] = [
   {
     name: 'remove resolution and first codec details',
-    clean: title => title.replace(simpleTitleRegex, ''),
+    pattern: resolutionOrCodecDetailsExp,
   },
   {
     name: 'remove website prefix',
-    clean: title => title.replace(websitePrefixRegex, ''),
+    pattern: websitePrefixRegex,
   },
   {
     name: 'remove torrent request prefix',
-    clean: title => title.replace(cleanTorrentPrefixRegex, ''),
+    pattern: cleanTorrentPrefixRegex,
   },
   {
     name: 'remove torrent tracker suffix',
-    clean: title => title.replace(cleanTorrentSuffixRegex, ''),
+    pattern: cleanTorrentSuffixRegex,
   },
   {
     name: 'remove common source markers',
-    clean: title => title.replace(commonSourcesGlobalExp, ''),
+    pattern: commonSourceMarkersGlobalExp,
   },
   {
     name: 'remove web download marker',
-    clean: title => title.replace(webdlExp, ''),
+    pattern: webdlExp,
   },
   {
     name: 'remove remaining codec markers',
-    clean: title => title.replace(codecGlobalExp, ''),
+    pattern: codecGlobalExp,
   },
 ];
 
@@ -89,31 +106,38 @@ const releaseTitleCleanupPasses: readonly CleanupPass[] = [
   },
   {
     name: 'remove request info',
-    clean: title => title.replace(requestInfoRegex, '').trim(),
+    pattern: requestInfoRegex,
+    trimAfter: true,
   },
   {
     name: 'remove common source markers',
-    clean: title => title.replace(commonSourcesGlobalExp, '').trim(),
+    pattern: commonSourceMarkersGlobalExp,
+    trimAfter: true,
   },
   {
     name: 'remove web download marker',
-    clean: title => title.replace(webdlExp, '').trim(),
+    pattern: webdlExp,
+    trimAfter: true,
   },
   {
     name: 'remove edition marker',
-    clean: title => title.replace(editionExp, '').trim(),
+    pattern: editionExp,
+    trimAfter: true,
   },
   {
     name: 'remove language marker',
-    clean: title => title.replace(languageExp, '').trim(),
+    pattern: languageExp,
+    trimAfter: true,
   },
   {
     name: 'remove scene garbage marker',
-    clean: title => title.replace(sceneGarbageGlobalExp, '').trim(),
+    pattern: sceneGarbageGlobalExp,
+    trimAfter: true,
   },
   {
     name: 'remove language names',
-    clean: title => title.replace(allLanguagesGlobalExp, '').trim(),
+    pattern: allLanguagesGlobalExp,
+    trimAfter: true,
   },
   {
     name: 'truncate at double space gap',
@@ -125,44 +149,60 @@ const releaseTitleCleanupPasses: readonly CleanupPass[] = [
   },
 ];
 
+function isCleanableReleaseTitle(title: string): boolean {
+  return title.length > 0 && title !== '(';
+}
+
+function shouldPreservePeriod(
+  segment: string,
+  previousSegmentWasAcronym: boolean,
+  nextSegment: string,
+): boolean {
+  if (segment.length !== 1) {
+    return false;
+  }
+
+  if (segment.toLowerCase() !== 'a') {
+    return Number.isNaN(Number.parseInt(segment, 10));
+  }
+
+  return previousSegmentWasAcronym || nextSegment.length === 1;
+}
+
+function formatDottedTitleSegments(title: string): string {
+  const segments = title.split('.');
+  let formattedTitle = '';
+  let previousSegmentWasAcronym = false;
+  let nextSegment = '';
+
+  for (const [segmentIndex, segment] of segments.entries()) {
+    if (segments.length >= segmentIndex + 2) {
+      nextSegment = segments[segmentIndex + 1] ?? '';
+    }
+
+    if (shouldPreservePeriod(segment, previousSegmentWasAcronym, nextSegment)) {
+      formattedTitle += `${segment}.`;
+      previousSegmentWasAcronym = true;
+      continue;
+    }
+
+    if (previousSegmentWasAcronym) {
+      formattedTitle += ' ';
+      previousSegmentWasAcronym = false;
+    }
+
+    formattedTitle += `${segment} `;
+  }
+
+  return formattedTitle.trim();
+}
+
 export function releaseTitleCleaner(title: string): string | null {
-  if (!title || title.length === 0 || title === '(') {
+  if (!isCleanableReleaseTitle(title)) {
     return null;
   }
 
   const trimmedTitle = applyCleanupPasses(title, releaseTitleCleanupPasses);
 
-  const parts = trimmedTitle.split('.');
-  let result = '';
-  let n = 0;
-  let previousAcronym = false;
-  let nextPart = '';
-  for (const part of parts) {
-    if (parts.length >= n + 2) {
-      nextPart = parts[n + 1] ?? '';
-    }
-
-    if (
-      part.length === 1 &&
-      part.toLowerCase() !== 'a' &&
-      Number.isNaN(Number.parseInt(part, 10))
-    ) {
-      result += `${part}.`;
-      previousAcronym = true;
-    } else if (part.toLowerCase() === 'a' && (previousAcronym || nextPart.length === 1)) {
-      result += `${part}.`;
-      previousAcronym = true;
-    } else {
-      if (previousAcronym) {
-        result += ' ';
-        previousAcronym = false;
-      }
-
-      result += `${part} `;
-    }
-
-    n++;
-  }
-
-  return result.trim();
+  return formatDottedTitleSegments(trimmedTitle);
 }

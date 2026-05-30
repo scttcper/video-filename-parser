@@ -44,6 +44,10 @@ export function parseSeason(title: string): Season | null {
 
     const result = pattern.parse(match, simpleTitle);
     if (result === null) {
+      if (pattern.stopOnNull === true) {
+        return null;
+      }
+
       continue;
     }
 
@@ -72,10 +76,10 @@ function preValidation(title: string): boolean {
 }
 
 function toSeason(title: string, result: ParsedMatchCollection): Season {
-  if (result.fullSeason && result.releaseTokens && /Special/i.test(result.releaseTokens)) {
-    result.fullSeason = false;
-    result.isSpecial = true;
-  }
+  const isSpecialFullSeason =
+    result.fullSeason === true &&
+    result.releaseTokens !== undefined &&
+    /Special/i.test(result.releaseTokens);
 
   return {
     releaseTitle: title,
@@ -83,11 +87,11 @@ function toSeason(title: string, result: ParsedMatchCollection): Season {
     seasons: result.seasonNumbers ?? [],
     episodeNumbers: result.episodeNumbers ?? [],
     airDate: result.airDate ?? null,
-    fullSeason: result.fullSeason ?? false,
+    fullSeason: isSpecialFullSeason ? false : (result.fullSeason ?? false),
     isPartialSeason: result.isPartialSeason ?? false,
     isMultiSeason: result.isMultiSeason ?? false,
     isSeasonExtra: result.isSeasonExtra ?? false,
-    isSpecial: result.isSpecial ?? false,
+    isSpecial: isSpecialFullSeason || (result.isSpecial ?? false),
     seasonPart: result.seasonPart ?? 0,
   };
 }

@@ -272,6 +272,28 @@ it('maps absolute-only range captures using the absolute range end', () => {
   ]);
 });
 
+it('ignores incomplete air date capture bags in the generic parser', () => {
+  const title = 'Show 2020';
+  const match = /^(?<title>.+?)\s+(?<airyear>\d{4})/i.exec(title)!;
+
+  expect(parseMatchCollection(match, title)).toBeNull();
+});
+
+it('rejects impossible air dates instead of rolling them into another month', () => {
+  const title = 'Show 2020 02 31 720p';
+  const match = /^(?<title>.+?)\s+(?<airyear>\d{4})\s+(?<airmonth>\d{2})\s+(?<airday>\d{2})/i.exec(
+    title,
+  )!;
+
+  expect(parseMatchCollection(match, title)).toBeNull();
+  expect(parseSeason(title)).toBeNull();
+});
+
+it('rejects future air dates without throwing', () => {
+  expect(() => parseSeason('Show 2999 01 01 720p')).not.toThrow();
+  expect(parseSeason('Show 2999 01 01 720p')).toBeNull();
+});
+
 it('does not expand descending absolute episode ranges', () => {
   const result = parseSeason('Anime Range ep12-01 [ABCDEF12]');
   expect(result?.episodeNumbers).not.toEqual([12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);

@@ -21,16 +21,19 @@ type MatchGroups = NonNullable<RegExpExecArray['groups']>;
 
 export function completeRange(arr: number[]): number[] {
   const uniqArr = [...new Set(arr)];
+  if (uniqArr.length === 0) {
+    return [];
+  }
 
   const first = Number(uniqArr[0]);
   const last = Number(uniqArr[uniqArr.length - 1]);
 
-  if (first > last) {
+  const range = expandIntegerRange(first, last);
+  if (range === null) {
     return arr;
   }
 
-  const count = last - first + 1;
-  return [...Array.from({ length: count }).keys()].map(k => k + first);
+  return range;
 }
 
 export function normalizeSixDigitAirDate(title: string, simpleTitle: string): string {
@@ -63,9 +66,9 @@ export function parseGenericMatchCollection(
     return parseAirDateGroups(groups, simpleTitle);
   }
 
-  const hasAbsoluteEpisode = Boolean(groups.absoluteepisode || groups.absoluteepisode1);
-  const hasSeasonPart = Boolean(groups.seasonpart);
-  const hasEpisode = Boolean(groups.episode || groups.episode1);
+  const hasAbsoluteEpisode = hasAnyGroup(groups, 'absoluteepisode', 'absoluteepisode1');
+  const hasSeasonPart = hasAnyGroup(groups, 'seasonpart');
+  const hasEpisode = hasAnyGroup(groups, 'episode', 'episode1');
 
   if (hasAbsoluteEpisode) {
     return parseAbsoluteEpisodeGroups(groups, simpleTitle);
@@ -127,7 +130,7 @@ function requireGroups(match: RegExpExecArray): MatchGroups {
 }
 
 function hasAirDate(groups: MatchGroups): boolean {
-  const airYear = Number.parseInt(groups.airyear ?? '', 10);
+  const airYear = Number.parseInt(groupValue(groups, 'airyear') ?? '', 10);
   return airYear >= 1900;
 }
 
@@ -136,10 +139,18 @@ function parseAirDateGroups(
   simpleTitle: string,
 ): ParsedMatchCollection | null {
   const { result } = createBaseResult(groups, simpleTitle);
-  let lastTokenIndex = indexOfEnd(simpleTitle, groups.title ?? '');
-  const airYear = Number.parseInt(groups.airyear ?? '', 10);
-  let airMonth = Number.parseInt(groups.airmonth ?? '', 10);
-  let airDay = Number.parseInt(groups.airday ?? '', 10);
+  let lastTokenIndex = indexOfEnd(simpleTitle, groupValue(groups, 'title') ?? '');
+  const airYearText = groupValue(groups, 'airyear');
+  const airMonthText = groupValue(groups, 'airmonth');
+  const airDayText = groupValue(groups, 'airday');
+
+  if (!airYearText || !airMonthText || !airDayText) {
+    return null;
+  }
+
+  const airYear = Number.parseInt(airYearText, 10);
+  let airMonth = Number.parseInt(airMonthText, 10);
+  let airDay = Number.parseInt(airDayText, 10);
 
   if (airMonth > 12) {
     const tempDay = airDay;
@@ -148,17 +159,13 @@ function parseAirDateGroups(
   }
 
   const airDate = new Date(airYear, airMonth - 1, airDay);
-  if (airDate.getTime() > Date.now()) {
-    throw new Error('Parsed date is in the future');
+  if (!isValidAirDate(airDate, airYear, airMonth, airDay)) {
+    return null;
   }
 
-  if (airDate.getTime() < new Date(1970, 1, 1).getTime()) {
-    throw new Error('Parsed date error');
-  }
-
-  lastTokenIndex = Math.max(indexOfEnd(simpleTitle, groups.airyear ?? ''), lastTokenIndex);
-  lastTokenIndex = Math.max(indexOfEnd(simpleTitle, groups.airmonth ?? ''), lastTokenIndex);
-  lastTokenIndex = Math.max(indexOfEnd(simpleTitle, groups.airday ?? ''), lastTokenIndex);
+  lastTokenIndex = Math.max(indexOfEnd(simpleTitle, airYearText), lastTokenIndex);
+  lastTokenIndex = Math.max(indexOfEnd(simpleTitle, airMonthText), lastTokenIndex);
+  lastTokenIndex = Math.max(indexOfEnd(simpleTitle, airDayText), lastTokenIndex);
   result.airDate = airDate;
 
   return finishResult(result, simpleTitle, lastTokenIndex);
@@ -185,7 +192,7 @@ function parseSeasonPackGroups(
   const { result, lastTokenIndex } = createBaseResult(groups, simpleTitle);
   const nextIndex = applySeasonNumbers(result, groups, simpleTitle, lastTokenIndex);
 
-  if (groups.extras) {
+  if (groupValue(groups, 'extras')) {
     result.isSeasonExtra = true;
   }
 
@@ -199,7 +206,7 @@ function parsePartialSeasonGroups(
 ): ParsedMatchCollection | null {
   const { result, lastTokenIndex } = createBaseResult(groups, simpleTitle);
   const nextIndex = applySeasonNumbers(result, groups, simpleTitle, lastTokenIndex);
-  const seasonPart = groups.seasonpart;
+  const seasonPart = groupValue(groups, 'seasonpart');
 
   if (seasonPart) {
     result.seasonPart = Number.parseInt(seasonPart, 10);
@@ -241,7 +248,8 @@ function createBaseResult(
   result: ParsedMatchCollection;
   lastTokenIndex: number;
 } {
-  const seriesName = (groups.title ?? '')
+  const title = groupValue(groups, 'title') ?? '';
+  const seriesName = title
     .replaceAll('.', ' ')
     .replaceAll('_', ' ')
     .replace(requestInfoExp, '')
@@ -251,7 +259,7 @@ function createBaseResult(
     result: {
       seriesName,
     },
-    lastTokenIndex: indexOfEnd(simpleTitle, groups.title ?? ''),
+    lastTokenIndex: indexOfEnd(simpleTitle, title),
   };
 }
 
@@ -262,10 +270,10 @@ function applySeasonNumbers(
   lastTokenIndex: number,
 ): number {
   let nextIndex = lastTokenIndex;
-  let seasons = [groups.season, groups.season1]
-    .filter(x => x !== undefined && x.length > 0)
+  let seasons = [groupValue(groups, 'season'), groupValue(groups, 'season1')]
+    .filter(isPresent)
     .map(x => {
-      nextIndex = Math.max(indexOfEnd(simpleTitle, x ?? ''), nextIndex);
+      nextIndex = Math.max(indexOfEnd(simpleTitle, x), nextIndex);
       return Number(x);
     });
 
@@ -282,20 +290,21 @@ function applySeasonNumbers(
 }
 
 function applyEpisodeNumbers(result: ParsedMatchCollection, groups: MatchGroups): null | undefined {
-  const episodeCaptures = [groups.episode, groups.episode1].filter(x => x);
+  const episodeCaptures = [groupValue(groups, 'episode'), groupValue(groups, 'episode1')].filter(
+    isPresent,
+  );
   if (episodeCaptures.length === 0) {
     return undefined;
   }
 
   const first = Number(episodeCaptures[0]);
   const last = Number(episodeCaptures[episodeCaptures.length - 1]);
-
-  if (first > last) {
+  const range = expandIntegerRange(first, last);
+  if (range === null) {
     return null;
   }
 
-  const count = last - first + 1;
-  result.episodeNumbers = [...Array.from({ length: count }).keys()].map(k => k + first);
+  result.episodeNumbers = range;
   return undefined;
 }
 
@@ -303,7 +312,10 @@ function applyAbsoluteEpisodeNumbers(
   result: ParsedMatchCollection,
   groups: MatchGroups,
 ): { lastCapture?: string } | null {
-  const absoluteEpisodeCaptures = [groups.absoluteepisode, groups.absoluteepisode1].filter(x => x);
+  const absoluteEpisodeCaptures = [
+    groupValue(groups, 'absoluteepisode'),
+    groupValue(groups, 'absoluteepisode1'),
+  ].filter(isPresent);
   if (absoluteEpisodeCaptures.length === 0) {
     return {};
   }
@@ -312,7 +324,7 @@ function applyAbsoluteEpisodeNumbers(
   const lastCapture = absoluteEpisodeCaptures[absoluteEpisodeCaptures.length - 1] ?? '';
   const last = Number(lastCapture);
 
-  if (first > last) {
+  if (!Number.isFinite(first) || !Number.isFinite(last) || first > last) {
     return null;
   }
 
@@ -326,12 +338,14 @@ function applyAbsoluteEpisodeNumbers(
     return { lastCapture };
   }
 
-  const count = last - first + 1;
-  result.episodeNumbers = [...Array.from({ length: Math.floor(count) }).keys()].map(
-    k => k + Math.floor(first),
-  );
+  const range = expandIntegerRange(first, last);
+  if (range === null) {
+    return null;
+  }
 
-  if (groups.special) {
+  result.episodeNumbers = range;
+
+  if (groupValue(groups, 'special')) {
     result.isSpecial = true;
   }
 
@@ -343,14 +357,57 @@ function finishResult(
   simpleTitle: string,
   lastTokenIndex: number,
 ): ParsedMatchCollection {
-  if (lastTokenIndex === simpleTitle.length || lastTokenIndex === -1) {
-    result.releaseTokens = simpleTitle;
-  } else {
-    result.releaseTokens = simpleTitle.slice(lastTokenIndex);
+  const releaseTokens =
+    lastTokenIndex === simpleTitle.length || lastTokenIndex === -1
+      ? simpleTitle
+      : simpleTitle.slice(lastTokenIndex);
+
+  return {
+    ...result,
+    releaseTokens,
+    seriesTitle: result.seriesName,
+  };
+}
+
+function groupValue(groups: MatchGroups, name: string): string | undefined {
+  const value = groups[name];
+  return value === undefined || value.length === 0 ? undefined : value;
+}
+
+function hasAnyGroup(groups: MatchGroups, ...names: string[]): boolean {
+  return names.some(name => groupValue(groups, name) !== undefined);
+}
+
+function isPresent(value: string | undefined): value is string {
+  return value !== undefined;
+}
+
+function expandIntegerRange(first: number, last: number): number[] | null {
+  if (!Number.isInteger(first) || !Number.isInteger(last) || first > last) {
+    return null;
   }
 
-  result.seriesTitle = result.seriesName;
-  return result;
+  return Array.from({ length: last - first + 1 }, (_, index) => index + first);
+}
+
+function isValidAirDate(airDate: Date, airYear: number, airMonth: number, airDay: number): boolean {
+  if (Number.isNaN(airDate.getTime())) {
+    return false;
+  }
+
+  if (
+    airDate.getFullYear() !== airYear ||
+    airDate.getMonth() !== airMonth - 1 ||
+    airDate.getDate() !== airDay
+  ) {
+    return false;
+  }
+
+  if (airDate.getTime() > Date.now()) {
+    return false;
+  }
+
+  return airDate.getTime() >= new Date(1970, 1, 1).getTime();
 }
 
 function indexOfEnd(str1: string, str2: string): number {

@@ -46,66 +46,67 @@ export enum Language {
   Serbian = 'Serbian',
 }
 
-const languagePatterns: Array<{ language: Language; pattern: RegExp | string }> = [
-  { language: Language.English, pattern: /\b(english|eng|EN|FI)\b/i },
-  { language: Language.Spanish, pattern: 'spanish' },
-  { language: Language.Danish, pattern: /\b(DK|DAN|danish)\b/i },
-  { language: Language.Japanese, pattern: 'japanese' },
-  { language: Language.Cantonese, pattern: 'cantonese' },
-  { language: Language.Mandarin, pattern: 'mandarin' },
-  { language: Language.Korean, pattern: 'korean' },
-  { language: Language.Vietnamese, pattern: 'vietnamese' },
-  { language: Language.Swedish, pattern: /\b(SE|SWE|swedish)\b/i },
-  { language: Language.Finnish, pattern: 'finnish' },
-  { language: Language.Turkish, pattern: 'turkish' },
-  { language: Language.Portuguese, pattern: 'portuguese' },
-  { language: Language.Hebrew, pattern: 'hebrew' },
-  { language: Language.Czech, pattern: 'czech' },
-  { language: Language.Ukrainian, pattern: 'ukrainian' },
-  { language: Language.Catalan, pattern: 'catalan' },
-  { language: Language.Estonian, pattern: 'estonian' },
-  { language: Language.Icelandic, pattern: /\b(ice|Icelandic)\b/i },
-  { language: Language.Chinese, pattern: /\b(chi|chinese)\b/i },
-  { language: Language.Thai, pattern: 'thai' },
-  { language: Language.Italian, pattern: /\b(ita|italian)\b/i },
-  { language: Language.German, pattern: /\b(german|videomann)\b/i },
-  { language: Language.Flemish, pattern: /\b(flemish)\b/i },
-  { language: Language.Greek, pattern: /\b(greek)\b/i },
+const languageAliasRules: Array<{ language: Language; aliases: string[] }> = [
+  { language: Language.English, aliases: ['english', 'eng', 'en'] },
+  { language: Language.Spanish, aliases: ['spanish'] },
+  { language: Language.Danish, aliases: ['dk', 'dan', 'danish'] },
+  { language: Language.Japanese, aliases: ['japanese'] },
+  { language: Language.Cantonese, aliases: ['cantonese'] },
+  { language: Language.Mandarin, aliases: ['mandarin'] },
+  { language: Language.Korean, aliases: ['korean'] },
+  { language: Language.Vietnamese, aliases: ['vietnamese'] },
+  { language: Language.Swedish, aliases: ['se', 'swe', 'swedish'] },
+  { language: Language.Finnish, aliases: ['fi', 'finnish'] },
+  { language: Language.Turkish, aliases: ['turkish'] },
+  { language: Language.Portuguese, aliases: ['portuguese'] },
+  { language: Language.Hebrew, aliases: ['hebrew', 'hebdub'] },
+  { language: Language.Czech, aliases: ['cz', 'czech'] },
+  { language: Language.Ukrainian, aliases: ['ukr', 'ukrainian'] },
+  { language: Language.Catalan, aliases: ['catalan'] },
+  { language: Language.Estonian, aliases: ['estonian'] },
+  { language: Language.Icelandic, aliases: ['ice', 'icelandic'] },
+  { language: Language.Chinese, aliases: ['chi', 'chinese'] },
+  { language: Language.Thai, aliases: ['thai'] },
+  { language: Language.Italian, aliases: ['ita', 'italian'] },
+  { language: Language.German, aliases: ['german', 'videomann'] },
+  { language: Language.Flemish, aliases: ['flemish'] },
+  { language: Language.Greek, aliases: ['greek'] },
   {
     language: Language.French,
-    pattern: /\b(FR|FRENCH|VOSTFR|VO|VFF|VFQ|VF2|TRUEFRENCH|SUBFRENCH)\b/i,
+    aliases: ['fr', 'french', 'vostfr', 'vo', 'vff', 'vfq', 'vf2', 'truefrench', 'subfrench'],
   },
-  { language: Language.Russian, pattern: /\b(russian|rus)\b/i },
-  { language: Language.Norwegian, pattern: /\b(norwegian|NO)\b/i },
-  { language: Language.Hungarian, pattern: /\b(HUNDUB|HUN|hungarian)\b/i },
-  { language: Language.Hebrew, pattern: /\b(HebDub)\b/i },
-  { language: Language.Czech, pattern: /\b(CZ|SK)\b/i },
-  { language: Language.Ukrainian, pattern: /\bukr\b/i },
-  { language: Language.Polish, pattern: /\b(PL|PLDUB|POLISH)\b/i },
-  { language: Language.Dutch, pattern: /\b(nl|dutch)\b/i },
-  { language: Language.Hindi, pattern: /\b(HIN|Hindi)\b/i },
-  { language: Language.Tamil, pattern: /\b(TAM|Tamil)\b/i },
-  { language: Language.Arabic, pattern: /\b(Arabic)\b/i },
-  { language: Language.Latvian, pattern: /\b(Latvian)\b/i },
-  { language: Language.Lithuanian, pattern: /\b(Lithuanian)\b/i },
-  { language: Language.Romanian, pattern: /\b(RO|Romanian|rodubbed)\b/i },
-  { language: Language.Slovak, pattern: /\b(SK|Slovak)\b/i },
-  { language: Language.Brazilian, pattern: /\b(Brazilian)\b/i },
-  { language: Language.Persian, pattern: /\b(Persian)\b/i },
-  { language: Language.Bengali, pattern: /\b(Bengali)\b/i },
-  { language: Language.Bulgarian, pattern: /\b(Bulgarian)\b/i },
-  { language: Language.Serbian, pattern: /\b(Serbian)\b/i },
-  { language: Language.Nordic, pattern: /\b(nordic|NORDICSUBS)\b/i },
+  { language: Language.Russian, aliases: ['rus', 'russian'] },
+  { language: Language.Norwegian, aliases: ['no', 'norwegian'] },
+  { language: Language.Hungarian, aliases: ['hun', 'hundub', 'hungarian'] },
+  { language: Language.Polish, aliases: ['pl', 'pldub', 'polish'] },
+  { language: Language.Dutch, aliases: ['nl', 'dutch'] },
+  { language: Language.Hindi, aliases: ['hin', 'hindi'] },
+  { language: Language.Tamil, aliases: ['tam', 'tamil'] },
+  { language: Language.Arabic, aliases: ['arabic'] },
+  { language: Language.Latvian, aliases: ['latvian'] },
+  { language: Language.Lithuanian, aliases: ['lithuanian'] },
+  { language: Language.Romanian, aliases: ['ro', 'romanian', 'rodubbed'] },
+  { language: Language.Slovak, aliases: ['sk', 'slovak'] },
+  { language: Language.Brazilian, aliases: ['brazilian'] },
+  { language: Language.Persian, aliases: ['persian'] },
+  { language: Language.Bengali, aliases: ['bengali'] },
+  { language: Language.Bulgarian, aliases: ['bulgarian'] },
+  { language: Language.Serbian, aliases: ['serbian'] },
+  { language: Language.Nordic, aliases: ['nordic', 'nordicsubs'] },
 ];
+
+const tokenExp = /[a-z0-9]+/gi;
+const multiTokens = new Set(['multi', 'dual', 'dl']);
 
 export function parseLanguage(title: string, parsedTitle?: string): Language[] {
   parsedTitle ??= parseTitleAndYear(title).title;
-  const languageTitle = title.replaceAll('.', ' ').replace(parsedTitle, '').toLowerCase();
-  const languages = languagePatterns
-    .filter(({ pattern }) => matchesLanguagePattern(languageTitle, pattern))
+  const titleTokens = removeParsedTitleTokens(tokenize(title), tokenize(parsedTitle));
+  const titleTokenSet = new Set(titleTokens);
+  const languages = languageAliasRules
+    .filter(({ aliases }) => aliases.some(alias => titleTokenSet.has(alias)))
     .map(({ language }) => language);
 
-  if (isMulti(languageTitle)) {
+  if (hasMultiLanguageToken(titleTokens)) {
     languages.push(Language.English);
   }
 
@@ -116,17 +117,40 @@ export function parseLanguage(title: string, parsedTitle?: string): Language[] {
   return [...new Set(languages)];
 }
 
-function matchesLanguagePattern(languageTitle: string, pattern: RegExp | string): boolean {
-  if (typeof pattern === 'string') {
-    return languageTitle.includes(pattern);
-  }
-
-  return pattern.test(languageTitle);
+function tokenize(title: string): string[] {
+  return Array.from(title.matchAll(tokenExp), match => match[0].toLowerCase());
 }
 
-// Reviens-moi (2007) [1080p] BluRay MULTi x264-PopHD
-const multiExp = /(?<!(WEB-))\b(MULTi|DUAL|DL)\b/i;
+function removeParsedTitleTokens(titleTokens: string[], parsedTitleTokens: string[]): string[] {
+  if (parsedTitleTokens.length === 0 || parsedTitleTokens.length > titleTokens.length) {
+    return titleTokens;
+  }
+
+  const startIndex = findTokenSequence(titleTokens, parsedTitleTokens);
+  if (startIndex === -1) {
+    return titleTokens;
+  }
+
+  return [
+    ...titleTokens.slice(0, startIndex),
+    ...titleTokens.slice(startIndex + parsedTitleTokens.length),
+  ];
+}
+
+function findTokenSequence(tokens: string[], sequence: string[]): number {
+  return tokens.findIndex((_, index) =>
+    sequence.every(
+      (sequenceToken, sequenceIndex) => tokens[index + sequenceIndex] === sequenceToken,
+    ),
+  );
+}
+
+function hasMultiLanguageToken(tokens: string[]): boolean {
+  return tokens.some(
+    (token, index) => multiTokens.has(token) && !(token === 'dl' && tokens[index - 1] === 'web'),
+  );
+}
+
 export function isMulti(title: string): boolean | undefined {
-  const noWebTitle = title.replace(/\bWEB-?DL\b/i, '');
-  return multiExp.test(noWebTitle) || undefined;
+  return hasMultiLanguageToken(tokenize(title)) || undefined;
 }

@@ -94,7 +94,9 @@ const languageCases: Array<[string, Language[]]> = [
   ['Arabic.12.1982.1080p.BluRay.x264-ROVERS', [Language.English]],
   ['No.Country.for.Old.Men.1080p.BluRay.x264-HiGHTiMES', [Language.English]],
   ['Cars.2.2011.ESTONiAN.DVDRip.x264-EMX', [Language.Estonian]],
-  ['Cars.2.2011.EN.SE.FI.PAL.DVDR-AMIRITE', [Language.English, Language.Swedish]],
+  ['Cars.2.2011.EN.SE.FI.PAL.DVDR-AMIRITE', [Language.English, Language.Swedish, Language.Finnish]],
+  ['Cars.2.2011.FI.PAL.DVDR-AMIRITE', [Language.Finnish]],
+  ['Castle.2009.S01E14.HDTV.XviD.SK-LOL', [Language.Slovak]],
   [
     'Cars.2.2011.ENG.DK.NO.ICE.READ.NFO.PAL.DVDR-WILDER',
     [Language.English, Language.Danish, Language.Icelandic, Language.Norwegian],
@@ -112,6 +114,7 @@ const languageCases: Array<[string, Language[]]> = [
   ['Get.Him.To.The.Greek.TRUEFRENCH.DVDRip.XviD-REVOLTE', [Language.French]],
   ['The.Social.Network.R5.LD.German.XviD-CinePlexx', [Language.German]],
   ['The.Social.Network.R5.LiNE.XviD-TWiZTED', [Language.English]],
+  ['Example.Movie.2020.1080p.BluRay.x264-SpanishFly', [Language.English]],
   ['Incassable.TRUE.FRENCH.PROPER.READ.NFO.DVDRiP.DiVX.SBC-KFT', [Language.French]],
   ['Space.Jam.A.New.Legacy.2021.ROMANiAN.2160p.UHD.BLURAY.x265-UNDERDOG', [Language.Romanian]],
   ['Space.Jam.A.New.Legacy.2021.RoDubbed.2160p.UHD.BLURAY.x265-UNDERDOG', [Language.Romanian]],
@@ -141,3 +144,7 @@ for (const [title] of multiCases) {
     expect(isMulti(title)).toBe(true);
   });
 }
+
+it('does not treat WEB.DL as multi-language', () => {
+  expect(isMulti('Movie.2020.1080p.WEB.DL.x264-GROUP')).toBeUndefined();
+});
