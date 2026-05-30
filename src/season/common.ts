@@ -1,4 +1,4 @@
-const requestInfoExp = /^(?:\[.+?\])+/;
+const requestInfoExp = /^(?:\[[^\]\r\n]+\])+/;
 const sixDigitAirDateMatchExp =
   /"(?<=[_.-])(?<airdate>(?<!\d)(?<airyear>[1-9]\d{1})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))(?=[_.-])/i;
 

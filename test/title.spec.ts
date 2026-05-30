@@ -56,6 +56,15 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
     { title: 'Scarface', year: '1983' },
   ],
   [
+    'Movie.Title.Directors.Cut.2019.1080p.BluRay.x264-GROUP',
+    { title: 'Movie Title', year: '2019' },
+  ],
+  ['Movie.Title.Final.Cut.1982.1080p.BluRay.x264-GROUP', { title: 'Movie Title', year: '1982' }],
+  [
+    'Movie.Title.Extended.Edition.2010.1080p.BluRay.x264-GROUP',
+    { title: 'Movie Title', year: '2010' },
+  ],
+  [
     'Ouija.Origin.of.Evil.2016.MULTi.TRUEFRENCH.1080p.BluRay.x264-MELBA',
     { title: 'Ouija Origin of Evil', year: '2016' },
   ],

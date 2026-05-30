@@ -17,6 +17,7 @@ const cleanupCases: Array<[string, string]> = [
   ['The.Man.from.U.N.C.L.E', 'The Man from U.N.C.L.E.'],
   ['The.Middle.', 'The Middle'],
   ['Incassable.TRUE.FRENCH.PROPER.READ.NFO.DVDRiP.DiVX.SBC-KFT', 'Incassable'],
+  ['Prometheus.Extended.Directors.Cut.Fan.Edit', 'Prometheus'],
 ];
 for (const [title, result] of cleanupCases) {
   it(`cleanup movie title "${title}"`, () => {
@@ -43,6 +44,7 @@ const simplifyCases: Array<[string, string]> = [
   ['Inglorious.Basterds.CAM.XviD-CAMELOT', 'Inglorious.Basterds..-CAMELOT'],
   ['The.Fighter.DVDR-MPTDVD', 'The.Fighter.-MPTDVD'],
   ['The Card Counter WEBSCREENER XviD-EVO', 'The Card Counter  -EVO'],
+  ['[ www.Torrenting.com ] - Revenge.2008.720p.X264-DIMENSION', 'Revenge.2008..-DIMENSION'],
 ];
 for (const [title, result] of simplifyCases) {
   it(`cleanup simplify "${title}"`, () => {

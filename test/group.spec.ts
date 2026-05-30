@@ -21,6 +21,7 @@ const cases: Array<[string, string | null]> = [
   ['Reizen Waes - S01E08 - Transistri\u00EB, Zuid-Osseti\u00EB en Abchazi\u00EB SDTV.avi', null],
   ['Simpsons 10x11 - Wild Barts Cant Be Broken [rl].avi', null],
   ['[ www.Torrenting.com ] - Revenge.S03E14.720p.HDTV.X264-DIMENSION', 'DIMENSION'],
+  ['www.Torrenting.com - Revenge.S03E14.720p.HDTV.X264-DIMENSION', 'DIMENSION'],
   ['Seed S02E09 HDTV x264-2HD [eztv]-[rarbg.com]', '2HD'],
   ['7s-atlantis-s02e01-720p.mkv', null],
   ['The.Middle.720p.HEVC.x265-MeGusta-Pre', 'MeGusta'],
@@ -73,3 +74,13 @@ for (const [title, result] of cases) {
     expect(parseGroup(title)).toBe(result);
   });
 }
+
+it('parses a leading anime subgroup without the broad subgroup regex', () => {
+  expect(parseGroup('[SubsPlease] Show Name - 01 [ABCDEF12].mkv', 'Show Name')).toBe('SubsPlease');
+});
+
+it('ignores malformed leading bracket groups beyond the bounded prefix scan', () => {
+  const malformedPrefix = `[${'A'.repeat(321)}] Movie.Name.2020.1080p.WEB-DL.x264-GROUP.mkv`;
+
+  expect(parseGroup(malformedPrefix, 'Movie Name')).toBe('GROUP');
+});
