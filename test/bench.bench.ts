@@ -1,6 +1,6 @@
 import { bench, describe } from 'vitest';
 
-import { filenameParse, parseQuality, parseSeason } from '../src/index.js';
+import { filenameParse, parseQuality, parseSeason, removeFileExtension } from '../src/index.js';
 
 const movieTitles = [
   'Whats.Eating.Gilbert.Grape.1993.720p.BluRay.x264-SiNNERS',
@@ -23,6 +23,22 @@ const tvTitles = [
   'Holmes.Makes.It.Right.S02.720p.HDTV.AAC5.1.x265-NOGRP',
   'House.S07E11.PROPER.REAL.RERIP.1080p.BluRay.x264-TENEIGHTY',
 ];
+
+const extensionTitles = [
+  'Whats.Eating.Gilbert.Grape.1993.720p.BluRay.x264-SiNNERS',
+  'Whats.Eating.Gilbert.Grape.1993.720p.BluRay.x264-SiNNERS.mkv',
+  'Spider-Man Far from Home.2019.1080p.HDRip.X264.AC3-EVO.mp4',
+  'movie.release.rmvb',
+  'Movie.Title.2026.1080p.WEB-DL-GROUP',
+];
+
+describe('removeFileExtension', () => {
+  for (const title of extensionTitles) {
+    bench(title, () => {
+      removeFileExtension(title);
+    });
+  }
+});
 
 describe('filenameParse - movies', () => {
   for (const title of movieTitles) {
