@@ -72,7 +72,7 @@ const cases: Array<[string, Partial<Edition>]> = [
 
 for (const [title, result] of cases) {
   it(`get edition from "${title}"`, () => {
-    expect(parseEdition(title)).toEqual(result);
+    expect(parseEdition(title)).toStrictEqual(result);
   });
 }
 
