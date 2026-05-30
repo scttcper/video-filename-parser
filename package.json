@@ -31,8 +31,8 @@
     "demo:watch": "pnpm run -r dev",
     "lint": "oxlint . && oxfmt --check",
     "lint:fix": "oxlint . --fix && oxfmt",
-    "prepare": "pnpm run build",
     "build": "tsc",
+    "typecheck": "tsgo --noEmit",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "bench": "vitest bench ./test/bench.bench.ts"
@@ -41,6 +41,7 @@
     "@ctrl/oxlint-config": "1.5.0",
     "@sindresorhus/tsconfig": "8.1.0",
     "@types/node": "25.9.1",
+    "@typescript/native-preview": "7.0.0-dev.20260527.2",
     "oxfmt": "0.52.0",
     "oxlint": "1.67.0",
     "typescript": "6.0.3",
