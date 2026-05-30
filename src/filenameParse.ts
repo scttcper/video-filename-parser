@@ -6,7 +6,7 @@ import { parseGroup } from './group.js';
 import { isMulti, type Language, parseLanguage } from './language.js';
 import { parseQuality, type Revision } from './quality.js';
 import type { Resolution } from './resolution.js';
-import { parseSeason, type Season } from './season.js';
+import { parseSeason, type Season } from './season/index.js';
 import type { Source } from './source.js';
 import { parseTitleAndYear } from './title.js';
 import { removeEmpty } from './utils.js';

@@ -1,13 +1,10 @@
 import {
-  completeRange,
   normalizeSixDigitAirDate,
   parseGenericMatchCollection,
   type ParsedMatchCollection,
-} from './season/common.js';
-import { rejectedPatterns, seasonPatterns } from './season/patterns.js';
-import { simplifyTitle } from './simplifyTitle.js';
-
-export { completeRange, type ParsedMatchCollection };
+} from './common.js';
+import { rejectedPatterns, seasonPatterns } from './patterns.js';
+import { simplifyTitle } from '../simplifyTitle.js';
 
 export interface Season {
   releaseTitle: string;
