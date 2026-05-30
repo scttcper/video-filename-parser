@@ -5,14 +5,14 @@ export enum Channels {
   MONO = 'mono',
 }
 
-const channelPatterns: Array<{ channels: Channels; regex: RegExp }> = [
-  { channels: Channels.SEVEN, regex: /\b7.?[01]\b/i },
+const channelPatterns: ReadonlyArray<{ channels: Channels; regex: RegExp }> = [
+  { channels: Channels.SEVEN, regex: /(?<!\d)7[\W_][01]\b/i },
   {
     channels: Channels.SIX,
-    regex: /\b((6[\W]0(?:ch)?)(?=[^\d]|$)|(5[\W][01](?:ch)?)(?=[^\d]|$)|5ch|6ch)\b/i,
+    regex: /(?<!\d)((6[\W]0(?:ch)?)(?=[^\d]|$)|(5[\W][01](?:ch)?)(?=[^\d]|$)|5ch|6ch)\b/i,
   },
-  { channels: Channels.STEREO, regex: /((2[\W]0(?:ch)?)(?=[^\d]|$))|(stereo)/i },
-  { channels: Channels.MONO, regex: /(1[\W]0(?:ch)?)(?=[^\d]|$)|(mono)|(1ch)/i },
+  { channels: Channels.STEREO, regex: /(?<!\d)(2[\W]0(?:ch)?)(?=[^\d]|$)|\bstereo\b/i },
+  { channels: Channels.MONO, regex: /(?<!\d)(1[\W]0(?:ch)?)(?=[^\d]|$)|\b(?:mono|1ch)\b/i },
 ];
 
 export function parseAudioChannels(title: string): { channels?: Channels; source?: string } {

@@ -20,11 +20,15 @@ interface AudioCodecPattern {
   regex: RegExp;
 }
 
-const audioCodecPatterns: AudioCodecPattern[] = [
+const audioCodecPatterns: readonly AudioCodecPattern[] = [
   { name: 'dolby-atmos', codec: AudioCodec.EAC3, regex: /\bDolby[-_. ]?Atmos\b/i },
-  { name: 'eac3', codec: AudioCodec.EAC3, regex: /\b(?:EAC3|DDP|DD\+)\b/i },
+  { name: 'eac3', codec: AudioCodec.EAC3, regex: /\b(?:EAC3|DDP(?:\d(?:[.\s-]?\d)?)?|DD\+)\b/i },
   { name: 'truehd', codec: AudioCodec.TRUEHD, regex: /\bTrue-?HD\b/i },
-  { name: 'dolby', codec: AudioCodec.DOLBY, regex: /\b(?:Dolby-?Digital|Dolby|DD|AC3D?)\b/i },
+  {
+    name: 'dolby',
+    codec: AudioCodec.DOLBY,
+    regex: /\b(?:Dolby-?Digital|Dolby|DD(?:\d(?:[.\s-]?\d)?)?|AC3D?)\b/i,
+  },
   { name: 'dts-hd', codec: AudioCodec.DTSHD, regex: /\b(?:DTS-?HD|DTS-?MA|DTS-X)\b/i },
   { name: 'dts', codec: AudioCodec.DTS, regex: /\bDTS\b/i },
   { name: 'aac', codec: AudioCodec.AAC, regex: /\bAAC(?=(?:\d(?:[.\s]?\d)?)?(?:ch)?\b)/i },

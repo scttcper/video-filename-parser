@@ -1,12 +1,14 @@
 import { expect, it } from 'vitest';
 
-import { AudioCodec, parseAudioCodec } from '../src/audioCodec.js';
+import { AudioCodec, parseAudioCodec } from '../src/index.js';
 
 const audioCodecCases: Array<[string, ReturnType<typeof parseAudioCodec>]> = [
   [
     'Hannibal 2001 4K UHD Dolby Vision MP4 DD+5 1 H265-d3g',
     { codec: AudioCodec.EAC3, source: 'DD+' },
   ],
+  ['Movie.Title.2024.1080p.WEB-DL.DDP5.1.H264-GROUP', { codec: AudioCodec.EAC3, source: 'DDP5.1' }],
+  ['Movie.Title.2024.1080p.WEB-DL.DD5.1.H264-GROUP', { codec: AudioCodec.DOLBY, source: 'DD5.1' }],
   ['Aladdin 2019 720p BluRay x264 AC3 5 1-OMEGA', { codec: AudioCodec.DOLBY, source: 'AC3' }],
   ['Trespass Against Us (2017) 1080p BluRay x265 6ch -Dtech mkv', {}],
   [

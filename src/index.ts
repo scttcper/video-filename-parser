@@ -1,3 +1,5 @@
+export * from './audioChannels.js';
+export * from './audioCodec.js';
 export * from './videoCodec.js';
 export * from './edition.js';
 export * from './filenameParse.js';

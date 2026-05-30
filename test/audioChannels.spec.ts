@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 
-import { Channels, parseAudioChannels } from '../src/audioChannels.js';
+import { Channels, parseAudioChannels } from '../src/index.js';
 
 const audioChannelCases: Array<[string, ReturnType<typeof parseAudioChannels>]> = [
   [
@@ -21,12 +21,17 @@ const audioChannelCases: Array<[string, ReturnType<typeof parseAudioChannels>]> 
     { channels: Channels.STEREO, source: '2.0' },
   ],
   ['Movie.Title.DTS.7.1.5.1', { channels: Channels.SEVEN, source: '7.1' }],
+  ['Movie.Title.DTS.7 1.5.1', { channels: Channels.SEVEN, source: '7 1' }],
+  ['Movie.Title.DTS.7-1.5.1', { channels: Channels.SEVEN, source: '7-1' }],
+  ['Movie.Title.DTS.7x1.H264-GROUP', {}],
   ['Movie.Title.AC3.5.1.6ch', { channels: Channels.SIX, source: '5.1' }],
   ['Movie.Title.AAC.6ch', { channels: Channels.SIX, source: '6ch' }],
   ['Movie.Title.AAC.2.0.stereo', { channels: Channels.STEREO, source: '2.0' }],
   ['Movie.Title.Audio.stereo', { channels: Channels.STEREO, source: 'stereo' }],
   ['Movie.Title.AAC.1.0.mono', { channels: Channels.MONO, source: '1.0' }],
   ['Movie.Title.Audio.mono', { channels: Channels.MONO, source: 'mono' }],
+  ['Movie.Title.Audio.monolith', {}],
+  ['Movie.Title.Audio.stereoscopic', {}],
 ];
 
 for (const [title, result] of audioChannelCases) {
