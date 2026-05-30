@@ -3,42 +3,48 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Try @ctrl/video-filename-parser in the browser and inspect parsed movie and TV release metadata."
+    />
+    <meta name="theme-color" content="#09090b" />
     <title>Video Filename Parser</title>
     <link rel="stylesheet" href="/src/style.css" />
   </head>
-  <body
-    class="min-h-screen bg-gradient-to-br from-black via-slate-950 to-gray-900 bg-fixed bg-no-repeat"
-  >
-    <div class="flex min-h-screen flex-col items-center justify-center px-6 py-16 lg:px-8">
-      <div class="mx-auto w-full max-w-4xl text-center">
-        <h1 class="mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-          Video Filename Parser
-        </h1>
-        <p class="mt-4 text-lg leading-8 text-gray-300">Parse release names into metadata</p>
-        <div class="mt-8 flex items-center justify-center gap-x-6">
-          <a
-            href="https://github.com/scttcper/video-filename-parser"
-            class="rounded-md bg-white/10 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          >
-            GitHub
-          </a>
-          <a
-            href="https://www.npmjs.com/package/@ctrl/video-filename-parser"
-            class="rounded-md bg-white/10 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          >
-            npm
-          </a>
-        </div>
-      </div>
-
-      <div class="mx-auto mt-12 w-full max-w-2xl px-4 sm:px-6 lg:px-8">
-        <div class="pt-6 text-white">
-          <h3 class="mb-3 text-lg leading-6 font-medium">Install</h3>
-          <div class="mt-2 rounded-md bg-white/10 p-3 font-mono text-sm leading-5 text-gray-300">
-            <code>npm install @ctrl/video-filename-parser</code>
+  <body class="min-h-screen bg-zinc-950 text-white antialiased">
+    <div
+      class="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(20,184,166,0.24),transparent_30rem),radial-gradient(circle_at_top_right,rgba(245,158,11,0.18),transparent_26rem),linear-gradient(135deg,#050505_0%,#09090b_45%,#111827_100%)] px-6 py-10 lg:px-8"
+    >
+      <div class="mx-auto flex min-h-screen w-full max-w-6xl flex-col justify-center">
+        <div class="mx-auto w-full max-w-4xl text-center">
+          <h1 class="mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+            Video Filename Parser
+          </h1>
+          <p class="mx-auto mt-4 max-w-2xl text-lg leading-8 text-zinc-300">
+            Try real release names and inspect the title, quality, codecs, language, group, and TV
+            episode metadata returned by the parser.
+          </p>
+          <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href="https://github.com/scttcper/video-filename-parser"
+              class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-zinc-950 shadow-sm hover:bg-zinc-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              GitHub
+            </a>
+            <a
+              href="https://npmx.dev/package/@ctrl/video-filename-parser"
+              class="rounded-md bg-white/10 px-3.5 py-2.5 text-sm font-semibold text-white ring-1 ring-white/10 hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              npmx
+            </a>
           </div>
         </div>
-        <div id="root" class="mt-12"></div>
+
+        <pre
+          class="mx-auto mt-6 w-fit max-w-full overflow-x-auto rounded-md bg-zinc-950/80 px-4 py-3 text-left font-mono text-sm text-zinc-200 ring-1 ring-white/10"
+        ><code>npm install @ctrl/video-filename-parser</code></pre>
+
+        <div id="root" class="mx-auto mt-12 w-full max-w-6xl"></div>
       </div>
     </div>
 
