@@ -12,6 +12,16 @@ const bdiskExp = /\b(COMPLETE|ISO|BDISO|BDMux|BD25|BD50|BR.?DISK)\b/i;
 const rawHdExp = /\b(?<rawhd>RawHD|1080i[-_. ]HDTV|Raw[-_. ]HD|MPEG[-_. ]?2)\b/i;
 
 const highDefPdtvRegex = /hr[-_. ]ws/i;
+const sceneCodecMarker = String.raw`(?:[xh][-. ]?26[45]|h[-. ]?26[45])`;
+const commonSceneBlurayExp = new RegExp(
+  String.raw`\b(?:1080p|2160p)(?:[-_. ]uhd)?[-_. ]bluray[-_. ]${sceneCodecMarker}\b`,
+  'i',
+);
+const commonSceneWebExp = new RegExp(
+  String.raw`\b(?:1080p|2160p)[-_. ]web[-_. ]${sceneCodecMarker}\b`,
+  'i',
+);
+const uncommonXvidExp = /x-?vid|divx/i;
 
 export enum QualityModifier {
   REMUX = 'REMUX',
@@ -95,10 +105,15 @@ export function parseQuality(title: string, codec?: VideoCodec): QualityModel {
     .toLowerCase();
 
   const revision = parseQualityModifyers(title);
-  const sourceGroups = parseSourceGroups(normalizedTitle);
   const { resolution } = parseResolutionFromTitle(normalizedTitle);
-  codec ??= parseVideoCodec(title).codec;
 
+  const commonSceneQuality = parseCommonSceneQuality(normalizedTitle, revision, resolution, codec);
+  if (commonSceneQuality !== null) {
+    return commonSceneQuality;
+  }
+
+  codec ??= parseVideoCodec(title).codec;
+  const sourceGroups = parseSourceGroups(normalizedTitle);
   const context: QualityContext = {
     title,
     normalizedTitle,
@@ -116,6 +131,50 @@ export function parseQuality(title: string, codec?: VideoCodec): QualityModel {
   }
 
   return createQualityResult(context);
+}
+
+function parseCommonSceneQuality(
+  normalizedTitle: string,
+  revision: Revision,
+  resolution?: Resolution,
+  codec?: VideoCodec,
+): QualityModel | null {
+  if (!isModernSceneResolution(resolution) || codec === VideoCodec.XVID) {
+    return null;
+  }
+
+  if (codec === undefined && uncommonXvidExp.test(normalizedTitle)) {
+    return null;
+  }
+
+  if (commonSceneBlurayExp.test(normalizedTitle)) {
+    return createCommonSceneQuality(Source.BLURAY, revision, resolution);
+  }
+
+  if (commonSceneWebExp.test(normalizedTitle)) {
+    return createCommonSceneQuality(Source.WEBDL, revision, resolution);
+  }
+
+  return null;
+}
+
+function isModernSceneResolution(
+  resolution?: Resolution,
+): resolution is Resolution.R1080P | Resolution.R2160P {
+  return resolution === Resolution.R1080P || resolution === Resolution.R2160P;
+}
+
+function createCommonSceneQuality(
+  source: Source.BLURAY | Source.WEBDL,
+  revision: Revision,
+  resolution: Resolution,
+): QualityModel {
+  return {
+    sources: [source],
+    resolution,
+    revision,
+    modifier: null,
+  };
 }
 
 function parseQualityModifier(

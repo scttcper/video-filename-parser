@@ -98,6 +98,10 @@ const languageAliasRules: Array<{ language: Language; aliases: string[] }> = [
 const tokenExp = /[a-z0-9]+/gi;
 const multiTokens = new Set(['multi', 'dual', 'dl']);
 const languageAliasTokens = new Set(languageAliasRules.flatMap(({ aliases }) => aliases));
+const languageOrMultiExp = new RegExp(
+  `\\b(?:${[...languageAliasTokens, ...multiTokens].join('|')})\\b`,
+  'i',
+);
 
 export function parseLanguage(title: string, parsedTitle?: string): Language[] {
   return parseLanguageInfo(title, parsedTitle).languages;
@@ -107,6 +111,10 @@ export function parseLanguageInfo(
   title: string,
   parsedTitle?: string,
 ): { languages: Language[]; multi?: boolean } {
+  if (!languageOrMultiExp.test(title)) {
+    return { languages: [Language.English] };
+  }
+
   const allTitleTokens = tokenize(title);
   const multi = hasMultiLanguageToken(allTitleTokens) || undefined;
 

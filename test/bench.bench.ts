@@ -3,10 +3,16 @@ import { bench, describe } from 'vitest';
 import { filenameParse, parseQuality, parseSeason, removeFileExtension } from '../src/index.js';
 
 const priorityMovieTitles = [
+  'Project.Hail.Mary.2026.DV.2160p.WEB.h265-GRACE',
+  'Project.Hail.Mary.2026.PROPER.HDR.2160p.WEB.h265-GRACE',
+  'Project.Hail.Mary.2026.HDR.2160P.WEB.H265-POKE',
+  'Project.Hail.Mary.2026.2160P.WEB.H265-POKE',
   'Speed.Racer.2008.2160p.UHD.BluRay.x265-B0MBARDiERS',
   'Speed.Racer.2008.2160p.UHD.BluRay.H265-GAZPROM',
   'Avatar.Fire.and.Ash.2025.2160p.UHD.BluRay.x265-SURCODE',
   'Avatar.Fire.and.Ash.2025.2160p.UHD.BluRay.H265-GAZPROM',
+  'Fight.Club.1999.2160p.UHD.BluRay.x265-SURCODE',
+  'Fight.Club.1999.2160p.UHD.BluRay.H265-GAZPROM',
 ];
 
 const movieTitles = [
