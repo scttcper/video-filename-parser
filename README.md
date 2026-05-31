@@ -78,6 +78,24 @@ console.log(filenameParse('The Office US S09E06 HDTV XviD-AFG', true));
 // }
 ```
 
+## Revision upgrades
+
+`isRevisionUpgrade({ current, candidate, isTv })` checks whether a candidate is a newer revision of
+the same parsed release type. It ignores release group and audio details, but keeps edition flags
+like HDR and DV separate.
+
+```ts
+import { isRevisionUpgrade } from '@ctrl/video-filename-parser';
+
+console.log(
+  isRevisionUpgrade({
+    current: 'Movie.Title.2026.HDR.2160P.WEB.H265-GROUP',
+    candidate: 'Movie.Title.2026.PROPER.HDR.2160p.WEB.h265-OTHER',
+  }),
+);
+// true
+```
+
 ## See also
 
 [Radarr movie parser](https://github.com/Radarr/Radarr/blob/01ad015b1433ce792c24f019f701f3a8a59c4b2c/src/NzbDrone.Core/Parser/Parser.cs)  

@@ -6,6 +6,7 @@ export * from './filenameParse.js';
 export * from './language.js';
 export * from './quality.js';
 export * from './resolution.js';
+export * from './revisionUpgrade.js';
 export * from './source.js';
 export * from './title/index.js';
 export * from './extensions.js';
