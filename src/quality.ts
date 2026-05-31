@@ -1,4 +1,4 @@
-import { parseResolution, Resolution } from './resolution.js';
+import { parseResolutionFromTitle, Resolution } from './resolution.js';
 import { parseSource, parseSourceGroups, Source } from './source.js';
 import { parseVideoCodec, VideoCodec } from './videoCodec.js';
 
@@ -35,7 +35,7 @@ interface QualityContext {
   title: string;
   normalizedTitle: string;
   sourceGroups: SourceGroups;
-  parsedSources: Source[];
+  parsedSources?: Source[];
   parsedResolution?: Resolution;
   codec?: VideoCodec;
   revision: Revision;
@@ -96,15 +96,13 @@ export function parseQuality(title: string, codec?: VideoCodec): QualityModel {
 
   const revision = parseQualityModifyers(title);
   const sourceGroups = parseSourceGroups(normalizedTitle);
-  const parsedSources = parseSource(normalizedTitle, sourceGroups);
-  const { resolution } = parseResolution(normalizedTitle, parsedSources);
+  const { resolution } = parseResolutionFromTitle(normalizedTitle);
   codec ??= parseVideoCodec(title).codec;
 
   const context: QualityContext = {
     title,
     normalizedTitle,
     sourceGroups,
-    parsedSources,
     parsedResolution: resolution,
     codec,
     revision,
@@ -145,10 +143,14 @@ function createQualityResult(
 ): QualityModel {
   return {
     sources: overrides.sources ?? getDefaultSources(context),
-    resolution: overrides.resolution ?? context.parsedResolution,
+    resolution: overrides.resolution ?? context.parsedResolution ?? getDefaultResolution(context),
     revision: context.revision,
     modifier: overrides.modifier ?? context.modifier,
   };
+}
+
+function getDefaultResolution(context: QualityContext): Resolution | undefined {
+  return getParsedSources(context).includes(Source.DVD) ? Resolution.R480P : undefined;
 }
 
 function getDefaultSources(context: QualityContext): Source[] {
@@ -160,6 +162,11 @@ function getDefaultSources(context: QualityContext): Source[] {
     return [Source.TV];
   }
 
+  return getParsedSources(context);
+}
+
+function getParsedSources(context: QualityContext): Source[] {
+  context.parsedSources ??= parseSource(context.normalizedTitle, context.sourceGroups);
   return context.parsedSources;
 }
 
@@ -175,7 +182,7 @@ const qualityPolicies: QualityPolicy[] = [
   {
     matches: ({ sourceGroups }) => sourceGroups.webdl || sourceGroups.webrip,
     getOverrides: context => ({
-      sources: context.parsedSources,
+      sources: getParsedSources(context),
       resolution: getWebResolution(context),
     }),
   },

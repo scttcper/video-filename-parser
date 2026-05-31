@@ -12,8 +12,16 @@ const animeReleaseGroupExp =
 const exceptionReleaseGroupRegex =
   /(\[)?(?<releasegroup>(Joy|YIFY|YTS.(MX|LT|AG)|FreetheFish|VH-PROD|FTW-HS|DX-TV|Blu-bits|afm72|Anna|Bandi|Ghost|Kappa|MONOLITH|Qman|RZeroX|SAMPA|Silence|theincognito|D-Z0N3|t3nzin|Vyndros|HDO|DusIctv|DHD|SEV|CtrlHD|-ZR-|ADC|XZVN|RH|Kametsu|r00t|HONE))(\])?$/i;
 const globalReleaseGroupExp = new RegExp(releaseGroupRegexExp.source, 'ig');
+const simpleReleaseGroupSuffixExp = /-(?<releasegroup>[a-z0-9]+)$/i;
+const protectedReleaseGroups = new Set(['web-dl', 'web-rip', '480p', '720p', '1080p', '2160p']);
+const exceptionReleaseGroupSuffixExp = /(?:Joy|YIFY|YTS.(?:MX|LT|AG)|FreetheFish|VH-PROD|FTW-HS|DX-TV|Blu-bits|afm72|Anna|Bandi|Ghost|Kappa|MONOLITH|Qman|RZeroX|SAMPA|Silence|theincognito|D-Z0N3|t3nzin|Vyndros|HDO|DusIctv|DHD|SEV|CtrlHD|-ZR-|ADC|XZVN|RH|Kametsu|r00t|HONE)$/i;
 
 export function parseGroup(title: string, parsedTitle?: string): string | null {
+  const simpleGroup = matchSimpleReleaseGroup(title);
+  if (simpleGroup !== null) {
+    return simpleGroup;
+  }
+
   const nowebsiteTitle = removeWebsitePrefix(title);
   const releaseTitle = normalizeReleaseTitle(nowebsiteTitle, parsedTitle);
   let trimmed = buildGroupCandidateTitle(nowebsiteTitle, releaseTitle);
@@ -39,6 +47,30 @@ export function parseGroup(title: string, parsedTitle?: string): string | null {
 
 function removeWebsitePrefix(title: string): string {
   return title.replace(websitePrefixExp, '');
+}
+
+function matchSimpleReleaseGroup(title: string): string | null {
+  const titleWithoutExtension = removeFileExtension(title.trim());
+  const separatorIndex = titleWithoutExtension.lastIndexOf('-');
+  if (separatorIndex === -1 || titleWithoutExtension.lastIndexOf('-', separatorIndex - 1) !== -1) {
+    return null;
+  }
+
+  if (exceptionReleaseGroupSuffixExp.test(titleWithoutExtension)) {
+    return null;
+  }
+
+  const match = simpleReleaseGroupSuffixExp.exec(titleWithoutExtension);
+  const group = match?.groups?.releasegroup;
+  if (!group) {
+    return null;
+  }
+
+  if (protectedReleaseGroups.has(group.toLowerCase())) {
+    return null;
+  }
+
+  return group;
 }
 
 function normalizeReleaseTitle(title: string, parsedTitle?: string): string {

@@ -126,9 +126,33 @@ export function parseSourceGroups(title: string): SourceGroups {
     .replaceAll(']', ' ')
     .trim();
 
-  return Object.fromEntries(
-    sourceGroupPatterns.map(({ group, regex }) => [group, regex.test(normalizedName)]),
-  ) as SourceGroups;
+  const groups: SourceGroups = {
+    bluray: false,
+    webdl: false,
+    webrip: false,
+    hdtv: false,
+    bdrip: false,
+    brrip: false,
+    scr: false,
+    dvdr: false,
+    dvd: false,
+    dsr: false,
+    regional: false,
+    ppv: false,
+    ts: false,
+    tc: false,
+    cam: false,
+    workprint: false,
+    pdtv: false,
+    sdtv: false,
+    tvrip: false,
+  };
+
+  for (const { group, regex } of sourceGroupPatterns) {
+    groups[group] = regex.test(normalizedName);
+  }
+
+  return groups;
 }
 
 export function parseSource(title: string, groups?: SourceGroups): Source[] {

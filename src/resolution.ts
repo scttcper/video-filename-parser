@@ -26,6 +26,22 @@ export function parseResolution(
   title: string,
   precomputedSource?: Source[],
 ): { resolution?: Resolution; source?: string } {
+  const parsedResolution = parseResolutionFromTitle(title);
+  if (parsedResolution.resolution) {
+    return parsedResolution;
+  }
+
+  // Fallback to guessing from some sources
+  // Make safe assumptions like dvdrip is probably 480p
+  const source = precomputedSource ?? parseSource(title);
+  if (source.includes(Source.DVD)) {
+    return { resolution: Resolution.R480P };
+  }
+
+  return {};
+}
+
+export function parseResolutionFromTitle(title: string): { resolution?: Resolution; source?: string } {
   for (const { resolution, regex } of resolutionPatterns) {
     const match = regex.exec(title);
     if (match) {
@@ -34,13 +50,6 @@ export function parseResolution(
         source: match[0],
       };
     }
-  }
-
-  // Fallback to guessing from some sources
-  // Make safe assumptions like dvdrip is probably 480p
-  const source = precomputedSource ?? parseSource(title);
-  if (source.includes(Source.DVD)) {
-    return { resolution: Resolution.R480P };
   }
 
   return {};

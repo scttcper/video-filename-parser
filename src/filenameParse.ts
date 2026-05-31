@@ -3,7 +3,7 @@ import { type AudioCodec, parseAudioCodec } from './audioCodec.js';
 import { isComplete } from './complete.js';
 import { type Edition, parseEdition } from './edition.js';
 import { parseGroup } from './group.js';
-import { isMulti, type Language, parseLanguage } from './language.js';
+import { type Language, parseLanguageInfo } from './language.js';
 import { parseQuality, type Revision } from './quality.js';
 import type { Resolution } from './resolution.js';
 import { parseSeason, type Season } from './season/index.js';
@@ -56,9 +56,8 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
   const { codec: audioCodec } = parseAudioCodec(name);
   const { channels: audioChannels } = parseAudioChannels(name);
   const group = parseGroup(name, parsedTitle);
-  const languages = parseLanguage(name, parsedTitle);
+  const { languages, multi } = parseLanguageInfo(name, parsedTitle);
   const quality = parseQuality(name, videoCodec);
-  const multi = isMulti(name);
   const complete = isComplete(name);
 
   const result: BaseParsed = {

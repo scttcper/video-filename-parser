@@ -2,6 +2,13 @@ import { bench, describe } from 'vitest';
 
 import { filenameParse, parseQuality, parseSeason, removeFileExtension } from '../src/index.js';
 
+const priorityMovieTitles = [
+  'Speed.Racer.2008.2160p.UHD.BluRay.x265-B0MBARDiERS',
+  'Speed.Racer.2008.2160p.UHD.BluRay.H265-GAZPROM',
+  'Avatar.Fire.and.Ash.2025.2160p.UHD.BluRay.x265-SURCODE',
+  'Avatar.Fire.and.Ash.2025.2160p.UHD.BluRay.H265-GAZPROM',
+];
+
 const movieTitles = [
   'Whats.Eating.Gilbert.Grape.1993.720p.BluRay.x264-SiNNERS',
   'Spider-Man Far from Home.2019.1080p.HDRip.X264.AC3-EVO',
@@ -40,6 +47,14 @@ describe('removeFileExtension', () => {
   }
 });
 
+describe('filenameParse - priority movies', () => {
+  for (const title of priorityMovieTitles) {
+    bench(title, () => {
+      filenameParse(title);
+    });
+  }
+});
+
 describe('filenameParse - movies', () => {
   for (const title of movieTitles) {
     bench(title, () => {
@@ -52,6 +67,14 @@ describe('filenameParse - tv shows', () => {
   for (const title of tvTitles) {
     bench(title, () => {
       filenameParse(title, true);
+    });
+  }
+});
+
+describe('parseQuality - priority movies', () => {
+  for (const title of priorityMovieTitles) {
+    bench(title, () => {
+      parseQuality(title);
     });
   }
 });

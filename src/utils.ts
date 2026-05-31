@@ -1,3 +1,12 @@
 export function removeEmpty<T extends object>(obj: T): T {
-  return Object.fromEntries(Object.entries(obj).filter(([, value]) => value != null)) as T;
+  const result: Partial<T> = {};
+
+  for (const key in obj) {
+    const value = obj[key];
+    if (value != null) {
+      result[key] = value;
+    }
+  }
+
+  return result as T;
 }

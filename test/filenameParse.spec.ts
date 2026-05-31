@@ -5,6 +5,62 @@ import { filenameParse, Language, Resolution, Source, VideoCodec } from '../src/
 
 const movieCases: Array<[string, any]> = [
   [
+    'Speed.Racer.2008.2160p.UHD.BluRay.x265-B0MBARDiERS',
+    {
+      resolution: Resolution.R2160P,
+      sources: [Source.BLURAY],
+      title: 'Speed Racer',
+      year: '2008',
+      videoCodec: VideoCodec.X265,
+      group: 'B0MBARDiERS',
+      revision: { version: 1, real: 0 },
+      languages: [Language.English],
+      edition: { uhd: true },
+    },
+  ],
+  [
+    'Speed.Racer.2008.2160p.UHD.BluRay.H265-GAZPROM',
+    {
+      resolution: Resolution.R2160P,
+      sources: [Source.BLURAY],
+      title: 'Speed Racer',
+      year: '2008',
+      videoCodec: VideoCodec.H265,
+      group: 'GAZPROM',
+      revision: { version: 1, real: 0 },
+      languages: [Language.English],
+      edition: { uhd: true },
+    },
+  ],
+  [
+    'Avatar.Fire.and.Ash.2025.2160p.UHD.BluRay.x265-SURCODE',
+    {
+      resolution: Resolution.R2160P,
+      sources: [Source.BLURAY],
+      title: 'Avatar Fire and Ash',
+      year: '2025',
+      videoCodec: VideoCodec.X265,
+      group: 'SURCODE',
+      revision: { version: 1, real: 0 },
+      languages: [Language.English],
+      edition: { uhd: true },
+    },
+  ],
+  [
+    'Avatar.Fire.and.Ash.2025.2160p.UHD.BluRay.H265-GAZPROM',
+    {
+      resolution: Resolution.R2160P,
+      sources: [Source.BLURAY],
+      title: 'Avatar Fire and Ash',
+      year: '2025',
+      videoCodec: VideoCodec.H265,
+      group: 'GAZPROM',
+      revision: { version: 1, real: 0 },
+      languages: [Language.English],
+      edition: { uhd: true },
+    },
+  ],
+  [
     'Whats.Eating.Gilbert.Grape.1993.720p.BluRay.x264-SiNNERS',
     {
       resolution: Resolution.R720P,

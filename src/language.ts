@@ -97,10 +97,25 @@ const languageAliasRules: Array<{ language: Language; aliases: string[] }> = [
 
 const tokenExp = /[a-z0-9]+/gi;
 const multiTokens = new Set(['multi', 'dual', 'dl']);
+const languageAliasTokens = new Set(languageAliasRules.flatMap(({ aliases }) => aliases));
 
 export function parseLanguage(title: string, parsedTitle?: string): Language[] {
+  return parseLanguageInfo(title, parsedTitle).languages;
+}
+
+export function parseLanguageInfo(
+  title: string,
+  parsedTitle?: string,
+): { languages: Language[]; multi?: boolean } {
+  const allTitleTokens = tokenize(title);
+  const multi = hasMultiLanguageToken(allTitleTokens) || undefined;
+
+  if (!hasLanguageAliasToken(allTitleTokens) && !multi) {
+    return { languages: [Language.English], multi };
+  }
+
   parsedTitle ??= parseTitleAndYear(title).title;
-  const titleTokens = removeParsedTitleTokens(tokenize(title), tokenize(parsedTitle));
+  const titleTokens = removeParsedTitleTokens(allTitleTokens, tokenize(parsedTitle));
   const titleTokenSet = new Set(titleTokens);
   const languages = languageAliasRules
     .filter(({ aliases }) => aliases.some(alias => titleTokenSet.has(alias)))
@@ -114,7 +129,7 @@ export function parseLanguage(title: string, parsedTitle?: string): Language[] {
     languages.push(Language.English);
   }
 
-  return [...new Set(languages)];
+  return { languages: [...new Set(languages)], multi };
 }
 
 function tokenize(title: string): string[] {
@@ -149,6 +164,10 @@ function hasMultiLanguageToken(tokens: string[]): boolean {
   return tokens.some(
     (token, index) => multiTokens.has(token) && !(token === 'dl' && tokens[index - 1] === 'web'),
   );
+}
+
+function hasLanguageAliasToken(tokens: string[]): boolean {
+  return tokens.some(token => languageAliasTokens.has(token));
 }
 
 export function isMulti(title: string): boolean | undefined {
