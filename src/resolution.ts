@@ -41,7 +41,10 @@ export function parseResolution(
   return {};
 }
 
-export function parseResolutionFromTitle(title: string): { resolution?: Resolution; source?: string } {
+export function parseResolutionFromTitle(title: string): {
+  resolution?: Resolution;
+  source?: string;
+} {
   for (const { resolution, regex } of resolutionPatterns) {
     const match = regex.exec(title);
     if (match) {
