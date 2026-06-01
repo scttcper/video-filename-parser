@@ -56,6 +56,23 @@ for (const [title, result] of realCases) {
   });
 }
 
+const repackCases: Array<[string, boolean, number]> = [
+  ['Movie Title 2018 REPACK 720p HDTV x264 aAF', true, 2],
+  ['Movie.Title.2018.REPACK.720p.HDTV.x264-aAF', true, 2],
+  ['Movie.Title.2018.REPACK2.720p.HDTV.x264-aAF', true, 3],
+  ['Movie.Title.2018.PROPER.720p.HDTV.x264-aAF', false, 2],
+  ['Movie.Title.2018.RERIP.720p.BluRay.x264-DEMAND', true, 2],
+  ['Movie.Title.2018.RERIP2.720p.BluRay.x264-DEMAND', true, 3],
+];
+
+for (const [title, isRepack, version] of repackCases) {
+  it(`parse repack revision "${title}"`, () => {
+    const revision = parseQualityModifyers(title);
+    expect(revision.version).toBe(version);
+    expect(Boolean(revision.isRepack)).toBe(isRepack);
+  });
+}
+
 const webdl480pCases: Array<[string, boolean]> = [
   ['Elementary.S01E10.The.Leviathan.480p.WEB-DL.x264-mSD', false],
   ['Glee.S04E10.Glee.Actually.480p.WEB-DL.x264-mSD', false],
@@ -178,6 +195,10 @@ const webdl2160pCases: Array<[string, boolean]> = [
   ['The.Nightly.Show.2016.03.14.2160p.WEB.x264-spamTV', false],
   ['The.Nightly.Show.2016.03.14.2160p.WEB.h264-spamTV', false],
   ['The.Nightly.Show.2016.03.14.2160p.WEB.PROPER.h264-spamTV', true],
+  ['Movie Name 2020 WEB-DL 4K H265 10bit HDR DDP5.1 Atmos-PTerWEB', false],
+  ['The.Movie.2022.NORDiC.2160p.DV.HDR.WEB.H.265-NiDHUG', false],
+  ['Movie.Name.2024.German.Dubbed.DL.AAC.2160p.DV.HDR.WEB.HEVC-GROUP', false],
+  ['Movie.Name.2024.German.AC3D.DL.2160p.Hybrid.WEB.DV.HDR10Plus.HEVC-GROUP', false],
 ];
 for (const [title, proper] of webdl2160pCases) {
   it(`parse webdl 2160 quality "${title}"`, () => {
@@ -295,6 +316,10 @@ const bluray2160Cases: Array<[string]> = [
   ['Movie.Title.2014.2160p.UHD.BluRay.X265-IAMABLE.mkv'],
   ['Movie.Title.1956.German.DL.2160p.HDR.UHDBDRip.h266-GROUP'],
   ['Movie.Title.2021.4K.HDR.2160P.UHDBDRip.HEVC-10bit.GROUP'],
+  ['Movie.S01E02.Chained.Heat.[Bluray2160p].mkv'],
+  ['[FFF] Movie no Movie-san - 10 [BD][2160p-FLAC][0C4091AF]'],
+  ['[coldhell] Movie v2 [BD2160p][5A45EABE].mkv'],
+  ['[Coalgirls]_Movie!!_01_(3840x2160_Blu-ray_FLAC)_[8370CB8F].mkv'],
 ];
 for (const [title] of bluray2160Cases) {
   it(`parse bluray 2160p quality "${title}"`, () => {
@@ -344,6 +369,12 @@ const brdisk1080pCases: Array<[string]> = [
   ['Bait.2012.Bluray.1080p.3D.AVC.DTS-HD.MA.5.1.iso'],
   ['Daylight.1996.Bluray.ISO'],
   ['Justified.Stagione.2.Parte.2.ITA-ENG.1080p.BDMux.DD5.1.x264-DarkSideMux'],
+  ['Random.Title.2010.1080p.HD.DVD.AVC.DDP.5.1-GRouP'],
+  ['Movie Title 2005 1080p USA Blu-ray AVC DTS-HD MA 5.1-PTP'],
+  ['Movie Title 2014 1080p Blu-ray AVC DTS-HD MA 5.1-PTP'],
+  ['Movie Title 1976 2160p UHD Blu-ray DTS-HD MA 5.1 DV HDR HEVC-UNTOUCHED'],
+  ['Movie.Title.2008.US.Directors.Cut.UHD.BD66.Blu-ray'],
+  ['Movie.2009.Blu.ray.AVC.DTS.HD.MA.5.1'],
 ];
 for (const [title] of brdisk1080pCases) {
   it(`parse brdisk 1080p quality "${title}"`, () => {
@@ -389,5 +420,21 @@ for (const [title] of bdripCases) {
     expect(quality.sources[0]).toBe(Source.BLURAY);
     expect(quality.resolution).toBe(Resolution.R480P);
     expect(quality.modifier).toBe(null);
+  });
+}
+
+const extensionFallbackCases: Array<[string, Source[], Resolution?]> = [
+  ['Movie.Title.S01E02.Chained.Heat.mkv', [Source.WEBDL], Resolution.R720P],
+  ['Movie Name - S01E01 - Title.avi', [Source.TV], Resolution.R480P],
+  ['Movie.Title..9x18.sunshine_days.avi', [Source.TV], Resolution.R480P],
+  ['[CR] Movie Title - 004 [48CE2D0F].avi', [Source.TV], Resolution.R480P],
+  ['Movie.Name.S03E01.The Electric Can Opener Fluctuation.m2ts', [Source.BLURAY], Resolution.R720P],
+];
+
+for (const [title, sources, resolution] of extensionFallbackCases) {
+  it(`parse quality from extension "${title}"`, () => {
+    const quality = parseQuality(title);
+    expect(quality.sources).toEqual(sources);
+    expect(quality.resolution).toBe(resolution);
   });
 }

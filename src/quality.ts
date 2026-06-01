@@ -2,14 +2,64 @@ import { parseResolutionFromTitle, Resolution } from './resolution.js';
 import { parseSource, parseSourceGroups, Source } from './source.js';
 import { parseVideoCodec, VideoCodec } from './videoCodec.js';
 
-const properRegex = /\b(?<proper>proper|repack|rerip)\b/i;
+const properRegex = /\b(?<proper>proper)\b/i;
 const realRegex = /\b(?<real>REAL)\b/; // not insensitive
 const realGlobalExp = new RegExp(realRegex.source, 'g');
-const versionExp = /(?<version>v\d\b|\[v\d\])/i;
+const repackRegex = /\b(?<repack>repack\d?|rerip\d?)\b/i;
+const versionExp = /\d[-._ ]?v(\d)[-._ ]|\bv(\d)\b|\[v(\d)\]|repack(\d)|rerip(\d)/i;
 
 const remuxExp = /\b(?<remux>(BD|UHD)?Remux)\b/i;
-const bdiskExp = /\b(COMPLETE|ISO|BDISO|BDMux|BD25|BD50|BR.?DISK)\b/i;
+const bdiskExp =
+  /\b(COMPLETE|ISO|BDISO|BDMux|BDMV|BD25|BD50|BD66|BD100|BD[-_. ]?(?:25|50|66|100)|BR[-_. ]?DISK|Full[-_. ]?Blu[-_. ]?ray|3D[-_. ]?BD)\b/i;
+const discCodecExp = /\b(AVC|HEVC|VC[-_. ]?1|MVC|MPEG[-_. ]?2)\b/i;
+const brDiskExclusionExp =
+  /\b((?<!HD[._ -]|HD)DVD|BDRip|720p|MKV|XviD|WMV|d3g|(BD)?REMUX|[xh][-_. ]?26[45])\b/i;
+const hardBrDiskExclusionExp = /\b((?<!HD[._ -]|HD)DVD|BDRip|720p|MKV|XviD|WMV|d3g|(BD)?REMUX)\b/i;
+const brDiskSourceExp = /(?:blu[-_. ]?ray|hd[-_. ]?dvd)/i;
 const rawHdExp = /\b(?<rawhd>RawHD|1080i[-_. ]HDTV|Raw[-_. ]HD|MPEG[-_. ]?2)\b/i;
+const extensionExp = /\.[a-z0-9-]+$/i;
+const sdtvExtensionSet = new Set([
+  '.m4v',
+  '.3gp',
+  '.nsv',
+  '.ty',
+  '.strm',
+  '.rm',
+  '.rmvb',
+  '.m3u',
+  '.ifo',
+  '.mov',
+  '.qt',
+  '.divx',
+  '.xvid',
+  '.bivx',
+  '.nrg',
+  '.pva',
+  '.wmv',
+  '.asf',
+  '.asx',
+  '.ogm',
+  '.ogv',
+  '.m2v',
+  '.avi',
+  '.bin',
+  '.dat',
+  '.dvr-ms',
+  '.mpg',
+  '.mpeg',
+  '.mp4',
+  '.avc',
+  '.vp3',
+  '.svq3',
+  '.nuv',
+  '.viv',
+  '.dv',
+  '.fli',
+  '.flv',
+  '.wpl',
+  '.ts',
+  '.wtv',
+]);
 
 const highDefPdtvRegex = /hr[-_. ]ws/i;
 const sceneCodecMarker = String.raw`(?:[xh][-. ]?26[45]|h[-. ]?26[45])`;
@@ -39,6 +89,7 @@ export interface QualityModel {
 export interface Revision {
   version: number;
   real: number;
+  isRepack?: true;
 }
 
 interface QualityContext {
@@ -47,6 +98,7 @@ interface QualityContext {
   sourceGroups: SourceGroups;
   parsedSources?: Source[];
   parsedResolution?: Resolution;
+  extensionQuality?: Pick<QualityModel, 'sources' | 'resolution'> | null;
   codec?: VideoCodec;
   revision: Revision;
   modifier: QualityModifier | null;
@@ -73,15 +125,11 @@ export function parseQualityModifyers(title: string): Revision {
   }
 
   const versionResult = versionExp.exec(normalizedTitle);
-  if (versionResult?.groups) {
-    // get numbers from version regex
-    const digits = /\d/i.exec(versionResult.groups.version ?? '');
-    if (digits) {
-      const value = Number.parseInt(digits[0] ?? '', 10);
-      if (!Number.isNaN(value)) {
-        result.version = value;
-      }
-    }
+  const versionText = versionResult?.slice(1).find(Boolean);
+  const version = versionText === undefined ? undefined : Number.parseInt(versionText, 10);
+
+  if (versionResult && version !== undefined && !Number.isNaN(version)) {
+    result.version = version;
   }
 
   let realCount = 0;
@@ -91,6 +139,15 @@ export function parseQualityModifyers(title: string): Revision {
   }
 
   result.real = realCount;
+
+  if (properRegex.test(normalizedTitle)) {
+    result.version = version === undefined || Number.isNaN(version) ? 2 : version + 1;
+  }
+
+  if (repackRegex.test(normalizedTitle)) {
+    result.version = version === undefined || Number.isNaN(version) ? 2 : version + 1;
+    result.isRepack = true;
+  }
 
   return result;
 }
@@ -181,7 +238,7 @@ function parseQualityModifier(
   normalizedTitle: string,
   sourceGroups: SourceGroups,
 ): QualityModifier | null {
-  if (bdiskExp.test(normalizedTitle) && sourceGroups.bluray) {
+  if (isBrDisk(normalizedTitle, sourceGroups)) {
     return QualityModifier.BRDISK;
   }
 
@@ -194,6 +251,22 @@ function parseQualityModifier(
   }
 
   return null;
+}
+
+function isBrDisk(normalizedTitle: string, sourceGroups: SourceGroups): boolean {
+  if (!sourceGroups.bluray || hardBrDiskExclusionExp.test(normalizedTitle)) {
+    return false;
+  }
+
+  if (bdiskExp.test(normalizedTitle)) {
+    return true;
+  }
+
+  if (brDiskExclusionExp.test(normalizedTitle)) {
+    return false;
+  }
+
+  return brDiskSourceExp.test(normalizedTitle) && discCodecExp.test(normalizedTitle);
 }
 
 function createQualityResult(
@@ -209,6 +282,11 @@ function createQualityResult(
 }
 
 function getDefaultResolution(context: QualityContext): Resolution | undefined {
+  const extensionQuality = getExtensionQuality(context);
+  if (extensionQuality) {
+    return extensionQuality.resolution;
+  }
+
   return getParsedSources(context).includes(Source.DVD) ? Resolution.R480P : undefined;
 }
 
@@ -221,12 +299,57 @@ function getDefaultSources(context: QualityContext): Source[] {
     return [Source.TV];
   }
 
-  return getParsedSources(context);
+  const parsedSources = getParsedSources(context);
+  if (parsedSources.length > 0) {
+    return parsedSources;
+  }
+
+  return getExtensionQuality(context)?.sources ?? [];
 }
 
 function getParsedSources(context: QualityContext): Source[] {
   context.parsedSources ??= parseSource(context.normalizedTitle, context.sourceGroups);
   return context.parsedSources;
+}
+
+function getExtensionQuality(
+  context: QualityContext,
+): Pick<QualityModel, 'sources' | 'resolution'> | null {
+  if (context.extensionQuality === undefined) {
+    context.extensionQuality = getQualityFromExtension(context.title);
+  }
+
+  return context.extensionQuality;
+}
+
+function getQualityFromExtension(
+  title: string,
+): Pick<QualityModel, 'sources' | 'resolution'> | null {
+  const extension = extensionExp.exec(title)?.[0].toLowerCase();
+
+  switch (extension) {
+    case '.mkv':
+    case '.mk3d': {
+      return { sources: [Source.WEBDL], resolution: Resolution.R720P };
+    }
+    case '.m2ts': {
+      return { sources: [Source.BLURAY], resolution: Resolution.R720P };
+    }
+    case '.img':
+    case '.iso':
+    case '.vob': {
+      return { sources: [Source.DVD] };
+    }
+    case '.webm':
+    case undefined: {
+      return null;
+    }
+    default: {
+      return sdtvExtensionSet.has(extension)
+        ? { sources: [Source.TV], resolution: Resolution.R480P }
+        : null;
+    }
+  }
 }
 
 const qualityPolicies: QualityPolicy[] = [
@@ -310,12 +433,12 @@ function isHighDefinition(resolution?: Resolution): boolean {
 }
 
 function getBlurayResolution(context: QualityContext): Resolution | undefined {
-  if (context.parsedResolution) {
-    return context.parsedResolution;
-  }
-
   if (context.modifier === QualityModifier.BRDISK) {
     return Resolution.R1080P;
+  }
+
+  if (context.parsedResolution) {
+    return context.parsedResolution;
   }
 
   if (context.modifier === QualityModifier.REMUX) {

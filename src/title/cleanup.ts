@@ -1,13 +1,12 @@
 import { Language } from '../language.js';
 import { webdlExp } from '../source.js';
+import { limitParseInput } from '../utils.js';
 import { codecExp } from '../videoCodec.js';
+import { cleanTorrentSuffixExp, websitePostfixExp, websitePrefixExp } from '../website.js';
 
 const resolutionOrCodecDetailsExp =
   /\s*(?:480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|HVEC|[xh][\W_]?26[45]|DD\W?5\W1|[<>?*:|]|848x480|1280x720|1920x1080)((8|10)b(it))?/i;
-const websitePrefixRegex =
-  /^\[\s*[a-z]+(?:\.[a-z]+){1,4}\s*\][- ]*|^www\.[a-z]+\.(?:com|net)[ -]*/i;
 const cleanTorrentPrefixRegex = /^\[(?:REQ)\]/i;
-const cleanTorrentSuffixRegex = /\[(?:ettv|rartv|rarbg|cttv)\]$/i;
 /** Used to help cleanup releases that often emit the year title.SCR-group */
 const commonSourceMarkerExp =
   /\b(Bluray|(dvdr?|BD)rip|HDTV|HDRip|TS|R5|CAM|SCR|(WEB|DVD)?.?SCREENER|DiVX|xvid|web-?dl)\b/i;
@@ -55,7 +54,11 @@ const simplifyTitleCleanupPasses: readonly CleanupPass[] = [
   },
   {
     name: 'remove website prefix',
-    pattern: websitePrefixRegex,
+    pattern: websitePrefixExp,
+  },
+  {
+    name: 'remove website postfix',
+    pattern: websitePostfixExp,
   },
   {
     name: 'remove torrent request prefix',
@@ -63,7 +66,7 @@ const simplifyTitleCleanupPasses: readonly CleanupPass[] = [
   },
   {
     name: 'remove torrent tracker suffix',
-    pattern: cleanTorrentSuffixRegex,
+    pattern: cleanTorrentSuffixExp,
   },
   {
     name: 'remove common source markers',
@@ -80,7 +83,7 @@ const simplifyTitleCleanupPasses: readonly CleanupPass[] = [
 ];
 
 export function simplifyTitle(title: string): string {
-  return applyCleanupPasses(title, simplifyTitleCleanupPasses).trim();
+  return applyCleanupPasses(limitParseInput(title), simplifyTitleCleanupPasses).trim();
 }
 
 const requestInfoRegex = /\[[^\]\r\n]+\]/i;
@@ -203,7 +206,7 @@ export function releaseTitleCleaner(title: string): string | null {
     return null;
   }
 
-  const trimmedTitle = applyCleanupPasses(title, releaseTitleCleanupPasses);
+  const trimmedTitle = applyCleanupPasses(limitParseInput(title), releaseTitleCleanupPasses);
 
   return formatDottedTitleSegments(trimmedTitle);
 }

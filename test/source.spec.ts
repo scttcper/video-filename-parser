@@ -38,6 +38,15 @@ const singleCases: Array<[string, Source[]]> = [
   ['Movie.Name.2016.German.DTS.DL.1080p.UHDBD.x265-TDO', [Source.BLURAY]],
   ['127.Hours.DVDSCR.NTSC.DVDR-GALAXY', [Source.DVD, Source.SCREENER]],
   ['Movie.Title.2019.1080p.AMZN.WEB-Rip.DDP.5.1.HEVC', [Source.WEBRIP]],
+  ['Movie.Title.S01E01.HD.TV', [Source.TV]],
+  ['Movie.Title.S01E01.SD.TV', [Source.TV]],
+  ['Movie.Name.2021.1080p.BDLight.x265-AVCDVD', [Source.BLURAY]],
+  ['Movie.Title.2012.German.DL.1080p.UHD2BD.x264-QfG', [Source.BLURAY]],
+  ['Movie.Name.2024.New.HDCAMRip.1080p', [Source.CAM]],
+  ['Movie Name (2022) 1080p HQCAM ENG x264 AAC - QRips', [Source.CAM]],
+  ['The Equalizer 2 2018 720p HD-TS x264-24HD', [Source.TELESYNC]],
+  ['Movie.Title.2024.TeleSynch.720p.HEVC-GROUP', [Source.TELESYNC]],
+  ['Movie.Title.2024.DVDSCREENER.XviD-GROUP', [Source.SCREENER]],
 ];
 for (const [title, result] of singleCases) {
   it(`parse source "${title}"`, () => {

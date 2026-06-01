@@ -1,7 +1,14 @@
 import { expect, it } from 'vitest';
 
 import { AudioCodec } from '../src/audioCodec.js';
-import { filenameParse, Language, Resolution, Source, VideoCodec } from '../src/index.js';
+import {
+  filenameParse,
+  Language,
+  QualityModifier,
+  Resolution,
+  Source,
+  VideoCodec,
+} from '../src/index.js';
 
 const movieCases: Array<[string, any]> = [
   [
@@ -233,7 +240,8 @@ const movieCases: Array<[string, any]> = [
       title: 'Indiana Jones and the Temple of Doom',
       year: '1984',
       group: 'JONES',
-      resolution: Resolution.R2160P,
+      resolution: Resolution.R1080P,
+      modifier: QualityModifier.BRDISK,
       complete: true,
     },
   ],

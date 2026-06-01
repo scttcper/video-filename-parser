@@ -27,6 +27,9 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
   ['A.I.Artificial.Intelligence.(2001)', { title: 'A.I. Artificial Intelligence', year: '2001' }],
   ['A.Movie.Name.(1998)', { title: 'A Movie Name', year: '1998' }],
   ['www.Torrenting.com - Revenge.2008.720p.X264-DIMENSION', { title: 'Revenge', year: '2008' }],
+  ['1337x.to - Revenge.2008.720p.X264-DIMENSION', { title: 'Revenge', year: '2008' }],
+  ['[ example.co.uk ] - Revenge.2008.720p.X264-DIMENSION', { title: 'Revenge', year: '2008' }],
+  ['(tracker.xn--p1ai) Revenge.2008.720p.X264-DIMENSION', { title: 'Revenge', year: '2008' }],
   ['Thor: The Dark World 2013', { title: 'Thor The Dark World', year: '2013' }],
   [
     'Resident.Evil.The.Final.Chapter.2016',
