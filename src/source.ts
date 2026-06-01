@@ -1,7 +1,7 @@
 const blurayExp =
-  /\b(M?Blu-?Ray|HDDVD|BD|UHDBD|BDISO|BDMux|BD25|BD50|BR.?DISK|Bluray(1080|720)p?|BD(1080|720)p?)\b/i;
+  /\b(M?Blu[-_. ]?Ray|HD[-_. ]?DVD|BD(?!$)|UHD2?BD|BDISO|BDMux|BD25|BD50|BD[-_. ]?(?:50|66|100)|BR[-_. ]?DISK|Bluray(2160|1080|720)p?|BD(2160|1080|720)p?)\b/i;
 export const webdlExp =
-  /\b(WEB[-_. ]DL|HDRIP|WEBDL|WEB-DLMux|NF|APTV|NETFLIX|NetflixU?HD|DSNY|DSNP|HMAX|AMZN|AmazonHD|iTunesHD|MaxdomeHD|WebHD\b|[. ]WEB[. ](?:[xh]26[45]|DD5[. ]1)|\d+0p[. ]WEB[. ]|\b\s\/\sWEB\s\/\s\b|AMZN[. ]WEB[. ])\b/i;
+  /\b(WEB[-_. ]DL(?:mux)?|HDRIP|WEBDL|NF|DP|APTV|NETFLIX|NetflixU?HD|DSNY|DSNP|DisneyHD|HMAX|HBOMaxHD|AMZN|AmazonHD|AmazonSD|iTunesHD|MaxdomeHD|WebHD\b|[. ]WEB[. ](?:[xh][ .]?26[45]|AVC|HEVC|DDP?5[. ]1)|\d{3,4}0p[-. ](?:Hybrid[-_. ]?)?WEB[-. ]|[-. ]WEB[-. ]\d{3,4}0p|\b\s\/\sWEB\s\/\s\b|(?:AMZN|NF|DP)[. -]WEB[. -](?!Rip))\b/i;
 
 export enum Source {
   BLURAY = 'BLURAY',
@@ -54,8 +54,8 @@ const sourceGroupPatterns: SourceGroupPattern[] = [
   { group: 'bluray', regex: blurayExp },
   { group: 'webdl', regex: webdlExp },
   { group: 'webrip', regex: /\b(WebRip|Web-Rip|WEBCap|WEBMux)\b/i },
-  { group: 'hdtv', regex: /\b(HDTV)\b/i },
-  { group: 'bdrip', regex: /\b(BDRip|UHDBDRip|HD[-_. ]?DVDRip)\b/i },
+  { group: 'hdtv', regex: /\b(HDTV|HD[-_. ]TV)\b/i },
+  { group: 'bdrip', regex: /\b(BDRip|BDLight|UHDBDRip|HD[-_. ]?DVDRip)\b/i },
   { group: 'brrip', regex: /\b(BRRip)\b/i },
   { group: 'scr', regex: /\b(SCR|SCREENER|DVDSCR|(DVD|WEB).?SCREENER)\b/i },
   { group: 'dvdr', regex: /\b(DVD-R|DVDR)\b/i },
@@ -63,12 +63,12 @@ const sourceGroupPatterns: SourceGroupPattern[] = [
   { group: 'dsr', regex: /\b(WS[-_. ]DSR|DSR)\b/i },
   { group: 'regional', regex: /\b(R[0-9]{1}|REGIONAL)\b/i },
   { group: 'ppv', regex: /\b(PPV)\b/i },
-  { group: 'ts', regex: /\b(TS|TELESYNC|HD-TS|HDTS|PDVD|TSRip|HDTSRip)\b/i },
+  { group: 'ts', regex: /\b(TS[-_. ]|TELESYNCH?|HD-TS|HDTS|PDVD|TSRip|HDTSRip)\b/i },
   { group: 'tc', regex: /\b(TC|TELECINE|HD-TC|HDTC)\b/i },
-  { group: 'cam', regex: /\b(CAMRIP|CAM|HDCAM|HD-CAM)\b/i },
+  { group: 'cam', regex: /\b(CAMRIP|(?:NEW)?CAM|HD-?CAM(?:Rip)?|HQCAM)\b/i },
   { group: 'workprint', regex: /\b(WORKPRINT|WP)\b/i },
   { group: 'pdtv', regex: /\b(PDTV)\b/i },
-  { group: 'sdtv', regex: /\b(SDTV)\b/i },
+  { group: 'sdtv', regex: /\b(SDTV|SD[-_. ]TV)\b/i },
   { group: 'tvrip', regex: /\b(TVRip)\b/i },
 ];
 

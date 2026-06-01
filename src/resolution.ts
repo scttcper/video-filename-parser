@@ -1,5 +1,4 @@
 import { parseSource, Source } from './source.js';
-
 export enum Resolution {
   R2160P = '2160P',
   R1080P = '1080P',
@@ -7,19 +6,24 @@ export enum Resolution {
   R576P = '576P',
   R540P = '540P',
   R480P = '480P',
+  R360P = '360P',
 }
 
 const resolutionPatterns: Array<{ resolution: Resolution; regex: RegExp }> = [
   {
     resolution: Resolution.R2160P,
     regex:
-      /2160p|4k[-_. ](?:UHD|HEVC|BD)|(?:UHD|HEVC|BD)[-_. ]4k|\b(4k)\b|COMPLETE.UHD|UHD.COMPLETE/i,
+      /2160p|3840x2160|4096x2160|4k[-_. ](?:UHD|HEVC|BD|H\.?265)|(?:UHD|HEVC|BD|H\.?265)[-_. ]4k|\b(4k)\b|COMPLETE.UHD|UHD.COMPLETE/i,
   },
-  { resolution: Resolution.R1080P, regex: /(1080(i|p)|1920x1080)(10bit)?/i },
+  {
+    resolution: Resolution.R1080P,
+    regex: /(1080(i|p)|1920x1080|1440p|\bFHD\b|4kto1080p)(10bit)?/i,
+  },
   { resolution: Resolution.R720P, regex: /(720(i|p)|1280x720|960p)(10bit)?/i },
   { resolution: Resolution.R576P, regex: /576(i|p)/i },
   { resolution: Resolution.R540P, regex: /540(i|p)/i },
   { resolution: Resolution.R480P, regex: /480(i|p)|640x480|848x480/i },
+  { resolution: Resolution.R360P, regex: /360p/i },
 ];
 
 export function parseResolution(

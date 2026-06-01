@@ -1,8 +1,8 @@
 import { removeFileExtension } from './extensions.js';
 import { simplifyTitle } from './title/cleanup.js';
 import { parseTitleAndYear } from './title/index.js';
+import { cleanTorrentSuffixExp, websitePrefixExp } from './website.js';
 
-const websitePrefixExp = /^\[\s*[a-z]+(?:\.[a-z]+){1,4}\s*\][- ]*|^www\.[a-z]+\.(?:com|net)[ -]*/i;
 const cleanReleaseGroupExp =
   /(-(RP|1|NZBGeek|Obfuscated|Obfuscation|Scrambled|sample|Pre|postbot|xpost|Rakuv[a-z0-9]*|WhiteRev|BUYMORE|AsRequested|AlternativeToRequested|GEROV|Z0iDS3N|Chamele0n|4P|4Planet|AlteZachen|RePACKPOST))+$/i;
 const releaseGroupRegexExp =
@@ -41,6 +41,7 @@ export function parseGroup(title: string, parsedTitle?: string): string | null {
     return animeSubgroup;
   }
 
+  trimmed = simplifyTitle(trimmed);
   trimmed = stripCleanupSuffixes(trimmed);
 
   return matchGenericReleaseGroup(trimmed);
@@ -82,9 +83,10 @@ function buildGroupCandidateTitle(title: string, releaseTitle: string): string {
   const trimmed = title
     .replaceAll(' ', '.')
     .replace(releaseTitle === title ? '' : releaseTitle, '')
-    .replaceAll('.-.', '.');
+    .replaceAll('.-.', '.')
+    .replace(cleanTorrentSuffixExp, '');
 
-  return simplifyTitle(removeFileExtension(trimmed.trim()));
+  return removeFileExtension(trimmed.trim());
 }
 
 function matchExceptionReleaseGroup(title: string): string | null {

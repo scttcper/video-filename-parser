@@ -45,6 +45,12 @@ const simplifyCases: Array<[string, string]> = [
   ['The.Fighter.DVDR-MPTDVD', 'The.Fighter.-MPTDVD'],
   ['The Card Counter WEBSCREENER XviD-EVO', 'The Card Counter  -EVO'],
   ['[ www.Torrenting.com ] - Revenge.2008.720p.X264-DIMENSION', 'Revenge.2008..-DIMENSION'],
+  ['1337x.to - Revenge.2008.720p.X264-DIMENSION', 'Revenge.2008..-DIMENSION'],
+  ['Revenge.2008.720p.X264-DIMENSION [publichd]', 'Revenge.2008..-DIMENSION'],
+  ['Revenge.2008.720p.X264-DIMENSION [rarbg.com]', 'Revenge.2008..-DIMENSION'],
+  ['Revenge.2008.720p.X264-DIMENSION [example.co.uk]', 'Revenge.2008..-DIMENSION'],
+  ['Revenge.2008.720p.X264-DIMENSION - example.co.uk', 'Revenge.2008..-DIMENSION'],
+  ['Movie.2020.YTS.AG', 'Movie.2020.YTS.AG'],
 ];
 for (const [title, result] of simplifyCases) {
   it(`cleanup simplify "${title}"`, () => {

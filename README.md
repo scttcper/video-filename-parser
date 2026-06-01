@@ -78,6 +78,9 @@ console.log(filenameParse('The Office US S09E06 HDTV XviD-AFG', true));
 // }
 ```
 
+Quality modifiers such as `Remux`, `BR-DISK`, and `Raw-HD` are exposed as `modifier`.
+Repack/rerip releases set `revision.isRepack` and increment `revision.version`.
+
 ## Revision upgrades
 
 `isRevisionUpgrade({ current, candidate, isTv })` checks whether a candidate is a newer revision of

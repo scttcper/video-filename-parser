@@ -28,6 +28,15 @@ const cases: Array<[string, Resolution?]> = [
   ['Movie.Title.576p.540p', Resolution.R576P],
   ['Movie.Title.540p.480p', Resolution.R540P],
   ['Movie.Title.848x480', Resolution.R480P],
+  ['Movie.Title.2018.360p.WEB-DL.x264-GROUP', Resolution.R360P],
+  ['Movie.Title.2018.1440p.WEB-DL.x264-GROUP', Resolution.R1080P],
+  ['Movie.Title.2018.FHD.WEB-DL.x264-GROUP', Resolution.R1080P],
+  ['Movie.Title.2018.3840x2160.BluRay', Resolution.R2160P],
+  ['Movie.Title.2018.4096x2160.BluRay', Resolution.R2160P],
+  [
+    'Movie.Name.2019.S02E07.Chapter.15.The.Believer.4Kto1080p.DSNYP.Webrip.x265.10bit.EAC3.5.1.Atmos.GokiTAoE',
+    Resolution.R1080P,
+  ],
 ];
 for (const [title, result] of cases) {
   it(`parse resolution "${title}"`, () => {

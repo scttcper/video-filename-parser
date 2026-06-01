@@ -4,7 +4,7 @@ import { isComplete } from './complete.js';
 import { type Edition, parseEdition } from './edition.js';
 import { parseGroup } from './group.js';
 import { type Language, parseLanguageInfo } from './language.js';
-import { parseQuality, type Revision } from './quality.js';
+import { parseQuality, type QualityModifier, type Revision } from './quality.js';
 import type { Resolution } from './resolution.js';
 import { parseSeason, type Season } from './season/index.js';
 import type { Source } from './source.js';
@@ -23,6 +23,7 @@ interface BaseParsed {
   videoCodec?: VideoCodec;
   audioCodec?: AudioCodec;
   audioChannels?: Channels;
+  modifier?: QualityModifier;
   group: string | null;
   revision: Revision;
   languages: Language[];
@@ -68,6 +69,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
     videoCodec,
     audioCodec,
     audioChannels,
+    modifier: quality.modifier ?? undefined,
     revision: quality.revision,
     group,
     edition,

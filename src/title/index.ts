@@ -1,3 +1,5 @@
+import { websitePrefixExp } from '../website.js';
+
 import { getFirstTitleBoundaryPosition } from './boundaries.js';
 import { releaseTitleCleaner, simplifyTitle } from './cleanup.js';
 import { movieTitleYearPatterns, releaseGroupSuffixExp } from './patterns.js';
@@ -5,7 +7,6 @@ import type { TitleAndYear, TitleYearPattern } from './types.js';
 
 const commonReleaseTitleYearExp =
   /^(?<title>(?![([])[^\r\n]+?)[-_. ](?<year>(?:1[89]|20)\d{2})(?=[-_. ](?:2160p|1080p|720p|576p|540p|480p|UHD|Blu-?Ray|Bluray|WEB[-_. ]?DL|WEBRip|HDRip|HDTV|DVDRip|BDRip|BRRip)\b)/i;
-const websitePrefixExp = /^\[\s*[a-z]+(?:\.[a-z]+){1,4}\s*\][- ]*|^www\.[a-z]+\.(?:com|net)[ -]*/i;
 
 export function parseTitleAndYear(title: string): TitleAndYear {
   const commonRelease = parseCommonReleaseTitleYear(title);
