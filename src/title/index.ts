@@ -1,4 +1,3 @@
-import { limitParseInput } from '../utils.js';
 import { websitePrefixExp } from '../website.js';
 
 import { getFirstTitleBoundaryPosition } from './boundaries.js';
@@ -10,13 +9,12 @@ const commonReleaseTitleYearExp =
   /^(?<title>(?![([])[^\r\n]+?)[-_. ](?<year>(?:1[89]|20)\d{2})(?=[-_. ](?:2160p|1080p|720p|576p|540p|480p|UHD|Blu-?Ray|Bluray|WEB[-_. ]?DL|WEBRip|HDRip|HDTV|DVDRip|BDRip|BRRip)\b)/i;
 
 export function parseTitleAndYear(title: string): TitleAndYear {
-  const limitedTitle = limitParseInput(title);
-  const commonRelease = parseCommonReleaseTitleYear(limitedTitle);
+  const commonRelease = parseCommonReleaseTitleYear(title);
   if (commonRelease !== null) {
     return commonRelease;
   }
 
-  const simpleTitle = simplifyTitle(limitedTitle);
+  const simpleTitle = simplifyTitle(title);
 
   // Removing the group from the end could be trouble if a title is "title-year"
   const grouplessTitle = simpleTitle.replace(releaseGroupSuffixExp, '');
@@ -28,12 +26,12 @@ export function parseTitleAndYear(title: string): TitleAndYear {
     }
   }
 
-  const firstPosition = getFirstTitleBoundaryPosition(limitedTitle);
+  const firstPosition = getFirstTitleBoundaryPosition(title);
   if (firstPosition !== null) {
-    return { title: releaseTitleCleaner(limitedTitle.slice(0, firstPosition)) ?? '', year: null };
+    return { title: releaseTitleCleaner(title.slice(0, firstPosition)) ?? '', year: null };
   }
 
-  return { title: limitedTitle.trim(), year: null };
+  return { title: title.trim(), year: null };
 }
 
 function parseCommonReleaseTitleYear(title: string): TitleAndYear | null {

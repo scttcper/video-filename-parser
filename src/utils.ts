@@ -10,9 +10,3 @@ export function removeEmpty<T extends object>(obj: T): T {
 
   return result as T;
 }
-
-const maxParseLength = 2048;
-
-export function limitParseInput(value: string): string {
-  return value.length > maxParseLength ? value.slice(0, maxParseLength) : value;
-}

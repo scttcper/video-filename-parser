@@ -9,7 +9,7 @@ import type { Resolution } from './resolution.js';
 import { parseSeason, type Season } from './season/index.js';
 import type { Source } from './source.js';
 import { parseTitleAndYear } from './title/index.js';
-import { limitParseInput, removeEmpty } from './utils.js';
+import { removeEmpty } from './utils.js';
 import { parseVideoCodec, type VideoCodec } from './videoCodec.js';
 
 type ParsedTvInfo = Omit<Season, 'releaseTitle' | 'seriesTitle'>;
@@ -40,10 +40,8 @@ export type ParsedFilename = ParsedMovie | ParsedShow;
  * @param isTV
  */
 export function filenameParse(name: string, isTv = false): ParsedFilename {
-  const parseName = limitParseInput(name);
-
   // Compute once and share with sub-parsers to avoid 3 redundant calls
-  const titleAndYear = parseTitleAndYear(parseName);
+  const titleAndYear = parseTitleAndYear(name);
   const parsedTitle = titleAndYear.title;
 
   let title: ParsedFilename['title'] = '';
@@ -54,14 +52,14 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
     year = titleAndYear.year;
   }
 
-  const edition = parseEdition(parseName, parsedTitle);
-  const { codec: videoCodec } = parseVideoCodec(parseName);
-  const { codec: audioCodec } = parseAudioCodec(parseName);
-  const { channels: audioChannels } = parseAudioChannels(parseName);
-  const group = parseGroup(parseName, parsedTitle);
-  const { languages, multi } = parseLanguageInfo(parseName, parsedTitle);
-  const quality = parseQuality(parseName, videoCodec);
-  const complete = isComplete(parseName);
+  const edition = parseEdition(name, parsedTitle);
+  const { codec: videoCodec } = parseVideoCodec(name);
+  const { codec: audioCodec } = parseAudioCodec(name);
+  const { channels: audioChannels } = parseAudioChannels(name);
+  const group = parseGroup(name, parsedTitle);
+  const { languages, multi } = parseLanguageInfo(name, parsedTitle);
+  const quality = parseQuality(name, videoCodec);
+  const complete = isComplete(name);
 
   const result: BaseParsed = {
     title,
@@ -81,7 +79,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
   };
 
   if (isTv) {
-    const season = parseSeason(parseName);
+    const season = parseSeason(name);
     if (season !== null) {
       const seasonResult: ParsedTvInfo = {
         seasons: season.seasons,

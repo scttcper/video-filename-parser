@@ -1,5 +1,4 @@
 import { parseTitleAndYear } from './title/index.js';
-
 export enum Language {
   English = 'English',
   French = 'French',

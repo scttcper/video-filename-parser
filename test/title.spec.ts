@@ -30,6 +30,7 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
   ['1337x.to - Revenge.2008.720p.X264-DIMENSION', { title: 'Revenge', year: '2008' }],
   ['[ example.co.uk ] - Revenge.2008.720p.X264-DIMENSION', { title: 'Revenge', year: '2008' }],
   ['(tracker.xn--p1ai) Revenge.2008.720p.X264-DIMENSION', { title: 'Revenge', year: '2008' }],
+  ['Revenge.2008.720p.X264-DIMENSION [example.co.uk]', { title: 'Revenge', year: '2008' }],
   ['Thor: The Dark World 2013', { title: 'Thor The Dark World', year: '2013' }],
   [
     'Resident.Evil.The.Final.Chapter.2016',

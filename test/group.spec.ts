@@ -25,6 +25,8 @@ const cases: Array<[string, string | null]> = [
   ['1337x.to - Revenge.S03E14.720p.HDTV.X264-DIMENSION', 'DIMENSION'],
   ['Seed S02E09 HDTV x264-2HD [eztv]-[rarbg.com]', '2HD'],
   ['Revenge.S03E14.720p.HDTV.X264-DIMENSION [publichd]', 'DIMENSION'],
+  ['Revenge.S03E14.720p.HDTV.X264-DIMENSION [example.co.uk]', 'DIMENSION'],
+  ['Movie.2020.1080p.BluRay.x264-YTS.AG', 'YTS.AG'],
   ['7s-atlantis-s02e01-720p.mkv', null],
   ['The.Middle.720p.HEVC.x265-MeGusta-Pre', 'MeGusta'],
   ['Haunted.Hayride.2018.720p.WEBRip.DDP5.1.x264-NTb-postbot', 'NTb'],

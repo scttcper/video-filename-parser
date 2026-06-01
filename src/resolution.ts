@@ -1,5 +1,4 @@
 import { parseSource, Source } from './source.js';
-
 export enum Resolution {
   R2160P = '2160P',
   R1080P = '1080P',

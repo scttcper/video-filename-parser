@@ -1,6 +1,5 @@
 import { Language } from '../language.js';
 import { webdlExp } from '../source.js';
-import { limitParseInput } from '../utils.js';
 import { codecExp } from '../videoCodec.js';
 import { cleanTorrentSuffixExp, websitePostfixExp, websitePrefixExp } from '../website.js';
 
@@ -83,7 +82,7 @@ const simplifyTitleCleanupPasses: readonly CleanupPass[] = [
 ];
 
 export function simplifyTitle(title: string): string {
-  return applyCleanupPasses(limitParseInput(title), simplifyTitleCleanupPasses).trim();
+  return applyCleanupPasses(title, simplifyTitleCleanupPasses).trim();
 }
 
 const requestInfoRegex = /\[[^\]\r\n]+\]/i;
@@ -206,7 +205,7 @@ export function releaseTitleCleaner(title: string): string | null {
     return null;
   }
 
-  const trimmedTitle = applyCleanupPasses(limitParseInput(title), releaseTitleCleanupPasses);
+  const trimmedTitle = applyCleanupPasses(title, releaseTitleCleanupPasses);
 
   return formatDottedTitleSegments(trimmedTitle);
 }

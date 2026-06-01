@@ -172,7 +172,7 @@ export function parseQuality(title: string, codec?: VideoCodec): QualityModel {
   codec ??= parseVideoCodec(title).codec;
   const sourceGroups = parseSourceGroups(normalizedTitle);
   const context: QualityContext = {
-    title,
+    title: title,
     normalizedTitle,
     sourceGroups,
     parsedResolution: resolution,
