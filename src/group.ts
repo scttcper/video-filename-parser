@@ -10,12 +10,12 @@ const releaseGroupRegexExp =
 const animeReleaseGroupExp =
   /^\[(?<subgroup>[^\s\]\r\n](?:[^\]\r\n]{0,318}[^\s\]\r\n])?)\](?:_|-|\s|\.)?/i;
 const exceptionReleaseGroupRegex =
-  /(\[)?(?<releasegroup>(Joy|YIFY|YTS.(MX|LT|AG)|FreetheFish|VH-PROD|FTW-HS|DX-TV|Blu-bits|afm72|Anna|Bandi|Ghost|Kappa|MONOLITH|Qman|RZeroX|SAMPA|Silence|theincognito|D-Z0N3|t3nzin|Vyndros|HDO|DusIctv|DHD|SEV|CtrlHD|-ZR-|ADC|XZVN|RH|Kametsu|r00t|HONE))(\])?$/i;
+  /(\[)?(?<releasegroup>(Joy|YIFY|YTS.(MX|LT|AG)|AnimePahe|FreetheFish|VH-PROD|FTW-HS|DX-TV|Blu-bits|afm72|Anna|Bandi|Ghost|Kappa|MONOLITH|Qman|RZeroX|SAMPA|Silence|theincognito|D-Z0N3|t3nzin|Vyndros|HDO|DusIctv|DHD|SEV|CtrlHD|-ZR-|ADC|XZVN|RH|Kametsu|r00t|HONE))(\])?$/i;
 const globalReleaseGroupExp = new RegExp(releaseGroupRegexExp.source, 'ig');
 const simpleReleaseGroupSuffixExp = /-(?<releasegroup>[a-z0-9]+)$/i;
 const protectedReleaseGroups = new Set(['web-dl', 'web-rip', '480p', '720p', '1080p', '2160p']);
 const exceptionReleaseGroupSuffixExp =
-  /(?:Joy|YIFY|YTS.(?:MX|LT|AG)|FreetheFish|VH-PROD|FTW-HS|DX-TV|Blu-bits|afm72|Anna|Bandi|Ghost|Kappa|MONOLITH|Qman|RZeroX|SAMPA|Silence|theincognito|D-Z0N3|t3nzin|Vyndros|HDO|DusIctv|DHD|SEV|CtrlHD|-ZR-|ADC|XZVN|RH|Kametsu|r00t|HONE)$/i;
+  /(?:Joy|YIFY|YTS.(?:MX|LT|AG)|AnimePahe|FreetheFish|VH-PROD|FTW-HS|DX-TV|Blu-bits|afm72|Anna|Bandi|Ghost|Kappa|MONOLITH|Qman|RZeroX|SAMPA|Silence|theincognito|D-Z0N3|t3nzin|Vyndros|HDO|DusIctv|DHD|SEV|CtrlHD|-ZR-|ADC|XZVN|RH|Kametsu|r00t|HONE)$/i;
 
 export function parseGroup(title: string, parsedTitle?: string): string | null {
   const simpleGroup = matchSimpleReleaseGroup(title);
