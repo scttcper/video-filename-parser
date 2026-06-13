@@ -85,22 +85,71 @@ export function simplifyTitle(title: string): string {
   return applyCleanupPasses(title, simplifyTitleCleanupPasses).trim();
 }
 
-const requestInfoRegex = /\[[^\]\r\n]+\]/i;
-const editionExp =
-  /\b(?:(?:(?:Extended|Ultimate)[-_. ']*)?(?:(?:Director|Collector)[-_. ']*s?|Theatrical|Anniversary|The[-_. ']*Uncut|DC|Ultimate|Final(?=[-_. ']*(?:Cut|Edition|Version))|Extended|Special|Despecialized|unrated|\d{2,3}(?:th)?[-_. ']*Anniversary)(?:[-_. ']*(?:Cut|Edition|Version))?(?:[-_. ']*(?:Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']*Edit))?|(?:Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']*Edit|Edition|Restored|[234]in1)){1,3}/i;
-const languageExp = /\b(TRUE.?FRENCH|videomann|SUBFRENCH|PLDUB|MULTI)\b/i;
-const sceneGarbageExp = /\b(PROPER|REAL|READ.NFO)/;
-
-// Hoisted global variants
-const sceneGarbageGlobalExp = new RegExp(sceneGarbageExp.source, 'ig');
-
-// Precomputed combined regex for all language names (replaces loop creating ~45 regexes per call)
-const allLanguagesGlobalExp = new RegExp(
-  `\\b(${Object.values(Language)
-    .map(l => l.toUpperCase())
-    .join('|')})`,
-  'g',
+const editionMarkerPattern = String.raw`(?:(?:(?:Extended|Ultimate)[-_. ']*)?(?:(?:Director|Collector)[-_. ']*s?[-_. ']*(?:Cut|Edition|Version)|Theatrical|Anniversary|The[-_. ']*Uncut|DC|Ultimate|Final(?=[-_. ']*(?:Cut|Edition|Version))|Extended|Special|Despecialized|unrated|\d{2,3}(?:th)?[-_. ']*Anniversary)(?:[-_. ']*(?:Cut|Edition|Version))?(?:[-_. ']*(?:Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']*Edit))?|(?:Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']*Edit|Edition|Restored|[234]in1)){1,3}`;
+const trailingLanguageMarkerPattern = String.raw`(?:${Object.values(Language).join('|')}|TRUE.?FRENCH|videomann|SUBFRENCH|PLDUB|MULTI)`;
+const editionSuffixExp = new RegExp(
+  String.raw`(?:^|[-_. '([]+)${editionMarkerPattern}(?:[-_. ']+${trailingLanguageMarkerPattern})*[-_. ')\]]*$`,
+  'i',
 );
+const releaseBoundaryExp = new RegExp(
+  String.raw`[-_. ']+(?:${commonSourceMarkerExp.source}|${webdlExp.source}|${codecExp.source})`,
+  'i',
+);
+const requestInfoSuffixExp = /(?:^|[-_. ']+)\[[^\]\r\n]+\][-_. ']*$/i;
+const languageMarkerSuffixExp = /\b(TRUE.?FRENCH|videomann|SUBFRENCH|PLDUB|MULTI)\b[-_. ']*$/i;
+const languageNameSuffixExp = new RegExp(
+  String.raw`(?:^|[-_. ']+)(?:${Object.values(Language)
+    .map(l => l.toUpperCase())
+    .join('|')})[-_. ']*$`,
+);
+const sceneGarbageSuffixExp =
+  /(?:^|[-_. ']+)(?:PROPER|REAL|READ.NFO)(?:[-_. ']+(?:PROPER|REAL|READ.NFO))*[-_. ']*$/i;
+const titleContentExp = /[a-z0-9]/i;
+
+const trailingMetadataSuffixExps = [
+  requestInfoSuffixExp,
+  languageMarkerSuffixExp,
+  languageNameSuffixExp,
+  sceneGarbageSuffixExp,
+  editionSuffixExp,
+];
+
+function removeTitleSuffix(title: string, suffixExp: RegExp): string {
+  suffixExp.lastIndex = 0;
+  const cleanedTitle = title.replace(suffixExp, '');
+  return titleContentExp.test(cleanedTitle) ? cleanedTitle : title;
+}
+
+// Release metadata should only trim the right edge. Title words that look like
+// metadata, such as "Collector" or "Real", must survive inside the title.
+function trimTrailingReleaseMetadata(title: string): string {
+  let trimmedTitle = title.trim();
+  let removedSuffix = true;
+
+  while (removedSuffix) {
+    removedSuffix = false;
+
+    for (const suffixExp of trailingMetadataSuffixExps) {
+      const cleanedTitle = removeTitleSuffix(trimmedTitle, suffixExp).trim();
+      if (cleanedTitle !== trimmedTitle) {
+        trimmedTitle = cleanedTitle;
+        removedSuffix = true;
+        break;
+      }
+    }
+  }
+
+  return trimmedTitle;
+}
+
+// Handles full release strings passed directly into the title cleaner. This is
+// intentionally separator-based so bare title substrings do not become cut points.
+function truncateAtReleaseMetadataBoundary(title: string): string {
+  releaseBoundaryExp.lastIndex = 0;
+  const match = releaseBoundaryExp.exec(title);
+
+  return match && match.index > 0 ? title.slice(0, match.index) : title;
+}
 
 const releaseTitleCleanupPasses: readonly CleanupPass[] = [
   {
@@ -108,38 +157,13 @@ const releaseTitleCleanupPasses: readonly CleanupPass[] = [
     clean: title => title.replace('_', ' '),
   },
   {
-    name: 'remove request info',
-    pattern: requestInfoRegex,
+    name: 'truncate at release metadata boundary',
+    clean: truncateAtReleaseMetadataBoundary,
     trimAfter: true,
   },
   {
-    name: 'remove common source markers',
-    pattern: commonSourceMarkersGlobalExp,
-    trimAfter: true,
-  },
-  {
-    name: 'remove web download marker',
-    pattern: webdlExp,
-    trimAfter: true,
-  },
-  {
-    name: 'remove edition marker',
-    pattern: editionExp,
-    trimAfter: true,
-  },
-  {
-    name: 'remove language marker',
-    pattern: languageExp,
-    trimAfter: true,
-  },
-  {
-    name: 'remove scene garbage marker',
-    pattern: sceneGarbageGlobalExp,
-    trimAfter: true,
-  },
-  {
-    name: 'remove language names',
-    pattern: allLanguagesGlobalExp,
+    name: 'trim trailing release metadata',
+    clean: trimTrailingReleaseMetadata,
     trimAfter: true,
   },
   {
