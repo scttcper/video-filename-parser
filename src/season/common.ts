@@ -1,6 +1,14 @@
+import { releaseTitleCleaner } from '../title/cleanup.js';
+import { releaseGroupSuffixExp } from '../title/patterns.js';
+
 const requestInfoExp = /^(?:\[[^\]\r\n]+\])+/;
 const sixDigitAirDateMatchExp =
   /"(?<=[_.-])(?<airdate>(?<!\d)(?<airyear>[1-9]\d{1})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))(?=[_.-])/i;
+const trailingRemainderRequestInfoExp = /(?:\s*\[[^\]\r\n]+\])+$/;
+const leadingRemainderSeparatorsExp = /^[-_.\s]+/;
+const leadingReleaseMetadataExp =
+  /^(?:[ip][-_.\s]+[xh][-. ]?26[45]|(?:1[89]|20)\d{2}|480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|WEB(?:[-_. ]?DL|Rip)?|Blu[-_. ]?Ray|HDTV|DVD(?:Rip)?|BDRip|BRRip|[xh][-. ]?26[45]|h[-. ]?26[45]|HEVC|XviD)\b/i;
+const remainderContentExp = /[a-z]/i;
 
 export interface ParsedMatchCollection {
   seriesName: string;
@@ -15,6 +23,7 @@ export interface ParsedMatchCollection {
   fullSeason?: boolean;
   airDate?: Date;
   releaseTokens?: string;
+  remainder?: string;
 }
 
 type MatchGroups = NonNullable<RegExpExecArray['groups']>;
@@ -177,12 +186,12 @@ function parseSeasonEpisodeGroups(
 ): ParsedMatchCollection | null {
   const { result, lastTokenIndex } = createBaseResult(groups, simpleTitle);
   const nextIndex = applySeasonNumbers(result, groups, simpleTitle, lastTokenIndex);
-  const episodeResult = applyEpisodeNumbers(result, groups);
+  const episodeResult = applyEpisodeNumbers(result, groups, simpleTitle, nextIndex);
   if (episodeResult === null) {
     return null;
   }
 
-  return finishResult(result, simpleTitle, nextIndex);
+  return finishResult(result, simpleTitle, episodeResult);
 }
 
 function parseSeasonPackGroups(
@@ -224,10 +233,12 @@ function parseAbsoluteEpisodeGroups(
 ): ParsedMatchCollection | null {
   const { result, lastTokenIndex } = createBaseResult(groups, simpleTitle);
   let nextIndex = applySeasonNumbers(result, groups, simpleTitle, lastTokenIndex);
-  const episodeResult = applyEpisodeNumbers(result, groups);
+  const episodeResult = applyEpisodeNumbers(result, groups, simpleTitle, nextIndex);
   if (episodeResult === null) {
     return null;
   }
+
+  nextIndex = episodeResult;
 
   const absoluteResult = applyAbsoluteEpisodeNumbers(result, groups);
   if (absoluteResult === null) {
@@ -273,7 +284,7 @@ function applySeasonNumbers(
   let seasons = [groupValue(groups, 'season'), groupValue(groups, 'season1')]
     .filter(isPresent)
     .map(x => {
-      nextIndex = Math.max(indexOfEnd(simpleTitle, x), nextIndex);
+      nextIndex = Math.max(indexOfEndAfter(simpleTitle, x, nextIndex), nextIndex);
       return Number(x);
     });
 
@@ -289,12 +300,17 @@ function applySeasonNumbers(
   return nextIndex;
 }
 
-function applyEpisodeNumbers(result: ParsedMatchCollection, groups: MatchGroups): null | undefined {
+function applyEpisodeNumbers(
+  result: ParsedMatchCollection,
+  groups: MatchGroups,
+  simpleTitle: string,
+  lastTokenIndex: number,
+): number | null {
   const episodeCaptures = [groupValue(groups, 'episode'), groupValue(groups, 'episode1')].filter(
     isPresent,
   );
   if (episodeCaptures.length === 0) {
-    return undefined;
+    return lastTokenIndex;
   }
 
   const first = Number(episodeCaptures[0]);
@@ -305,7 +321,13 @@ function applyEpisodeNumbers(result: ParsedMatchCollection, groups: MatchGroups)
   }
 
   result.episodeNumbers = range;
-  return undefined;
+
+  let nextIndex = lastTokenIndex;
+  for (const episodeCapture of episodeCaptures) {
+    nextIndex = Math.max(indexOfEndAfter(simpleTitle, episodeCapture, nextIndex), nextIndex);
+  }
+
+  return nextIndex;
 }
 
 function applyAbsoluteEpisodeNumbers(
@@ -361,12 +383,31 @@ function finishResult(
     lastTokenIndex === simpleTitle.length || lastTokenIndex === -1
       ? simpleTitle
       : simpleTitle.slice(lastTokenIndex);
+  const remainder =
+    result.episodeNumbers !== undefined && result.episodeNumbers.length > 0
+      ? parseRemainder(releaseTokens)
+      : undefined;
 
   return {
     ...result,
     releaseTokens,
+    ...(remainder ? { remainder } : {}),
     seriesTitle: result.seriesName,
   };
+}
+
+function parseRemainder(releaseTokens: string): string | undefined {
+  const rawRemainder = releaseTokens
+    .replace(trailingRemainderRequestInfoExp, '')
+    .replace(releaseGroupSuffixExp, '')
+    .replace(leadingRemainderSeparatorsExp, '');
+  if (leadingReleaseMetadataExp.test(rawRemainder)) {
+    return undefined;
+  }
+
+  const remainder = releaseTitleCleaner(rawRemainder);
+
+  return remainder !== null && remainderContentExp.test(remainder) ? remainder : undefined;
 }
 
 function groupValue(groups: MatchGroups, name: string): string | undefined {
@@ -416,5 +457,14 @@ function indexOfEnd(str1: string, str2: string): number {
   }
 
   const io = str1.indexOf(str2);
+  return io === -1 ? -1 : io + str2.length;
+}
+
+function indexOfEndAfter(str1: string, str2: string, startIndex: number): number {
+  if (str2.length === 0) {
+    return -1;
+  }
+
+  const io = str1.indexOf(str2, Math.max(0, startIndex));
   return io === -1 ? -1 : io + str2.length;
 }

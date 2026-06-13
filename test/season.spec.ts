@@ -84,6 +84,38 @@ for (const [postTitle, title, episodes] of multiEpisodeCases) {
   });
 }
 
+const remainderCases: Array<[string, string, number[], number[], string]> = [
+  ['The Expanse - S01E02 - The Big Empty', 'The Expanse', [1], [2], 'The Big Empty'],
+  [
+    'The.Expanse.S01E02.The.Big.Empty.1080p.WEB.H264-GROUP',
+    'The Expanse',
+    [1],
+    [2],
+    'The Big Empty',
+  ],
+  ['Show.S02E02.Episode.Title.1080p.WEB.H264-GROUP', 'Show', [2], [2], 'Episode Title'],
+];
+for (const [postTitle, title, seasons, episodes, remainder] of remainderCases) {
+  it(`parses remainder after episode tokens for "${postTitle}"`, () => {
+    expect(parseSeason(postTitle)).toMatchObject({
+      seriesTitle: title,
+      seasons,
+      episodeNumbers: episodes,
+      remainder,
+    });
+  });
+}
+
+const noRemainderCases: Array<[string]> = [
+  ['Great British Railway Journeys S11E03 480p x264-mSD [eztv]'],
+  ['The Morning Show S01E01-E03 2019 1080p WEBRip X264 AC3-EVO'],
+];
+for (const [postTitle] of noRemainderCases) {
+  it(`does not expose junk remainder for "${postTitle}"`, () => {
+    expect(parseSeason(postTitle)).not.toHaveProperty('remainder');
+  });
+}
+
 const partialSeasonPackCases: Array<[string, string, number, number]> = [
   ['The.Ranch.2016.S02.Part.1.1080p.NF.WEBRip.DD5.1.x264-NTb', 'The Ranch 2016', 2, 1],
 ];

@@ -12,6 +12,7 @@ export interface Season {
   seriesTitle: string;
   seasons: number[];
   episodeNumbers: number[];
+  remainder?: string;
   airDate: Date | null;
   // Language: Language;
   fullSeason: boolean;
@@ -86,6 +87,7 @@ function toSeason(title: string, result: ParsedMatchCollection): Season {
     seriesTitle: result.seriesName,
     seasons: result.seasonNumbers ?? [],
     episodeNumbers: result.episodeNumbers ?? [],
+    ...(result.remainder ? { remainder: result.remainder } : {}),
     airDate: result.airDate ?? null,
     fullSeason: isSpecialFullSeason ? false : (result.fullSeason ?? false),
     isPartialSeason: result.isPartialSeason ?? false,

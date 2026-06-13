@@ -378,6 +378,16 @@ const tvCases: Array<[string, any]> = [
       isTv: true,
     },
   ],
+  [
+    'The Expanse - S01E02 - The Big Empty',
+    {
+      title: 'The Expanse',
+      seasons: [1],
+      episodeNumbers: [2],
+      remainder: 'The Big Empty',
+      isTv: true,
+    },
+  ],
 ];
 for (const [title, result] of tvCases) {
   it(`parse tv show title "${title}"`, () => {
