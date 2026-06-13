@@ -71,6 +71,19 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
     { title: 'Scarface', year: '1983' },
   ],
   [
+    'The.Bone.Collector.1999.2160p.UHD.BluRay.x265-B0MBARDiERS',
+    { title: 'The Bone Collector', year: '1999' },
+  ],
+  ['The.Collector.2009.1080p.BluRay.X264-AMIABLE', { title: 'The Collector', year: '2009' }],
+  [
+    'Uncut.Gems.2019.2160p.UHD.BluRay.x265-B0MBARDiERS',
+    { title: 'Uncut Gems', year: '2019' },
+  ],
+  ['A.Real.Pain.2024.1080p.WEB.H264-GROUP', { title: 'A Real Pain', year: '2024' }],
+  ['Real.Steel.2011.1080p.BluRay.x264-GROUP', { title: 'Real Steel', year: '2011' }],
+  ['Reality.2023.1080p.WEB.H264-GROUP', { title: 'Reality', year: '2023' }],
+  ['Polish.Wedding.1998.1080p.WEB.H264-GROUP', { title: 'Polish Wedding', year: '1998' }],
+  [
     'Movie.Title.Directors.Cut.2019.1080p.BluRay.x264-GROUP',
     { title: 'Movie Title', year: '2019' },
   ],

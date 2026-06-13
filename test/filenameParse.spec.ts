@@ -231,6 +231,76 @@ const movieCases: Array<[string, any]> = [
     },
   ],
   [
+    'The.Bone.Collector.1999.2160p.UHD.BluRay.x265-B0MBARDiERS',
+    {
+      resolution: Resolution.R2160P,
+      title: 'The Bone Collector',
+      year: '1999',
+      group: 'B0MBARDiERS',
+      languages: [Language.English],
+    },
+  ],
+  [
+    'The.Collector.2009.1080p.BluRay.X264-AMIABLE',
+    {
+      resolution: Resolution.R1080P,
+      title: 'The Collector',
+      year: '2009',
+      group: 'AMIABLE',
+      languages: [Language.English],
+    },
+  ],
+  [
+    'Uncut.Gems.2019.2160p.UHD.BluRay.x265-B0MBARDiERS',
+    {
+      resolution: Resolution.R2160P,
+      title: 'Uncut Gems',
+      year: '2019',
+      group: 'B0MBARDiERS',
+      languages: [Language.English],
+    },
+  ],
+  [
+    'A.Real.Pain.2024.1080p.WEB.H264-GROUP',
+    {
+      resolution: Resolution.R1080P,
+      title: 'A Real Pain',
+      year: '2024',
+      group: 'GROUP',
+      languages: [Language.English],
+    },
+  ],
+  [
+    'Real.Steel.2011.1080p.BluRay.x264-GROUP',
+    {
+      resolution: Resolution.R1080P,
+      title: 'Real Steel',
+      year: '2011',
+      group: 'GROUP',
+      languages: [Language.English],
+    },
+  ],
+  [
+    'Reality.2023.1080p.WEB.H264-GROUP',
+    {
+      resolution: Resolution.R1080P,
+      title: 'Reality',
+      year: '2023',
+      group: 'GROUP',
+      languages: [Language.English],
+    },
+  ],
+  [
+    'Polish.Wedding.1998.1080p.WEB.H264-GROUP',
+    {
+      resolution: Resolution.R1080P,
+      title: 'Polish Wedding',
+      year: '1998',
+      group: 'GROUP',
+      languages: [Language.English],
+    },
+  ],
+  [
     'Spider-Man Far from Home.2019.1080p.HDRip.X264.AC3-EVO',
     {
       resolution: Resolution.R1080P,

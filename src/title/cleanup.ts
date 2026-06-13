@@ -86,21 +86,35 @@ export function simplifyTitle(title: string): string {
 }
 
 const requestInfoRegex = /\[[^\]\r\n]+\]/i;
-const editionExp =
-  /\b(?:(?:(?:Extended|Ultimate)[-_. ']*)?(?:(?:Director|Collector)[-_. ']*s?|Theatrical|Anniversary|The[-_. ']*Uncut|DC|Ultimate|Final(?=[-_. ']*(?:Cut|Edition|Version))|Extended|Special|Despecialized|unrated|\d{2,3}(?:th)?[-_. ']*Anniversary)(?:[-_. ']*(?:Cut|Edition|Version))?(?:[-_. ']*(?:Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']*Edit))?|(?:Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']*Edit|Edition|Restored|[234]in1)){1,3}/i;
+const editionMarkerPattern = String.raw`(?:(?:(?:Extended|Ultimate)[-_. ']*)?(?:(?:Director|Collector)[-_. ']*s?[-_. ']*(?:Cut|Edition|Version)|Theatrical|Anniversary|The[-_. ']*Uncut|DC|Ultimate|Final(?=[-_. ']*(?:Cut|Edition|Version))|Extended|Special|Despecialized|unrated|\d{2,3}(?:th)?[-_. ']*Anniversary)(?:[-_. ']*(?:Cut|Edition|Version))?(?:[-_. ']*(?:Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']*Edit))?|(?:Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']*Edit|Edition|Restored|[234]in1)){1,3}`;
+const trailingLanguageMarkerPattern = String.raw`(?:${Object.values(Language).join('|')}|TRUE.?FRENCH|videomann|SUBFRENCH|PLDUB|MULTI)`;
+const editionSuffixExp = new RegExp(
+  String.raw`(?:^|[-_. '([]+)${editionMarkerPattern}(?:[-_. ']+${trailingLanguageMarkerPattern})*[-_. ')\]]*$`,
+  'i',
+);
 const languageExp = /\b(TRUE.?FRENCH|videomann|SUBFRENCH|PLDUB|MULTI)\b/i;
-const sceneGarbageExp = /\b(PROPER|REAL|READ.NFO)/;
-
-// Hoisted global variants
-const sceneGarbageGlobalExp = new RegExp(sceneGarbageExp.source, 'ig');
+const sceneGarbageSuffixExp = /(?:^|[-_. ']+)(?:PROPER|REAL|READ.NFO)(?:[-_. ']+(?:PROPER|REAL|READ.NFO))*[-_. ']*$/i;
+const titleContentExp = /[a-z0-9]/i;
 
 // Precomputed combined regex for all language names (replaces loop creating ~45 regexes per call)
 const allLanguagesGlobalExp = new RegExp(
   `\\b(${Object.values(Language)
     .map(l => l.toUpperCase())
-    .join('|')})`,
+    .join('|')})\\b`,
   'g',
 );
+
+function removeEditionSuffix(title: string): string {
+  const cleanedTitle = title.replace(editionSuffixExp, '');
+
+  return titleContentExp.test(cleanedTitle) ? cleanedTitle : title;
+}
+
+function removeSceneGarbageSuffix(title: string): string {
+  const cleanedTitle = title.replace(sceneGarbageSuffixExp, '');
+
+  return titleContentExp.test(cleanedTitle) ? cleanedTitle : title;
+}
 
 const releaseTitleCleanupPasses: readonly CleanupPass[] = [
   {
@@ -124,7 +138,7 @@ const releaseTitleCleanupPasses: readonly CleanupPass[] = [
   },
   {
     name: 'remove edition marker',
-    pattern: editionExp,
+    clean: removeEditionSuffix,
     trimAfter: true,
   },
   {
@@ -134,7 +148,7 @@ const releaseTitleCleanupPasses: readonly CleanupPass[] = [
   },
   {
     name: 'remove scene garbage marker',
-    pattern: sceneGarbageGlobalExp,
+    clean: removeSceneGarbageSuffix,
     trimAfter: true,
   },
   {
