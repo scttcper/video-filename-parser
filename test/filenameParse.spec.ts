@@ -192,6 +192,45 @@ const movieCases: Array<[string, any]> = [
     },
   ],
   [
+    'Multiplicity (1996) [REPACK] [720p]',
+    {
+      resolution: Resolution.R720P,
+      title: 'Multiplicity',
+      year: '1996',
+      languages: [Language.English],
+    },
+  ],
+  [
+    'Multiplicity.1996.1080p.BluRay.X264-AMIABLE',
+    {
+      resolution: Resolution.R1080P,
+      title: 'Multiplicity',
+      year: '1996',
+      group: 'AMIABLE',
+      languages: [Language.English],
+    },
+  ],
+  [
+    'Doctor.Strange.in.the.Multiverse.of.Madness.2022.2160p.UHD.BluRay.x265-SURCODE',
+    {
+      resolution: Resolution.R2160P,
+      title: 'Doctor Strange in the Multiverse of Madness',
+      year: '2022',
+      group: 'SURCODE',
+      languages: [Language.English],
+    },
+  ],
+  [
+    'Doctor.Strange.in.the.Multiverse.of.Madness.2022.2160p.WEB.H265-SLOT',
+    {
+      resolution: Resolution.R2160P,
+      title: 'Doctor Strange in the Multiverse of Madness',
+      year: '2022',
+      group: 'SLOT',
+      languages: [Language.English],
+    },
+  ],
+  [
     'Spider-Man Far from Home.2019.1080p.HDRip.X264.AC3-EVO',
     {
       resolution: Resolution.R1080P,
