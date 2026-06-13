@@ -93,7 +93,8 @@ const editionSuffixExp = new RegExp(
   'i',
 );
 const languageExp = /\b(TRUE.?FRENCH|videomann|SUBFRENCH|PLDUB|MULTI)\b/i;
-const sceneGarbageSuffixExp = /(?:^|[-_. ']+)(?:PROPER|REAL|READ.NFO)(?:[-_. ']+(?:PROPER|REAL|READ.NFO))*[-_. ']*$/i;
+const sceneGarbageSuffixExp =
+  /(?:^|[-_. ']+)(?:PROPER|REAL|READ.NFO)(?:[-_. ']+(?:PROPER|REAL|READ.NFO))*[-_. ']*$/i;
 const titleContentExp = /[a-z0-9]/i;
 
 // Precomputed combined regex for all language names (replaces loop creating ~45 regexes per call)
