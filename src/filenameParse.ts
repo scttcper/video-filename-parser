@@ -84,6 +84,7 @@ export function filenameParse(name: string, isTv = false): ParsedFilename {
       const seasonResult: ParsedTvInfo = {
         seasons: season.seasons,
         episodeNumbers: season.episodeNumbers,
+        ...(season.remainder ? { remainder: season.remainder } : {}),
         airDate: season.airDate,
         fullSeason: season.fullSeason,
         isPartialSeason: season.isPartialSeason,

@@ -76,6 +76,9 @@ console.log(filenameParse('The Office US S09E06 HDTV XviD-AFG', true));
 //   "seasonPart": 0,
 //   "isTv": true
 // }
+
+console.log(filenameParse('The Expanse - S01E02 - The Big Empty', true).remainder);
+// "The Big Empty"
 ```
 
 Quality modifiers such as `Remux`, `BR-DISK`, and `Raw-HD` are exposed as `modifier`.
