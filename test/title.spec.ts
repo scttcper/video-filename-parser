@@ -53,6 +53,17 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
   ],
   ['The.Middle.720p.HEVC.x265-MeGusta-Pre', { title: 'The Middle', year: null }],
   ['The.Middle.HEVC.x265-MeGusta-Pre', { title: 'The Middle', year: null }],
+  ['Multiplicity (1996) [REPACK] [720p]', { title: 'Multiplicity', year: '1996' }],
+  ['Multiplicity.1996.1080p.BluRay.X264-AMIABLE', { title: 'Multiplicity', year: '1996' }],
+  ['Multiverse (2024) 720p WEB-DL', { title: 'Multiverse', year: '2024' }],
+  [
+    'Doctor.Strange.in.the.Multiverse.of.Madness.2022.2160p.UHD.BluRay.x265-SURCODE',
+    { title: 'Doctor Strange in the Multiverse of Madness', year: '2022' },
+  ],
+  [
+    'Doctor.Strange.in.the.Multiverse.of.Madness.2022.2160p.WEB.H265-SLOT',
+    { title: 'Doctor Strange in the Multiverse of Madness', year: '2022' },
+  ],
   ['Blade Runner 2049 2017', { title: 'Blade Runner 2049', year: '2017' }],
   ['Blade Runner 2049 (2017)', { title: 'Blade Runner 2049', year: '2017' }],
   [
