@@ -16,6 +16,7 @@ const priorityMovieTitles = [
 ];
 
 const movieTitles = [
+  'Click.2006.2160p.UHD.BluRay.x265-B0MBARDiERS',
   'Whats.Eating.Gilbert.Grape.1993.720p.BluRay.x264-SiNNERS',
   'Spider-Man Far from Home.2019.1080p.HDRip.X264.AC3-EVO',
   'Togo 2019 2160p HDR DSNP WEBRip DDPAtmos 5 1 X265-TrollUHD',
@@ -25,6 +26,12 @@ const movieTitles = [
   'Indiana.Jones.and.the.Temple.of.Doom.1984.Complete.UHD.Bluray-JONES',
   'Apprentice.2016.COMPLETE.BLURAY-UNRELiABLE',
 ];
+
+const allMovieTitles = [...priorityMovieTitles, ...movieTitles];
+const thousandMovieTitles = Array.from(
+  { length: 1000 },
+  (_, index) => allMovieTitles[index % allMovieTitles.length]!,
+);
 
 const tvTitles = [
   'Its Always Sunny in Philadelphia S14E04 720p WEB H264-METCON',
@@ -67,6 +74,18 @@ describe('filenameParse - movies', () => {
       filenameParse(title);
     });
   }
+});
+
+describe('filenameParse - aggregate', () => {
+  bench('1000x movies', () => {
+    let parsedTitlesLength = 0;
+
+    for (const title of thousandMovieTitles) {
+      parsedTitlesLength += filenameParse(title).title.length;
+    }
+
+    void parsedTitlesLength;
+  });
 });
 
 describe('filenameParse - tv shows', () => {

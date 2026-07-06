@@ -1,4 +1,4 @@
-import { websitePrefixExp } from '../website.js';
+import { hasWebsitePrefix } from '../website.js';
 
 import { getFirstTitleBoundaryPosition } from './boundaries.js';
 import { releaseTitleCleaner, simplifyTitle } from './cleanup.js';
@@ -35,7 +35,7 @@ export function parseTitleAndYear(title: string): TitleAndYear {
 }
 
 function parseCommonReleaseTitleYear(title: string): TitleAndYear | null {
-  if (websitePrefixExp.test(title)) {
+  if (hasWebsitePrefix(title)) {
     return null;
   }
 

@@ -36,7 +36,12 @@ type EditionFlag = keyof Edition;
 interface EditionPattern {
   flag: EditionFlag;
   regex: RegExp;
+  hint?: (title: string) => boolean;
 }
+
+const hasSbsMarker = (title: string): boolean => title.includes('sbs');
+const hasHardcodedSubsMarker = (title: string): boolean =>
+  title.includes('sub') || title.includes('hc');
 
 const editionPatterns: EditionPattern[] = [
   { flag: 'internal', regex: /\b(INTERNAL)\b/i },
@@ -51,8 +56,8 @@ const editionPatterns: EditionPattern[] = [
   { flag: 'hdr', regex: /\b(HDR)\b/i },
   { flag: 'bw', regex: /\b(BW)\b/i },
   { flag: 'threeD', regex: /\b(3D)\b/i },
-  { flag: 'hsbs', regex: /\b(Half-?SBS|HSBS)\b/i },
-  { flag: 'sbs', regex: /\b((?<!H|HALF-)SBS)\b/i },
+  { flag: 'hsbs', regex: /\b(Half-?SBS|HSBS)\b/i, hint: hasSbsMarker },
+  { flag: 'sbs', regex: /\b((?<!H|HALF-)SBS)\b/i, hint: hasSbsMarker },
   { flag: 'hou', regex: /\b(HOU)\b/i },
   { flag: 'uhd', regex: /\b(UHD)\b/i },
   { flag: 'oar', regex: /\b(OAR)\b/i },
@@ -60,6 +65,7 @@ const editionPatterns: EditionPattern[] = [
   {
     flag: 'hardcodedSubs',
     regex: /\b((?<hcsub>(\w+(?<!SOFT|HORRIBLE)SUBS?))|(?<hc>(HC|SUBBED)))\b/i,
+    hint: hasHardcodedSubsMarker,
   },
   { flag: 'deletedScenes', regex: /\b((Bonus.)?Deleted.Scenes)\b/i },
   {
@@ -74,8 +80,8 @@ export function parseEdition(title: string, parsedTitle?: string): Edition {
   const withoutTitle = getEditionSearchText(title, parsedTitle);
 
   const result: Edition = {};
-  for (const { flag, regex } of editionPatterns) {
-    if (regex.test(withoutTitle)) {
+  for (const { flag, regex, hint } of editionPatterns) {
+    if ((hint === undefined || hint(withoutTitle)) && regex.test(withoutTitle)) {
       result[flag] = true;
     }
   }
