@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # https://github.com/actions/checkout
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
-      # https://github.com/actions/setup-node
-      - uses: wyvox/action-setup-pnpm@v3
+      # https://github.com/wyvox/action-setup-pnpm
+      - uses: wyvox/action-setup-pnpm@v4
         with: { node-version: 24 }
 
       - name: lint

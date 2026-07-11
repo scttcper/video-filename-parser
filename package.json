@@ -32,7 +32,7 @@
     "lint": "oxlint . && oxfmt --check",
     "lint:fix": "oxlint . --fix && oxfmt",
     "build": "tsc",
-    "typecheck": "tsgo --noEmit",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "bench": "vitest bench ./test/bench.bench.ts"
@@ -40,12 +40,11 @@
   "devDependencies": {
     "@ctrl/oxlint-config": "1.5.0",
     "@sindresorhus/tsconfig": "8.1.0",
-    "@types/node": "25.9.1",
-    "@typescript/native-preview": "7.0.0-dev.20260527.2",
-    "oxfmt": "0.52.0",
-    "oxlint": "1.67.0",
-    "typescript": "6.0.3",
-    "vitest": "4.1.7"
+    "@types/node": "26.1.1",
+    "oxfmt": "0.58.0",
+    "oxlint": "1.73.0",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10"
   },
   "release": {
     "branches": [
@@ -55,5 +54,5 @@
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "pnpm@11.4.0"
+  "packageManager": "pnpm@11.11.0"
 }
