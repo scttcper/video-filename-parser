@@ -80,18 +80,12 @@ episode.remainder;
 mode. The exported TypeScript types describe the full result. Metadata that is not present or cannot
 be inferred is generally omitted; `year` and `group` may be `null`.
 
-## How results work
-
-`sources` describes the media or delivery type, not the storefront or streaming service. Markers
-such as `AMZN`, `NF`, and `iTunesHD` can help identify a WEB-DL, but the service itself is not
-returned.
+## Notes
 
 Releases without a recognized language marker default to English. `multi` means the name contains a
 multi-language marker; it does not guess languages that are not named.
 
-A `Dolby Atmos` marker can identify Dolby Digital Plus, but standalone `Atmos` is not retained and
-there is no separate Atmos flag. Parsing is heuristic, so ambiguous names may need
-application-specific handling.
+Parsing is heuristic, so ambiguous names may need application-specific handling.
 
 ## Focused parsers
 
