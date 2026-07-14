@@ -10,7 +10,7 @@ export enum VideoCodec {
 
 const codecPatterns: Array<{ codec: VideoCodec; regex: RegExp }> = [
   { codec: VideoCodec.H264, regex: /h264/i },
-  { codec: VideoCodec.H265, regex: /h265/i },
+  { codec: VideoCodec.H265, regex: /h[-_. ]?265/i },
   { codec: VideoCodec.X265, regex: /x265|HEVC/i },
   { codec: VideoCodec.X264, regex: /x264/i },
   { codec: VideoCodec.XVID, regex: /XvidHD|X-?vid|divx/i },

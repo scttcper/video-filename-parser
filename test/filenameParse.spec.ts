@@ -2,6 +2,7 @@ import { expect, it } from 'vitest';
 
 import { AudioCodec } from '../src/audioCodec.js';
 import {
+  Channels,
   filenameParse,
   Language,
   QualityModifier,
@@ -11,6 +12,22 @@ import {
 } from '../src/index.js';
 
 const movieCases: Array<[string, any]> = [
+  [
+    'Backrooms.2026.2160p.iT.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-BYNDR',
+    {
+      title: 'Backrooms',
+      year: '2026',
+      resolution: Resolution.R2160P,
+      sources: [Source.WEBDL],
+      videoCodec: VideoCodec.H265,
+      audioCodec: AudioCodec.EAC3,
+      audioChannels: Channels.SIX,
+      group: 'BYNDR',
+      revision: { version: 1, real: 0 },
+      edition: { hdr: true, dolbyVision: true },
+      languages: [Language.English],
+    },
+  ],
   [
     'Project.Hail.Mary.2026.DV.2160p.WEB.h265-GRACE',
     {
