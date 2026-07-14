@@ -18,6 +18,7 @@ const cases: Array<[string, ReturnType<typeof parseVideoCodec>['codec']]> = [
   ['The Incredibles 2004 BluRay x264-jlw', VideoCodec.X264],
   ['Jack Reacher 2012 720p BluRay X264-AMIABLE', VideoCodec.X264],
   ['Super Troopers 2 2018 1080p WEB-DL H264 AC3-EVO', VideoCodec.H264],
+  ['Spaced codec H 264', VideoCodec.H264],
   ['Dotted codec H.265', VideoCodec.H265],
   ['The.Middle.720p.HEVC-MeGusta-Pre', VideoCodec.X265],
   ['Cloud.Atlas.2012.BluRay.1080p.VC1.5.1.WMV-INSECTS', VideoCodec.WMV],

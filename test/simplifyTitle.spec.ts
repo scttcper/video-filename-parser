@@ -29,7 +29,7 @@ const simplifyCases: Array<[string, string]> = [
   ['The.Man.from.U.N.C.L.E.2015.1080p.BluRay.x264-SPARKS', 'The.Man.from.U.N.C.L.E.2015...-SPARKS'],
   [
     'Movie.Title.Imax.2018.1080p.AMZN.WEB-DL.DD5.1.H.264-NTG',
-    'Movie.Title.Imax.2018....DD5.1.H.264-NTG',
+    'Movie.Title.Imax.2018....DD5.1.-NTG',
   ],
   [
     'Thunderbirds.Are.Go.S01E10.Tunnels.Of.Time.720p.HDTV.x264-RDVAS[rartv]',

@@ -13,6 +13,21 @@ import {
 
 const movieCases: Array<[string, any]> = [
   [
+    'Backrooms 2026 1080p AMZN WEB-DL DDP5 1 Atmos H 264-BYNDR',
+    {
+      title: 'Backrooms',
+      year: '2026',
+      resolution: Resolution.R1080P,
+      sources: [Source.WEBDL],
+      videoCodec: VideoCodec.H264,
+      audioCodec: AudioCodec.EAC3,
+      audioChannels: Channels.SIX,
+      group: 'BYNDR',
+      revision: { version: 1, real: 0 },
+      languages: [Language.English],
+    },
+  ],
+  [
     'Backrooms.2026.2160p.iT.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-BYNDR',
     {
       title: 'Backrooms',
