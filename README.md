@@ -77,39 +77,26 @@ episode.remainder;
 | `isTv`    | `boolean` | `false` | Enables season, episode, and air-date detection. |
 
 `filenameParse` returns `ParsedMovie` by default and `ParsedShow` when TV metadata is found in TV
-mode. Common metadata includes:
+mode. The exported TypeScript types describe the full result. Metadata that is not present or cannot
+be inferred is generally omitted; `year` and `group` may be `null`.
 
-- title and year
-- resolution and source type
-- video codec, audio codec, and audio channels
-- release group and languages
-- edition flags such as HDR, Dolby Vision, IMAX, remastered, and unrated
-- quality modifiers such as remux, BR-DISK, and Raw-HD
-- revision details for proper, repack, rerip, and versioned releases
-- season, episode, air-date, and season-pack details in TV mode
+## How results work
 
-Metadata that is not present or cannot be inferred is generally omitted. `sources`, `languages`, and
-`edition` are always returned, while `year` and `group` may be `null`.
+`sources` describes the media or delivery type, not the storefront or streaming service. Markers
+such as `AMZN`, `NF`, and `iTunesHD` can help identify a WEB-DL, but the service itself is not
+returned.
 
-## Metadata conventions
+Releases without a recognized language marker default to English. `multi` means the name contains a
+multi-language marker; it does not guess languages that are not named.
 
-- `sources` describes the media or delivery type, such as `WEBDL`, `WEBRIP`, `BLURAY`, or `TV`.
-  Service markers such as `AMZN`, `NF`, and `iTunesHD` can help identify a WEB-DL, but the service
-  itself is not returned.
-- Releases without a recognized language marker default to English.
-- `multi` indicates a multi-language marker; it does not enumerate languages that are not named in
-  the release.
-- A `Dolby Atmos` marker can identify Dolby Digital Plus, but standalone `Atmos` is not retained and
-  there is no separate Atmos flag in the result.
-- Parsing is heuristic. Ambiguous names may need the focused parsing helpers or application-specific
-  handling.
+A `Dolby Atmos` marker can identify Dolby Digital Plus, but standalone `Atmos` is not retained and
+there is no separate Atmos flag. Parsing is heuristic, so ambiguous names may need
+application-specific handling.
 
 ## Focused parsers
 
-The package also exports focused helpers for consumers that do not need the full result, including
-`parseTitleAndYear`, `parseSeason`, `parseQuality`, `parseResolution`, `parseSource`,
-`parseVideoCodec`, `parseAudioCodec`, `parseAudioChannels`, `parseEdition`, `parseGroup`,
-`parseLanguage`, and `removeFileExtension`.
+The package also exports the focused parsers used by `filenameParse` for consumers that only need one
+piece of metadata.
 
 ```ts
 import { parseAudioCodec, parseResolution } from '@ctrl/video-filename-parser';
