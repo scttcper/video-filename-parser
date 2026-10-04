@@ -15,7 +15,7 @@ jobs:
 
       # https://github.com/wyvox/action-setup-pnpm
       - uses: wyvox/action-setup-pnpm@d84148cd87d55adb709e92120c709b88d15bceac # v4.0.0
-        with: { node-version: 24 }
+        with: { node-version: 26 }
 
       - name: lint
         run: pnpm run lint
