@@ -1,4 +1,4 @@
-import { bench, describe } from 'vitest';
+import { test } from 'vitest';
 
 import { filenameParse, parseQuality, parseSeason, removeFileExtension } from '../src/index.js';
 
@@ -52,32 +52,38 @@ const extensionTitles = [
   'Movie.Title.2026.1080p.WEB-DL-GROUP',
 ];
 
-describe('removeFileExtension', () => {
-  for (const title of extensionTitles) {
-    bench(title, () => {
-      removeFileExtension(title);
-    });
-  }
+test('removeFileExtension', async ({ bench }) => {
+  await bench.compare(
+    ...extensionTitles.map(title =>
+      bench(title, () => {
+        removeFileExtension(title);
+      }),
+    ),
+  );
 });
 
-describe('filenameParse - priority movies', () => {
-  for (const title of priorityMovieTitles) {
-    bench(title, () => {
-      filenameParse(title);
-    });
-  }
+test('filenameParse - priority movies', async ({ bench }) => {
+  await bench.compare(
+    ...priorityMovieTitles.map(title =>
+      bench(title, () => {
+        filenameParse(title);
+      }),
+    ),
+  );
 });
 
-describe('filenameParse - movies', () => {
-  for (const title of movieTitles) {
-    bench(title, () => {
-      filenameParse(title);
-    });
-  }
+test('filenameParse - movies', async ({ bench }) => {
+  await bench.compare(
+    ...movieTitles.map(title =>
+      bench(title, () => {
+        filenameParse(title);
+      }),
+    ),
+  );
 });
 
-describe('filenameParse - aggregate', () => {
-  bench('1000x movies', () => {
+test('filenameParse - aggregate', async ({ bench }) => {
+  await bench('1000x movies', () => {
     let parsedTitlesLength = 0;
 
     for (const title of thousandMovieTitles) {
@@ -85,38 +91,46 @@ describe('filenameParse - aggregate', () => {
     }
 
     void parsedTitlesLength;
-  });
+  }).run();
 });
 
-describe('filenameParse - tv shows', () => {
-  for (const title of tvTitles) {
-    bench(title, () => {
-      filenameParse(title, true);
-    });
-  }
+test('filenameParse - tv shows', async ({ bench }) => {
+  await bench.compare(
+    ...tvTitles.map(title =>
+      bench(title, () => {
+        filenameParse(title, true);
+      }),
+    ),
+  );
 });
 
-describe('parseQuality - priority movies', () => {
-  for (const title of priorityMovieTitles) {
-    bench(title, () => {
-      parseQuality(title);
-    });
-  }
+test('parseQuality - priority movies', async ({ bench }) => {
+  await bench.compare(
+    ...priorityMovieTitles.map(title =>
+      bench(title, () => {
+        parseQuality(title);
+      }),
+    ),
+  );
 });
 
-describe('parseQuality', () => {
+test('parseQuality', async ({ bench }) => {
   const titles = [...movieTitles, ...tvTitles];
-  for (const title of titles) {
-    bench(title, () => {
-      parseQuality(title);
-    });
-  }
+  await bench.compare(
+    ...titles.map(title =>
+      bench(title, () => {
+        parseQuality(title);
+      }),
+    ),
+  );
 });
 
-describe('parseSeason', () => {
-  for (const title of tvTitles) {
-    bench(title, () => {
-      parseSeason(title);
-    });
-  }
+test('parseSeason', async ({ bench }) => {
+  await bench.compare(
+    ...tvTitles.map(title =>
+      bench(title, () => {
+        parseSeason(title);
+      }),
+    ),
+  );
 });

@@ -40,11 +40,11 @@
   "devDependencies": {
     "@ctrl/oxlint-config": "1.5.0",
     "@sindresorhus/tsconfig": "8.1.0",
-    "@types/node": "26.1.1",
-    "oxfmt": "0.58.0",
-    "oxlint": "1.73.0",
+    "@types/node": "26.6.4",
+    "oxfmt": "0.71.0",
+    "oxlint": "1.86.0",
     "typescript": "7.0.2",
-    "vitest": "4.1.10"
+    "vitest": "5.0.3"
   },
   "release": {
     "branches": [
@@ -54,5 +54,5 @@
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "pnpm@11.13.0"
+  "packageManager": "pnpm@12.9.1"
 }
