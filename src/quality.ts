@@ -6,7 +6,9 @@ const properRegex = /\b(?<proper>proper)\b/i;
 const realRegex = /\b(?<real>REAL)\b/; // not insensitive
 const realGlobalExp = new RegExp(realRegex.source, 'g');
 const repackRegex = /\b(?<repack>repack\d?|rerip\d?)\b/i;
-const versionExp = /\d[-._ ]?v(\d)[-._ ]|\bv(\d)\b|\[v(\d)\]|repack(\d)|rerip(\d)/i;
+// A bare `v2` only counts after the year, otherwise titles like "Movie.V2.2021" bump the version
+const versionExp =
+  /\d[-._ ]?v(\d)[-._ ]|\bv(\d)\b(?!.*\b(?:19|20)\d{2}\b)|\[v(\d)\]|repack(\d)|rerip(\d)/i;
 
 const remuxExp = /\b(?<remux>(BD|UHD)?Remux)\b/i;
 const bdiskExp =

@@ -25,6 +25,9 @@ const versionCases: Array<[string, number]> = [
   ['[Vivid-Asenshi] Akame ga Kill - 04v2 [266EE983]', 2],
   ['[Vivid-Asenshi] Akame ga Kill - 03v2 [66A05817]', 2],
   ['[Vivid-Asenshi] Akame ga Kill - 02v2 [1F67AB55]', 2],
+  ['Movie.Title.2020.1080p.WEB.h264.v2-GRP', 2],
+  ['Movie.V2.2021.1080p.WEB-DL.x264-GRP', 1],
+  ['Project.V.2019.1080p.WEB-DL.x264-GRP', 1],
 ];
 
 for (const [title, result] of versionCases) {
