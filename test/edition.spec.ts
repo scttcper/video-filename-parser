@@ -59,7 +59,7 @@ const cases: Array<[string, Partial<Edition>]> = [
   ['Long Shot 2019 DV 2160p WEB H265-SLOT', { dolbyVision: true }],
   [
     'Sicario 2015 Hybrid 2160p UHD BluRay REMUX DV HDR10+ HEVC TrueHD 7.1 Atmos-WiLDCAT',
-    { uhd: true, dolbyVision: true },
+    { uhd: true, dolbyVision: true, hdr: true },
   ],
   ['Babylon.2022.OAR.1080p.WEB.H264-SLOT', { oar: true }],
   [
@@ -68,6 +68,13 @@ const cases: Array<[string, Partial<Edition>]> = [
   ],
   ['The.Golden.Compass.2007.BONUS.1080p.BluRay.H264-REFRACTiON', { bonusContent: true }],
   ['The.Mist.2007.BW.2160p.UHD.BluRay.x265-GUHZER', { bw: true, uhd: true }],
+  ['Extended.Family.Outing.2020.1080p.BluRay.x264-GRP', {}],
+  ['The.Limited.Partner.2019.1080p.WEB-DL.x264-GRP', {}],
+  ['The.Theatrical.Ones.2019.Directors.Cut.1080p.BluRay.x264-GRP', { directors: true }],
+  ['Movie.2021.2160p.WEB-DL.HDR10.HEVC-GRP', { hdr: true }],
+  ['Movie.2021.2160p.UHD.BluRay.HDR10Plus.x265-GRP', { hdr: true, uhd: true }],
+  ['Movie.2021.2160p.WEB-DL.DoVi.HEVC-GRP', { dolbyVision: true }],
+  ['Movie.2021.2160p.WEB-DL.Dolby.Vision.HEVC-GRP', { dolbyVision: true }],
 ];
 
 for (const [title, result] of cases) {
@@ -82,6 +89,7 @@ const hardcodedSubsCases: Array<[string, true | undefined]> = [
   ['Movie Title 2017 HC 720p HDRiP DD5 1 x264-LEGi0N', true],
   ['Movie.Title.2017.720p.SUBBED.HDRip.V2.XViD-26k.avi', true],
   ['Movie.Title.2000.1080p.BlueRay.x264.DTS.RoSubbed-playHD', undefined],
+  ['Movie.Title.2021.1080p.WEB-DL.MULTISUBS.x264-GRP', undefined],
   ['Movie Title! 2018 [Web][MKV][h264][480p][AAC 2.0][Softsubs]', undefined],
   [
     'Movie Title! 2019 [HorribleSubs][Web][MKV][h264][848x480][AAC 2.0][Softsubs(HorribleSubs)]',
