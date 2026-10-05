@@ -37,6 +37,11 @@ interface EditionPattern {
   flag: EditionFlag;
   regex: RegExp;
   hint?: (title: string) => boolean;
+  /**
+   * Format tags are rarely real title words, but the title parser can swallow
+   * them (e.g. "Warcraft.The.Beginning.3D.HOU.2016"), so search the full name.
+   */
+  includeTitle?: true;
 }
 
 const hasSbsMarker = (title: string): boolean => title.includes('sbs');
@@ -53,18 +58,18 @@ const editionPatterns: EditionPattern[] = [
   { flag: 'unrated', regex: /\b(Uncensored|Unrated)\b/i },
   { flag: 'imax', regex: /\b(IMAX)\b/i },
   { flag: 'fanEdit', regex: /\b(Despecialized|Fan.?Edit)\b/i },
-  { flag: 'hdr', regex: /\b(HDR)\b/i },
-  { flag: 'bw', regex: /\b(BW)\b/i },
-  { flag: 'threeD', regex: /\b(3D)\b/i },
-  { flag: 'hsbs', regex: /\b(Half-?SBS|HSBS)\b/i, hint: hasSbsMarker },
-  { flag: 'sbs', regex: /\b((?<!H|HALF-)SBS)\b/i, hint: hasSbsMarker },
-  { flag: 'hou', regex: /\b(HOU)\b/i },
-  { flag: 'uhd', regex: /\b(UHD)\b/i },
-  { flag: 'oar', regex: /\b(OAR)\b/i },
-  { flag: 'dolbyVision', regex: /\b(DV(\b(HDR10|HLG|SDR))?)\b/i },
+  { flag: 'hdr', regex: /\b(HDR(?:10(?:\+|Plus)?)?)\b/i, includeTitle: true },
+  { flag: 'bw', regex: /\b(BW)\b/i, includeTitle: true },
+  { flag: 'threeD', regex: /\b(3D)\b/i, includeTitle: true },
+  { flag: 'hsbs', regex: /\b(Half-?SBS|HSBS)\b/i, hint: hasSbsMarker, includeTitle: true },
+  { flag: 'sbs', regex: /\b((?<!H|HALF-)SBS)\b/i, hint: hasSbsMarker, includeTitle: true },
+  { flag: 'hou', regex: /\b(HOU)\b/i, includeTitle: true },
+  { flag: 'uhd', regex: /\b(UHD)\b/i, includeTitle: true },
+  { flag: 'oar', regex: /\b(OAR)\b/i, includeTitle: true },
+  { flag: 'dolbyVision', regex: /\b(DV|DoVi|Dolby[-_. ]?Vision)\b/i, includeTitle: true },
   {
     flag: 'hardcodedSubs',
-    regex: /\b((?<hcsub>(\w+(?<!SOFT|HORRIBLE)SUBS?))|(?<hc>(HC|SUBBED)))\b/i,
+    regex: /\b((?<hcsub>(\w+(?<!SOFT|MULTI|HORRIBLE)SUBS?))|(?<hc>(HC|SUBBED)))\b/i,
     hint: hasHardcodedSubsMarker,
   },
   { flag: 'deletedScenes', regex: /\b((Bonus.)?Deleted.Scenes)\b/i },
@@ -77,11 +82,13 @@ const editionPatterns: EditionPattern[] = [
 
 export function parseEdition(title: string, parsedTitle?: string): Edition {
   parsedTitle ??= parseTitleAndYear(title).title;
+  const fullTitle = normalizeSeparators(title).toLowerCase();
   const withoutTitle = getEditionSearchText(title, parsedTitle);
 
   const result: Edition = {};
-  for (const { flag, regex, hint } of editionPatterns) {
-    if ((hint === undefined || hint(withoutTitle)) && regex.test(withoutTitle)) {
+  for (const { flag, regex, hint, includeTitle } of editionPatterns) {
+    const searchText = includeTitle ? fullTitle : withoutTitle;
+    if ((hint === undefined || hint(searchText)) && regex.test(searchText)) {
       result[flag] = true;
     }
   }
@@ -89,6 +96,14 @@ export function parseEdition(title: string, parsedTitle?: string): Edition {
   return result;
 }
 
+const titleSeparatorExp = /[._]/g;
+
+// Normalize separators on both sides so dotted release names line up with the
+// parsed title. Otherwise title words like "Extended" or "Limited" leak through.
 function getEditionSearchText(title: string, parsedTitle: string): string {
-  return title.replace('.', ' ').replace(parsedTitle, '').toLowerCase();
+  return normalizeSeparators(title).replace(normalizeSeparators(parsedTitle), '').toLowerCase();
+}
+
+function normalizeSeparators(title: string): string {
+  return title.replaceAll(titleSeparatorExp, ' ');
 }
