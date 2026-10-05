@@ -168,7 +168,7 @@ export const seasonPatterns: SeasonPattern[] = [
   ),
   seasonEpisode(
     'miniseries-part-word',
-    /^(?<title>[^\r\n]+?)(?:\W+(?:Part[-._ ](?<episode>One|Two|Three|Four|Five|Six|Seven|Eight|Nine)(>[-._ ])))/i,
+    /^(?<title>[^\r\n]+?)(?:\W+(?:Part[-._ ](?<episode>One|Two|Three|Four|Five|Six|Seven|Eight|Nine)(?:[-._ ]|$)))/i,
   ),
   seasonEpisode(
     'miniseries-x-of-y',
@@ -287,11 +287,13 @@ export const seasonPatterns: SeasonPattern[] = [
 export const rejectedPatterns = [
   /^[0-9a-zA-Z]{32}/i,
   /^[a-z0-9]{24}$/i,
-  /"^[A-Z]{11}\d{3}$/i,
-  /"^[a-z]{12}\d{3}$/i,
+  // NZBGeek hashes, case sensitive since they are close to 101 style episode numbering
+  /^[A-Z]{11}\d{3}$/,
+  /^[a-z]{12}\d{3}$/,
   /^Backup_\d{5,}S\d{2}-\d{2}$/i,
-  /^123$"/,
-  /^abc$"/i,
-  /^b00bs$"/i,
-  /^\d{6}_\d{2}$"/,
+  /^123$/,
+  /^abc$/i,
+  /^abc[-_. ]xyz/i,
+  /^b00bs$/i,
+  /^\d{6}_\d{2}$/,
 ];
