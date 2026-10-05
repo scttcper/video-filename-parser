@@ -124,6 +124,18 @@ const languageCases: Array<[string, Language[]]> = [
     'A.Serbian.Film.2010.SERBIAN.UnCut.DTS-HD.DTS.NORDICSUBS.1080p.BluRay.x264.HQ-TUSAHD',
     [Language.Serbian, Language.Nordic],
   ],
+  ['Movie.Title.2021.1080p.WEB-DL.ESP.x264-GRP', [Language.Spanish]],
+  ['Movie.Title.2021.Castellano.1080p.WEB-DL.x264-GRP', [Language.Spanish]],
+  ['Movie.Title.2021.GER.DL.1080p.BluRay.x264-GRP', [Language.German, Language.English]],
+  ['Movie.Title.2021.Deutsch.1080p.BluRay.x264-GRP', [Language.German]],
+  ['Movie.Title.2021.FRE.1080p.BluRay.x264-GRP', [Language.French]],
+  ['Movie.Title.2021.JAP.1080p.BluRay.x264-GRP', [Language.Japanese]],
+  ['Movie.Title.2021.KOR.1080p.WEB-DL.x264-GRP', [Language.Korean]],
+  ['Movie.Title.2021.VIE.1080p.WEB-DL.x264-GRP', [Language.Vietnamese]],
+  ['Movie.Title.2021.1080p.WEB-DL.Dublado.x264-GRP', [Language.Brazilian]],
+  ['Movie.Title.2021.1080p.WEB-DL.Telugu.x264-GRP', [Language.Telugu]],
+  ['Movie.Title.2021.1080p.WEB-DL.Malayalam.x264-GRP', [Language.Malayalam]],
+  ['Movie.Title.2021.1080p.WEB-DL.Kannada.x264-GRP', [Language.Kannada]],
 ];
 
 for (const [title, result] of languageCases) {
