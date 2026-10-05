@@ -55,6 +55,12 @@ const audioCodecCases: Array<[string, ReturnType<typeof parseAudioCodec>]> = [
   ['Movie.Title.2024.1080p.WEB.Vorbis.x265-GROUP', { codec: AudioCodec.VORBIS, source: 'Vorbis' }],
   ['Movie.Title.2024.DVDRip.LAME3-99.XviD-GROUP', { codec: AudioCodec.MP3, source: 'LAME3-99' }],
   ['Movie.Title.2024.DVDRip.MP2.XviD-GROUP', { codec: AudioCodec.MP2, source: 'MP2' }],
+  ['Movie.Title.2024.1080p.BluRay.DTS.X.x264-GROUP', { codec: AudioCodec.DTSHD, source: 'DTS.X' }],
+  ['Movie.Title.2024.1080p.BluRay.DTS:X.x264-GROUP', { codec: AudioCodec.DTSHD, source: 'DTS:X' }],
+  ['Movie.Title.2024.1080p.BluRay.DTSX.x264-GROUP', { codec: AudioCodec.DTSHD, source: 'DTSX' }],
+  ['Movie.Title.2024.1080p.BluRay.DTS.x264-GROUP', { codec: AudioCodec.DTS, source: 'DTS' }],
+  ['Movie.Title.2024.1080p.WEB-DL.E-AC-3.H264-GROUP', { codec: AudioCodec.EAC3, source: 'E-AC-3' }],
+  ['Movie.Title.2024.1080p.WEB-DL.AC-3.H264-GROUP', { codec: AudioCodec.DOLBY, source: 'AC-3' }],
 ];
 
 for (const [title, result] of audioCodecCases) {

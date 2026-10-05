@@ -28,6 +28,10 @@ const cases: Array<[string, ReturnType<typeof parseVideoCodec>['codec']]> = [
   ['Codec variants DVDR', VideoCodec.DVDR],
   ['Codec precedence x264 before H264', VideoCodec.H264],
   ['Codec precedence x265 before H265', VideoCodec.H265],
+  ['Movie.Title.2024.1080p.WEB-DL.DDP5.1.AV1-GROUP', VideoCodec.AV1],
+  ['Movie.Title.2024.2160p.WEB-DL.Opus.VP9-GROUP', VideoCodec.VP9],
+  ['Movie.Title.2024.1080p.BluRay.REMUX.AVC.DTS-HD.MA.5.1-GROUP', VideoCodec.H264],
+  ['Movie.Title.2024.1080p.BluRay.REMUX.x264.AVC-GROUP', VideoCodec.X264],
 ];
 
 for (const [title, result] of cases) {

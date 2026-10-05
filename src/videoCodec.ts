@@ -6,6 +6,8 @@ export enum VideoCodec {
   WMV = 'WMV',
   XVID = 'xvid',
   DVDR = 'dvdr',
+  AV1 = 'av1',
+  VP9 = 'vp9',
 }
 
 const codecPatterns: Array<{ codec: VideoCodec; regex: RegExp }> = [
@@ -16,6 +18,9 @@ const codecPatterns: Array<{ codec: VideoCodec; regex: RegExp }> = [
   { codec: VideoCodec.XVID, regex: /XvidHD|X-?vid|divx/i },
   { codec: VideoCodec.WMV, regex: /WMV/i },
   { codec: VideoCodec.DVDR, regex: /DVDR\b/i },
+  { codec: VideoCodec.AV1, regex: /\bAV1\b/i },
+  { codec: VideoCodec.VP9, regex: /\bVP9\b/i },
+  { codec: VideoCodec.H264, regex: /\bAVC\b/i },
 ];
 
 export const codecExp = new RegExp(codecPatterns.map(({ regex }) => regex.source).join('|'), 'i');
