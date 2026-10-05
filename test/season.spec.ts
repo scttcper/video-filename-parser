@@ -39,6 +39,7 @@ const dayEpisodeCases: Array<[string, string, Date]> = [
     'NFL',
     new Date(2019, 9, 6),
   ],
+  ['Series.Title.140226.720p.HDTV.x264-GRP', 'Series Title', new Date(2014, 1, 26)],
 ];
 for (const [postTitle, title, airDate] of dayEpisodeCases) {
   it(`parse day season release "${postTitle}"`, () => {
@@ -164,6 +165,18 @@ it('keeps representative season parser shapes working', () => {
   });
 });
 
+const miniseriesPartWordCases: Array<[string, string, number]> = [
+  ['Mini.Series.Part.One.720p.HDTV.x264-GRP', 'Mini Series', 1],
+  ['Band.of.Brothers.Part.Three.720p.BluRay.x264-GRP', 'Band of Brothers', 3],
+];
+for (const [postTitle, title, episode] of miniseriesPartWordCases) {
+  it(`parse miniseries part word "${postTitle}"`, () => {
+    const result = parseSeason(postTitle)!;
+    expect(result.seriesTitle).toBe(title);
+    expect(result.episodeNumbers).toEqual([episode]);
+  });
+}
+
 const crapCases: Array<[string]> = [
   ['76El6LcgLzqb426WoVFg1vVVVGx4uCYopQkfjmLe'],
   ['Vrq6e1Aba3U amCjuEgV5R2QvdsLEGYF3YQAQkw8'],
@@ -186,6 +199,8 @@ const crapCases: Array<[string]> = [
   ['ah63jka93jf0jh26ahjas961.mkv'],
   ['qrdSD3rYzWb7cPdVIGSn4E7'],
   ['QZC4HDl7ncmzyUj9amucWe1ddKU1oFMZDd8r0dEDUsTd'],
+  ['abc.xyz.S01E01.720p.HDTV.x264-GRP'],
+  ['ABCDEFGHIJK123'],
 ];
 for (const [title] of crapCases) {
   it(`should not parse ${title}`, () => {

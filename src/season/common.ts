@@ -3,12 +3,24 @@ import { releaseGroupSuffixExp } from '../title/patterns.js';
 
 const requestInfoExp = /^(?:\[[^\]\r\n]+\])+/;
 const sixDigitAirDateMatchExp =
-  /"(?<=[_.-])(?<airdate>(?<!\d)(?<airyear>[1-9]\d{1})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))(?=[_.-])/i;
+  /(?<=[_.-])(?<airdate>(?<!\d)(?<airyear>[1-9]\d{1})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))(?=[_.-])/i;
 const trailingRemainderRequestInfoExp = /(?:\s*\[[^\]\r\n]+\])+$/;
 const leadingRemainderSeparatorsExp = /^[-_.\s]+/;
 const leadingReleaseMetadataExp =
   /^(?:[ip][-_.\s]+[xh][-. ]?26[45]|(?:1[89]|20)\d{2}|480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|WEB(?:[-_. ]?DL|Rip)?|Blu[-_. ]?Ray|HDTV|DVD(?:Rip)?|BDRip|BRRip|[xh][-. ]?26[45]|h[-. ]?26[45]|HEVC|XviD)\b/i;
 const remainderContentExp = /[a-z]/i;
+const episodeNumberWords = [
+  'zero',
+  'one',
+  'two',
+  'three',
+  'four',
+  'five',
+  'six',
+  'seven',
+  'eight',
+  'nine',
+];
 
 export interface ParsedMatchCollection {
   seriesName: string;
@@ -313,8 +325,8 @@ function applyEpisodeNumbers(
     return lastTokenIndex;
   }
 
-  const first = Number(episodeCaptures[0]);
-  const last = Number(episodeCaptures[episodeCaptures.length - 1]);
+  const first = parseEpisodeNumber(episodeCaptures[0]!);
+  const last = parseEpisodeNumber(episodeCaptures[episodeCaptures.length - 1]!);
   const range = expandIntegerRange(first, last);
   if (range === null) {
     return null;
@@ -421,6 +433,12 @@ function hasAnyGroup(groups: MatchGroups, ...names: string[]): boolean {
 
 function isPresent(value: string | undefined): value is string {
   return value !== undefined;
+}
+
+// Miniseries can spell out the part, e.g. "Part.One"
+function parseEpisodeNumber(capture: string): number {
+  const wordIndex = episodeNumberWords.indexOf(capture.toLowerCase());
+  return wordIndex === -1 ? Number(capture) : wordIndex;
 }
 
 function expandIntegerRange(first: number, last: number): number[] | null {
