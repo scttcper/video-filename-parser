@@ -26,10 +26,16 @@ jobs:
       # https://github.com/actions/checkout
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      # https://github.com/wyvox/action-setup-pnpm
-      - uses: wyvox/action-setup-pnpm@d84148cd87d55adb709e92120c709b88d15bceac # v4.0.0
+      # https://github.com/pnpm/action-setup
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      # https://github.com/actions/setup-node
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 26
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
 
       # Ensure npm 11.5.1 or later is installed
       - name: Update npm
