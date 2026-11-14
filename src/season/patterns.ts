@@ -192,7 +192,7 @@ export const seasonPatterns: SeasonPattern[] = [
   // be followed by .1 (5.1 audio), runs of dots are left behind when quality tokens are stripped.
   seasonPack(
     'multi-season-pack',
-    /^(?<title>[^\r\n]+?)(?:Complete Series)?[-_. ]+(?:S|(?:Season|Saison|Series|Stagione)[_. ])(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:[-_. ]|[-_. ]?-[-_. ]?)(?:S|(?:Season|Saison|Series|Stagione)[_. ])?(?<season1>(?<!\d+)\d{1,2}(?!\d+|\.\d)))+/i,
+    /^(?<title>[^\r\n]+?)(?:Complete Series)?[-_. ]+(?:S|(?:Season|Saison|Series|Stagione)[_. ])(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:[-_. ]|[-_. ]?-[-_. ]?)(?:S|(?:Season|Saison|Series|Stagione)[_. ])?(?<season1>(?<!\d+)\d{1,2}(?!\d+|\.\d|[a-z])))+/i,
   ),
   partialSeason(
     'partial-season-pack',
@@ -389,10 +389,10 @@ export const seasonPatterns: SeasonPattern[] = [
   ),
 ];
 
-// Resolutions that simplifyTitle leaves behind, removed so they are not read as season or episode
-// numbers. Matches the resolution part of Sonarr's SimpleTitleRegex.
+// Resolutions and bit depths that simplifyTitle leaves behind, removed so they are not read as
+// season or episode numbers. Matches those parts of Sonarr's SimpleTitleRegex.
 export const seasonSimpleTitleExp =
-  /(?:(?:480|540|576|720|1080|1440|2160)[ip]|(?<![a-z\d])[248]k(?![a-z\d]))\s*?/gi;
+  /(?:(?:480|540|576|720|1080|1440|2160)[ip]|(?<![a-z\d])[248]k(?![a-z\d])|(?<![a-f\d])(?:8|10)[ -]?(?:b(?![a-z\d])|bits?))\s*?/gi;
 
 // Rewrites applied to the release title before the season patterns run
 export const preSubstitutions: Array<[RegExp, string]> = [

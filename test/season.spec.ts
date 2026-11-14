@@ -290,6 +290,10 @@ const sonarrPatternCases: Array<[string, Partial<Season>]> = [
     { seriesTitle: 'Show Name', seasons: [1], isMultiSeason: false, fullSeason: true },
   ],
   // Resolutions like 4K, 1440p and 540p are not season or episode numbers
+  [
+    'Show.S01.10bit.1080p',
+    { seriesTitle: 'Show', seasons: [1], isMultiSeason: false, fullSeason: true },
+  ],
   ['Series Title S01 4K 2160p WEB-DL x265-GRP', { seriesTitle: 'Series Title', seasons: [1] }],
   ['Series S01 1440p HMAX WEB-DL DD+ 5.1 H.265', { seriesTitle: 'Series', seasons: [1] }],
   [
