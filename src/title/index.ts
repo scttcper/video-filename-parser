@@ -10,11 +10,12 @@ const commonReleaseTitleYearExp =
   /^(?<title>(?![([])[^\r\n]+?)[-_. ](?<year>(?:1[89]|20)\d{2})(?=[-_. ](?:2160p|1080p|720p|576p|540p|480p|UHD|Blu-?Ray|Bluray|WEB[-_. ]?DL|WEBRip|HDRip|HDTV|DVDRip|BDRip|BRRip)\b)/i;
 
 // Leading [REQ], [Group] or tracker tags, from Radarr's RequestInfoRegex
-const requestInfoPrefixExp = /^(?:\[[^\]\r\n]+\])+/;
+const requestInfoPrefixExp = /^(?:\[[^\]\r\n]+\][-_. ]*)+/;
 const akaExp = / +A\.K\.A\. +/gi;
 // Folder names with the year first: (1995) Movie Name
 const yearFirstFolderExp = /^[([](?<year>(?:19|20)\d{2})[)\]][-_. ]+(?<title>[^\r\n]+)$/;
 const yearExp = /^\d{4}$/;
+const titleWordExp = /\p{L}/u;
 // A bracket left open when a title is cut at its first quality token: Movie Name [1080p
 const unclosedBracketExp = /[-_. ]*[[(][^\])]*$/;
 // Where a title without a year runs into its first [tag]
@@ -38,7 +39,8 @@ export function parseTitleAndYear(title: string): TitleAndYear {
     }
   }
 
-  const folder = yearFirstFolderExp.exec(grouplessTitle);
+  // Folder names have no release group, a trailing hyphen is part of the title (Spider-Man)
+  const folder = yearFirstFolderExp.exec(removeFileExtension(simpleTitle));
   if (folder?.groups) {
     const folderTitle = cleanMovieTitle(folder.groups.title ?? '');
     if (folderTitle) {
@@ -54,16 +56,20 @@ export function parseTitleAndYear(title: string): TitleAndYear {
     };
   }
 
-  const bareTitle = removeFileExtension(title.trim()).trim();
+  const bareTitle = removeRequestInfo(removeFileExtension(title.trim()).trim());
   const tagIndex = bareTitle.search(firstTagExp);
   const untaggedTitle = tagIndex > 0 ? bareTitle.slice(0, tagIndex) : bareTitle;
   return { title: cleanMovieTitle(untaggedTitle) || bareTitle, year: null };
 }
 
 function cleanMovieTitle(title: string): string | null {
-  return releaseTitleCleaner(
-    title.replace(requestInfoPrefixExp, '').trim().replaceAll(akaExp, ' AKA '),
-  );
+  return releaseTitleCleaner(removeRequestInfo(title).trim().replaceAll(akaExp, ' AKA '));
+}
+
+// Drops leading [REQ]/[Group] tags, unless the bracket is the title itself like [REC] or [REC] 2
+function removeRequestInfo(title: string): string {
+  const withoutRequestInfo = title.replace(requestInfoPrefixExp, '');
+  return titleWordExp.test(withoutRequestInfo) ? withoutRequestInfo : title;
 }
 
 function parseCommonReleaseTitleYear(title: string): TitleAndYear | null {
@@ -98,7 +104,8 @@ function parseTitleYearPattern(pattern: TitleYearPattern, title: string): TitleA
   }
 
   const cleanTitle = cleanMovieTitle(match.groups.title ?? '');
-  if (cleanTitle === null) {
+  // A [SubGroup] prefix that leaves no title words was the title itself: [REC] 2 (2009)
+  if (cleanTitle === null || (match.groups.subgroup && !titleWordExp.test(cleanTitle))) {
     return null;
   }
 

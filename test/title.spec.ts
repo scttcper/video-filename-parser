@@ -161,6 +161,14 @@ const radarrCases: Array<[string, { title: string; year: string | null }]> = [
   ],
   // Year first folders, bracketed tags aren't years
   ['(1995) Movie Name', { title: 'Movie Name', year: '1995' }],
+  ['(1995) Movie Name.mkv', { title: 'Movie Name', year: '1995' }],
+  ['(2002) Spider-Man', { title: 'Spider-Man', year: '2002' }],
+  // A bracket that is the title itself isn't a request tag
+  ['[REC] 2 (2009) 1080p BluRay', { title: '[REC] 2', year: '2009' }],
+  [
+    '[Jumonji-Giri]_[F-B]_Series_Title_Ep04_(0b0e2c10).mkv',
+    { title: 'Series Title Ep04 (0b0e2c10)', year: null },
+  ],
   ['World Movie Z Movie [2023]', { title: 'World Movie Z Movie', year: '2023' }],
   [
     'My.Movie.Assembly.Cut.1992.REPACK.1080p.BluRay.DD5.1.x264-Group',
