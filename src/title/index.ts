@@ -12,6 +12,8 @@ const commonReleaseTitleYearExp =
 // Leading [REQ], [Group] or tracker tags, from Radarr's RequestInfoRegex
 const requestInfoPrefixExp = /^(?:\[[^\]\r\n]+\][-_. ]*)+/;
 const akaExp = / +A\.K\.A\. +/gi;
+// Brackets left empty once quality tokens are stripped: Movie Name [1080p] -> Movie Name []
+const emptyBracketsExp = /[-_. ]*(?:\[[-_. ]*\]|\([-_. ]*\))/g;
 // Folder names with the year first: (1995) Movie Name
 const yearFirstFolderExp = /^[([](?<year>(?:19|20)\d{2})[)\]][-_. ]+(?<title>[^\r\n]+)$/;
 const yearExp = /^\d{4}$/;
@@ -63,7 +65,9 @@ export function parseTitleAndYear(title: string): TitleAndYear {
 }
 
 function cleanMovieTitle(title: string): string | null {
-  return releaseTitleCleaner(removeRequestInfo(title).trim().replaceAll(akaExp, ' AKA '));
+  return releaseTitleCleaner(
+    removeRequestInfo(title).replaceAll(emptyBracketsExp, ' ').trim().replaceAll(akaExp, ' AKA '),
+  );
 }
 
 // Drops leading [REQ]/[Group] tags, unless the bracket is the title itself like [REC] or [REC] 2

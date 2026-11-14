@@ -163,6 +163,8 @@ const radarrCases: Array<[string, { title: string; year: string | null }]> = [
   ['(1995) Movie Name', { title: 'Movie Name', year: '1995' }],
   ['(1995) Movie Name.mkv', { title: 'Movie Name', year: '1995' }],
   ['(2002) Spider-Man', { title: 'Spider-Man', year: '2002' }],
+  ['(2002) Spider-Man [1080p] [BluRay]', { title: 'Spider-Man', year: '2002' }],
+  ['(1995) Movie Name (1080p)', { title: 'Movie Name', year: '1995' }],
   // A bracket that is the title itself isn't a request tag
   ['[REC] 2 (2009) 1080p BluRay', { title: '[REC] 2', year: '2009' }],
   [
