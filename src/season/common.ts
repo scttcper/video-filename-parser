@@ -2,6 +2,7 @@ import { releaseTitleCleaner } from '../title/cleanup.js';
 import { releaseGroupSuffixExp } from '../title/patterns.js';
 
 const requestInfoExp = /^(?:\[[^\]\r\n]+\])+/;
+const edgeTitleSeparatorsExp = /^[\s-]+|[\s-]+$/g;
 const sixDigitAirDateMatchExp =
   /(?<=[_.-])(?<airdate>(?<!\d)(?<airyear>[1-9]\d{1})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))(?=[_.-])/i;
 const trailingRemainderRequestInfoExp = /(?:\s*\[[^\]\r\n]+\])+$/;
@@ -196,6 +197,13 @@ function parseSeasonEpisodeGroups(
   groups: MatchGroups,
   simpleTitle: string,
 ): ParsedMatchCollection | null {
+  // Repeated episode tokens capture the first season as `season` and the last as `season1`.
+  // A multi-season episode list is unlikely, so let a later pattern try instead.
+  const season1 = groupValue(groups, 'season1');
+  if (season1 !== undefined && Number(season1) !== Number(groupValue(groups, 'season'))) {
+    return null;
+  }
+
   const { result, lastTokenIndex } = createBaseResult(groups, simpleTitle);
   const nextIndex = applySeasonNumbers(result, groups, simpleTitle, lastTokenIndex);
   const episodeResult = applyEpisodeNumbers(result, groups, simpleTitle, nextIndex);
@@ -276,7 +284,7 @@ function createBaseResult(
     .replaceAll('.', ' ')
     .replaceAll('_', ' ')
     .replace(requestInfoExp, '')
-    .trim();
+    .replaceAll(edgeTitleSeparatorsExp, '');
 
   return {
     result: {
@@ -391,12 +399,12 @@ function finishResult(
   simpleTitle: string,
   lastTokenIndex: number,
 ): ParsedMatchCollection {
-  const releaseTokens =
-    lastTokenIndex === simpleTitle.length || lastTokenIndex === -1
-      ? simpleTitle
-      : simpleTitle.slice(lastTokenIndex);
+  const hasTrailingTokens = lastTokenIndex !== -1 && lastTokenIndex < simpleTitle.length;
+  // Like Sonarr, fall back to the whole title for release tokens, but only text after the episode
+  // tokens can be an episode title remainder.
+  const releaseTokens = hasTrailingTokens ? simpleTitle.slice(lastTokenIndex) : simpleTitle;
   const remainder =
-    result.episodeNumbers !== undefined && result.episodeNumbers.length > 0
+    hasTrailingTokens && result.episodeNumbers !== undefined && result.episodeNumbers.length > 0
       ? parseRemainder(releaseTokens)
       : undefined;
 

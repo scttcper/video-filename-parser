@@ -73,17 +73,102 @@ for (const [postTitle, title, seasons] of seasonPackCases) {
   });
 }
 
-const multiEpisodeCases: Array<[string, string, number[]]> = [
-  ['The Morning Show S01E01-E03 2019 1080p WEBRip X264 AC3-EVO', 'The Morning Show', [1, 2, 3]],
+const multiEpisodeCases: Array<[string, string, number, number[]]> = [
+  ['The Morning Show S01E01-E03 2019 1080p WEBRip X264 AC3-EVO', 'The Morning Show', 1, [1, 2, 3]],
+  // Repeated episode tokens keep the first episode, not only the last repetition
+  ['Series.S03E01.S03E02.720p.HDTV.X264-DIMENSION', 'Series', 3, [1, 2]],
+  ['Series.Title.2x04.2x05.720p.BluRay-FUTV', 'Series Title', 2, [4, 5]],
+  [
+    'Series Title - S07E22 - S07E23 - And Lots of Security.. [HDTV-720p].mkv',
+    'Series Title',
+    7,
+    [22, 23],
+  ],
+  ['S02E04E05.720p.BluRay-FUTV', '', 2, [4, 5]],
+  ['S02E03-04-05.720p.BluRay-FUTV', '', 2, [3, 4, 5]],
+  ['Series.Title.103.104.720p.HDTV.X264-DIMENSION', 'Series Title', 1, [3, 4]],
+  ['Series.10708.hdtv-lol.mp4', 'Series', 1, [7, 8]],
+  ['grp-zoos01e11e12-1080p', 'grp-zoo', 1, [11, 12]],
+  ['Series.S01E91-E100', 'Series', 1, [91, 92, 93, 94, 95, 96, 97, 98, 99, 100]],
+  ['Series.S29E161-E165.PDTV.x264-FQM', 'Series', 29, [161, 162, 163, 164, 165]],
+  ["Series's Sonarr - 8x01_02 - Free Falling", "Series's Sonarr", 8, [1, 2]],
+  ['Series Title - [02x01-02] - Episode 1', 'Series Title', 2, [1, 2]],
+  ['Series Title (S15E06-08) City Sushi', 'Series Title', 15, [6, 7, 8]],
+  [
+    'The Series And The Code - S42 Ep10718 - Ep10720',
+    'The Series And The Code',
+    42,
+    [10_718, 10_719, 10_720],
+  ],
+  ['Series Title - S15E06-07 - City Sushi HDTV-720p', 'Series Title', 15, [6, 7]],
 ];
-for (const [postTitle, title, episodes] of multiEpisodeCases) {
-  it(`parse multi season release "${postTitle}"`, () => {
+for (const [postTitle, title, season, episodes] of multiEpisodeCases) {
+  it(`parse multi episode release "${postTitle}"`, () => {
     const result = parseSeason(postTitle)!;
+    expect(result.seasons).toEqual([season]);
     expect(result.episodeNumbers).toEqual(episodes);
     expect(result.seriesTitle).toBe(title);
     expect(result.isMultiSeason).toBe(false);
   });
 }
+
+// Numbers in episode titles and resolutions are not extra episodes
+const singleEpisodeCases: Array<[string, string, number, number]> = [
+  ['Series.S01E04.2-45.PM.[HDTV-720p].mkv', 'Series', 1, 4],
+  ['Series-S07E12-31st_Century_Fox-[Bluray-1080p].mkv', 'Series', 7, 12],
+  ['Series S08E20 50-50 Carla [DVD]', 'Series', 8, 20],
+  ['Developers & Coders S02E10 6-50 to SLC [SDTV]', 'Developers & Coders', 2, 10],
+  ['Series.Galaxy.S01E01.33.720p.HDDVD.x264-SiNNERS.mkv', 'Series Galaxy', 1, 1],
+  ['The_Series_US_s06e19_04.28.2014_hdtv.x264.Poke.mp4', 'The Series US', 6, 19],
+  ['Series Title - S02E01 1920x910', 'Series Title', 2, 1],
+  ['Series-S03E14-720p-HDTV-X264-DIMENSION', 'Series', 3, 14],
+];
+for (const [postTitle, title, season, episode] of singleEpisodeCases) {
+  it(`parse single episode release "${postTitle}"`, () => {
+    const result = parseSeason(postTitle)!;
+    expect(result.seasons).toEqual([season]);
+    expect(result.episodeNumbers).toEqual([episode]);
+    expect(result.seriesTitle).toBe(title);
+  });
+}
+
+const absoluteRangeCases: Array<[string, string, number, number]> = [
+  ['[Doutei] Some Good, Anime Show - 01-12 [BD][720p-AAC]', 'Some Good, Anime Show', 1, 12],
+  ['[HorribleSubs] Some Anime Show!! (01-25) [1080p] (Batch)', 'Some Anime Show!!', 1, 25],
+  [
+    'Some Anime Show (2011) Episode 99-100 [1080p] [Dual.Audio] [x265]',
+    'Some Anime Show (2011)',
+    99,
+    100,
+  ],
+  ['[ANBU-AonE]_SeriesTitle_26-27_[F224EF26].avi', 'SeriesTitle', 26, 27],
+];
+for (const [postTitle, title, first, last] of absoluteRangeCases) {
+  it(`parse absolute episode range "${postTitle}"`, () => {
+    const result = parseSeason(postTitle)!;
+    expect(result.episodeNumbers).toEqual(
+      Array.from({ length: last - first + 1 }, (_, index) => first + index),
+    );
+    expect(result.seriesTitle).toBe(title);
+  });
+}
+
+it('does not read air dates as season and episode ranges', () => {
+  expect(parseSeason('A Late Talk Show - 2011-04-12 - Gov. Deval Patrick')).toMatchObject({
+    seriesTitle: 'A Late Talk Show',
+    seasons: [],
+    episodeNumbers: [],
+    airDate: new Date(2011, 3, 12),
+  });
+  expect(parseSeason('Series Title (1955) - 1954-01-23 05 00 00 - Cottage for Sale.ts')).toBeNull();
+});
+
+it('trims separators around series titles', () => {
+  expect(parseSeason('[MGS] - Kuragehime - Episode 02v2 - [D8B6C90D]')?.seriesTitle).toBe(
+    'Kuragehime',
+  );
+  expect(parseSeason('Mad Series - Season 1 [Bluray720p]')?.seriesTitle).toBe('Mad Series');
+});
 
 const remainderCases: Array<[string, string, number[], number[], string]> = [
   ['The Expanse - S01E02 - The Big Empty', 'The Expanse', [1], [2], 'The Big Empty'],
@@ -110,6 +195,10 @@ for (const [postTitle, title, seasons, episodes, remainder] of remainderCases) {
 const noRemainderCases: Array<[string]> = [
   ['Great British Railway Journeys S11E03 480p x264-mSD [eztv]'],
   ['The Morning Show S01E01-E03 2019 1080p WEBRip X264 AC3-EVO'],
+  // The episode token ends the title, so there is nothing after it
+  ['The.Series.S02E15'],
+  ['The Series Title! - S01E01-02-03'],
+  ['[Judas] Series Title (2024) - S01E14'],
 ];
 for (const [postTitle] of noRemainderCases) {
   it(`does not expose junk remainder for "${postTitle}"`, () => {
