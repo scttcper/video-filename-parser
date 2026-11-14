@@ -39,12 +39,12 @@
   },
   "devDependencies": {
     "@ctrl/oxlint-config": "1.5.0",
-    "@sindresorhus/tsconfig": "8.1.0",
-    "@types/node": "26.6.4",
-    "oxfmt": "0.71.0",
-    "oxlint": "1.86.0",
+    "@sindresorhus/tsconfig": "9.0.0",
+    "@types/node": "26.6.6",
+    "oxfmt": "0.78.0",
+    "oxlint": "1.93.0",
     "typescript": "7.0.2",
-    "vitest": "5.0.3"
+    "vitest": "5.1.0"
   },
   "release": {
     "branches": [
@@ -52,7 +52,7 @@
     ]
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
-  "packageManager": "pnpm@12.9.1"
+  "packageManager": "pnpm@12.18.0"
 }

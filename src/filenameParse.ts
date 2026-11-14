@@ -18,17 +18,17 @@ interface BaseParsed {
   title: string;
   year: string | null;
   edition: Edition;
-  resolution?: Resolution;
+  resolution?: Resolution | undefined;
   sources: Source[];
-  videoCodec?: VideoCodec;
-  audioCodec?: AudioCodec;
-  audioChannels?: Channels;
-  modifier?: QualityModifier;
+  videoCodec?: VideoCodec | undefined;
+  audioCodec?: AudioCodec | undefined;
+  audioChannels?: Channels | undefined;
+  modifier?: QualityModifier | undefined;
   group: string | null;
   revision: Revision;
   languages: Language[];
-  multi?: boolean;
-  complete?: boolean;
+  multi?: boolean | undefined;
+  complete?: boolean | undefined;
 }
 
 export type ParsedMovie = BaseParsed;

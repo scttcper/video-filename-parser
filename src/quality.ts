@@ -74,7 +74,7 @@ const commonSceneWebExp = new RegExp(
   String.raw`\b(?:1080p|2160p)[-_. ]web[-_. ]${sceneCodecMarker}\b`,
   'i',
 );
-const animeWebDlExp = /\[WEB\]|[\[(]WEB[ .]/i;
+const animeWebDlExp = /\[WEB\]|[[(]WEB[ .]/i;
 // Upper case only, a trailing `web` word is not a source
 const trailingWebExp = /[. ]WEB$/;
 // x264 with no source or resolution is an SD TV release, like upstream's codec fallback
@@ -99,7 +99,7 @@ export enum QualityModifier {
 export interface QualityModel {
   sources: Source[];
   modifier: QualityModifier | null;
-  resolution?: Resolution;
+  resolution?: Resolution | undefined;
   revision: Revision;
 }
 
@@ -114,9 +114,9 @@ interface QualityContext {
   normalizedTitle: string;
   sourceGroups: SourceGroups;
   parsedSources?: Source[];
-  parsedResolution?: Resolution;
+  parsedResolution?: Resolution | undefined;
   extensionQuality?: Pick<QualityModel, 'sources' | 'resolution'> | null;
-  codec?: VideoCodec;
+  codec?: VideoCodec | undefined;
   revision: Revision;
   modifier: QualityModifier | null;
 }
