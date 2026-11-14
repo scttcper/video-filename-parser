@@ -1,6 +1,6 @@
 import { parseAudioChannels } from '../audioChannels.js';
 import { parseAudioCodec } from '../audioCodec.js';
-import { parseResolution } from '../resolution.js';
+import { findFirstResolutionToken } from '../resolution.js';
 import { parseVideoCodec } from '../videoCodec.js';
 
 interface TitleBoundaryParser {
@@ -9,7 +9,7 @@ interface TitleBoundaryParser {
 }
 
 const titleBoundaryParsers: TitleBoundaryParser[] = [
-  { name: 'resolution', parse: title => parseResolution(title).source },
+  { name: 'resolution', parse: findFirstResolutionToken },
   { name: 'audio-codec', parse: title => parseAudioCodec(title).source },
   { name: 'audio-channels', parse: title => parseAudioChannels(title).source },
   { name: 'video-codec', parse: title => parseVideoCodec(title).source },

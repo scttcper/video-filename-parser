@@ -63,3 +63,19 @@ export function parseResolutionFromTitle(title: string): {
 
   return {};
 }
+
+/**
+ * The leftmost resolution token. parseResolution picks a resolution by priority (an explicit 720p
+ * beats a bare 4K), but a title ends at whichever token comes first.
+ */
+export function findFirstResolutionToken(title: string): string | undefined {
+  let first: RegExpExecArray | undefined;
+  for (const { regex } of resolutionPatterns) {
+    const match = regex.exec(title);
+    if (match && (first === undefined || match.index < first.index)) {
+      first = match;
+    }
+  }
+
+  return first?.[0];
+}
