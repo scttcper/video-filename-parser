@@ -227,6 +227,13 @@ export const seasonPatterns: SeasonPattern[] = [
     'anime-title-four-digit-absolute-subgroup',
     /^(?<title>[^\r\n]+?)[-_. ]+(?!(?:19|20)\d{2}(?!\d))(?<absoluteepisode>(?<!\d+)\d{4}(?!\d+))[-_. ]\[(?<subgroup>[^\]\r\n]+)\]/i,
   ),
+  // Long running anime without a subgroup: Title - 1001 [1080p], Title - 1000-1001 (1080p). Only
+  // numbers from 1000 that are followed by a bracket, paren or the end, so scene style
+  // Title.1013.720p and Title - 1012 - Episode Title stay season and episode.
+  absoluteEpisode(
+    'anime-title-dash-four-digit-absolute',
+    /^(?<title>[^\r\n]+?) - (?!(?:19|20)\d{2}(?!\d))(?<absoluteepisode>(?<!\d)[1-9]\d{3})(?:\s?[-~]\s?(?<absoluteepisode1>[1-9]\d{3}))?(?!\d)(?:v\d)?(?=\s*(?:[[(]|$))/i,
+  ),
   seasonEpisode(
     'miniseries-year-title-part-number',
     /^(?<title>[^\r\n]+?\d{4})\W+(?:Part\W?|e)(?<episode>\d{1,2}(?!\d+))(?:(?:Part\W?|e)(?<episode1>\d{1,2}(?!\d+)))*/i,
