@@ -153,6 +153,13 @@ for (const [postTitle, title, first, last] of absoluteRangeCases) {
   });
 }
 
+it('does not read a year range after an anime subgroup as absolute episodes', () => {
+  expect(parseSeason('[Group] Show Name (2009-2010) [BD 1080p]')).toBeNull();
+  expect(parseSeason('[HatSubs] One Series (1017-1088) (WEB 1080p)')?.episodeNumbers).toHaveLength(
+    72,
+  );
+});
+
 it('does not read air dates as season and episode ranges', () => {
   expect(parseSeason('A Late Talk Show - 2011-04-12 - Gov. Deval Patrick')).toMatchObject({
     seriesTitle: 'A Late Talk Show',

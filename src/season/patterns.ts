@@ -201,7 +201,7 @@ export const seasonPatterns: SeasonPattern[] = [
   // Anime 4 digit absolute episodes, a 19xx/20xx year is not treated as an episode
   absoluteEpisode(
     'anime-subgroup-four-digit-absolute-range',
-    /^\[(?<subgroup>[^\]\r\n]+)\][-_. ]?(?<title>[^\r\n]+?)[-_. ]+?\(?(?<absoluteepisode>\d{4}(\.\d{1,2})?(?!\d+))-(?<absoluteepisode1>\d{4}(\.\d{1,2})?(?!\d+))\)?/i,
+    /^\[(?<subgroup>[^\]\r\n]+)\][-_. ]?(?<title>[^\r\n]+?)[-_. ]+?\(?(?!(?:19|20)\d{2}(?!\d))(?<absoluteepisode>\d{4}(\.\d{1,2})?(?!\d+))-(?<absoluteepisode1>\d{4}(\.\d{1,2})?(?!\d+))\)?/i,
   ),
   absoluteEpisode(
     'anime-subgroup-four-digit-absolute',
