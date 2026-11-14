@@ -14,7 +14,7 @@ const remainderContentExp = /[a-z]/i;
 // Brackets left empty after quality tokens are stripped, e.g. `VOSTFR ()` or `[Web][MKV][]`
 const emptyBracketsExp = /\s*(?:\(\s*\)|\[\s*\]|\{\s*\})/g;
 // Anime CRC32 hash tags like [27AAA0A0]
-const hashTagExp = /\s*[[(][\dA-F]{8}[\])]/g;
+const hashTagExp = /\s*[[(][\dA-F]{8}[\])]/gi;
 const episodeNumberWords = [
   'zero',
   'one',

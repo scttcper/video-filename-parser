@@ -317,11 +317,12 @@ const junkRemainderCases = [
   '[HorribleSubs] Shirobako - 20 [720p].mkv',
   '[Hatsuyuki] Series Title - 363 [848x480][ADE35E38].mkv',
   'Tokyo Ghoul: RE S2 - Episode 4 VOSTFR (1080p)',
+  '[Group] Series Title - 05 (8246e542).mkv',
 ];
 for (const postTitle of junkRemainderCases) {
   it(`does not keep junk in the remainder for "${postTitle}"`, () => {
     const remainder = parseSeason(postTitle)?.remainder;
-    expect(remainder ?? '').not.toMatch(/mkv|\[\s*\]|\(\s*\)|ADE35E38/);
+    expect(remainder ?? '').not.toMatch(/mkv|\[\s*\]|\(\s*\)|ADE35E38|8246e542/i);
   });
 }
 for (const [postTitle, expected] of sonarrPatternCases) {
