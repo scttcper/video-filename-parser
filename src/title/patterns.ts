@@ -35,19 +35,19 @@ export const movieTitleYearPatterns: TitleYearPattern[] = [
     name: 'anime-subgroup-title-parenthesized-year',
     guard: animeParenthesizedYearExp,
     regex:
-      /^(?:\[(?<subgroup>.+?)\][-_. ]?)(?<title>(?![(\[]).+?)\s*\((?<year>(1(8|9)|20)\d{2})\).*?(?<hash>\[\w{8}\])?(?:$|\.)/i,
+      /^(?:\[(?<subgroup>.+?)\][-_. ]?)(?<title>(?![([]).+?)\s*\((?<year>(1(8|9)|20)\d{2})\).*?(?<hash>\[\w{8}\])?(?:$|\.)/i,
   },
   {
     name: 'anime-subgroup-title-year',
     guard: animeYearExp,
     regex:
-      /^(?:\[(?<subgroup>.+?)\][-_. ]?)(?<title>(?![(\[]).+?)?(?:(?:[-_\W](?<![)\[!]))*(?<year>(1(8|9)|20)\d{2}(?!p|i|x|\d+|\]|\W\d+)))+.*?(?<hash>\[\w{8}\])?(?:$|\.)/i,
+      /^(?:\[(?<subgroup>.+?)\][-_. ]?)(?<title>(?![([]).+?)?(?:(?:[-_\W](?<![)[!]))*(?<year>(1(8|9)|20)\d{2}(?!p|i|x|\d+|\]|\W\d+)))+.*?(?<hash>\[\w{8}\])?(?:$|\.)/i,
   },
   {
     name: 'anime-subgroup-title-version-hash',
     guard: animeHashExp,
     regex:
-      /^(?:\[(?<subgroup>.+?)\][-_. ]?)(?<title>(?![(\[]).+?)((v)(?:\d{1,2})(?:([-_. ])))(\[.*)?(?:[\[(][^\])])?.*?(?<hash>\[\w{8}\])(?:$|\.)/i,
+      /^(?:\[(?<subgroup>.+?)\][-_. ]?)(?<title>(?![([]).+?)((v)(?:\d{1,2})(?:([-_. ])))(\[.*)?(?:[[(][^\])])?.*?(?<hash>\[\w{8}\])(?:$|\.)/i,
   },
   {
     name: 'anime-subgroup-title-bracket-hash',
@@ -59,14 +59,14 @@ export const movieTitleYearPatterns: TitleYearPattern[] = [
     name: 'anime-subgroup-title-hash',
     guard: animeHashExp,
     regex:
-      /^(?:\[(?<subgroup>.+?)\][-_. ]?)(?<title>(?![(\[]).+)(?:[\[(][^\])]).*?(?<hash>\[\w{8}\])(?:$|\.)/i,
+      /^(?:\[(?<subgroup>.+?)\][-_. ]?)(?<title>(?![([]).+)(?:[[(][^\])]).*?(?<hash>\[\w{8}\])(?:$|\.)/i,
   },
   // German/TrueFrench tracker names put the language before the year: Title.German.DL.2011
   {
     name: 'german-truefrench',
     guard: /german|truefrench/i,
     regex:
-      /^(?<title>(?![(\[]).+?)((\W|_))(\(?\b(?<edition>(((Recut.|Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Ultimate|Extended|Despecialized|(Special|Rouge|Final|Assembly|Imperial|Diamond|Signature|Hunter|Rekall)(?=(.(Cut|Edition|Version)))|\d{2,3}(th)?.Anniversary)(?:.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|Open.?Matte|IMAX|Fan.?Edit))?|((Uncensored|Remastered|Unrated|Uncut|Open?.Matte|IMAX|Fan.?Edit|Restored|((2|3|4)in1))))))\b\)?.{1,3})?(?:(?<!(19|20)\d{2}.*?)(?<!(?:Good|The)[_ .-])(German|TrueFrench)\b)(?<afterLanguage>.+?)(?=((19|20)\d{2}|$))(?<year>(19|20)\d{2}(?!p|i|\d+|\]|\W\d+))?(\W+|_|$)(?!\\)/i,
+      /^(?<title>(?![([]).+?)((\W|_))(\(?\b(?<edition>(((Recut.|Extended.|Ultimate.)?(Director.?s|Collector.?s|Theatrical|Ultimate|Extended|Despecialized|(Special|Rouge|Final|Assembly|Imperial|Diamond|Signature|Hunter|Rekall)(?=(.(Cut|Edition|Version)))|\d{2,3}(th)?.Anniversary)(?:.(Cut|Edition|Version))?(.(Extended|Uncensored|Remastered|Unrated|Uncut|Open.?Matte|IMAX|Fan.?Edit))?|((Uncensored|Remastered|Unrated|Uncut|Open?.Matte|IMAX|Fan.?Edit|Restored|((2|3|4)in1))))))\b\)?.{1,3})?(?:(?<!(19|20)\d{2}.*?)(?<!(?:Good|The)[_ .-])(German|TrueFrench)\b)(?<afterLanguage>.+?)(?=((19|20)\d{2}|$))(?<year>(19|20)\d{2}(?!p|i|\d+|\]|\W\d+))?(\W+|_|$)(?!\\)/i,
     accept: hasReleaseInfoAfterLanguage,
   },
   {

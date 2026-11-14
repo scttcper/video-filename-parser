@@ -164,7 +164,7 @@ export function parseLanguage(title: string, parsedTitle?: string): Language[] {
 export function parseLanguageInfo(
   title: string,
   parsedTitle?: string,
-): { languages: Language[]; multi?: boolean } {
+): { languages: Language[]; multi?: boolean | undefined } {
   if (!languageOrMultiExp.test(title) && !hasLanguageExp(title)) {
     return { languages: [Language.English] };
   }

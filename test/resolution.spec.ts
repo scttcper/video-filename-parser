@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 
 import { parseResolution, Resolution } from '../src/index.js';
 
-const cases: Array<[string, Resolution?]> = [
+const cases: Array<[string, Resolution | undefined]> = [
   ['Oceans.Thirteen.2007.iNTERNAL.720p.BluRay.x264-MHQ', Resolution.R720P],
   ['Rocketman 2019 2160p UHD BluRay x265-TERMiNAL', Resolution.R2160P],
   ['Alita Battle Angel 2019 1080p BluRay x264-SPARKS', Resolution.R1080P],
