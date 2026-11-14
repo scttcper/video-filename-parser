@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 
-import { parseMatchCollection, parseSeason } from '../src/index.js';
+import { parseMatchCollection, parseSeason, type Season } from '../src/index.js';
 
 const fullSeasonRelease: Array<[string, string, number]> = [
   ['30.Rock.Season.04.HDTV.XviD-DIMENSION', '30 Rock', 4],
@@ -153,6 +153,13 @@ for (const [postTitle, title, first, last] of absoluteRangeCases) {
   });
 }
 
+it('does not read a year range after an anime subgroup as absolute episodes', () => {
+  expect(parseSeason('[Group] Show Name (2009-2010) [BD 1080p]')).toBeNull();
+  expect(parseSeason('[HatSubs] One Series (1017-1088) (WEB 1080p)')?.episodeNumbers).toHaveLength(
+    72,
+  );
+});
+
 it('does not read air dates as season and episode ranges', () => {
   expect(parseSeason('A Late Talk Show - 2011-04-12 - Gov. Deval Patrick')).toMatchObject({
     seriesTitle: 'A Late Talk Show',
@@ -170,6 +177,180 @@ it('trims separators around series titles', () => {
   expect(parseSeason('Mad Series - Season 1 [Bluray720p]')?.seriesTitle).toBe('Mad Series');
 });
 
+const range = (first: number, last: number) =>
+  Array.from({ length: last - first + 1 }, (_, index) => first + index);
+
+const sonarrPatternCases: Array<[string, Partial<Season>]> = [
+  // Anime season packs
+  ['[Group] Title S01 12 13 [1080p]', { seriesTitle: 'Title', seasons: [1], fullSeason: true }],
+  [
+    '[Vivid] Some Anime Show S01 [Web][MKV][h264 10-bit][1080p][AAC 2.0]',
+    { seriesTitle: 'Some Anime Show', seasons: [1], fullSeason: true },
+  ],
+  [
+    '[Group] Series Title S01-04 (BD 1080p) [Dual Audio]',
+    { seriesTitle: 'Series Title', seasons: [1, 2, 3, 4], isMultiSeason: true },
+  ],
+  [
+    '[Group] Series Title S03 Vol.02 [BD 1080p FLAC]',
+    { seriesTitle: 'Series Title', seasons: [3], isPartialSeason: true, seasonPart: 2 },
+  ],
+  ['[Group] Title S01 - 01-12 [1080p]', { seriesTitle: 'Title S01', episodeNumbers: range(1, 12) }],
+  [
+    '[Erai-raws] Series Title! - 01~10 [1080p][Multiple Subtitle]',
+    { seriesTitle: 'Series Title!', episodeNumbers: range(1, 10) },
+  ],
+  // Air dates win over a later "Part N"
+  [
+    'Series Title - 2026-07-03 - Recap 2025 Part 2 [WEBDL-1080p]-RlsGrp',
+    { seriesTitle: 'Series Title', episodeNumbers: [], airDate: new Date(2026, 6, 3) },
+  ],
+  [
+    'Series.Title.2015.09.07.Part.1.720p.HULU.WEBRip.AAC2.0.H.264-Sonarr',
+    { seriesTitle: 'Series Title', episodeNumbers: [], airDate: new Date(2015, 8, 7) },
+  ],
+  [
+    'Series On TitleClub E76 2024 08 08 1080p WEB H264-RnB96 [TJET]',
+    { seriesTitle: 'Series On TitleClub', episodeNumbers: [], airDate: new Date(2024, 7, 8) },
+  ],
+  // Korean releases with an episode and air date
+  [
+    "It's a Series Title.E56.190121.720p-NEXT.mp4",
+    { seriesTitle: "It's a Series Title", seasons: [1], episodeNumbers: [56] },
+  ],
+  // Spanish tracker releases
+  [
+    'Series Title - Temporada 2 [HDTV 720p][Cap.201][AC3 5.1 Castellano][www.pctnew.com]',
+    { seriesTitle: 'Series Title', seasons: [2], episodeNumbers: [1] },
+  ],
+  [
+    'Series falls - Temporada 1 [HDTV][Cap.111_120]',
+    { seriesTitle: 'Series falls', seasons: [1], episodeNumbers: range(11, 20) },
+  ],
+  [
+    'Series Title [HDTV][Cap.104](website.com).avi',
+    { seriesTitle: 'Series Title', seasons: [1], episodeNumbers: [4] },
+  ],
+  [
+    'Series (1994) - Temporada 10',
+    { seriesTitle: 'Series (1994)', seasons: [10], fullSeason: true },
+  ],
+  // 3 digit seasons
+  [
+    'Series.S006E18.Some.Title.Name-Part.1.1080p.WEB-DL.AAC2.0.H.264-Release',
+    { seriesTitle: 'Series', seasons: [6], episodeNumbers: [18] },
+  ],
+  [
+    'Series S093E081 1080p ALL4 WEB-DL AAC2 0 H 264-JJUNAHJAMESON',
+    { seriesTitle: 'Series', seasons: [93], episodeNumbers: [81] },
+  ],
+  [
+    'Series.S101E01-E02.Some.Title.Name.1080p.WEB-DL.AAC2.0.H.264-Release',
+    { seriesTitle: 'Series', seasons: [101], episodeNumbers: [1, 2] },
+  ],
+  // Dutch/Flemish releases
+  [
+    '13 Series Se.1 afl.2-3-4 [VTM]',
+    { seriesTitle: '13 Series', seasons: [1], episodeNumbers: [2, 3, 4] },
+  ],
+  ['Series T Se.3 afl.3 en 4', { seriesTitle: 'Series T', seasons: [3], episodeNumbers: [3, 4] }],
+  // Season packs
+  [
+    'Series.Saison3.VOSTFR.HDTV.XviD-NOTAG',
+    { seriesTitle: 'Series', seasons: [3], fullSeason: true },
+  ],
+  ['Series.Stagione.3.HDTV.XviD-NOTAG', { seriesTitle: 'Series', seasons: [3], fullSeason: true }],
+  [
+    '1234 [Sezon 3] [1080p] [NF] [WEB-DL] [H264] [DDP5.1.Atmos-K83] [Serial Polski]',
+    { seriesTitle: '1234', seasons: [3], fullSeason: true },
+  ],
+  [
+    '[Judas] Series E (Series J) (Season 04) [1080p][HEVC x265 10bit][Dual-Audio][Multi-Subs] (Batch)',
+    { seriesTitle: 'Series E (Series J)', seasons: [4], fullSeason: true },
+  ],
+  [
+    'The.Series.S07.Vol.1.1080p.NF.WEBRip.DD5.1.x264-NTb',
+    { seriesTitle: 'The Series', seasons: [7], isPartialSeason: true, seasonPart: 1 },
+  ],
+  [
+    'Series Title Season 01 - Season 07 BluRay 1080p x264 REPACK -SacReD',
+    { seriesTitle: 'Series Title', seasons: range(1, 7), isMultiSeason: true },
+  ],
+  [
+    'Series Title Complete Series S01 S04 (1080p BluRay x265 HEVC 10bit AAC 5.1 Vyndros)',
+    { seriesTitle: 'Series Title', seasons: range(1, 4), isMultiSeason: true },
+  ],
+  // Audio channels left next to the season after stripping aren't more seasons
+  [
+    'Show.Name.S01.720p.HDTV.2.0.x264-GRP',
+    { seriesTitle: 'Show Name', seasons: [1], isMultiSeason: false, fullSeason: true },
+  ],
+  [
+    'Show.Name.S01.1080p.BluRay.5.1.x265-GRP',
+    { seriesTitle: 'Show Name', seasons: [1], isMultiSeason: false, fullSeason: true },
+  ],
+  // Resolutions like 4K, 1440p and 540p are not season or episode numbers
+  [
+    'Show.S01.10bit.1080p',
+    { seriesTitle: 'Show', seasons: [1], isMultiSeason: false, fullSeason: true },
+  ],
+  ['Series Title S01 4K 2160p WEB-DL x265-GRP', { seriesTitle: 'Series Title', seasons: [1] }],
+  ['Series S01 1440p HMAX WEB-DL DD+ 5.1 H.265', { seriesTitle: 'Series', seasons: [1] }],
+  [
+    'Titles.s06.01.1999.BDRip.1080p.Ukr.Eng.AC3',
+    { seriesTitle: 'Titles', seasons: [6], episodeNumbers: [1] },
+  ],
+  // Anime absolute numbers
+  [
+    '[HatSubs] One Series 1017-1088 (WEB 1080p)',
+    { seriesTitle: 'One Series', episodeNumbers: range(1017, 1088) },
+  ],
+  [
+    '[HatSubs] Anime Title 1004 [E63F2984].mkv',
+    { seriesTitle: 'Anime Title', episodeNumbers: [1004] },
+  ],
+  [
+    '[Erai-raws] Series - 0955 ~ 1005 [1080p]',
+    { seriesTitle: 'Series', episodeNumbers: range(955, 1005) },
+  ],
+  [
+    'SeriesTitle.E1206.In.seinen.Augen.2022.GERMAN.1080p.WEB.h264-Group',
+    { seriesTitle: 'SeriesTitle', episodeNumbers: [1206] },
+  ],
+  [
+    'Different show 1. Bölüm (23.10.2023) 720p WebDL AAC H.264 - TURG',
+    { seriesTitle: 'Different show', episodeNumbers: [1] },
+  ],
+  [
+    'Series_Title_2_[01]_[AniLibria_TV]_[WEBRip_1080p]',
+    { seriesTitle: 'Series Title 2', episodeNumbers: [1] },
+  ],
+  [
+    'Series Title - [02x01] - Episode 1',
+    { seriesTitle: 'Series Title', seasons: [2], episodeNumbers: [1] },
+  ],
+  ['1x1', { seasons: [1], episodeNumbers: [1] }],
+];
+
+// File extensions, CRC hashes and empty brackets are not episode titles
+const junkRemainderCases = [
+  '[HorribleSubs] Shirobako - 20 [720p].mkv',
+  '[Hatsuyuki] Series Title - 363 [848x480][ADE35E38].mkv',
+  'Tokyo Ghoul: RE S2 - Episode 4 VOSTFR (1080p)',
+  '[Group] Series Title - 05 (8246e542).mkv',
+];
+for (const postTitle of junkRemainderCases) {
+  it(`does not keep junk in the remainder for "${postTitle}"`, () => {
+    const remainder = parseSeason(postTitle)?.remainder;
+    expect(remainder ?? '').not.toMatch(/mkv|\[\s*\]|\(\s*\)|ADE35E38|8246e542/i);
+  });
+}
+for (const [postTitle, expected] of sonarrPatternCases) {
+  it(`parse "${postTitle}"`, () => {
+    expect(parseSeason(postTitle)).toMatchObject(expected);
+  });
+}
+
 const remainderCases: Array<[string, string, number[], number[], string]> = [
   ['The Expanse - S01E02 - The Big Empty', 'The Expanse', [1], [2], 'The Big Empty'],
   [
@@ -180,6 +361,8 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
     'The Big Empty',
   ],
   ['Show.S02E02.Episode.Title.1080p.WEB.H264-GROUP', 'Show', [2], [2], 'Episode Title'],
+  ['Series Title [S01E05] Episode Title', 'Series Title', [1], [5], 'Episode Title'],
+  ['Series Title - [02x01-02] - Episode 1', 'Series Title', [2], [1, 2], 'Episode 1'],
 ];
 for (const [postTitle, title, seasons, episodes, remainder] of remainderCases) {
   it(`parses remainder after episode tokens for "${postTitle}"`, () => {
