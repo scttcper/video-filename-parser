@@ -317,6 +317,30 @@ const sonarrPatternCases: Array<[string, Partial<Season>]> = [
     'SeriesTitle.E1206.In.seinen.Augen.2022.GERMAN.1080p.WEB.h264-Group',
     { seriesTitle: 'SeriesTitle', episodeNumbers: [1206] },
   ],
+  // #65: 4 digit absolute episodes without a subgroup
+  ['One Piece - 1001 [1080p]', { seriesTitle: 'One Piece', seasons: [], episodeNumbers: [1001] }],
+  ['One Piece - 1001 (1080p)', { seriesTitle: 'One Piece', seasons: [], episodeNumbers: [1001] }],
+  ['One Piece - 1001v2 [1080p]', { seriesTitle: 'One Piece', episodeNumbers: [1001] }],
+  ['Detective Conan - 1000 [1080p]', { seriesTitle: 'Detective Conan', episodeNumbers: [1000] }],
+  [
+    'A Random Series Name - 1000 [1080p WEB-DL]',
+    { seriesTitle: 'A Random Series Name', seasons: [], episodeNumbers: [1000] },
+  ],
+  ['One Piece - 1000-1001 [1080p]', { seriesTitle: 'One Piece', episodeNumbers: [1000, 1001] }],
+  ['One Piece - 1000 ~ 1001 [1080p]', { seriesTitle: 'One Piece', episodeNumbers: [1000, 1001] }],
+  // Scene numbering and episode titles after the number stay season and episode
+  [
+    'Series.and.a.Title.1013.720p.HDTV.X264-DIMENSION',
+    { seriesTitle: 'Series and a Title', seasons: [10], episodeNumbers: [13] },
+  ],
+  [
+    'Series Title - 1012 - Episode Title',
+    { seriesTitle: 'Series Title', seasons: [10], episodeNumbers: [12] },
+  ],
+  [
+    'Series Title - 0102 [720p]',
+    { seriesTitle: 'Series Title', seasons: [1], episodeNumbers: [2] },
+  ],
   [
     'Different show 1. Bölüm (23.10.2023) 720p WebDL AAC H.264 - TURG',
     { seriesTitle: 'Different show', episodeNumbers: [1] },
