@@ -23,7 +23,10 @@ const codecPatterns: Array<{ codec: VideoCodec; regex: RegExp }> = [
   { codec: VideoCodec.H264, regex: /\bAVC\b/i },
 ];
 
-export const codecExp = new RegExp(codecPatterns.map(({ regex }) => regex.source).join('|'), 'i');
+export const codecExp: RegExp = new RegExp(
+  codecPatterns.map(({ regex }) => regex.source).join('|'),
+  'i',
+);
 
 export function parseVideoCodec(title: string): { codec?: VideoCodec; source?: string } {
   for (const { codec, regex } of codecPatterns) {

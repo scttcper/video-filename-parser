@@ -16,12 +16,17 @@
     "demo"
   ],
   "files": [
-    "dist/src"
+    "dist"
   ],
   "type": "module",
   "sideEffects": false,
-  "types": "./dist/src/index.d.ts",
-  "exports": "./dist/src/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "publishConfig": {
     "access": "public",
     "provenance": true
@@ -31,15 +36,14 @@
     "demo:watch": "pnpm run -r dev",
     "lint": "oxlint . && oxfmt --check",
     "lint:fix": "oxlint . --fix && oxfmt",
-    "build": "tsc",
-    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "bench": "vitest bench ./test/bench.bench.ts"
   },
   "devDependencies": {
     "@ctrl/oxlint-config": "1.5.0",
-    "@sindresorhus/tsconfig": "9.0.0",
     "@types/node": "26.6.6",
     "oxfmt": "0.78.0",
     "oxlint": "1.93.0",

@@ -1,6 +1,6 @@
 const blurayExp =
   /\b(M?Blu[-_. ]?Ray|HD[-_. ]?DVD|BD(?!$)|UHD2?BD|BDISO|BDMux|BD25|BD50|BD[-_. ]?(?:50|66|100)|BR[-_. ]?DISK|Bluray(2160|1080|720)p?|BD(2160|1080|720)p?)\b/i;
-export const webdlExp =
+export const webdlExp: RegExp =
   /\b(WEB[-_. ]DL(?:mux)?|HDRIP|WEBDL|NF|DP|APTV|NETFLIX|NetflixU?HD|DSNY|DSNP|DisneyHD|HMAX|HBOMaxHD|AMZN|AmazonHD|AmazonSD|iTunesHD|MaxdomeHD|WebHD\b|[. ]WEB[. ](?:[xh][ .]?26[456]|AVC|HEVC|EAC3|DDP?[ .]?5[. ]1)|(?:480|576|720|\d{3,4}0)p[-. ](?:Hybrid[-_. ]?)?WEB[-. ]|[-. ]WEB[-. ](?:480|576|720|\d{3,4}0)p|\b\s\/\sWEB\s\/\s\b|(?:AMZN|ATVP|NF|DP)[. -]WEB[. -](?!Rip))\b/i;
 
 export enum Source {

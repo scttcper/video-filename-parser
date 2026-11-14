@@ -1,6 +1,6 @@
 import type { TitleYearPattern } from './types.js';
 
-export const releaseGroupSuffixExp = /-([a-z0-9]+)$/i;
+export const releaseGroupSuffixExp: RegExp = /-([a-z0-9]+)$/i;
 
 // Cheap checks for what these anime patterns require, so names without it skip the scan
 const animeYearExp = /(?:1[89]|20)\d{2}/;

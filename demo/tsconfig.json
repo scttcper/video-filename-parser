@@ -1,12 +1,16 @@
 {
-  "extends": "@sindresorhus/tsconfig",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "rootDir": "..",
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "lib": ["es2024", "dom"],
     "types": ["vite/client"],
-    "noPropertyAccessFromIndexSignature": false,
-    "noEmit": true,
-    "erasableSyntaxOnly": false
+    "jsx": "react-jsx",
+    // An app, not a library: nothing emits declarations
+    "declaration": false,
+    "isolatedDeclarations": false,
+    "noEmit": true
   },
-  "include": ["./src", "../src"]
+  "include": ["src", "../src"]
 }
