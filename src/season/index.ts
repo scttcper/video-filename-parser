@@ -5,7 +5,12 @@ import {
   parseGenericMatchCollection,
   type ParsedMatchCollection,
 } from './common.js';
-import { preSubstitutions, rejectedPatterns, seasonPatterns } from './patterns.js';
+import {
+  preSubstitutions,
+  rejectedPatterns,
+  seasonPatterns,
+  seasonSimpleTitleExp,
+} from './patterns.js';
 
 export interface Season {
   releaseTitle: string;
@@ -40,7 +45,10 @@ export function parseSeason(title: string): Season | null {
     substituted = substituted.replace(exp, replacement);
   }
 
-  const simpleTitle = normalizeSixDigitAirDate(substituted, simplifyTitle(substituted));
+  const simpleTitle = normalizeSixDigitAirDate(
+    substituted,
+    simplifyTitle(substituted).replaceAll(seasonSimpleTitleExp, ''),
+  );
 
   for (const pattern of seasonPatterns) {
     const match = pattern.regex.exec(simpleTitle);

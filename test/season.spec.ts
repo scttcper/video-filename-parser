@@ -247,7 +247,83 @@ const sonarrPatternCases: Array<[string, Partial<Season>]> = [
     { seriesTitle: '13 Series', seasons: [1], episodeNumbers: [2, 3, 4] },
   ],
   ['Series T Se.3 afl.3 en 4', { seriesTitle: 'Series T', seasons: [3], episodeNumbers: [3, 4] }],
+  // Season packs
+  [
+    'Series.Saison3.VOSTFR.HDTV.XviD-NOTAG',
+    { seriesTitle: 'Series', seasons: [3], fullSeason: true },
+  ],
+  ['Series.Stagione.3.HDTV.XviD-NOTAG', { seriesTitle: 'Series', seasons: [3], fullSeason: true }],
+  [
+    '1234 [Sezon 3] [1080p] [NF] [WEB-DL] [H264] [DDP5.1.Atmos-K83] [Serial Polski]',
+    { seriesTitle: '1234', seasons: [3], fullSeason: true },
+  ],
+  [
+    '[Judas] Series E (Series J) (Season 04) [1080p][HEVC x265 10bit][Dual-Audio][Multi-Subs] (Batch)',
+    { seriesTitle: 'Series E (Series J)', seasons: [4], fullSeason: true },
+  ],
+  [
+    'The.Series.S07.Vol.1.1080p.NF.WEBRip.DD5.1.x264-NTb',
+    { seriesTitle: 'The Series', seasons: [7], isPartialSeason: true, seasonPart: 1 },
+  ],
+  [
+    'Series Title Season 01 - Season 07 BluRay 1080p x264 REPACK -SacReD',
+    { seriesTitle: 'Series Title', seasons: range(1, 7), isMultiSeason: true },
+  ],
+  [
+    'Series Title Complete Series S01 S04 (1080p BluRay x265 HEVC 10bit AAC 5.1 Vyndros)',
+    { seriesTitle: 'Series Title', seasons: range(1, 4), isMultiSeason: true },
+  ],
+  // Resolutions like 4K, 1440p and 540p are not season or episode numbers
+  ['Series Title S01 4K 2160p WEB-DL x265-GRP', { seriesTitle: 'Series Title', seasons: [1] }],
+  ['Series S01 1440p HMAX WEB-DL DD+ 5.1 H.265', { seriesTitle: 'Series', seasons: [1] }],
+  [
+    'Titles.s06.01.1999.BDRip.1080p.Ukr.Eng.AC3',
+    { seriesTitle: 'Titles', seasons: [6], episodeNumbers: [1] },
+  ],
+  // Anime absolute numbers
+  [
+    '[HatSubs] One Series 1017-1088 (WEB 1080p)',
+    { seriesTitle: 'One Series', episodeNumbers: range(1017, 1088) },
+  ],
+  [
+    '[HatSubs] Anime Title 1004 [E63F2984].mkv',
+    { seriesTitle: 'Anime Title', episodeNumbers: [1004] },
+  ],
+  [
+    '[Erai-raws] Series - 0955 ~ 1005 [1080p]',
+    { seriesTitle: 'Series', episodeNumbers: range(955, 1005) },
+  ],
+  [
+    'SeriesTitle.E1206.In.seinen.Augen.2022.GERMAN.1080p.WEB.h264-Group',
+    { seriesTitle: 'SeriesTitle', episodeNumbers: [1206] },
+  ],
+  [
+    'Different show 1. Bölüm (23.10.2023) 720p WebDL AAC H.264 - TURG',
+    { seriesTitle: 'Different show', episodeNumbers: [1] },
+  ],
+  [
+    'Series_Title_2_[01]_[AniLibria_TV]_[WEBRip_1080p]',
+    { seriesTitle: 'Series Title 2', episodeNumbers: [1] },
+  ],
+  [
+    'Series Title - [02x01] - Episode 1',
+    { seriesTitle: 'Series Title', seasons: [2], episodeNumbers: [1] },
+  ],
+  ['1x1', { seasons: [1], episodeNumbers: [1] }],
 ];
+
+// File extensions, CRC hashes and empty brackets are not episode titles
+const junkRemainderCases = [
+  '[HorribleSubs] Shirobako - 20 [720p].mkv',
+  '[Hatsuyuki] Series Title - 363 [848x480][ADE35E38].mkv',
+  'Tokyo Ghoul: RE S2 - Episode 4 VOSTFR (1080p)',
+];
+for (const postTitle of junkRemainderCases) {
+  it(`does not keep junk in the remainder for "${postTitle}"`, () => {
+    const remainder = parseSeason(postTitle)?.remainder;
+    expect(remainder ?? '').not.toMatch(/mkv|\[\s*\]|\(\s*\)|ADE35E38/);
+  });
+}
 for (const [postTitle, expected] of sonarrPatternCases) {
   it(`parse "${postTitle}"`, () => {
     expect(parseSeason(postTitle)).toMatchObject(expected);
