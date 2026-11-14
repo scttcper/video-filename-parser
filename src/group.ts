@@ -56,7 +56,10 @@ const simpleExceptionReleaseGroups = new Set([
   'r00t',
   'hone',
 ]);
-const dZ0n3ReleaseGroupSuffix = 'd-z0n3';
+// Known groups with a hyphen in the name. The single hyphen fast path would only see the part after
+// it, so these go to the full parser which knows the whole name.
+const hyphenatedReleaseGroupSuffixExp =
+  /(?:^|[-_. [])(?:D-Z0N3|Fight-BB|VH-PROD|FTW-HS|DX-TV|Blu-bits)$/i;
 
 export function parseGroup(title: string, parsedTitle?: string): string | null {
   const simpleGroup = matchSimpleReleaseGroup(title);
@@ -113,7 +116,7 @@ function matchSimpleReleaseGroup(title: string): string | null {
   const normalizedGroup = group.toLowerCase();
   if (
     simpleExceptionReleaseGroups.has(normalizedGroup) ||
-    titleWithoutExtension.toLowerCase().endsWith(dZ0n3ReleaseGroupSuffix)
+    hyphenatedReleaseGroupSuffixExp.test(titleWithoutExtension)
   ) {
     return null;
   }

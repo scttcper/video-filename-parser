@@ -90,6 +90,9 @@ const upstreamCases: Array<[string, string | null]> = [
   ['Movie.Title.2016.1080p.WEB-DL', null],
   ['Movie Title 2016 1080p WEB-Rip', null],
   ['Movie.Title.2008.US.Directors.Cut.UHD.BD66.Blu-ray', null],
+  // Hyphenated group names aren't split by the single hyphen fast path
+  ['Series.Title.S01E01.1080p.WEB.H264.Fight-BB', 'Fight-BB'],
+  ['Movie.Title.2019.1080p.BluRay.x264.VH-PROD', 'VH-PROD'],
 ];
 
 for (const [title, result] of [...cases, ...upstreamCases]) {
