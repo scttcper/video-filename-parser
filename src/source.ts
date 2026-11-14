@@ -1,7 +1,7 @@
 const blurayExp =
   /\b(M?Blu[-_. ]?Ray|HD[-_. ]?DVD|BD(?!$)|UHD2?BD|BDISO|BDMux|BD25|BD50|BD[-_. ]?(?:50|66|100)|BR[-_. ]?DISK|Bluray(2160|1080|720)p?|BD(2160|1080|720)p?)\b/i;
 export const webdlExp =
-  /\b(WEB[-_. ]DL(?:mux)?|HDRIP|WEBDL|NF|DP|APTV|NETFLIX|NetflixU?HD|DSNY|DSNP|DisneyHD|HMAX|HBOMaxHD|AMZN|AmazonHD|AmazonSD|iTunesHD|MaxdomeHD|WebHD\b|[. ]WEB[. ](?:[xh][ .]?26[45]|AVC|HEVC|DDP?5[. ]1)|\d{3,4}0p[-. ](?:Hybrid[-_. ]?)?WEB[-. ]|[-. ]WEB[-. ]\d{3,4}0p|\b\s\/\sWEB\s\/\s\b|(?:AMZN|NF|DP)[. -]WEB[. -](?!Rip))\b/i;
+  /\b(WEB[-_. ]DL(?:mux)?|HDRIP|WEBDL|NF|DP|APTV|NETFLIX|NetflixU?HD|DSNY|DSNP|DisneyHD|HMAX|HBOMaxHD|AMZN|AmazonHD|AmazonSD|iTunesHD|MaxdomeHD|WebHD\b|[. ]WEB[. ](?:[xh][ .]?26[456]|AVC|HEVC|EAC3|DDP?[ .]?5[. ]1)|(?:480|576|720|\d{3,4}0)p[-. ](?:Hybrid[-_. ]?)?WEB[-. ]|[-. ]WEB[-. ](?:480|576|720|\d{3,4}0)p|\b\s\/\sWEB\s\/\s\b|(?:AMZN|ATVP|NF|DP)[. -]WEB[. -](?!Rip))\b/i;
 
 export enum Source {
   BLURAY = 'BLURAY',
@@ -58,7 +58,7 @@ const sourceGroupPatterns: SourceGroupPattern[] = [
   { group: 'bdrip', regex: /\b(BDRip|BDLight|UHDBDRip|HD[-_. ]?DVDRip)\b/i },
   { group: 'brrip', regex: /\b(BRRip)\b/i },
   { group: 'scr', regex: /\b(SCR|SCREENER|DVDSCR|(DVD|WEB).?SCREENER)\b/i },
-  { group: 'dvdr', regex: /\b(DVD-R|DVDR)\b/i },
+  { group: 'dvdr', regex: /\b(\d?x?M?DVD-?[R59])\b/i },
   { group: 'dvd', regex: /\b(DVD9?|DVDRip|NTSC|PAL|xvidvd|DvDivX)\b/i },
   { group: 'dsr', regex: /\b(WS[-_. ]DSR|DSR)\b/i },
   { group: 'regional', regex: /\b(R[0-9]{1}|REGIONAL)\b/i },

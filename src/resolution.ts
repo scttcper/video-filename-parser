@@ -13,17 +13,19 @@ const resolutionPatterns: Array<{ resolution: Resolution; regex: RegExp }> = [
   {
     resolution: Resolution.R2160P,
     regex:
-      /2160p|3840x2160|4096x2160|4k[-_. ](?:UHD|HEVC|BD|H\.?265)|(?:UHD|HEVC|BD|H\.?265)[-_. ]4k|\b(4k)\b|COMPLETE.UHD|UHD.COMPLETE/i,
+      /2160p|3840x2160|4096x2160|4k[-_. ](?:UHD|HEVC|BD|H\.?265)|(?:UHD|HEVC|BD|H\.?265)[-_. ]4k|COMPLETE.UHD|UHD.COMPLETE/i,
   },
   {
     resolution: Resolution.R1080P,
-    regex: /(1080(i|p)|1920x1080|1440p|\bFHD\b|4kto1080p)(10bit)?/i,
+    regex: /(1080(i|p)|1920x1080|1440p|4kto1080p)(10bit)?/i,
   },
   { resolution: Resolution.R720P, regex: /(720(i|p)|1280x720|960p)(10bit)?/i },
   { resolution: Resolution.R576P, regex: /576(i|p)/i },
   { resolution: Resolution.R540P, regex: /540(i|p)/i },
   { resolution: Resolution.R480P, regex: /480(i|p)|640x480|848x480/i },
   { resolution: Resolution.R360P, regex: /360p/i },
+  { resolution: Resolution.R1080P, regex: /\bFHD\b/i },
+  { resolution: Resolution.R2160P, regex: /\b4k\b/i },
 ];
 
 export function parseResolution(
@@ -60,4 +62,20 @@ export function parseResolutionFromTitle(title: string): {
   }
 
   return {};
+}
+
+/**
+ * The leftmost resolution token. parseResolution picks a resolution by priority (an explicit 720p
+ * beats a bare 4K), but a title ends at whichever token comes first.
+ */
+export function findFirstResolutionToken(title: string): string | undefined {
+  let first: RegExpExecArray | undefined;
+  for (const { regex } of resolutionPatterns) {
+    const match = regex.exec(title);
+    if (match && (first === undefined || match.index < first.index)) {
+      first = match;
+    }
+  }
+
+  return first?.[0];
 }
