@@ -223,6 +223,12 @@ function parseSeasonPackGroups(
   groups: MatchGroups,
   simpleTitle: string,
 ): ParsedMatchCollection | null {
+  // A descending season range like S03-S01 isn't a pack
+  const season1 = groupValue(groups, 'season1');
+  if (season1 !== undefined && Number(season1) < Number(groupValue(groups, 'season'))) {
+    return null;
+  }
+
   const { result, lastTokenIndex } = createBaseResult(groups, simpleTitle);
   const nextIndex = applySeasonNumbers(result, groups, simpleTitle, lastTokenIndex);
 

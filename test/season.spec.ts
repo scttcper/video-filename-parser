@@ -273,6 +273,15 @@ const sonarrPatternCases: Array<[string, Partial<Season>]> = [
     'Series Title Complete Series S01 S04 (1080p BluRay x265 HEVC 10bit AAC 5.1 Vyndros)',
     { seriesTitle: 'Series Title', seasons: range(1, 4), isMultiSeason: true },
   ],
+  // Audio channels left next to the season after stripping aren't more seasons
+  [
+    'Show.Name.S01.720p.HDTV.2.0.x264-GRP',
+    { seriesTitle: 'Show Name', seasons: [1], isMultiSeason: false, fullSeason: true },
+  ],
+  [
+    'Show.Name.S01.1080p.BluRay.5.1.x265-GRP',
+    { seriesTitle: 'Show Name', seasons: [1], isMultiSeason: false, fullSeason: true },
+  ],
   // Resolutions like 4K, 1440p and 540p are not season or episode numbers
   ['Series Title S01 4K 2160p WEB-DL x265-GRP', { seriesTitle: 'Series Title', seasons: [1] }],
   ['Series S01 1440p HMAX WEB-DL DD+ 5.1 H.265', { seriesTitle: 'Series', seasons: [1] }],

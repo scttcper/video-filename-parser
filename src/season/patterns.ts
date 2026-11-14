@@ -188,9 +188,11 @@ export const seasonPatterns: SeasonPattern[] = [
     'season-dot-episode',
     /^(?<title>[^\r\n]+?)(?:[-_\W](?<![()[!]))+S(?<season>(?<!\d+)\d{2}(?!\d+))\.(?<episode>\d{2,3}(?!\d+))(?:[-_. ]|$)/i,
   ),
+  // S01-S04, S01 - S04, Season 01 - Season 07. A 3 character gap needs a hyphen and a season can't
+  // be followed by .1 (5.1 audio), runs of dots are left behind when quality tokens are stripped.
   seasonPack(
     'multi-season-pack',
-    /^(?<title>[^\r\n]+?)(?:Complete Series)?[-_. ]+(?:S|(?:Season|Saison|Series|Stagione)[_. ])(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:[-_. ]|[-_. ]{3})(?:S|(?:Season|Saison|Series|Stagione)[_. ])?(?<season1>(?<!\d+)\d{1,2}(?!\d+)))+/i,
+    /^(?<title>[^\r\n]+?)(?:Complete Series)?[-_. ]+(?:S|(?:Season|Saison|Series|Stagione)[_. ])(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:[-_. ]|[-_. ]?-[-_. ]?)(?:S|(?:Season|Saison|Series|Stagione)[_. ])?(?<season1>(?<!\d+)\d{1,2}(?!\d+|\.\d)))+/i,
   ),
   partialSeason(
     'partial-season-pack',
