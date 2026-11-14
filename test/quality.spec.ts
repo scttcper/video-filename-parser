@@ -506,6 +506,16 @@ const upstreamQualityCases: Array<
   // A parsed resolution wins over the x264 and extension defaults
   ['Series.Title.S01E01.576p.x264-GRP', [Source.TV], Resolution.R576P, null],
   ['Movie.Title.2019.REMUX.AVC-GRP.mkv', [Source.BLURAY], Resolution.R720P, QualityModifier.REMUX],
+  // Explicit full disc markers win over the German codec heuristic
+  [
+    'Movie.2020.German.DL.BD50.BLURAY.AVC-GRP',
+    [Source.BLURAY],
+    Resolution.R1080P,
+    QualityModifier.BRDISK,
+  ],
+  // Bracketed remux markers
+  ['Movie.2020.1080p.(REMUX).mkv', [Source.BLURAY], Resolution.R1080P, QualityModifier.REMUX],
+  ['Movie.2020.1080p.[REMUX].mkv', [Source.BLURAY], Resolution.R1080P, QualityModifier.REMUX],
 ];
 
 for (const [title, sources, resolution, modifier] of upstreamQualityCases) {
@@ -516,3 +526,11 @@ for (const [title, sources, resolution, modifier] of upstreamQualityCases) {
     expect(quality.modifier).toBe(modifier);
   });
 }
+
+// Release names are untrusted input, a long name must not hang the German heuristics
+it('parses long repeated German names quickly', () => {
+  const title = `Movie.2020.${'German.'.repeat(1426)}BluRay.`;
+  const start = performance.now();
+  parseQuality(title);
+  expect(performance.now() - start).toBeLessThan(500);
+});

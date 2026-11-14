@@ -11,16 +11,13 @@ const versionExp =
   /\d[-._ ]?v(\d)[-._ ]|\bv(\d)\b(?!.*\b(?:19|20)\d{2}\b)|\[v(\d)\]|repack(\d)|rerip(\d)/i;
 
 const remuxExp =
-  /(?:[_. ]|\d{4}p-|\bHybrid-)(?:(?:BD|UHD)[-_. ]?)?Remux\b|(?:(?:BD|UHD)[-_. ]?)?Remux[_. ]\d{4}p/i;
+  /(?:[_. [(]|\d{4}p-|\bHybrid-)(?:(?:BD|UHD)[-_. ]?)?Remux\b|(?:(?:BD|UHD)[-_. ]?)?Remux[_. ]\d{4}p/i;
 const bdiskExp =
   /\b(COMPLETE|ISO|BDISO|BDMux|BDMV|BD25|BD50|BD66|BD100|BD[-_. ]?(?:25|50|66|100)|BR[-_. ]?DISK|Full[-_. ]?Blu[-_. ]?ray|3D[-_. ]?BD)\b/i;
 const discCodecExp = /\b(AVC|HEVC|VC[-_. ]?1|MVC|MPEG[-_. ]?2)\b/i;
 const brDiskExclusionExp =
   /\b((?<!HD[._ -]|HD)DVD|BDRip|720p|MKV|XviD|WMV|d3g|(BD)?REMUX|[xh][-_. ]?26[45])\b/i;
 const hardBrDiskExclusionExp = /\b((?<!HD[._ -]|HD)DVD|BDRip|720p|MKV|XviD|WMV|d3g|(BD)?REMUX)\b/i;
-// German releases name the disc codec on remuxes, so a codec isn't a sign of a full disc
-const germanBrDiskExclusionExp =
-  /\b(German.*[DM]L|((?<=\d{4}).*German.*([DM]L)?)(?=.*\b(AVC|HEVC|VC[-_. ]?1|MVC|MPEG[-_. ]?2)\b))\b/i;
 const brDiskSourceExp = /(?:blu[-_. ]?ray|hd[-_. ]?dvd)/i;
 const rawHdExp = /\b(?<rawhd>RawHD|Raw[-_. ]HD|MPEG[-_. ]?2)\b/i;
 const extensionExp = /\.[a-z0-9-]+$/i;
@@ -82,8 +79,13 @@ const animeWebDlExp = /\[WEB\]|[\[(]WEB[ .]/i;
 const trailingWebExp = /[. ]WEB$/;
 // x264 with no source or resolution is an SD TV release, like upstream's codec fallback
 const bareX264Exp = /\bx264\b/;
-const germanRemuxExp =
-  /((?<=\d{4}).*german.*([dm]l)?)(?=.*\b(avc|hevc|vc[_. -]?1|mvc|mpeg[_. -]?2))(?=.*blu-?ray)/;
+// Upstream's German heuristics as token checks. Their regexes (`(?<=\d{4}).*German.*` with
+// lookaheads) backtrack badly on long input, see the adversarial tests.
+const germanTokenExp = /\bgerman/;
+const yearTokenExp = /\d{4}/;
+const germanDualLanguageExp = /[dm]l\b/;
+const germanDiscCodecExp = /\b(?:avc|hevc|vc[-_. ]?1|mvc|mpeg[-_. ]?2)/;
+const germanBlurayExp = /blu-?ray/;
 const uncommonXvidExp = /x-?vid|divx/i;
 // `HD TV` without the HDTV token is HD, like upstream's other source fallback
 const hdtvTokenExp = /\bhdtv\b/;
@@ -291,16 +293,17 @@ function parseQualityModifier(
 }
 
 function isBrDisk(normalizedTitle: string, sourceGroups: SourceGroups): boolean {
-  if (
-    !sourceGroups.bluray ||
-    hardBrDiskExclusionExp.test(normalizedTitle) ||
-    (normalizedTitle.includes('german') && germanBrDiskExclusionExp.test(normalizedTitle))
-  ) {
+  if (!sourceGroups.bluray || hardBrDiskExclusionExp.test(normalizedTitle)) {
     return false;
   }
 
+  // Explicit disc markers (BD50, BDMV, COMPLETE...) win over the German codec heuristic
   if (bdiskExp.test(normalizedTitle)) {
     return true;
+  }
+
+  if (hasGermanBrDiskExclusion(normalizedTitle)) {
+    return false;
   }
 
   if (brDiskExclusionExp.test(normalizedTitle)) {
@@ -310,8 +313,39 @@ function isBrDisk(normalizedTitle: string, sourceGroups: SourceGroups): boolean 
   return brDiskSourceExp.test(normalizedTitle) && discCodecExp.test(normalizedTitle);
 }
 
+/** Text after `german` when a year comes before it, upstream's `(?<=\d{4}).*German` */
+function afterGermanWithYear(normalizedTitle: string): string | null {
+  const germanIndex = normalizedTitle.search(germanTokenExp);
+  if (germanIndex === -1 || !yearTokenExp.test(normalizedTitle.slice(0, germanIndex))) {
+    return null;
+  }
+
+  return normalizedTitle.slice(germanIndex + 'german'.length);
+}
+
+// German.DL, or a year then German then a disc codec: German releases name the codec on remuxes
+function hasGermanBrDiskExclusion(normalizedTitle: string): boolean {
+  const germanIndex = normalizedTitle.search(germanTokenExp);
+  if (germanIndex === -1) {
+    return false;
+  }
+
+  if (germanDualLanguageExp.test(normalizedTitle.slice(germanIndex + 'german'.length))) {
+    return true;
+  }
+
+  const afterGerman = afterGermanWithYear(normalizedTitle);
+  return afterGerman !== null && germanDiscCodecExp.test(afterGerman);
+}
+
+// A year, German, then a disc codec and Blu-ray, upstream's GermanRemuxRegex
 function isGermanRemux(normalizedTitle: string): boolean {
-  return normalizedTitle.includes('german') && germanRemuxExp.test(normalizedTitle);
+  const afterGerman = afterGermanWithYear(normalizedTitle);
+  return (
+    afterGerman !== null &&
+    germanDiscCodecExp.test(afterGerman) &&
+    germanBlurayExp.test(afterGerman)
+  );
 }
 
 function createQualityResult(
