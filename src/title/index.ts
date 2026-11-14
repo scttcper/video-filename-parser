@@ -35,7 +35,7 @@ export function parseTitleAndYear(title: string): TitleAndYear {
   const grouplessTitle = simpleTitle.replace(releaseGroupSuffixExp, '');
 
   for (const pattern of movieTitleYearPatterns) {
-    const result = parseTitleYearPattern(pattern, grouplessTitle);
+    const result = parseTitleYearPattern(pattern, grouplessTitle, title);
     if (result !== null) {
       return result;
     }
@@ -97,13 +97,17 @@ function parseCommonReleaseTitleYear(title: string): TitleAndYear | null {
   };
 }
 
-function parseTitleYearPattern(pattern: TitleYearPattern, title: string): TitleAndYear | null {
+function parseTitleYearPattern(
+  pattern: TitleYearPattern,
+  title: string,
+  releaseTitle: string,
+): TitleAndYear | null {
   if (pattern.guard && !pattern.guard.test(title)) {
     return null;
   }
 
   const match = pattern.regex.exec(title);
-  if (!match?.groups) {
+  if (!match?.groups || (pattern.accept && !pattern.accept(match, releaseTitle))) {
     return null;
   }
 

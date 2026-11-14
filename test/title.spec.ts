@@ -140,6 +140,8 @@ const radarrCases: Array<[string, { title: string; year: string | null }]> = [
   ],
   // German and TrueFrench tracker names
   ['Cars.2.German.DL.720p.BluRay.x264-EmpireHD', { title: 'Cars 2', year: null }],
+  // German inside the title, not a language tag
+  ['A.German.Life.2016.mkv', { title: 'A German Life', year: '2016' }],
   [
     'Der.Film.deines.Lebens.German.2011.PAL.DVDR-ETM',
     { title: 'Der Film deines Lebens', year: '2011' },
@@ -186,3 +188,16 @@ for (const [title, result] of [...cases, ...radarrCases]) {
     expect(parseTitleAndYear(title)).toEqual(result);
   });
 }
+
+// Release names are untrusted input, long runs of brackets must not backtrack for seconds
+it('parses long bracket-heavy names quickly', () => {
+  for (const title of [
+    `[Group] ${'['.repeat(9992)}`,
+    `[Group] ${'Title [x] '.repeat(1000)}`,
+    `[Group] ${'['.repeat(9980)} [ABCDEF12].mkv`,
+  ]) {
+    const start = performance.now();
+    parseTitleAndYear(title);
+    expect(performance.now() - start).toBeLessThan(500);
+  }
+});

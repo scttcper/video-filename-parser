@@ -87,23 +87,26 @@ export function simplifyTitle(title: string): string {
 
 const editionMarkerPattern = String.raw`(?:(?:(?:Recut|Extended|Ultimate)[-_. ']*)?(?:(?:Director|Collector)[-_. ']*s?[-_. ']*(?:Cut|Edition|Version)|Theatrical|Anniversary|The[-_. ']*Uncut|DC|Ultimate|(?:Final|Rouge|Assembly|Imperial|Diamond|Signature|Hunter|Rekall)(?=[-_. ']*(?:Cut|Edition|Version))|Extended|Special|Despecialized|unrated|\d{2,3}(?:th)?[-_. ']*Anniversary)(?:[-_. ']*(?:Cut|Edition|Version))?(?:[-_. ']*(?:Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']*Edit))?|(?:Uncensored|Remastered|Unrated|Uncut|Open[-_. ']?Matte|IMAX|Fan[-_. ']*Edit|Edition|Restored|[234]in1)){1,3}`;
 const trailingLanguageMarkerPattern = String.raw`(?:${Object.values(Language).join('|')}|TRUE.?FRENCH|videomann|SUBFRENCH|PLDUB|MULTI)`;
+// Each suffix separator run must start where the run starts (lookbehind), otherwise a long run of
+// separators or brackets is retried from every position inside it
 const editionSuffixExp = new RegExp(
-  String.raw`(?:^|[-_. '([]+)${editionMarkerPattern}(?:[-_. ']+${trailingLanguageMarkerPattern})*[-_. ')\]]*$`,
+  String.raw`(?:^|(?<![-_. '([])[-_. '([]+)${editionMarkerPattern}(?:[-_. ']+${trailingLanguageMarkerPattern})*[-_. ')\]]*$`,
   'i',
 );
 const releaseBoundaryExp = new RegExp(
   String.raw`[-_. ']+(?:${commonSourceMarkerExp.source}|${webdlExp.source}|${codecExp.source})`,
   'i',
 );
-const requestInfoSuffixExp = /(?:^|[-_. ']+)\[[^\]\r\n]+\][-_. ']*$/i;
+// No [ inside the brackets, so a run of [ fails at each one instead of scanning to the end
+const requestInfoSuffixExp = /(?:^|(?<![-_. '])[-_. ']+)\[[^[\]\r\n]+\][-_. ']*$/i;
 const languageMarkerSuffixExp = /\b(TRUE.?FRENCH|videomann|SUBFRENCH|PLDUB|MULTI)\b[-_. ']*$/i;
 const languageNameSuffixExp = new RegExp(
-  String.raw`(?:^|[-_. ']+)(?:${Object.values(Language)
+  String.raw`(?:^|(?<![-_. '])[-_. ']+)(?:${Object.values(Language)
     .map(l => l.toUpperCase())
     .join('|')})[-_. ']*$`,
 );
 const sceneGarbageSuffixExp =
-  /(?:^|[-_. ']+)(?:PROPER|REAL|READ.NFO)(?:[-_. ']+(?:PROPER|REAL|READ.NFO))*[-_. ']*$/i;
+  /(?:^|(?<![-_. '])[-_. ']+)(?:PROPER|REAL|READ.NFO)(?:[-_. ']+(?:PROPER|REAL|READ.NFO))*[-_. ']*$/i;
 const titleContentExp = /[a-z0-9]/i;
 
 const trailingMetadataSuffixExps = [
