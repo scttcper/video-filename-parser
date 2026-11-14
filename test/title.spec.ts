@@ -110,8 +110,7 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
   ],
   [
     'The.Social.Network.German.720p.BluRay.x264-DECENT',
-    // Not sure what to do about this case. You would need to know the movie title
-    { title: 'The Social Network German', year: null },
+    { title: 'The Social Network', year: null },
   ],
   [
     'The.Outsiders.DC.German.1983.AC3.BDRip.XviD.INTERNAL-ARC',
@@ -123,8 +122,82 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
   ],
 ];
 
-for (const [title, result] of cases) {
+// From Radarr's ParserFixture
+const radarrCases: Array<[string, { title: string; year: string | null }]> = [
+  // Anime
+  ['[MTBB] Kimi no Na wa. (2016) v2 [97681524].mkv', { title: 'Kimi no Na wa', year: '2016' }],
+  [
+    '[sam] Toward the Terra (1980) [BD 1080p TrueHD].mkv',
+    { title: 'Toward the Terra', year: '1980' },
+  ],
+  [
+    "[Arid] Cowboy Bebop - Knockin' on Heaven's Door v2 [00F4CDA0].mkv",
+    { title: "Cowboy Bebop - Knockin' on Heaven's Door", year: null },
+  ],
+  [
+    "[sam] Goblin Slayer - Goblin's Crown [BD 1080p FLAC] [CD298D48].mkv",
+    { title: "Goblin Slayer - Goblin's Crown", year: null },
+  ],
+  // German and TrueFrench tracker names
+  ['Cars.2.German.DL.720p.BluRay.x264-EmpireHD', { title: 'Cars 2', year: null }],
+  // German inside the title, not a language tag
+  ['A.German.Life.2016.mkv', { title: 'A German Life', year: '2016' }],
+  [
+    'Der.Film.deines.Lebens.German.2011.PAL.DVDR-ETM',
+    { title: 'Der Film deines Lebens', year: '2011' },
+  ],
+  ['Passengers.German.DL.AC3.Dubbed..BluRay.x264-PsO', { title: 'Passengers', year: null }],
+  // Single letters and Dr.
+  [
+    'Movie.War.Q.EXTENDED.CUT.2013.German.DL.1080p.BluRay.x264-HQX',
+    { title: 'Movie War Q', year: '2013' },
+  ],
+  [
+    'Die.fantastische.Reise.des.Dr.Dolittle.2020.German.DL.LD.1080p.WEBRip.x264-PRD',
+    { title: 'Die fantastische Reise des Dr. Dolittle', year: '2020' },
+  ],
+  // a.k.a.
+  [
+    'Sydney A.K.A. Hard Eight 1996 1080p AMZN WEB-DL DD+ 2.0 H.264.mkv',
+    { title: 'Sydney AKA Hard Eight', year: '1996' },
+  ],
+  // Year first folders, bracketed tags aren't years
+  ['(1995) Movie Name', { title: 'Movie Name', year: '1995' }],
+  ['(1995) Movie Name.mkv', { title: 'Movie Name', year: '1995' }],
+  ['(2002) Spider-Man', { title: 'Spider-Man', year: '2002' }],
+  ['(2002) Spider-Man [1080p] [BluRay]', { title: 'Spider-Man', year: '2002' }],
+  ['(1995) Movie Name (1080p)', { title: 'Movie Name', year: '1995' }],
+  // A bracket that is the title itself isn't a request tag
+  ['[REC] 2 (2009) 1080p BluRay', { title: '[REC] 2', year: '2009' }],
+  [
+    '[Jumonji-Giri]_[F-B]_Series_Title_Ep04_(0b0e2c10).mkv',
+    { title: 'Series Title Ep04 (0b0e2c10)', year: null },
+  ],
+  ['World Movie Z Movie [2023]', { title: 'World Movie Z Movie', year: '2023' }],
+  [
+    'My.Movie.Assembly.Cut.1992.REPACK.1080p.BluRay.DD5.1.x264-Group',
+    { title: 'My Movie', year: '1992' },
+  ],
+  // Underscores, file extensions and unclosed brackets
+  ['Some_Anime_Show_e66_time_is_money', { title: 'Some Anime Show e66 time is money', year: null }],
+  ['The.Series.S02E15.mkv', { title: 'The Series S02E15', year: null }],
+];
+
+for (const [title, result] of [...cases, ...radarrCases]) {
   it(`parse title "${title}"`, () => {
     expect(parseTitleAndYear(title)).toEqual(result);
   });
 }
+
+// Release names are untrusted input, long runs of brackets must not backtrack for seconds
+it('parses long bracket-heavy names quickly', () => {
+  for (const title of [
+    `[Group] ${'['.repeat(9992)}`,
+    `[Group] ${'Title [x] '.repeat(1000)}`,
+    `[Group] ${'['.repeat(9980)} [ABCDEF12].mkv`,
+  ]) {
+    const start = performance.now();
+    parseTitleAndYear(title);
+    expect(performance.now() - start).toBeLessThan(500);
+  }
+});

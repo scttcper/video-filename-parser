@@ -97,11 +97,15 @@ export function parseEdition(title: string, parsedTitle?: string): Edition {
 }
 
 const titleSeparatorExp = /[._]/g;
+// Leading [SubGroup] or [REQ] tags, group names like [BakeSubs] aren't hardcoded subs
+const leadingTagsExp = /^(?:\[[^\]\r\n]+\][-_. ]*)+/;
 
 // Normalize separators on both sides so dotted release names line up with the
 // parsed title. Otherwise title words like "Extended" or "Limited" leak through.
 function getEditionSearchText(title: string, parsedTitle: string): string {
-  return normalizeSeparators(title).replace(normalizeSeparators(parsedTitle), '').toLowerCase();
+  return normalizeSeparators(title.replace(leadingTagsExp, ''))
+    .replace(normalizeSeparators(parsedTitle), '')
+    .toLowerCase();
 }
 
 function normalizeSeparators(title: string): string {

@@ -85,25 +85,28 @@ export function simplifyTitle(title: string): string {
   return applyCleanupPasses(title, simplifyTitleCleanupPasses).trim();
 }
 
-const editionMarkerPattern = String.raw`(?:(?:(?:Extended|Ultimate)[-_. ']*)?(?:(?:Director|Collector)[-_. ']*s?[-_. ']*(?:Cut|Edition|Version)|Theatrical|Anniversary|The[-_. ']*Uncut|DC|Ultimate|Final(?=[-_. ']*(?:Cut|Edition|Version))|Extended|Special|Despecialized|unrated|\d{2,3}(?:th)?[-_. ']*Anniversary)(?:[-_. ']*(?:Cut|Edition|Version))?(?:[-_. ']*(?:Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']*Edit))?|(?:Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']*Edit|Edition|Restored|[234]in1)){1,3}`;
+const editionMarkerPattern = String.raw`(?:(?:(?:Recut|Extended|Ultimate)[-_. ']*)?(?:(?:Director|Collector)[-_. ']*s?[-_. ']*(?:Cut|Edition|Version)|Theatrical|Anniversary|The[-_. ']*Uncut|DC|Ultimate|(?:Final|Rouge|Assembly|Imperial|Diamond|Signature|Hunter|Rekall)(?=[-_. ']*(?:Cut|Edition|Version))|Extended|Special|Despecialized|unrated|\d{2,3}(?:th)?[-_. ']*Anniversary)(?:[-_. ']*(?:Cut|Edition|Version))?(?:[-_. ']*(?:Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']*Edit))?|(?:Uncensored|Remastered|Unrated|Uncut|Open[-_. ']?Matte|IMAX|Fan[-_. ']*Edit|Edition|Restored|[234]in1)){1,3}`;
 const trailingLanguageMarkerPattern = String.raw`(?:${Object.values(Language).join('|')}|TRUE.?FRENCH|videomann|SUBFRENCH|PLDUB|MULTI)`;
+// Each suffix separator run must start where the run starts (lookbehind), otherwise a long run of
+// separators or brackets is retried from every position inside it
 const editionSuffixExp = new RegExp(
-  String.raw`(?:^|[-_. '([]+)${editionMarkerPattern}(?:[-_. ']+${trailingLanguageMarkerPattern})*[-_. ')\]]*$`,
+  String.raw`(?:^|(?<![-_. '([])[-_. '([]+)${editionMarkerPattern}(?:[-_. ']+${trailingLanguageMarkerPattern})*[-_. ')\]]*$`,
   'i',
 );
 const releaseBoundaryExp = new RegExp(
   String.raw`[-_. ']+(?:${commonSourceMarkerExp.source}|${webdlExp.source}|${codecExp.source})`,
   'i',
 );
-const requestInfoSuffixExp = /(?:^|[-_. ']+)\[[^\]\r\n]+\][-_. ']*$/i;
+// No [ inside the brackets, so a run of [ fails at each one instead of scanning to the end
+const requestInfoSuffixExp = /(?:^|(?<![-_. '])[-_. ']+)\[[^[\]\r\n]+\][-_. ']*$/i;
 const languageMarkerSuffixExp = /\b(TRUE.?FRENCH|videomann|SUBFRENCH|PLDUB|MULTI)\b[-_. ']*$/i;
 const languageNameSuffixExp = new RegExp(
-  String.raw`(?:^|[-_. ']+)(?:${Object.values(Language)
+  String.raw`(?:^|(?<![-_. '])[-_. ']+)(?:${Object.values(Language)
     .map(l => l.toUpperCase())
     .join('|')})[-_. ']*$`,
 );
 const sceneGarbageSuffixExp =
-  /(?:^|[-_. ']+)(?:PROPER|REAL|READ.NFO)(?:[-_. ']+(?:PROPER|REAL|READ.NFO))*[-_. ']*$/i;
+  /(?:^|(?<![-_. '])[-_. ']+)(?:PROPER|REAL|READ.NFO)(?:[-_. ']+(?:PROPER|REAL|READ.NFO))*[-_. ']*$/i;
 const titleContentExp = /[a-z0-9]/i;
 
 const trailingMetadataSuffixExps = [
@@ -153,8 +156,8 @@ function truncateAtReleaseMetadataBoundary(title: string): string {
 
 const releaseTitleCleanupPasses: readonly CleanupPass[] = [
   {
-    name: 'replace first underscore',
-    clean: title => title.replace('_', ' '),
+    name: 'replace underscores',
+    clean: title => title.replaceAll('_', ' '),
   },
   {
     name: 'truncate at release metadata boundary',
@@ -180,34 +183,39 @@ function isCleanableReleaseTitle(title: string): boolean {
   return title.length > 0 && title !== '(';
 }
 
-function shouldPreservePeriod(
-  segment: string,
-  previousSegmentWasAcronym: boolean,
-  nextSegment: string,
-): boolean {
-  if (segment.length !== 1) {
-    return false;
-  }
-
-  if (segment.toLowerCase() !== 'a') {
-    return Number.isNaN(Number.parseInt(segment, 10));
-  }
-
-  return previousSegmentWasAcronym || nextSegment.length === 1;
+function isDigit(character: string): boolean {
+  return character >= '0' && character <= '9';
 }
 
+const repeatedSpaceExp = / {2,}/g;
+
+// Radarr's ParseMovieMatchCollection: single letters keep their dot (S.H.I.E.L.D.), except a
+// trailing letter after a word (World War Z.), a lone "a" unless part of an acronym, and numbers
 function formatDottedTitleSegments(title: string): string {
   const segments = title.split('.');
   let formattedTitle = '';
   let previousSegmentWasAcronym = false;
-  let nextSegment = '';
 
   for (const [segmentIndex, segment] of segments.entries()) {
-    if (segments.length >= segmentIndex + 2) {
-      nextSegment = segments[segmentIndex + 1] ?? '';
+    const nextSegment = segments[segmentIndex + 1] ?? '';
+    const isLetter = segment.length === 1 && !isDigit(segment);
+    const isArticle = segment.toLowerCase() === 'a';
+
+    if (
+      isLetter &&
+      !isArticle &&
+      (previousSegmentWasAcronym || segmentIndex < segments.length - 1) &&
+      (previousSegmentWasAcronym || nextSegment.length !== 1 || !isDigit(nextSegment))
+    ) {
+      formattedTitle += `${segment}.`;
+      previousSegmentWasAcronym = true;
+      continue;
     }
 
-    if (shouldPreservePeriod(segment, previousSegmentWasAcronym, nextSegment)) {
+    if (
+      (isArticle && (previousSegmentWasAcronym || nextSegment.length === 1)) ||
+      segment.toLowerCase() === 'dr'
+    ) {
       formattedTitle += `${segment}.`;
       previousSegmentWasAcronym = true;
       continue;
@@ -221,7 +229,7 @@ function formatDottedTitleSegments(title: string): string {
     formattedTitle += `${segment} `;
   }
 
-  return formattedTitle.trim();
+  return formattedTitle.replaceAll(repeatedSpaceExp, ' ').trim();
 }
 
 export function releaseTitleCleaner(title: string): string | null {
