@@ -503,6 +503,9 @@ const upstreamQualityCases: Array<
   ],
   // Bare x264 with nothing else is SD TV
   ['The.Series.S01E13.x264-CtrlSD', [Source.TV], Resolution.R480P, null],
+  // A parsed resolution wins over the x264 and extension defaults
+  ['Series.Title.S01E01.576p.x264-GRP', [Source.TV], Resolution.R576P, null],
+  ['Movie.Title.2019.REMUX.AVC-GRP.mkv', [Source.BLURAY], Resolution.R720P, QualityModifier.REMUX],
 ];
 
 for (const [title, sources, resolution, modifier] of upstreamQualityCases) {

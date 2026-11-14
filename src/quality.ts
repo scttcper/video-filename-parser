@@ -213,7 +213,10 @@ export function parseQuality(title: string, codec?: VideoCodec): QualityModel {
     getDefaultSources(context).length === 0 &&
     bareX264Exp.test(normalizedTitle)
   ) {
-    return createQualityResult(context, { sources: [Source.TV], resolution: Resolution.R480P });
+    return createQualityResult(context, {
+      sources: [Source.TV],
+      resolution: context.parsedResolution ?? Resolution.R480P,
+    });
   }
 
   return createQualityResult(context);
@@ -318,12 +321,13 @@ function createQualityResult(
   const resolution =
     overrides.resolution ?? context.parsedResolution ?? getDefaultResolution(context);
   let modifier = overrides.modifier ?? context.modifier;
-  // Upstream has no remux quality below 1080p, a 720p remux is plain Blu-ray
+  // Upstream has no remux quality below 1080p, a 720p remux is plain Blu-ray. Only an explicit
+  // resolution counts, not a default like .mkv meaning 720p.
   if (
     modifier === QualityModifier.REMUX &&
-    resolution !== undefined &&
-    resolution !== Resolution.R1080P &&
-    resolution !== Resolution.R2160P
+    context.parsedResolution !== undefined &&
+    context.parsedResolution !== Resolution.R1080P &&
+    context.parsedResolution !== Resolution.R2160P
   ) {
     modifier = null;
   }
