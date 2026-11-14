@@ -73,7 +73,32 @@ const cases: Array<[string, string | null]> = [
   ['Movie.Title.2019.1080p.AMZN.WEB-Rip.DDP.5.1.HEVC', null],
 ];
 
-for (const [title, result] of cases) {
+// From Radarr and Sonarr's ReleaseGroupParserFixture
+const upstreamCases: Array<[string, string | null]> = [
+  ['Movie Name (2003) (2160p BluRay X265 HEVC 10bit HDR AAC 7.1 Tigole) [QxR]', 'QxR'],
+  ['Movie Name in the Movie (2017) (1080p BluRay x265 HEVC 10bit AAC 7.1 Tigole)', 'Tigole'],
+  ['Movie Name (2001) 1080p NF WEB-DL DDP2.0 x264-E.N.D', 'E.N.D'],
+  ['Movie Name.2018.1080p.Blu-ray.Remux.AVC.DTS-HD.MA.5.1.KRaLiMaRKo', 'KRaLiMaRKo'],
+  ['Movie Title 2014 1080p Blu-ray AVC DTS-HD MA 5.1-PTP', 'PTP'],
+  ['Movie Name (2021) [Remux-2160p x265 HDR 10-BIT DTS-HD MA 7.1]-FraMeSToR.mkv', 'FraMeSToR'],
+  ['[FFF] DATE A LIVE - 01 [BD][720p-AAC][0601BED4]', 'FFF'],
+  ['[HorribleSubs] Shirobako - 20 [720p].mkv', 'HorribleSubs'],
+  ['[Vivid-Asenshi] Akame ga Kill - 04v2 [266EE983]', 'Vivid-Asenshi'],
+  ['Series S01E01 VOSTFR 1080p WEB x265 EAC3 -Hveðrungr', 'Hveðrungr'],
+  ['[REQ] Movie.Title.2019.1080p.BluRay.x264-GROUP', 'GROUP'],
+  // A bracket that is the whole title isn't a subgroup
+  ['[REC] 2 (2009) 1080p WEB-DL-GRP', 'GRP'],
+  ['[Group] Movie Title (2020) [1080p].mkv', 'Group'],
+  // A trailing quality token with one hyphen is not a group
+  ['Movie.Title.2016.1080p.WEB-DL', null],
+  ['Movie Title 2016 1080p WEB-Rip', null],
+  ['Movie.Title.2008.US.Directors.Cut.UHD.BD66.Blu-ray', null],
+  // Hyphenated group names aren't split by the single hyphen fast path
+  ['Series.Title.S01E01.1080p.WEB.H264.Fight-BB', 'Fight-BB'],
+  ['Movie.Title.2019.1080p.BluRay.x264.VH-PROD', 'VH-PROD'],
+];
+
+for (const [title, result] of [...cases, ...upstreamCases]) {
   it(`parse group "${title}"`, () => {
     expect(parseGroup(title)).toBe(result);
   });
