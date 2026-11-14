@@ -1,4 +1,4 @@
-export const fileExtensions = [
+export const fileExtensions: string[] = [
   // Unknown
   '.webm',
   // SDTV

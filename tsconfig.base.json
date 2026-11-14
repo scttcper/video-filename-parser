@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    // Node 22 is the oldest supported runtime (engines.node), it runs ES2024 natively
+    "target": "es2024",
+    "lib": ["es2024"],
+    "module": "nodenext",
+    "moduleDetection": "force",
+    // Universal library, no Node or DOM globals unless a config opts in
+    "types": [],
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noUncheckedSideEffectImports": true,
+
+    // Every file can be transpiled and its declarations emitted on its own
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "isolatedDeclarations": true,
+    "declaration": true,
+
+    "libReplacement": false,
+    "skipLibCheck": true
+  }
+}

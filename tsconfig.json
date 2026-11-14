@@ -1,10 +1,8 @@
 {
-  "extends": "@sindresorhus/tsconfig",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "outDir": "dist",
-    "types": ["node"],
-    "noPropertyAccessFromIndexSignature": false,
-    "erasableSyntaxOnly": false
-  }
+    "noEmit": true
+  },
+  "include": ["src", "test", "vitest.config.ts"]
 }

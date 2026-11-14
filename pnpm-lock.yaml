@@ -169,9 +169,6 @@ importers:
       '@ctrl/oxlint-config':
         specifier: 1.5.0
         version: 1.5.0
-      '@sindresorhus/tsconfig':
-        specifier: 9.0.0
-        version: 9.0.0
       '@types/node':
         specifier: 26.6.6
         version: 26.6.6
@@ -606,10 +603,6 @@ packages:
 
   '@rolldown/pluginutils@1.0.1':
     resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
-
-  '@sindresorhus/tsconfig@9.0.0':
-    resolution: {integrity: sha512-mtMvHnPCDoKuZvXKAsNsi7JrgfHOWKAy+a/k6VEAh7mcrNitburEdz/dOPpp4rL7KXfc0buRnEdkKEeZGXWtkg==}
-    engines: {node: '>=22'}
 
   '@tailwindcss/node@4.3.5':
     resolution: {integrity: sha512-yT53FzV4ke0cr/BguDxhWMpm5MJu1O2muzk+tKw6lKHjODAsYArBbWwFbJiaksfzFv1tpkO9QHGzmfs1hJT66g==}
@@ -1422,8 +1415,6 @@ snapshots:
     optional: true
 
   '@rolldown/pluginutils@1.0.1': {}
-
-  '@sindresorhus/tsconfig@9.0.0': {}
 
   '@tailwindcss/node@4.3.5':
     dependencies:

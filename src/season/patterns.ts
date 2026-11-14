@@ -391,7 +391,7 @@ export const seasonPatterns: SeasonPattern[] = [
 
 // Resolutions and bit depths that simplifyTitle leaves behind, removed so they are not read as
 // season or episode numbers. Matches those parts of Sonarr's SimpleTitleRegex.
-export const seasonSimpleTitleExp =
+export const seasonSimpleTitleExp: RegExp =
   /(?:(?:480|540|576|720|1080|1440|2160)[ip]|(?<![a-z\d])[248]k(?![a-z\d])|(?<![a-f\d])(?:8|10)[ -]?(?:b(?![a-z\d])|bits?))\s*?/gi;
 
 // Rewrites applied to the release title before the season patterns run
@@ -400,7 +400,7 @@ export const preSubstitutions: Array<[RegExp, string]> = [
   [/\.E(\d{2,4})\.\d{6}\.(.*-(?:F1RST|NEXT)(?:\.[a-z\d]{2,4})?)$/, '.S01E$1.$2'],
 ];
 
-export const rejectedPatterns = [
+export const rejectedPatterns: RegExp[] = [
   /^[0-9a-zA-Z]{32}/i,
   /^[a-z0-9]{24}$/i,
   // NZBGeek hashes, case sensitive since they are close to 101 style episode numbering
