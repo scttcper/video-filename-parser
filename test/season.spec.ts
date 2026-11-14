@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 
-import { parseMatchCollection, parseSeason } from '../src/index.js';
+import { parseMatchCollection, parseSeason, type Season } from '../src/index.js';
 
 const fullSeasonRelease: Array<[string, string, number]> = [
   ['30.Rock.Season.04.HDTV.XviD-DIMENSION', '30 Rock', 4],
@@ -170,6 +170,90 @@ it('trims separators around series titles', () => {
   expect(parseSeason('Mad Series - Season 1 [Bluray720p]')?.seriesTitle).toBe('Mad Series');
 });
 
+const range = (first: number, last: number) =>
+  Array.from({ length: last - first + 1 }, (_, index) => first + index);
+
+const sonarrPatternCases: Array<[string, Partial<Season>]> = [
+  // Anime season packs
+  ['[Group] Title S01 12 13 [1080p]', { seriesTitle: 'Title', seasons: [1], fullSeason: true }],
+  [
+    '[Vivid] Some Anime Show S01 [Web][MKV][h264 10-bit][1080p][AAC 2.0]',
+    { seriesTitle: 'Some Anime Show', seasons: [1], fullSeason: true },
+  ],
+  [
+    '[Group] Series Title S01-04 (BD 1080p) [Dual Audio]',
+    { seriesTitle: 'Series Title', seasons: [1, 2, 3, 4], isMultiSeason: true },
+  ],
+  [
+    '[Group] Series Title S03 Vol.02 [BD 1080p FLAC]',
+    { seriesTitle: 'Series Title', seasons: [3], isPartialSeason: true, seasonPart: 2 },
+  ],
+  ['[Group] Title S01 - 01-12 [1080p]', { seriesTitle: 'Title S01', episodeNumbers: range(1, 12) }],
+  [
+    '[Erai-raws] Series Title! - 01~10 [1080p][Multiple Subtitle]',
+    { seriesTitle: 'Series Title!', episodeNumbers: range(1, 10) },
+  ],
+  // Air dates win over a later "Part N"
+  [
+    'Series Title - 2026-07-03 - Recap 2025 Part 2 [WEBDL-1080p]-RlsGrp',
+    { seriesTitle: 'Series Title', episodeNumbers: [], airDate: new Date(2026, 6, 3) },
+  ],
+  [
+    'Series.Title.2015.09.07.Part.1.720p.HULU.WEBRip.AAC2.0.H.264-Sonarr',
+    { seriesTitle: 'Series Title', episodeNumbers: [], airDate: new Date(2015, 8, 7) },
+  ],
+  [
+    'Series On TitleClub E76 2024 08 08 1080p WEB H264-RnB96 [TJET]',
+    { seriesTitle: 'Series On TitleClub', episodeNumbers: [], airDate: new Date(2024, 7, 8) },
+  ],
+  // Korean releases with an episode and air date
+  [
+    "It's a Series Title.E56.190121.720p-NEXT.mp4",
+    { seriesTitle: "It's a Series Title", seasons: [1], episodeNumbers: [56] },
+  ],
+  // Spanish tracker releases
+  [
+    'Series Title - Temporada 2 [HDTV 720p][Cap.201][AC3 5.1 Castellano][www.pctnew.com]',
+    { seriesTitle: 'Series Title', seasons: [2], episodeNumbers: [1] },
+  ],
+  [
+    'Series falls - Temporada 1 [HDTV][Cap.111_120]',
+    { seriesTitle: 'Series falls', seasons: [1], episodeNumbers: range(11, 20) },
+  ],
+  [
+    'Series Title [HDTV][Cap.104](website.com).avi',
+    { seriesTitle: 'Series Title', seasons: [1], episodeNumbers: [4] },
+  ],
+  [
+    'Series (1994) - Temporada 10',
+    { seriesTitle: 'Series (1994)', seasons: [10], fullSeason: true },
+  ],
+  // 3 digit seasons
+  [
+    'Series.S006E18.Some.Title.Name-Part.1.1080p.WEB-DL.AAC2.0.H.264-Release',
+    { seriesTitle: 'Series', seasons: [6], episodeNumbers: [18] },
+  ],
+  [
+    'Series S093E081 1080p ALL4 WEB-DL AAC2 0 H 264-JJUNAHJAMESON',
+    { seriesTitle: 'Series', seasons: [93], episodeNumbers: [81] },
+  ],
+  [
+    'Series.S101E01-E02.Some.Title.Name.1080p.WEB-DL.AAC2.0.H.264-Release',
+    { seriesTitle: 'Series', seasons: [101], episodeNumbers: [1, 2] },
+  ],
+  // Dutch/Flemish releases
+  [
+    '13 Series Se.1 afl.2-3-4 [VTM]',
+    { seriesTitle: '13 Series', seasons: [1], episodeNumbers: [2, 3, 4] },
+  ],
+  ['Series T Se.3 afl.3 en 4', { seriesTitle: 'Series T', seasons: [3], episodeNumbers: [3, 4] }],
+];
+for (const [postTitle, expected] of sonarrPatternCases) {
+  it(`parse "${postTitle}"`, () => {
+    expect(parseSeason(postTitle)).toMatchObject(expected);
+  });
+}
+
 const remainderCases: Array<[string, string, number[], number[], string]> = [
   ['The Expanse - S01E02 - The Big Empty', 'The Expanse', [1], [2], 'The Big Empty'],
   [
@@ -180,6 +264,8 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
     'The Big Empty',
   ],
   ['Show.S02E02.Episode.Title.1080p.WEB.H264-GROUP', 'Show', [2], [2], 'Episode Title'],
+  ['Series Title [S01E05] Episode Title', 'Series Title', [1], [5], 'Episode Title'],
+  ['Series Title - [02x01-02] - Episode 1', 'Series Title', [2], [1, 2], 'Episode 1'],
 ];
 for (const [postTitle, title, seasons, episodes, remainder] of remainderCases) {
   it(`parses remainder after episode tokens for "${postTitle}"`, () => {

@@ -92,6 +92,11 @@ export const seasonPatterns: SeasonPattern[] = [
     'anime-subgroup-season-episode',
     /^(?:\[(?<subgroup>[^\]\r\n]+)\](?:_|-|\s|\.)?)(?<title>[^\r\n]+?)(?:[-_\W](?<![()[!]))+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+))(?:(?:[ex]|\W[ex]){1,2}(?<episode1>\d{2}(?!\d+)))*)(?:\s|\.)[^\r\n]*(?:$|\.)/i,
   ),
+  // Anime batches separated with a tilde: [SubGroup] Title - 01~10
+  absoluteEpisode(
+    'anime-subgroup-title-tilde-batch',
+    /^\[(?<subgroup>[^\]\r\n]+)\][-_. ]?(?<title>[^\r\n]+?)(?<![-_. ]|\b0\d+) - [-_. ]?(?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+))\s?~\s?(?<absoluteepisode1>\d{2,3}(\.\d{1,2})?(?!\d+))(?:[-_. ]+(?<special>special|ova|ovd))?[^\r\n]*(?:$|\.mkv)/i,
+  ),
   absoluteEpisode(
     'anime-subgroup-title-with-trailing-number',
     /^\[(?<subgroup>[^\]\r\n]+)\][-_. ]?(?<title>[^-\r\n]*?\d+)[-_. ]+[-_. ]?(?<absoluteepisode>\d{3}(\.\d{1,2})?(?!\d+))(?:[-_. ]?(?<absoluteepisode1>\d{3}(\.\d{1,2})?(?!\d+)))*(?:[-_. ]+(?<special>special|ova|ovd))?[^\r\n]*(?:$|\.mkv)/i,
@@ -99,6 +104,22 @@ export const seasonPatterns: SeasonPattern[] = [
   absoluteEpisode(
     'anime-subgroup-title-dash-absolute',
     /^\[(?<subgroup>[^\]\r\n]+)\][-_. ]?(?<title>[^\r\n]+?)[. ]-[. ](?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+|[-]))(?:[. ]-[. ](?<absoluteepisode1>\d{2,3}(\.\d{1,2})?(?!\d+|[-])))*(?:[-_. ]+(?<special>special|ova|ovd))?[^\r\n]*(?:$|\.mkv)/i,
+  ),
+  seasonPack(
+    'anime-subgroup-multi-season-pack',
+    /^\[(?<subgroup>[^\]\r\n]+)\][-_. ]?(?<title>[^\r\n]+?)[-_. ]+S(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:-S?|[-_. ]{1,3}S)(?<season1>(?<!\d+)\d{1,2}(?!\d+)))+/i,
+  ),
+  partialSeason(
+    'anime-subgroup-partial-season-pack',
+    /^\[(?<subgroup>[^\]\r\n]+)\][-_. ]?(?<title>[^\r\n]+?)\W+S(?<season>(?<!\d+)\d{1,2}(?!\d+))\W+(?:(?:(?:Part|Vol)\W?|(?<!\d+\W+)e|p)(?<seasonpart>\d{1,2}(?!\d+)))+/i,
+  ),
+  absoluteEpisode(
+    'anime-subgroup-title-dash-absolute-range',
+    /^\[(?<subgroup>[^\]\r\n]+)\][-_. ]?(?<title>[^-\r\n]+?)(?<![-_. ]|\b0\d+) - [-_. ]?(?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+))(?:[-_. ]?(?<absoluteepisode1>\d{2,3}(\.\d{1,2})?(?!\d+)))*(?:[-_. ]+(?<special>special|ova|ovd))?[^\r\n]*(?:$|\.mkv)/i,
+  ),
+  seasonPack(
+    'anime-subgroup-title-season-pack',
+    /^\[(?<subgroup>[^\]\r\n]+)\][-_. ]?(?<title>[^\r\n]+?)[-_. ]+S(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?![ex]?\d+))[^\r\n]+?(?:$|\.mkv)/i,
   ),
   absoluteEpisode(
     'anime-subgroup-title-absolute',
@@ -144,6 +165,11 @@ export const seasonPatterns: SeasonPattern[] = [
     'airdate-and-season-episode',
     /^(?<title>[^\r\n]+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])(?!\W+[0-3][0-9])[^\r\n]*?(?:s?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+)))(?:[ex](?<episode>(?<!\d+)(?:\d{1,3})(?!\d+)))/i,
   ),
+  // TJET wrestling: Title E76 2024 08 08 ... [TJET], the air date identifies the episode
+  airDate(
+    'absolute-episode-and-airdate',
+    /^(?<title>[^\r\n]+?)?[-_. ]e\d{2,3}(?!\d)[-_. ](?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])(?!\W+[0-3][0-9])[^\r\n]+?\[[a-z]+\]/i,
+  ),
   seasonEpisode(
     'four-digit-season-s-episode',
     /^(?<title>[^\r\n]+?)(?:(?:[-_\W](?<![()[!]))+S(?<season>(?<!\d+)(?:\d{4})(?!\d+))(?:e|\We|_){1,2}(?<episode>\d{2,3}(?!\d+))(?:(?:-|e|\We|_){1,2}(?<episode1>\d{2,3}(?!\d+)))*)\W?(?!\\)/i,
@@ -161,20 +187,29 @@ export const seasonPatterns: SeasonPattern[] = [
     /^(?<title>[^\r\n]+?)(?:\W+S(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<seasonpart>\d{1,2}(?!\d+)))+)/i,
   ),
   seasonEpisode(
-    'miniseries-year-title-part-number',
-    /^(?<title>[^\r\n]+?\d{4})\W+(?:Part\W?|e)(?<episode>\d{1,2}(?!\d+))(?:(?:Part\W?|e)(?<episode1>\d{1,2}(?!\d+)))*/i,
-  ),
-  seasonEpisode(
     'miniseries-multi-episode',
     /^(?<title>[^\r\n]+?)(?:[-._ ][e])(?<episode>\d{2,3}(?!\d+))(?:(?:-?[e])(?<episode1>\d{2,3}(?!\d+)))+/i,
   ),
   seasonEpisode(
-    'miniseries-part-number',
-    /^(?<title>[^\r\n]+?)\W+(?:Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+))(?:(?:Part\W?|(?<!\d+\W+)e)(?<episode1>\d{1,2}(?!\d+)))*/i,
+    'five-digit-episode-with-title',
+    /^(?:(?<title>[^\r\n]+?)(?:_|-|\s|\.)+)(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+)))(?:(?:-|[ex]|\W[ex]|_){1,2}(?<episode>(?<!\d+)\d{5}(?!\d+)))/i,
   ),
   seasonEpisode(
-    'miniseries-part-word',
-    /^(?<title>[^\r\n]+?)(?:\W+(?:Part[-._ ](?<episode>One|Two|Three|Four|Five|Six|Seven|Eight|Nine)(?:[-._ ]|$)))/i,
+    'five-digit-multi-episode-with-title',
+    /^(?:(?<title>[^\r\n]+?)(?:_|-|\s|\.)+)(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+)))(?:[-_. ]{1,3}ep){1,2}(?<episode>(?<!\d+)\d{5}(?!\d+))(?:(?:[-_. ]{1,3}ep){1,2}(?<episode1>(?<!\d+)\d{5}(?!\d+)))*/i,
+  ),
+  airDate(
+    'ymd-airdate',
+    /^(?<title>[^\r\n]+?)?\W*(?<airyear>\d{4})[-_. ]+(?<airmonth>[0-1][0-9])[-_. ]+(?<airday>[0-3][0-9])(?![-_. ]+[0-3][0-9])/i,
+  ),
+  seasonEpisode(
+    'miniseries-year-title-part-number',
+    /^(?<title>[^\r\n]+?\d{4})\W+(?:Part\W?|e)(?<episode>\d{1,2}(?!\d+))(?:(?:Part\W?|e)(?<episode1>\d{1,2}(?!\d+)))*/i,
+  ),
+  // Title.S001E01 or Title.S001E01-E02
+  seasonEpisode(
+    'three-digit-season-multi-episode',
+    /^(?<title>[^\r\n]+?)[-_. ]+S(?<season>(?<!\d+)\d{3}(?!\d+))E(?<episode>(?<!\d+)\d{2}(?!\d+))(?:-[ex](?<episode1>(?<!\d+)\d{2}(?!\d+)))?(?:[_. ]|$)(?!\\)/i,
   ),
   seasonEpisode(
     'miniseries-x-of-y',
@@ -201,14 +236,6 @@ export const seasonPatterns: SeasonPattern[] = [
     /^(?<title>[^\r\n]*?)(?:\W?|_)S(?<season>(?<!\d+)\d{3}(?!\d+))(?:\W|_)?E(?<episode>(?<!\d+)\d{1,2}(?!\d+))/i,
   ),
   seasonEpisode(
-    'five-digit-episode-with-title',
-    /^(?:(?<title>[^\r\n]+?)(?:_|-|\s|\.)+)(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+)))(?:(?:-|[ex]|\W[ex]|_){1,2}(?<episode>(?<!\d+)\d{5}(?!\d+)))/i,
-  ),
-  seasonEpisode(
-    'five-digit-multi-episode-with-title',
-    /^(?:(?<title>[^\r\n]+?)(?:_|-|\s|\.)+)(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+)))(?:[-_. ]{1,3}ep){1,2}(?<episode>(?<!\d+)\d{5}(?!\d+))(?:(?:[-_. ]{1,3}ep){1,2}(?<episode1>(?<!\d+)\d{5}(?!\d+)))*/i,
-  ),
-  seasonEpisode(
     'separated-season-and-episode',
     /^(?<title>[^\r\n]+?)(?:_|-|\s|\.)+S(?<season>\d{2}(?!\d+))(\W-\W)E(?<episode>(?<!\d+)\d{2}(?!\d+))(?!\\)/i,
   ),
@@ -232,6 +259,11 @@ export const seasonPatterns: SeasonPattern[] = [
     'season-episode-square-brackets',
     /^(?<title>[^\r\n]+?)(?:(?:[-_\W](?<![()[!]))+\[S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:-|[ex]|\W[ex]|_){1,2}(?<episode>(?<!\d+)\d{2}(?!\d+|i|p))(?:(?:-|[ex]|\W[ex]|_){1,2}(?<episode1>(?<!\d+)\d{2}(?!\d+|i|p)))*\])\W?(?!\\)/i,
   ),
+  // Spanish tracker releases: Series - Temporada 1 [HDTV][Cap.101] or Series [HDTV][Cap.111_120]
+  seasonEpisode(
+    'spanish-temporada-cap',
+    /^(?<title>[^\r\n]+?)(?:[-_. ]+?Temporada[^\r\n]+?|\[[^\]\r\n]*\])\[Cap[-_. ]+(?<season>(?<!\d+)\d{1,2})(?<episode>(?<!e|x)(?:[1-9][0-9]|[0][1-9]))(?:[-_. ]+(?<season1>(?<!\d+)\d{1,2})(?<episode1>(?<!e|x)(?:[1-9][0-9]|[0][1-9])))*\]/i,
+  ),
   seasonEpisode(
     'three-digit-episode-numbering',
     /^(?<title>[^\r\n]+?)?(?:[_.](?<![()[!]))+(?<season>(?<!\d+)[1-9])(?<episode>[1-9][0-9]|[0][1-9])(?![a-z]|\d+)(?:(?:[_.](?<![()[!]))+(?<season1>(?<!\d+)[1-9])(?<episode1>[1-9][0-9]|[0][1-9])(?![a-z]|\d+))*(?:[_.]|$)/i,
@@ -245,16 +277,17 @@ export const seasonPatterns: SeasonPattern[] = [
     /^(?<title>[^\r\n]+?)(?:(?:[-_\W](?<![()[!]))+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:-|[ex]|\W[ex]|_){1,2}(?<episode>\d{4}(?!\d+|i|p))(?:(?:-|[ex]|\W[ex]|_){1,2}(?<episode1>\d{4}(?!\d+|i|p)))*)\W?(?!\\)/i,
   ),
   airDate(
-    'ymd-airdate',
-    /^(?<title>[^\r\n]+?)?\W*(?<airyear>\d{4})[-_. ]+(?<airmonth>[0-1][0-9])[-_. ]+(?<airday>[0-3][0-9])(?![-_. ]+[0-3][0-9])/i,
-  ),
-  airDate(
     'mdy-airdate',
     /^(?<title>[^\r\n]+?)?\W*(?<airmonth>[0-1][0-9])[-_. ]+(?<airday>[0-3][0-9])[-_. ]+(?<airyear>\d{4})(?!\d+)/i,
   ),
   seasonEpisode(
     'four-digit-scene-numbering',
     /^(?<title>[^\r\n]+?)?(?:(?:[-_\W](?<![()[!]))*(?<season>(?<!\d+|\(|\[|e|x)\d{2})(?<episode>(?<!e|x)\d{2}(?!p|i|\d+|\)|\]|\W\d+|\W(?:e|ep|x)\d+)))+(\W+|_|$)(?!\\)/i,
+  ),
+  // Dutch/Flemish: Series Se.1 afl.2-3-4, Series Se.3 afl.3 en 4
+  seasonEpisode(
+    'dutch-season-afl',
+    /^(?<title>[^\r\n]+?)[-_. ]Se\.(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))[-_ ]?afl\.(?<episode>\d{1,3}(?!\d+))(?:(?:-|[-_ ]en[-_ ])(?<episode1>\d{1,3}(?!\d+)))*/i,
   ),
   seasonEpisode(
     'single-digit-episode',
@@ -268,6 +301,14 @@ export const seasonPatterns: SeasonPattern[] = [
     'itunes-season-episode',
     /^(?:(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:-(?<episode>\d{2,3}(?!\d+))))/i,
   ),
+  seasonEpisode(
+    'miniseries-part-number',
+    /^(?<title>[^\r\n]+?)\W+(?:Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+))(?:(?:Part\W?|(?<!\d+\W+)e)(?<episode1>\d{1,2}(?!\d+)))*/i,
+  ),
+  seasonEpisode(
+    'miniseries-part-word',
+    /^(?<title>[^\r\n]+?)(?:\W+(?:Part[-._ ](?<episode>One|Two|Three|Four|Five|Six|Seven|Eight|Nine)(?:[-._ ]|$)))/i,
+  ),
   absoluteEpisode(
     'anime-absolute-ep-label',
     /^(?:\[(?<subgroup>[^\]\r\n]+)\][-_. ]?)?(?<title>[^\r\n]+?)(?:_|-|\s|\.)+(?:e|ep)(?<absoluteepisode>\d{2,4}(\.\d{1,2})?)(?:(?:_|-|\s|\.)+(?:e|ep)(?<absoluteepisode1>\d{2,4}(\.\d{1,2})?))*[^\r\n]*(?:$|\.)/i,
@@ -275,6 +316,10 @@ export const seasonPatterns: SeasonPattern[] = [
   absoluteEpisode(
     'anime-title-episode-absolute',
     /^(?<title>[^\r\n]+?)[-_. ](?:Episode)[-_. ]+(?<absoluteepisode>(?<!\d+)\d{2,3}(\.\d{1,2})?(?!\d+))(?:[-_. ]+(?<absoluteepisode1>(?<!\d+)\d{2,3}(\.\d{1,2})?(?!\d+)))*[-_. ]*(?<hash>\[\w{8}\])?(?:$|\.)?/i,
+  ),
+  seasonPack(
+    'spanish-temporada-season-only',
+    /^(?<title>[^\r\n]+?)[_. ]-[_. ]Temporada[-_. ]?(?<season>\d{1,2}(?![_. ]?\d+))(?:[_. ]|$)+(?<extras>EXTRAS|SUBPACK)?(?!\\)/i,
   ),
   absoluteEpisode(
     'anime-title-absolute-number',
@@ -288,6 +333,16 @@ export const seasonPatterns: SeasonPattern[] = [
     'extant-multi-episode-numbering',
     /^(?<title>[^\r\n]+?)[-_. ](?<season>0?\d)(?<episode>\d{2})(?<episode1>\d{2})(?!\d+)[-_. ]/i,
   ),
+  seasonEpisode(
+    'three-digit-season-with-title',
+    /^(?<title>[^\r\n]+?)(?:[-_\W](?<![()[!]))+S?(?<season>(?<!\d+)\d{3}(?!\d+))(?:[ex]|\W[ex]){1,2}(?<episode>\d{2,3}(?!\d+))(?:(?:-|[ex]|\W[ex]|_){1,2}(?<episode1>\d{2,3}(?!\d+)))*(?:[-_. ]|$)/i,
+  ),
+];
+
+// Rewrites applied to the release title before the season patterns run
+export const preSubstitutions: Array<[RegExp, string]> = [
+  // Korean series without a season number, replace with S01Exxx and remove the air date
+  [/\.E(\d{2,4})\.\d{6}\.(.*-(?:F1RST|NEXT)(?:\.[a-z\d]{2,4})?)$/, '.S01E$1.$2'],
 ];
 
 export const rejectedPatterns = [
