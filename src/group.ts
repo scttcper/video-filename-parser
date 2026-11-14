@@ -5,8 +5,12 @@ import { cleanTorrentSuffixExp, removeWebsitePrefix } from './website.js';
 
 const cleanReleaseGroupExp =
   /(-(RP|1|NZBGeek|Obfuscated|Obfuscation|Scrambled|sample|Pre|postbot|xpost|Rakuv[a-z0-9]*|WhiteRev|BUYMORE|AsRequested|AlternativeToRequested|GEROV|Z0iDS3N|Chamele0n|4P|4Planet|AlteZachen|RePACKPOST))+$/i;
-const releaseGroupRegexExp =
-  /-(?<releasegroup>[A-Za-zÀ-ÖØ-öø-ÿ0-9]+)(?<!(?:HDTV|SDTV|WEB-(?:DL|Rip)|Blu-Ray|480p|576p|720p|1080p|2160p|DTS-(?:HD|X|MA|ES)|-ES|-EN|-CAT|-ENG|-JAP|-GER|-FRA|-FRE|-ITA|-HDRip|\d{1,2}-bit|[ ._]\d{4}-\d{2}|-\d{2}|tmdb(?:id)?-\d+|tt\d{7,8}|[a-zA-Z]{3}-ENG))(?:\b|[-._ ]|$)/i;
+// A `-TOKEN` that is release metadata rather than a group, from upstream's ReleaseGroupRegex
+const releaseGroupTokenPattern = String.raw`-(?<releasegroup>[A-Za-zÀ-ÖØ-öø-ÿ0-9]+)(?<!(?:HDTV|SDTV|WEB-(?:DL|Rip)|Blu-Ray|480p|576p|720p|1080p|2160p|DTS-(?:HD|X|MA|ES)|-ES|-EN|-CAT|-ENG|-JAP|-GER|-FRA|-FRE|-ITA|-HDRip|\d{1,2}-bit|[ ._]\d{4}-\d{2}|-\d{2}|tmdb(?:id)?-\d+|tt\d{7,8}|[a-zA-Z]{3}-ENG))`;
+const releaseGroupRegexExp = new RegExp(
+  String.raw`${releaseGroupTokenPattern}(?:\b|[-._ ]|$)`,
+  'i',
+);
 const animeReleaseGroupExp =
   /^\[(?!REQ\])(?<subgroup>[^\s\]\r\n](?:[^\]\r\n]{0,318}[^\s\]\r\n])?)\](?:_|-|\s|\.)?/i;
 const exceptionReleaseGroupRegex =
@@ -20,8 +24,8 @@ const bracketedReleaseGroupExp =
 // Everything up to an SxxEyy token is the series title, which can contain a group name
 const episodeTitlePrefixExp = /^.*?[-._ ]S\d+E\d+[-._ ]/i;
 const globalReleaseGroupExp = new RegExp(releaseGroupRegexExp.source, 'ig');
-const simpleReleaseGroupSuffixExp = /-(?<releasegroup>[a-z0-9]+)$/i;
-const protectedReleaseGroups = new Set(['web-dl', 'web-rip', '480p', '720p', '1080p', '2160p']);
+// Same rejections as the generic regex, so `...1080p.WEB-DL` isn't group `DL`
+const simpleReleaseGroupSuffixExp = new RegExp(`${releaseGroupTokenPattern}$`, 'i');
 const simpleExceptionReleaseGroups = new Set([
   'joy',
   'yify',
@@ -108,7 +112,6 @@ function matchSimpleReleaseGroup(title: string): string | null {
 
   const normalizedGroup = group.toLowerCase();
   if (
-    protectedReleaseGroups.has(normalizedGroup) ||
     simpleExceptionReleaseGroups.has(normalizedGroup) ||
     titleWithoutExtension.toLowerCase().endsWith(dZ0n3ReleaseGroupSuffix)
   ) {

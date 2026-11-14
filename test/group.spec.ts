@@ -86,6 +86,10 @@ const upstreamCases: Array<[string, string | null]> = [
   ['[Vivid-Asenshi] Akame ga Kill - 04v2 [266EE983]', 'Vivid-Asenshi'],
   ['Series S01E01 VOSTFR 1080p WEB x265 EAC3 -Hveðrungr', 'Hveðrungr'],
   ['[REQ] Movie.Title.2019.1080p.BluRay.x264-GROUP', 'GROUP'],
+  // A trailing quality token with one hyphen is not a group
+  ['Movie.Title.2016.1080p.WEB-DL', null],
+  ['Movie Title 2016 1080p WEB-Rip', null],
+  ['Movie.Title.2008.US.Directors.Cut.UHD.BD66.Blu-ray', null],
 ];
 
 for (const [title, result] of [...cases, ...upstreamCases]) {
