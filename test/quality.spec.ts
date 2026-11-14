@@ -441,3 +441,75 @@ for (const [title, sources, resolution] of extensionFallbackCases) {
     expect(quality.resolution).toBe(resolution);
   });
 }
+
+// From Radarr and Sonarr's QualityParserFixture
+const upstreamQualityCases: Array<
+  [string, Source[], Resolution | undefined, QualityModifier | null]
+> = [
+  // HD TV without the HDTV token is 720p
+  ['Series - S22E03 - MoneyBART - HD TV.mkv', [Source.TV], Resolution.R720P, null],
+  ['Series.Title.S01E01.HD.TV', [Source.TV], Resolution.R720P, null],
+  // XviD from a Blu-ray is Blu-ray 480p, not DVD
+  ['SERIES.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD', [Source.BLURAY], Resolution.R480P, null],
+  [
+    'X-Men Days of Future Past 2014 THE ROGUE CUT BRRip XviD AC3-EVO',
+    [Source.BLURAY],
+    Resolution.R480P,
+    null,
+  ],
+  // 1080i HDTV is not RAWHD, Raw-HD without a resolution is 1080p
+  [
+    'Super.Seires.Go.S01E02.Depths.of.Sonarr.1080i.HDTV.DD5.1.H.264-NOGRP',
+    [Source.TV],
+    Resolution.R1080P,
+    null,
+  ],
+  [
+    'Show - S03E01 - Episode Title Raw-HD.ts',
+    [Source.TV],
+    Resolution.R1080P,
+    QualityModifier.RAWHD,
+  ],
+  // No remux quality below 1080p
+  [
+    'Series.Hunter.S02.720p.Blu-ray.Remux.AVC.FLAC.2.0-SiCFoI',
+    [Source.BLURAY],
+    Resolution.R720P,
+    null,
+  ],
+  // An explicit resolution beats a bare 4k or an FHD group name
+  [
+    'Series Title S02E03 Title 4k to 1080p DSNP WEBrip x265 DDP 5 1 Releaser[SEV]',
+    [Source.WEBRIP],
+    Resolution.R1080P,
+    null,
+  ],
+  ['The.Series.S05E06.720p.HDTV.x264-FHD', [Source.TV], Resolution.R720P, null],
+  // Anime [Web] tag
+  [
+    '[HorribleSubs] Series Title! S01 [Web][MKV][h264][AAC 2.0][Softsubs (HorribleSubs)]',
+    [Source.WEBDL],
+    Resolution.R720P,
+    null,
+  ],
+  // TVRip keeps the parsed resolution
+  ['Series S01E07 - Sonarr zmen (CZ)[TvRip][HEVC][1080p]', [Source.TV], Resolution.R1080P, null],
+  // German Blu-ray with a disc codec is a remux
+  [
+    'Star.Trek.Der.Film.1979.German.DL.2160p.UHD.BluRay.HEVC-UNTHEVC',
+    [Source.BLURAY],
+    Resolution.R2160P,
+    QualityModifier.REMUX,
+  ],
+  // Bare x264 with nothing else is SD TV
+  ['The.Series.S01E13.x264-CtrlSD', [Source.TV], Resolution.R480P, null],
+];
+
+for (const [title, sources, resolution, modifier] of upstreamQualityCases) {
+  it(`parse upstream quality "${title}"`, () => {
+    const quality = parseQuality(title);
+    expect(quality.sources).toEqual(sources);
+    expect(quality.resolution).toBe(resolution);
+    expect(quality.modifier).toBe(modifier);
+  });
+}

@@ -10,15 +10,19 @@ const repackRegex = /\b(?<repack>repack\d?|rerip\d?)\b/i;
 const versionExp =
   /\d[-._ ]?v(\d)[-._ ]|\bv(\d)\b(?!.*\b(?:19|20)\d{2}\b)|\[v(\d)\]|repack(\d)|rerip(\d)/i;
 
-const remuxExp = /\b(?<remux>(BD|UHD)?Remux)\b/i;
+const remuxExp =
+  /(?:[_. ]|\d{4}p-|\bHybrid-)(?:(?:BD|UHD)[-_. ]?)?Remux\b|(?:(?:BD|UHD)[-_. ]?)?Remux[_. ]\d{4}p/i;
 const bdiskExp =
   /\b(COMPLETE|ISO|BDISO|BDMux|BDMV|BD25|BD50|BD66|BD100|BD[-_. ]?(?:25|50|66|100)|BR[-_. ]?DISK|Full[-_. ]?Blu[-_. ]?ray|3D[-_. ]?BD)\b/i;
 const discCodecExp = /\b(AVC|HEVC|VC[-_. ]?1|MVC|MPEG[-_. ]?2)\b/i;
 const brDiskExclusionExp =
   /\b((?<!HD[._ -]|HD)DVD|BDRip|720p|MKV|XviD|WMV|d3g|(BD)?REMUX|[xh][-_. ]?26[45])\b/i;
 const hardBrDiskExclusionExp = /\b((?<!HD[._ -]|HD)DVD|BDRip|720p|MKV|XviD|WMV|d3g|(BD)?REMUX)\b/i;
+// German releases name the disc codec on remuxes, so a codec isn't a sign of a full disc
+const germanBrDiskExclusionExp =
+  /\b(German.*[DM]L|((?<=\d{4}).*German.*([DM]L)?)(?=.*\b(AVC|HEVC|VC[-_. ]?1|MVC|MPEG[-_. ]?2)\b))\b/i;
 const brDiskSourceExp = /(?:blu[-_. ]?ray|hd[-_. ]?dvd)/i;
-const rawHdExp = /\b(?<rawhd>RawHD|1080i[-_. ]HDTV|Raw[-_. ]HD|MPEG[-_. ]?2)\b/i;
+const rawHdExp = /\b(?<rawhd>RawHD|Raw[-_. ]HD|MPEG[-_. ]?2)\b/i;
 const extensionExp = /\.[a-z0-9-]+$/i;
 const sdtvExtensionSet = new Set([
   '.m4v',
@@ -73,7 +77,16 @@ const commonSceneWebExp = new RegExp(
   String.raw`\b(?:1080p|2160p)[-_. ]web[-_. ]${sceneCodecMarker}\b`,
   'i',
 );
+const animeWebDlExp = /\[WEB\]|[\[(]WEB[ .]/i;
+// Upper case only, a trailing `web` word is not a source
+const trailingWebExp = /[. ]WEB$/;
+// x264 with no source or resolution is an SD TV release, like upstream's codec fallback
+const bareX264Exp = /\bx264\b/;
+const germanRemuxExp =
+  /((?<=\d{4}).*german.*([dm]l)?)(?=.*\b(avc|hevc|vc[_. -]?1|mvc|mpeg[_. -]?2))(?=.*blu-?ray)/;
 const uncommonXvidExp = /x-?vid|divx/i;
+// `HD TV` without the HDTV token is HD, like upstream's other source fallback
+const hdtvTokenExp = /\bhdtv\b/;
 
 export enum QualityModifier {
   REMUX = 'REMUX',
@@ -173,6 +186,12 @@ export function parseQuality(title: string, codec?: VideoCodec): QualityModel {
 
   codec ??= parseVideoCodec(title).codec;
   const sourceGroups = parseSourceGroups(normalizedTitle);
+  if (trailingWebExp.test(title.trim())) {
+    sourceGroups.webdl = true;
+  }
+  if (!Object.values(sourceGroups).some(Boolean) && animeWebDlExp.test(title)) {
+    sourceGroups.webdl = true;
+  }
   const context: QualityContext = {
     title: title,
     normalizedTitle,
@@ -187,6 +206,14 @@ export function parseQuality(title: string, codec?: VideoCodec): QualityModel {
     if (policy.matches(context)) {
       return createQualityResult(context, policy.getOverrides(context));
     }
+  }
+
+  if (
+    !context.modifier &&
+    getDefaultSources(context).length === 0 &&
+    bareX264Exp.test(normalizedTitle)
+  ) {
+    return createQualityResult(context, { sources: [Source.TV], resolution: Resolution.R480P });
   }
 
   return createQualityResult(context);
@@ -244,7 +271,12 @@ function parseQualityModifier(
     return QualityModifier.BRDISK;
   }
 
-  if (remuxExp.test(normalizedTitle) && !sourceGroups.webdl && !sourceGroups.hdtv) {
+  if (
+    ((normalizedTitle.includes('remux') && remuxExp.test(normalizedTitle)) ||
+      isGermanRemux(normalizedTitle)) &&
+    !sourceGroups.webdl &&
+    !sourceGroups.hdtv
+  ) {
     return QualityModifier.REMUX;
   }
 
@@ -256,7 +288,11 @@ function parseQualityModifier(
 }
 
 function isBrDisk(normalizedTitle: string, sourceGroups: SourceGroups): boolean {
-  if (!sourceGroups.bluray || hardBrDiskExclusionExp.test(normalizedTitle)) {
+  if (
+    !sourceGroups.bluray ||
+    hardBrDiskExclusionExp.test(normalizedTitle) ||
+    (normalizedTitle.includes('german') && germanBrDiskExclusionExp.test(normalizedTitle))
+  ) {
     return false;
   }
 
@@ -271,19 +307,38 @@ function isBrDisk(normalizedTitle: string, sourceGroups: SourceGroups): boolean 
   return brDiskSourceExp.test(normalizedTitle) && discCodecExp.test(normalizedTitle);
 }
 
+function isGermanRemux(normalizedTitle: string): boolean {
+  return normalizedTitle.includes('german') && germanRemuxExp.test(normalizedTitle);
+}
+
 function createQualityResult(
   context: QualityContext,
   overrides: QualityResultOverrides = {},
 ): QualityModel {
+  const resolution =
+    overrides.resolution ?? context.parsedResolution ?? getDefaultResolution(context);
+  let modifier = overrides.modifier ?? context.modifier;
+  // Upstream has no remux quality below 1080p, a 720p remux is plain Blu-ray
+  if (
+    modifier === QualityModifier.REMUX &&
+    resolution !== undefined &&
+    resolution !== Resolution.R1080P &&
+    resolution !== Resolution.R2160P
+  ) {
+    modifier = null;
+  }
   return {
     sources: overrides.sources ?? getDefaultSources(context),
-    resolution: overrides.resolution ?? context.parsedResolution ?? getDefaultResolution(context),
+    resolution,
     revision: context.revision,
-    modifier: overrides.modifier ?? context.modifier,
+    modifier,
   };
 }
 
 function getDefaultResolution(context: QualityContext): Resolution | undefined {
+  if (context.modifier === QualityModifier.RAWHD) {
+    return Resolution.R1080P;
+  }
   const extensionQuality = getExtensionQuality(context);
   if (extensionQuality) {
     return extensionQuality.resolution;
@@ -327,7 +382,7 @@ function getExtensionQuality(
 function getQualityFromExtension(
   title: string,
 ): Pick<QualityModel, 'sources' | 'resolution'> | null {
-  const extension = extensionExp.exec(title)?.[0].toLowerCase();
+  const extension = extensionExp.exec(title.trim())?.[0].toLowerCase();
 
   switch (extension) {
     case '.mkv':
@@ -358,7 +413,7 @@ const qualityPolicies: QualityPolicy[] = [
   {
     matches: ({ sourceGroups }) => sourceGroups.bluray,
     getOverrides: context =>
-      getXvidDvdOverrides(context) ?? {
+      getXvidBlurayOverrides(context) ?? {
         sources: [Source.BLURAY],
         resolution: getBlurayResolution(context),
       },
@@ -382,15 +437,15 @@ const qualityPolicies: QualityPolicy[] = [
       sourceGroups.pdtv || sourceGroups.sdtv || sourceGroups.dsr || sourceGroups.tvrip,
     getOverrides: context => ({
       sources: [Source.TV],
-      resolution: highDefPdtvRegex.test(context.normalizedTitle)
-        ? Resolution.R720P
-        : Resolution.R480P,
+      resolution:
+        context.parsedResolution ??
+        (highDefPdtvRegex.test(context.normalizedTitle) ? Resolution.R720P : Resolution.R480P),
     }),
   },
   {
     matches: ({ sourceGroups }) => sourceGroups.bdrip || sourceGroups.brrip,
     getOverrides: context =>
-      getXvidDvdOverrides(context) ?? {
+      getXvidBlurayOverrides(context) ?? {
         sources: [Source.BLURAY],
         resolution: context.parsedResolution ?? Resolution.R480P,
       },
@@ -415,13 +470,13 @@ function sourcePolicy(
   };
 }
 
-function getXvidDvdOverrides(context: QualityContext): QualityResultOverrides | null {
+function getXvidBlurayOverrides(context: QualityContext): QualityResultOverrides | null {
   if (context.codec !== VideoCodec.XVID) {
     return null;
   }
 
   return {
-    sources: [Source.DVD],
+    sources: [Source.BLURAY],
     resolution: Resolution.R480P,
   };
 }
@@ -455,7 +510,9 @@ function getWebResolution(context: QualityContext): Resolution | undefined {
     return context.parsedResolution;
   }
 
-  return context.title.includes('[WEBDL]') ? Resolution.R720P : Resolution.R480P;
+  return context.title.includes('[WEBDL]') || animeWebDlExp.test(context.title)
+    ? Resolution.R720P
+    : Resolution.R480P;
 }
 
 function getHdtvResolution(context: QualityContext): Resolution | undefined {
@@ -463,5 +520,7 @@ function getHdtvResolution(context: QualityContext): Resolution | undefined {
     return context.parsedResolution;
   }
 
-  return context.title.includes('[HDTV]') ? Resolution.R720P : Resolution.R480P;
+  return context.title.includes('[HDTV]') || !hdtvTokenExp.test(context.normalizedTitle)
+    ? Resolution.R720P
+    : Resolution.R480P;
 }
