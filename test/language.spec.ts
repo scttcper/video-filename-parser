@@ -136,6 +136,30 @@ const languageCases: Array<[string, Language[]]> = [
   ['Movie.Title.2021.1080p.WEB-DL.Telugu.x264-GRP', [Language.Telugu]],
   ['Movie.Title.2021.1080p.WEB-DL.Malayalam.x264-GRP', [Language.Malayalam]],
   ['Movie.Title.2021.1080p.WEB-DL.Kannada.x264-GRP', [Language.Kannada]],
+  // Language after the season/episode token, where the parsed title runs past it
+  ['Series.Title.S13E11.Ausgebacken.German.AmazonSD.h264-4SF', [Language.German]],
+  ['Series.Title.1x04.ITA.WEBMux.x264-NovaRip', [Language.Italian]],
+  ['Series - S03E10 - Episode #3.10 - rus 720p WEBDL (LostFilm)', [Language.Russian]],
+  ['Tokyo Ghoul: RE S2 - Episode 4 VOSTFR (1080p)', [Language.French]],
+  // Missing aliases
+  [
+    'Parasite.2019.MULTi.VFI.WEBrip.2160p.HDR.x265.True.HD-Tokuchi',
+    [Language.French, Language.English],
+  ],
+  ['Movie.Title.2016.Latvian.LV.1080p.WEB-DL', [Language.Latvian]],
+  ['Movie.Title.2016.SWISSGERMAN.1080p.WEB-DL', [Language.German]],
+  ['Movie.Title.2016.PLDUB.LEKPL.1080p.WEB-DL', [Language.Polish]],
+  ['Movie.Title.2016.Català.1080p.WEB-DL', [Language.Catalan]],
+  ['Movie Title (2024) [1080p] [Ukr+3xUkr]', [Language.Ukrainian]],
+  // Case sensitive codes and markers
+  ['Movie.Title.2016.GERMAN.DE.1080p.WEB-DL', [Language.German]],
+  ['Movie.Title.2016.BG.1080p.WEB-DL', [Language.Bulgarian]],
+  ['[abc] My Series - 01 [繁中]', [Language.Chinese]],
+  ['[Erai-raws] To Be Series - 14 (JA) [1080p CR WEB-DL AVC AAC][MultiSub]', [Language.Japanese]],
+  ['Movie.Title.2016.German.ML.1080p.WEB-DL', [Language.German, Language.English]],
+  // "no" is only Norwegian in upper case
+  ['The Wire S01-05 WS BDRip X264-REWARD-No Rars', [Language.English]],
+  ['[Doki] Mahouka Koukou no Rettousei - 07 (1280x720 Hi10P AAC) [80AF7DDE]', [Language.English]],
 ];
 
 for (const [title, result] of languageCases) {
