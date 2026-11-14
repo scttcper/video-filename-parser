@@ -118,12 +118,16 @@ const languageAliasRules: Array<{ language: Language; aliases: string[] }> = [
 ];
 
 // Codes that are only a language when written in upper case, or markers that aren't single tokens.
+// The SUB and DTS exclusions match any case (Sub.DE, dts.ES) since only the code itself is cased.
 // Matched against the release title with the series/movie title cut out.
 const languageExpRules: Array<{ language: Language; exp: RegExp }> = [
   { language: Language.Norwegian, exp: /\bNO\b/ },
-  { language: Language.Bulgarian, exp: /(?<!SUB[\W_])\bBG\b(?![\W_]SUB)/ },
-  { language: Language.German, exp: /(?<!SUB[\W_])\bDE\b(?![\W_]SUB)/ },
-  { language: Language.Spanish, exp: /(?<!SUB[\W_])(?<!DTS[._ -])\bES\b(?![\W_]SUB)/ },
+  { language: Language.Bulgarian, exp: /(?<![Ss][Uu][Bb][\W_])\bBG\b(?![\W_][Ss][Uu][Bb])/ },
+  { language: Language.German, exp: /(?<![Ss][Uu][Bb][\W_])\bDE\b(?![\W_][Ss][Uu][Bb])/ },
+  {
+    language: Language.Spanish,
+    exp: /(?<![Ss][Uu][Bb][\W_])(?<![Dd][Tt][Ss][._ -])\bES\b(?![\W_][Ss][Uu][Bb])/,
+  },
   { language: Language.Catalan, exp: /[-,. ]cat[. ](?:DD|subs)/i },
   { language: Language.Portuguese, exp: /[_. ]por[_. ]/i },
   { language: Language.Ukrainian, exp: /\b\d+x?ukr\b/i },

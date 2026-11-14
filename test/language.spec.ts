@@ -154,6 +154,10 @@ const languageCases: Array<[string, Language[]]> = [
   // Case sensitive codes and markers
   ['Movie.Title.2016.GERMAN.DE.1080p.WEB-DL', [Language.German]],
   ['Movie.Title.2016.BG.1080p.WEB-DL', [Language.Bulgarian]],
+  // DTS and SUB next to a code aren't languages in any case
+  ['Movie.2020.dts.ES.1080p', [Language.English]],
+  ['Movie.2020.Sub.DE.1080p', [Language.English]],
+  ['Movie.2020.ES.1080p', [Language.Spanish]],
   ['[abc] My Series - 01 [繁中]', [Language.Chinese]],
   ['[Erai-raws] To Be Series - 14 (JA) [1080p CR WEB-DL AVC AAC][MultiSub]', [Language.Japanese]],
   ['Movie.Title.2016.German.ML.1080p.WEB-DL', [Language.German, Language.English]],
