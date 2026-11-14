@@ -11,6 +11,7 @@ const releaseGroupRegexExp = new RegExp(
   String.raw`${releaseGroupTokenPattern}(?:\b|[-._ ]|$)`,
   'i',
 );
+const titleWordExp = /\p{L}/u;
 const animeReleaseGroupExp =
   /^\[(?!REQ\])(?<subgroup>[^\s\]\r\n](?:[^\]\r\n]{0,318}[^\s\]\r\n])?)\](?:_|-|\s|\.)?/i;
 const exceptionReleaseGroupRegex =
@@ -71,13 +72,22 @@ export function parseGroup(title: string, parsedTitle?: string): string | null {
     cleanTorrentSuffixExp,
     '',
   );
-  const knownGroup = matchAnimeSubgroup(cleanTitle) ?? matchKnownReleaseGroup(cleanTitle);
+  const nowebsiteTitle = removeWebsitePrefix(title);
+  let releaseTitle: string | undefined;
+  const animeSubgroup = matchAnimeSubgroup(cleanTitle);
+  if (animeSubgroup !== null) {
+    releaseTitle = normalizeReleaseTitle(nowebsiteTitle, parsedTitle);
+    if (!isBracketTitle(releaseTitle, animeSubgroup)) {
+      return animeSubgroup;
+    }
+  }
+
+  const knownGroup = matchKnownReleaseGroup(cleanTitle);
   if (knownGroup !== null) {
     return knownGroup;
   }
 
-  const nowebsiteTitle = removeWebsitePrefix(title);
-  const releaseTitle = normalizeReleaseTitle(nowebsiteTitle, parsedTitle);
+  releaseTitle ??= normalizeReleaseTitle(nowebsiteTitle, parsedTitle);
   let trimmed = buildGroupCandidateTitle(nowebsiteTitle, releaseTitle);
 
   if (trimmed.length === 0) {
@@ -89,9 +99,9 @@ export function parseGroup(title: string, parsedTitle?: string): string | null {
     return exceptionGroup;
   }
 
-  const animeSubgroup = matchAnimeSubgroup(trimmed);
-  if (animeSubgroup !== null) {
-    return animeSubgroup;
+  const candidateSubgroup = matchAnimeSubgroup(trimmed);
+  if (candidateSubgroup !== null) {
+    return candidateSubgroup;
   }
 
   trimmed = simplifyTitle(trimmed);
@@ -162,6 +172,12 @@ function lastReleaseGroup(exp: RegExp, title: string): string | null {
   }
 
   return group;
+}
+
+// A leading bracket is the title, like [REC] 2, when the parsed title kept it and has no other words
+function isBracketTitle(releaseTitle: string, subgroup: string): boolean {
+  const bracket = `[${subgroup}]`;
+  return releaseTitle.startsWith(bracket) && !titleWordExp.test(releaseTitle.slice(bracket.length));
 }
 
 function matchAnimeSubgroup(title: string): string | null {
