@@ -448,3 +448,19 @@ for (const [title, result] of dailyTvCases) {
     expect(filenameParse(title, true)).toEqual(expect.objectContaining(result));
   });
 }
+
+// https://github.com/scttcper/video-filename-parser/issues/93
+const tvEpisodeCases: Array<[string, string, number[], number[]]> = [
+  ['Series.S01E04.2-45.PM.[HDTV-720p].mkv', 'Series', [1], [4]],
+  ['Series-S07E12-31st_Century_Fox-[Bluray-1080p].mkv', 'Series', [7], [12]],
+  ['Series S08E20 50-50 Carla [DVD]', 'Series', [8], [20]],
+  ['Series.S03E01.S03E02.720p.HDTV.X264-DIMENSION', 'Series', [3], [1, 2]],
+  ['Series.Title.2x04.2x05.720p.BluRay-FUTV', 'Series Title', [2], [4, 5]],
+  ['Series Title - S02E01 1920x910', 'Series Title', [2], [1]],
+  ['Series Title - S15E06-07 - City Sushi HDTV-720p', 'Series Title', [15], [6, 7]],
+];
+for (const [name, title, seasons, episodeNumbers] of tvEpisodeCases) {
+  it(`parse tv episode numbers "${name}"`, () => {
+    expect(filenameParse(name, true)).toMatchObject({ title, seasons, episodeNumbers });
+  });
+}
