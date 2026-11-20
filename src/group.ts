@@ -62,7 +62,17 @@ const simpleExceptionReleaseGroups = new Set([
 const hyphenatedReleaseGroupSuffixExp =
   /(?:^|[-_. [])(?:D-Z0N3|Fight-BB|VH-PROD|FTW-HS|DX-TV|Blu-bits)$/i;
 
+// Scene names end in `<codec>-GROUP`, so that token is the group even when it looks like an
+// episode number (-13), a source (-SDTV) or the title has hyphenated words (Warm-Up.1080p...).
+const codecReleaseGroupSuffixExp =
+  /[-_. ](?:[xh]\.?26[456]|HEVC|AVC|XviD|DivX|AV1|VP9)-(?<releasegroup>[A-Za-z0-9]+)$/i;
+
 export function parseGroup(title: string, parsedTitle?: string): string | null {
+  const codecGroup = matchCodecReleaseGroup(title);
+  if (codecGroup !== null) {
+    return codecGroup;
+  }
+
   const simpleGroup = matchSimpleReleaseGroup(title);
   if (simpleGroup !== null) {
     return simpleGroup;
@@ -108,6 +118,13 @@ export function parseGroup(title: string, parsedTitle?: string): string | null {
   trimmed = stripCleanupSuffixes(trimmed);
 
   return matchGenericReleaseGroup(trimmed);
+}
+
+function matchCodecReleaseGroup(title: string): string | null {
+  const cleanTitle = stripCleanupSuffixes(
+    removeWebsitePrefix(removeFileExtension(title.trim())).replace(cleanTorrentSuffixExp, ''),
+  );
+  return codecReleaseGroupSuffixExp.exec(cleanTitle)?.groups?.releasegroup ?? null;
 }
 
 function matchSimpleReleaseGroup(title: string): string | null {
