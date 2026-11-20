@@ -94,6 +94,7 @@ const languageCases: Array<[string, Language[]]> = [
   ['Arabic.12.1982.1080p.BluRay.x264-ROVERS', [Language.English]],
   ['No.Country.for.Old.Men.1080p.BluRay.x264-HiGHTiMES', [Language.English]],
   ['Cars.2.2011.ESTONiAN.DVDRip.x264-EMX', [Language.Estonian]],
+  ['Snoopy.Presenta.Natale.Con.Snoopy.iTALiAN.720p.WEB.H264-NTROPiC', [Language.Italian]],
   ['Cars.2.2011.EN.SE.FI.PAL.DVDR-AMIRITE', [Language.English, Language.Swedish, Language.Finnish]],
   ['Cars.2.2011.FI.PAL.DVDR-AMIRITE', [Language.Finnish]],
   ['Castle.2009.S01E14.HDTV.XviD.SK-LOL', [Language.Slovak]],
