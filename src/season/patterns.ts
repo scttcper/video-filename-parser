@@ -194,6 +194,11 @@ export const seasonPatterns: SeasonPattern[] = [
     'multi-season-pack',
     /^(?<title>[^\r\n]+?)(?:Complete Series)?[-_. ]+(?:S|(?:Season|Saison|Series|Stagione)[_. ])(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:[-_. ]|[-_. ]?-[-_. ]?)(?:S|(?:Season|Saison|Series|Stagione)[_. ])?(?<season1>(?<!\d+)\d{1,2}(?!\d+|\.\d|[a-z])))+/i,
   ),
+  // Blu-ray/DVD disc rips: Monk.S03D04.DUAL.COMPLETE.BLURAY-iFPD is disc 4 of season 3
+  partialSeason(
+    'season-disc-pack',
+    /^(?<title>[^\r\n]+?)[-_. ]+S(?<season>(?<!\d+)\d{1,2}(?!\d+))D(?<seasonpart>\d{1,3}(?!\d+))(?:[-_. ]|$)/i,
+  ),
   partialSeason(
     'partial-season-pack',
     /^(?<title>[^\r\n]+?)(?:\W+S(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))\W+(?:(?:(?:Part|Vol)\W?|(?<!\d+\W+)e|p)(?<seasonpart>\d{1,2}(?!\d+)))+)/i,
