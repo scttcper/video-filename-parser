@@ -23,6 +23,7 @@ const sceneReleaseTagExp =
 
 // Built on first use, language.ts imports the title parser so Language isn't set at load time
 let trailingLanguageExp: RegExp | undefined;
+const capitalizedWordExp = /^\p{Lu}\p{Ll}+$/u;
 
 export function getFirstTitleBoundaryPosition(title: string): number | null {
   const positions = titleBoundaryParsers
@@ -35,12 +36,17 @@ export function getFirstTitleBoundaryPosition(title: string): number | null {
   }
 
   // A language word right before the first release tag is the release language, not the title:
-  // Snoopy.Presenta.Natale.Con.Snoopy.iTALiAN.MULTi.2160p
+  // Snoopy.Presenta.Natale.Con.Snoopy.iTALiAN.MULTi.2160p. Only scene spellings (FRENCH, iTALiAN)
+  // count, a capitalized word is the title: Get.Him.To.The.Greek.1080p
   const position = Math.min(...validPositions);
   trailingLanguageExp ??= new RegExp(
-    String.raw`[-_. ](?:${Object.values(Language).join('|')})[-_. ]*$`,
+    String.raw`[-_. ](?<marker>(?:TRUE[-_. ]?)?(?<language>${Object.values(Language).join('|')}))[-_. ]*$`,
     'i',
   );
-  const languageIndex = title.slice(0, position).search(trailingLanguageExp);
-  return languageIndex > 0 ? languageIndex : position;
+  const languageMatch = trailingLanguageExp.exec(title.slice(0, position));
+  if (languageMatch?.groups?.language && !capitalizedWordExp.test(languageMatch.groups.language)) {
+    return languageMatch.index > 0 ? languageMatch.index : position;
+  }
+
+  return position;
 }

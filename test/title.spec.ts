@@ -107,6 +107,8 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
     { title: 'The Complete Guide To Everything', year: null },
   ],
   ['The.Italian.Job.1080p.BluRay.x264-GRP', { title: 'The Italian Job', year: null }],
+  ['Get.Him.To.The.Greek.1080p.BluRay.x264-GRP', { title: 'Get Him To The Greek', year: null }],
+  ['Some.Movie.TRUE.FRENCH.1080p.WEB.H264-GRP', { title: 'Some Movie', year: null }],
   ['Inglorious.Basterds.CAM.XviD-CAMELOT', { title: 'Inglorious Basterds', year: null }],
   ['Inglourious.Basterds.SCR.XViD-xSCR', { title: 'Inglourious Basterds', year: null }],
   ['No.Country.for.Old.Men.DVDRip.XviD-DiAMOND', { title: 'No Country for Old Men', year: null }],
