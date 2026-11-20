@@ -151,6 +151,11 @@ const languageMarkerRules: Array<{ language: Language; exp: RegExp }> = [
 const tokenExp = /[\p{L}\p{N}]+/gu;
 const multiTokens = new Set(['multi', 'dual', 'dl']);
 const languageAliasTokens = new Set(languageAliasRules.flatMap(({ aliases }) => aliases));
+
+/** Lower case language names and codes the parser recognizes, like `kor` or `hun` */
+export function getLanguageAliasTokens(): ReadonlySet<string> {
+  return languageAliasTokens;
+}
 const languageOrMultiExp = new RegExp(
   String.raw`(?<![\p{L}\p{N}])(?:${[...languageAliasTokens, ...multiTokens].join('|')})(?![\p{L}\p{N}])`,
   'iu',
