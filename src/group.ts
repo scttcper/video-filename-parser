@@ -122,7 +122,9 @@ export function parseGroup(title: string, parsedTitle?: string): string | null {
 
 function matchCodecReleaseGroup(title: string): string | null {
   const cleanTitle = stripCleanupSuffixes(
-    removeWebsitePrefix(removeFileExtension(title.trim())).replace(cleanTorrentSuffixExp, ''),
+    removeWebsitePrefix(removeFileExtension(title.trim()))
+      .replace(cleanTorrentSuffixExp, '')
+      .trimEnd(),
   );
   return codecReleaseGroupSuffixExp.exec(cleanTitle)?.groups?.releasegroup ?? null;
 }

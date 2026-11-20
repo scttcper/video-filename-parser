@@ -11,6 +11,8 @@ const cases: Array<[string, string | null]> = [
   ['Formula1.2026.Las.Vegas.Grand.Prix.Weekend.Warm-Up.1080p.WEB.h264-BILLIE', 'BILLIE'],
   ['CHL.2026.11.18.Fribourg-Gotteron.vs.Geneve-Servette.720p.WEB.h264-ViCEROYS', 'ViCEROYS'],
   ['Some.Movie.2020.1080p.WEB.x264-GRP-postbot', 'GRP'],
+  ['The.Daily.Show.2026.11.16.Adam.Ad-Rock.Horovitz.1080p.WEB.h264-EDITH [rarbg]', 'EDITH'],
+  ['Surfing.Antarctica.2018.1080p.WEB.H264-13 [rarbg]', '13'],
   ['Castle.2009.S01E14.English.HDTV.XviD-LOL', 'LOL'],
   ['Castle 2009 S01E14 English HDTV XviD LOL', null],
   ['Acropolis Now S05 EXTRAS DVDRip XviD RUNNER', null],
