@@ -40,6 +40,11 @@ const dayEpisodeCases: Array<[string, string, Date]> = [
     new Date(2019, 9, 6),
   ],
   ['Series.Title.140226.720p.HDTV.x264-GRP', 'Series Title', new Date(2014, 1, 26)],
+  [
+    'Jimmy_Fallon_2019_10_23_Michael_Douglas_1080p_HEVC_x265-MeGusta',
+    'Jimmy Fallon',
+    new Date(2019, 9, 23),
+  ],
 ];
 for (const [postTitle, title, airDate] of dayEpisodeCases) {
   it(`parse day season release "${postTitle}"`, () => {
@@ -126,6 +131,12 @@ const singleEpisodeCases: Array<[string, string, number, number]> = [
   ['Klassen.S07E370.Et.Vildt.Venskab.DANISH.720p.WEB.h264-LSDK', 'Klassen', 7, 370],
   ['Stargate_Atlantis_4x16_Trio_DVDRip_Dual_XviD-CLT', 'Stargate Atlantis', 4, 16],
   ['Samurai.Jack.1x16.XVI.Jack.and.the.Smackback.SVCD.SD-6', 'Samurai Jack', 1, 16],
+  [
+    'Turning_Point_9_11_and_the_War_on_Terror_S01E01.mkv',
+    'Turning Point 9 11 and the War on Terror',
+    1,
+    1,
+  ],
 ];
 for (const [postTitle, title, season, episode] of singleEpisodeCases) {
   it(`parse single episode release "${postTitle}"`, () => {
