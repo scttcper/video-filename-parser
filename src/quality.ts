@@ -1,5 +1,5 @@
 import { parseResolutionFromTitle, Resolution } from './resolution.js';
-import { parseSource, parseSourceGroups, Source } from './source.js';
+import { isTvCaptureOnly, parseSource, parseSourceGroups, Source } from './source.js';
 import { parseVideoCodec, VideoCodec } from './videoCodec.js';
 
 const properRegex = /\b(?<proper>proper)\b/i;
@@ -95,6 +95,8 @@ const vcdExp = /\bvcd\b/;
 // XvidHD is upstream's 720p xvid, everything else xvid or divx is an SD encode. Only the whole
 // word, a group like XviD-HDLiTE is still SD.
 const xvidHdExp = /\bxvidhd\b/;
+// VHS tapes are SD
+const vhsRipExp = /\bvhs-?rip\b/;
 
 export enum QualityModifier {
   REMUX = 'REMUX',
@@ -383,6 +385,16 @@ function getDefaultResolution(context: QualityContext): Resolution | undefined {
   if (context.modifier === QualityModifier.RAWHD) {
     return Resolution.R1080P;
   }
+
+  // The disc format in the name beats a guess from the file extension, VCDs are .dat files
+  if (svcdExp.test(context.normalizedTitle)) {
+    return Resolution.R480P;
+  }
+
+  if (vcdExp.test(context.normalizedTitle)) {
+    return Resolution.R360P;
+  }
+
   const extensionQuality = getExtensionQuality(context);
   if (extensionQuality) {
     return extensionQuality.resolution;
@@ -390,16 +402,12 @@ function getDefaultResolution(context: QualityContext): Resolution | undefined {
 
   const sources = getParsedSources(context);
   // Radarr's DVDSCR quality is 480p too
-  if (sources.includes(Source.DVD) || sources.includes(Source.SCREENER)) {
+  if (
+    sources.includes(Source.DVD) ||
+    sources.includes(Source.SCREENER) ||
+    vhsRipExp.test(context.normalizedTitle)
+  ) {
     return Resolution.R480P;
-  }
-
-  if (svcdExp.test(context.normalizedTitle)) {
-    return Resolution.R480P;
-  }
-
-  if (vcdExp.test(context.normalizedTitle)) {
-    return Resolution.R360P;
   }
 
   return context.codec === VideoCodec.XVID && !xvidHdExp.test(context.normalizedTitle)
@@ -494,7 +502,11 @@ const qualityPolicies: QualityPolicy[] = [
   },
   {
     matches: ({ sourceGroups }) =>
-      sourceGroups.pdtv || sourceGroups.sdtv || sourceGroups.dsr || sourceGroups.tvrip,
+      sourceGroups.pdtv ||
+      sourceGroups.sdtv ||
+      sourceGroups.dsr ||
+      sourceGroups.tvrip ||
+      isTvCaptureOnly(sourceGroups),
     getOverrides: context => ({
       sources: [Source.TV],
       resolution:

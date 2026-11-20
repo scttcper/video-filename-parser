@@ -41,6 +41,7 @@ type SourceGroupKey =
   | 'workprint'
   | 'pdtv'
   | 'sdtv'
+  | 'tvcapture'
   | 'tvrip';
 
 type SourceGroups = Record<SourceGroupKey, boolean>;
@@ -49,6 +50,14 @@ type SourcePolicy = {
   source: Source;
   matches: (groups: SourceGroups) => boolean;
 };
+
+// Older scene TV captures: satellite, DVB, digital TV and SD rips of HDTV. At the very end after a
+// hyphen it is the release group, like the Danish group DTV.
+const tvCaptureTagPattern = String.raw`(?:SATRip|DVBRip|DVB|DTVRip|DTV|DSRip|HDTVRip)`;
+const tvCaptureExp = new RegExp(
+  String.raw`\b${tvCaptureTagPattern}\b(?!$)|(?<!-)\b${tvCaptureTagPattern}$`,
+  'i',
+);
 
 const sourceGroupPatterns: SourceGroupPattern[] = [
   { group: 'bluray', regex: blurayExp },
@@ -59,7 +68,8 @@ const sourceGroupPatterns: SourceGroupPattern[] = [
   { group: 'brrip', regex: /\b(BRRip)\b/i },
   { group: 'scr', regex: /\b(SCR|SCREENER|DVDSCR|(DVD|WEB).?SCREENER)\b/i },
   { group: 'dvdr', regex: /\b(\d?x?M?DVD-?[R59])\b/i },
-  { group: 'dvd', regex: /\b(DVD9?|DVDRip|NTSC|PAL|xvidvd|DvDivX)\b/i },
+  // DVTV is French scene DVD video with TV audio
+  { group: 'dvd', regex: /\b(DVD9?|DVDRip|DVTV|NTSC|PAL|xvidvd|DvDivX)\b/i },
   { group: 'dsr', regex: /\b(WS[-_. ]DSR|DSR)\b/i },
   { group: 'regional', regex: /\b(R[0-9]{1}|REGIONAL)\b/i },
   { group: 'ppv', regex: /\b(PPV)\b/i },
@@ -68,11 +78,8 @@ const sourceGroupPatterns: SourceGroupPattern[] = [
   { group: 'cam', regex: /\b(CAMRIP|(?:NEW)?CAM|HD-?CAM(?:Rip)?|HQCAM)\b/i },
   { group: 'workprint', regex: /\b(WORKPRINT|WP)\b/i },
   { group: 'pdtv', regex: /\b(PDTV)\b/i },
-  // Older scene SD TV captures: satellite, DVB, digital TV, VHS and SD HDTV rips
-  {
-    group: 'sdtv',
-    regex: /\b(SDTV|SD[-_. ]TV|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|DSRip|VHSRip|HDTVRip)\b/i,
-  },
+  { group: 'sdtv', regex: /\b(SDTV|SD[-_. ]TV)\b/i },
+  { group: 'tvcapture', regex: tvCaptureExp },
   { group: 'tvrip', regex: /\b(TVRip)\b/i },
 ];
 
@@ -103,7 +110,13 @@ const sourcePolicies: SourcePolicy[] = [
   },
   {
     source: Source.TV,
-    matches: groups => groups.pdtv || groups.sdtv || groups.dsr || groups.tvrip || groups.hdtv,
+    matches: groups =>
+      groups.pdtv ||
+      groups.sdtv ||
+      groups.dsr ||
+      groups.tvrip ||
+      groups.hdtv ||
+      isTvCaptureOnly(groups),
   },
   {
     source: Source.CAM,
@@ -149,6 +162,7 @@ export function parseSourceGroups(title: string): SourceGroups {
     workprint: false,
     pdtv: false,
     sdtv: false,
+    tvcapture: false,
     tvrip: false,
   };
 
@@ -157,6 +171,23 @@ export function parseSourceGroups(title: string): SourceGroups {
   }
 
   return groups;
+}
+
+/**
+ * Capture tags are TV only when nothing names a disc or web source. Show.720p.DTV.WEB-DL is a
+ * WEB-DL and a Spanish [DVD+DVB] or german.dvb.pal.dvdr is a DVD.
+ */
+export function isTvCaptureOnly(groups: SourceGroups): boolean {
+  return (
+    groups.tvcapture &&
+    !groups.bluray &&
+    !groups.bdrip &&
+    !groups.brrip &&
+    !groups.webdl &&
+    !groups.webrip &&
+    !groups.dvd &&
+    !groups.dvdr
+  );
 }
 
 export function parseSource(title: string, groups?: SourceGroups): Source[] {
