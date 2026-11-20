@@ -1,5 +1,5 @@
 import { parseResolutionFromTitle, Resolution } from './resolution.js';
-import { parseSource, parseSourceGroups, Source } from './source.js';
+import { isTvCaptureOnly, parseSource, parseSourceGroups, Source } from './source.js';
 import { parseVideoCodec, VideoCodec } from './videoCodec.js';
 
 const properRegex = /\b(?<proper>proper)\b/i;
@@ -89,6 +89,14 @@ const germanBlurayExp = /blu-?ray/;
 const uncommonXvidExp = /x-?vid|divx/i;
 // `HD TV` without the HDTV token is HD, like upstream's other source fallback
 const hdtvTokenExp = /\bhdtv\b/;
+// Video CD formats only exist in SD, SVCD at 480 lines and VCD below that
+const svcdExp = /\bsvcd\b/;
+const vcdExp = /\bvcd\b/;
+// XvidHD is upstream's 720p xvid, everything else xvid or divx is an SD encode. Only the whole
+// word, a group like XviD-HDLiTE is still SD.
+const xvidHdExp = /\bxvidhd\b/;
+// VHS tapes are SD
+const vhsRipExp = /\bvhs-?rip\b/;
 
 export enum QualityModifier {
   REMUX = 'REMUX',
@@ -377,12 +385,34 @@ function getDefaultResolution(context: QualityContext): Resolution | undefined {
   if (context.modifier === QualityModifier.RAWHD) {
     return Resolution.R1080P;
   }
+
+  // The disc format in the name beats a guess from the file extension, VCDs are .dat files
+  if (svcdExp.test(context.normalizedTitle)) {
+    return Resolution.R480P;
+  }
+
+  if (vcdExp.test(context.normalizedTitle)) {
+    return Resolution.R360P;
+  }
+
   const extensionQuality = getExtensionQuality(context);
   if (extensionQuality) {
     return extensionQuality.resolution;
   }
 
-  return getParsedSources(context).includes(Source.DVD) ? Resolution.R480P : undefined;
+  const sources = getParsedSources(context);
+  // Radarr's DVDSCR quality is 480p too
+  if (
+    sources.includes(Source.DVD) ||
+    sources.includes(Source.SCREENER) ||
+    vhsRipExp.test(context.normalizedTitle)
+  ) {
+    return Resolution.R480P;
+  }
+
+  return context.codec === VideoCodec.XVID && !xvidHdExp.test(context.normalizedTitle)
+    ? Resolution.R480P
+    : undefined;
 }
 
 function getDefaultSources(context: QualityContext): Source[] {
@@ -472,7 +502,11 @@ const qualityPolicies: QualityPolicy[] = [
   },
   {
     matches: ({ sourceGroups }) =>
-      sourceGroups.pdtv || sourceGroups.sdtv || sourceGroups.dsr || sourceGroups.tvrip,
+      sourceGroups.pdtv ||
+      sourceGroups.sdtv ||
+      sourceGroups.dsr ||
+      sourceGroups.tvrip ||
+      isTvCaptureOnly(sourceGroups),
     getOverrides: context => ({
       sources: [Source.TV],
       resolution:
