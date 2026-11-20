@@ -92,8 +92,9 @@ const hdtvTokenExp = /\bhdtv\b/;
 // Video CD formats only exist in SD, SVCD at 480 lines and VCD below that
 const svcdExp = /\bsvcd\b/;
 const vcdExp = /\bvcd\b/;
-// XvidHD is upstream's 720p xvid, everything else xvid or divx is an SD encode
-const xvidHdExp = /xvid-?hd/;
+// XvidHD is upstream's 720p xvid, everything else xvid or divx is an SD encode. Only the whole
+// word, a group like XviD-HDLiTE is still SD.
+const xvidHdExp = /\bxvidhd\b/;
 
 export enum QualityModifier {
   REMUX = 'REMUX',

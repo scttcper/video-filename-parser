@@ -551,8 +551,9 @@ const olderSdCases: Array<[string, Source[], Resolution | undefined]> = [
   ['Hope.and.Faith.S01E14.VCD-FFN', [], Resolution.R360P],
   ['Ben.Stiller.Biography.XviD-ELPH', [], Resolution.R480P],
   ['Some.Movie.2004.DivX-GRP', [], Resolution.R480P],
-  // XvidHD is not SD
+  // XvidHD is not SD, a group starting with HD is
   ['Some.Show.S01E01.XvidHD-GRP', [], undefined],
+  ['Some.Show.S01E01.XviD-HDLiTE', [], Resolution.R480P],
 ];
 
 for (const [title, sources, resolution] of olderSdCases) {
