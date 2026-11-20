@@ -98,6 +98,7 @@ const languageCases: Array<[string, Language[]]> = [
   ['Some.Movie.2020.CROATIAN.1080p.WEB.H264-GRP', [Language.Croatian]],
   ['Ghost.In.The.Cell.2026.INDONESIAN.1080p.BLURAY.x264-HOA', [Language.Indonesian]],
   ['Kahalili.2023.TAGALOG.1080p.BLURAY.x264-HOA', [Language.Filipino]],
+  ['Snoopy.Presenta.Natale.Con.Snoopy.iTALiAN.720p.WEB.H264-NTROPiC', [Language.Italian]],
   ['Cars.2.2011.EN.SE.FI.PAL.DVDR-AMIRITE', [Language.English, Language.Swedish, Language.Finnish]],
   ['Cars.2.2011.FI.PAL.DVDR-AMIRITE', [Language.Finnish]],
   ['Castle.2009.S01E14.HDTV.XviD.SK-LOL', [Language.Slovak]],
