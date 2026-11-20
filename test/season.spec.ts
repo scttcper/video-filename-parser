@@ -415,6 +415,14 @@ for (const [postTitle] of noRemainderCases) {
 
 const partialSeasonPackCases: Array<[string, string, number, number]> = [
   ['The.Ranch.2016.S02.Part.1.1080p.NF.WEBRip.DD5.1.x264-NTb', 'The Ranch 2016', 2, 1],
+  ['Monk.S03D04.DUAL.COMPLETE.BLURAY-iFPD', 'Monk', 3, 4],
+  ['Dragon.Ball.Daima.S01D01.COMPLETE.BLURAY-ANiMANiAKS', 'Dragon Ball Daima', 1, 1],
+  [
+    'The.Walking.Dead.Dead.City.S03D02.COMPLETE.BLURAY-BROADCAST',
+    'The Walking Dead Dead City',
+    3,
+    2,
+  ],
 ];
 for (const [postTitle, title, season, seasonPart] of partialSeasonPackCases) {
   it(`parse partial season release "${postTitle}"`, () => {
