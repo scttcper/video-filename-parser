@@ -46,6 +46,10 @@ export enum Language {
   Romanian = 'Romanian',
   Slovak = 'Slovak',
   Serbian = 'Serbian',
+  Slovenian = 'Slovenian',
+  Croatian = 'Croatian',
+  Indonesian = 'Indonesian',
+  Filipino = 'Filipino',
 }
 
 const languageAliasRules: Array<{ language: Language; aliases: string[] }> = [
@@ -114,6 +118,10 @@ const languageAliasRules: Array<{ language: Language; aliases: string[] }> = [
   { language: Language.Bengali, aliases: ['bengali'] },
   { language: Language.Bulgarian, aliases: ['bulgarian', 'bgaudio'] },
   { language: Language.Serbian, aliases: ['serbian'] },
+  { language: Language.Slovenian, aliases: ['slovenian', 'slovene'] },
+  { language: Language.Croatian, aliases: ['croatian'] },
+  { language: Language.Indonesian, aliases: ['indonesian'] },
+  { language: Language.Filipino, aliases: ['filipino', 'tagalog'] },
   { language: Language.Nordic, aliases: ['nordic', 'nordicsubs'] },
 ];
 
