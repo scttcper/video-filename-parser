@@ -52,10 +52,11 @@ type SourcePolicy = {
 };
 
 // Older scene TV captures: satellite, DVB, digital TV and SD rips of HDTV. At the very end after a
-// hyphen it is the release group, like the Danish group DTV.
+// hyphen, maybe before a file extension, it is the release group, like the Danish group DTV.
 const tvCaptureTagPattern = String.raw`(?:SATRip|DVBRip|DVB|DTVRip|DTV|DSRip|HDTVRip)`;
+const nameEndPattern = String.raw`(?:\.[a-z0-9]{2,4})?$`;
 const tvCaptureExp = new RegExp(
-  String.raw`\b${tvCaptureTagPattern}\b(?!$)|(?<!-)\b${tvCaptureTagPattern}$`,
+  String.raw`\b${tvCaptureTagPattern}\b(?!${nameEndPattern})|(?<!-)\b${tvCaptureTagPattern}(?=${nameEndPattern})`,
   'i',
 );
 

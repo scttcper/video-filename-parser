@@ -7,6 +7,7 @@ import {
   Resolution,
   Source,
 } from '../src/index.js';
+import { parseSourceGroups } from '../src/source.js';
 
 const versionCases: Array<[string, number]> = [
   ['Chuck.S04E05.HDTV.XviD-LOL', 1],
@@ -552,6 +553,7 @@ const olderSdCases: Array<[string, Source[], Resolution | undefined]> = [
   ['4400-die.rueckkehrer.2004.german.dvb.pal.dvdr-mb', [Source.DVD], Resolution.R480P],
   // The Danish group DTV is not a capture tag
   ['Headtrip-Boom_Bass_Acid_EP-VLS-1995-DTV', [], undefined],
+  ['Show.S01E01.German.DTV.avi', [Source.TV], Resolution.R480P],
   // French DVTV is DVD video with TV audio, VHS rips are SD without a source
   ['The.Unit.S01E03.FRENCH.DVTV.XViD-JMT', [Source.DVD], Resolution.R480P],
   ['Naked.1993.VHSRIP-FLAiR', [], Resolution.R480P],
@@ -567,6 +569,13 @@ const olderSdCases: Array<[string, Source[], Resolution | undefined]> = [
   ['Some.Show.S01E01.XvidHD-GRP', [], undefined],
   ['Some.Show.S01E01.XviD-HDLiTE', [], Resolution.R480P],
 ];
+
+it('reads a DTV group before a file extension like any other group', () => {
+  expect(parseSourceGroups('Anna.Pihl.S03E05.DANiSH.XviD-DTV.mkv').tvcapture).toBe(false);
+  expect(parseQuality('Anna.Pihl.S03E05.DANiSH.XviD-DTV.mkv')).toEqual(
+    parseQuality('Anna.Pihl.S03E05.DANiSH.XviD-GRP.mkv'),
+  );
+});
 
 for (const [title, sources, resolution] of olderSdCases) {
   it(`parse older SD quality "${title}"`, () => {
