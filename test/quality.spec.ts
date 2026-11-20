@@ -527,6 +527,42 @@ for (const [title, sources, resolution, modifier] of upstreamQualityCases) {
   });
 }
 
+const olderSdCases: Array<[string, Source[], Resolution | undefined]> = [
+  // Satellite, DVB, digital TV, VHS and SD HDTV rips are SD TV
+  ['Nip.Tuck.S04E13.German.SATRip.XviD-ITG', [Source.TV], Resolution.R480P],
+  ['ReGenesis.S02E05.WS.DVB.XviD.CZ-dCZ', [Source.TV], Resolution.R480P],
+  ['Historia.Tykit.Taudit.Ja.Teras.E2.FiNNiSH.DVBRip.XViD-TVTUPA', [Source.TV], Resolution.R480P],
+  ['Rauchende.Colts.S18E20.Das.grosse.Spiel.GERMAN.dTV.XViD-NVA', [Source.TV], Resolution.R480P],
+  ['Spoorloos.Verdwenen.S02E05.DUTCH.DTVrip.Xvid-TDF', [Source.TV], Resolution.R480P],
+  ['The.Unit.S01E03.FRENCH.DVTV.XViD-JMT', [Source.TV], Resolution.R480P],
+  ['Men.in.Black.The.Series.S01E06.DSRip.XviD-SFM', [Source.TV], Resolution.R480P],
+  ['ECW.Hardcore.TV.08.27.96.VHSRip.XviD-KYR', [Source.TV], Resolution.R480P],
+  [
+    'Goldtaucher.der.Beringsee.S02E08.GERMAN.DOKU.WS.HDTVRip.XviD-TVP',
+    [Source.TV],
+    Resolution.R480P,
+  ],
+  // An explicit resolution still wins
+  ['Show.S01E01.German.SATRip.720p.x264-GRP', [Source.TV], Resolution.R720P],
+  // Radarr's DVDSCR is 480p
+  ['007.Die.Another.Day.DVDSCR.XViD-DVL', [Source.SCREENER], Resolution.R480P],
+  // Video CD formats and bare xvid or divx encodes are SD
+  ['Smallville.2x10.Hoehlengeheimnis.German.SVCD-FKKTV', [], Resolution.R480P],
+  ['Hope.and.Faith.S01E14.VCD-FFN', [], Resolution.R360P],
+  ['Ben.Stiller.Biography.XviD-ELPH', [], Resolution.R480P],
+  ['Some.Movie.2004.DivX-GRP', [], Resolution.R480P],
+  // XvidHD is not SD
+  ['Some.Show.S01E01.XvidHD-GRP', [], undefined],
+];
+
+for (const [title, sources, resolution] of olderSdCases) {
+  it(`parse older SD quality "${title}"`, () => {
+    const quality = parseQuality(title);
+    expect(quality.sources).toEqual(sources);
+    expect(quality.resolution).toBe(resolution);
+  });
+}
+
 // Release names are untrusted input, a long name must not hang the German heuristics
 it('parses long repeated German names quickly', () => {
   const title = `Movie.2020.${'German.'.repeat(1426)}BluRay.`;

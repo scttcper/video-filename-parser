@@ -89,6 +89,11 @@ const germanBlurayExp = /blu-?ray/;
 const uncommonXvidExp = /x-?vid|divx/i;
 // `HD TV` without the HDTV token is HD, like upstream's other source fallback
 const hdtvTokenExp = /\bhdtv\b/;
+// Video CD formats only exist in SD, SVCD at 480 lines and VCD below that
+const svcdExp = /\bsvcd\b/;
+const vcdExp = /\bvcd\b/;
+// XvidHD is upstream's 720p xvid, everything else xvid or divx is an SD encode
+const xvidHdExp = /xvid-?hd/;
 
 export enum QualityModifier {
   REMUX = 'REMUX',
@@ -382,7 +387,23 @@ function getDefaultResolution(context: QualityContext): Resolution | undefined {
     return extensionQuality.resolution;
   }
 
-  return getParsedSources(context).includes(Source.DVD) ? Resolution.R480P : undefined;
+  const sources = getParsedSources(context);
+  // Radarr's DVDSCR quality is 480p too
+  if (sources.includes(Source.DVD) || sources.includes(Source.SCREENER)) {
+    return Resolution.R480P;
+  }
+
+  if (svcdExp.test(context.normalizedTitle)) {
+    return Resolution.R480P;
+  }
+
+  if (vcdExp.test(context.normalizedTitle)) {
+    return Resolution.R360P;
+  }
+
+  return context.codec === VideoCodec.XVID && !xvidHdExp.test(context.normalizedTitle)
+    ? Resolution.R480P
+    : undefined;
 }
 
 function getDefaultSources(context: QualityContext): Source[] {

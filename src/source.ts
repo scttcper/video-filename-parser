@@ -68,7 +68,11 @@ const sourceGroupPatterns: SourceGroupPattern[] = [
   { group: 'cam', regex: /\b(CAMRIP|(?:NEW)?CAM|HD-?CAM(?:Rip)?|HQCAM)\b/i },
   { group: 'workprint', regex: /\b(WORKPRINT|WP)\b/i },
   { group: 'pdtv', regex: /\b(PDTV)\b/i },
-  { group: 'sdtv', regex: /\b(SDTV|SD[-_. ]TV)\b/i },
+  // Older scene SD TV captures: satellite, DVB, digital TV, VHS and SD HDTV rips
+  {
+    group: 'sdtv',
+    regex: /\b(SDTV|SD[-_. ]TV|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|DSRip|VHSRip|HDTVRip)\b/i,
+  },
   { group: 'tvrip', regex: /\b(TVRip)\b/i },
 ];
 
