@@ -134,9 +134,18 @@ export const seasonPatterns: SeasonPattern[] = [
     'multi-episode-repeated',
     /^(?<title>[^\r\n]+?)(?:[-_\W](?<![()[!]))+S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:[ex]|[-_. ]e){1,2}(?<episode>\d{1,3}(?!\d+))(?:(?:[ex]|[-_. ]e){1,2}\d{1,3}(?!\d+))*(?:(?:[-_\W](?<![()[!]))+S?(?<season1>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[ex]|[-_. ]e){1,2}(?<episode1>\d{1,3}(?!\d+)))+)+/i,
   ),
+  // An E or X between season and episode: anything not followed by another episode number is the
+  // episode title (Big.Love.1x07.Eviction, Stargate_Atlantis_4x16_Trio). A number further on
+  // after separators is still left to the multi episode and anime patterns (Title_10x14_-_214).
   seasonEpisode(
     'single-episode-with-title',
-    /^(?<title>[^\r\n]+?)(?:(?:[-_\W](?<![()[!]))+S?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:[ex]|\W[ex]|_){1,2}(?<episode>(?!265|264)\d{2,3}(?!\d+|(?:[ex]|\W[ex]|_|-){1,2})))/i,
+    /^(?<title>[^\r\n]+?)(?:(?:[-_\W](?<![()[!]))+S?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?!_{1,2}\d)(?:[ex]|\W[ex]|_){1,2}(?<episode>(?!265|264)\d{2,3}(?!\d+|(?:[ex]|\W[ex]|_|-){1,3}\d)))/i,
+  ),
+  // Only underscores between season and episode, like Sonarr this is strict about what follows so
+  // dates and numbers in titles stay out (Show_2019_10_23_Guest, Turning_Point_9_11_and_the_War)
+  seasonEpisode(
+    'single-episode-underscore-with-title',
+    /^(?<title>[^\r\n]+?)(?:(?:[-_\W](?<![()[!]))+S?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))_{1,2}(?<episode>(?!265|264)\d{2,3}(?!\d+|(?:[ex]|\W[ex]|_|-){1,2})))/i,
   ),
   absoluteEpisode(
     'anime-title-season-episode-plus-absolute-subgroup',
