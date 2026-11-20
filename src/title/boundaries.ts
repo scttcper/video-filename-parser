@@ -21,12 +21,14 @@ const titleBoundaryParsers: TitleBoundaryParser[] = [
 const sceneReleaseTagExp =
   /[-_. ](?:MULTi|MULTI|DUAL|HDR|HDR10|HDR10Plus|DV|HLG|COMPLETE|PROPER|REPACK|iNTERNAL|INTERNAL|DiRFiX|DIRFIX|NFOFiX|NFOFIX|SUBBED|ANiME|ANIME|D\d{2,3})(?=[-_. ]|$)/;
 // The tags below need a dot, underscore or space before them. Joined by a hyphen they are part of
-// the name (Boys.Dont.Cry-WS-DVDRiP-SPHiSO) and the group parser needs them.
+// the name (Boys.Dont.Cry-WS-DVDRiP-SPHiSO) and the group parser needs them. No DL, it would split
+// a dotted WEB.DL and leave WEB in the title.
 const releaseTagExp =
-  /[._ ](?:DUBBED|WS|FS|LIMITED|UNCUT|UNRATED|STV|DL|LD|XXX|DOC|DOCU|DOKU|READNFO|[A-Za-z]{2,7}SUB(?:S|BED)?)(?=[-_. ]|$)/;
-// Sources aren't title words, so any case. Gota.Kanal.3.Bakom.Kulisserna.SWEDiSH.PDTV.XViD
+  /[._ ](?:DUBBED|WS|FS|LIMITED|UNCUT|UNRATED|STV|LD|XXX|DOC|DOCU|DOKU|READNFO|[A-Za-z]{2,7}SUB(?:S|BED)?)(?=[-_. ]|$)/;
+// Sources aren't title words, so any case. Gota.Kanal.3.Bakom.Kulisserna.SWEDiSH.PDTV.XViD. A
+// dotted DVD.SCREENER is one tag, so DVD doesn't stay in the title.
 const sourceTagExp =
-  /[._ ](?:PDTV|SDTV|HDTVRip|DSR|DSRip|TVRip|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|VHSRip|DVDRip|DVDR|DVD[59]|DVDSCR|SCREENER|SVCD|VCD|BDRip|BRRip|HDRip)(?=[-_. ]|$)/i;
+  /[._ ](?:PDTV|SDTV|HDTVRip|DSR|DSRip|TVRip|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|VHSRip|DVDRip|DVDR|DVD[59]|DVDSCR|(?:DVD[._ ]?)?SCREENER|SVCD|VCD|BDRip|BRRip|HDRip)(?=[-_. ]|$)/i;
 // Short source tags that are also words (My.Pal.Joey, a web cam), only upper case
 const upperCaseSourceTagExp = /[._ ](?:PAL|NTSC|SECAM|TS|TC|CAM|R5)(?=[-_. ]|$)/;
 

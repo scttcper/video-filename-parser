@@ -128,6 +128,9 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
   ],
   // Words that look like tags stay in the title
   ['My.Pal.Joey.DVDRip.XviD-GRP', { title: 'My Pal Joey', year: null }],
+  ['Movie.Title.WEB.DL.x264-GRP', { title: 'Movie Title', year: null }],
+  ['Garden.State.DVD.Screener.DVDR-BooZerS', { title: 'Garden State', year: null }],
+  ['Movie Title WEB DL 1080p H 264-GRP', { title: 'Movie Title', year: null }],
   [
     'Hot.Doc.Het.Vrouwelijk.Orgasme.DUTCH.WS.PDTV.XviD-MiSTAKE',
     { title: 'Hot Doc Het Vrouwelijk Orgasme', year: null },
