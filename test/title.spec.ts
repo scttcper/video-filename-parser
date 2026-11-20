@@ -108,6 +108,40 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
   ],
   ['The.Italian.Job.1080p.BluRay.x264-GRP', { title: 'The Italian Job', year: null }],
   ['Get.Him.To.The.Greek.1080p.BluRay.x264-GRP', { title: 'Get Him To The Greek', year: null }],
+  // Source and release tags end a yearless title, and a language tag right before them comes off
+  [
+    'Gota.Kanal.3.Bakom.Kulisserna.SWEDiSH.PDTV.XViD-PRiNCE',
+    { title: 'Gota Kanal 3 Bakom Kulisserna', year: null },
+  ],
+  ['The.Negotiator.HUN.DVDRip.XviD-HXT', { title: 'The Negotiator', year: null }],
+  ['The.Negotiator.HUN.ENG.DVDRip.XviD-HXT', { title: 'The Negotiator', year: null }],
+  ['VJ.Special.070119.KOR.SD.TV.XViD-YYK', { title: 'VJ Special 070119', year: null }],
+  ['The.Card.Counter.WEB.SCREENER.XviD-EVO', { title: 'The Card Counter', year: null }],
+  [
+    'Le.Vrai.Pouvoir.Du.Vatican.E2.FiNAL.DOC.FRENCH.720p.HDTV.x264-GRP',
+    { title: 'Le Vrai Pouvoir Du Vatican E2 FiNAL', year: null },
+  ],
+  [
+    'Wedding.Peach.21-22.SVCD.DVDRiP.R1.Subbed-ANiMOTiON',
+    { title: 'Wedding Peach 21-22', year: null },
+  ],
+  [
+    'Myths.Of.Mankind.E04.SWESUB.PDTV.XViD-MiCROCLOWNS',
+    { title: 'Myths Of Mankind E04', year: null },
+  ],
+  // Words that look like tags stay in the title
+  ['My.Pal.Joey.DVDRip.XviD-GRP', { title: 'My Pal Joey', year: null }],
+  ['Movie.Title.WEB.DL.x264-GRP', { title: 'Movie Title', year: null }],
+  ['Garden.State.DVD.Screener.DVDR-BooZerS', { title: 'Garden State', year: null }],
+  ['Movie Title WEB DL 1080p H 264-GRP', { title: 'Movie Title', year: null }],
+  [
+    'Hot.Doc.Het.Vrouwelijk.Orgasme.DUTCH.WS.PDTV.XviD-MiSTAKE',
+    { title: 'Hot Doc Het Vrouwelijk Orgasme', year: null },
+  ],
+  ['The.Ice.Storm.DVDRip.XviD-GRP', { title: 'The Ice Storm', year: null }],
+  // An upper case name can't tell a code or LIMITED from a title word
+  ['FIRE.AND.ICE.1080p.BluRay.x264-GRP', { title: 'FIRE AND ICE', year: null }],
+  ['THE.DARJEELING.LIMITED.1080p.BluRay.x264-GRP', { title: 'THE DARJEELING LIMITED', year: null }],
   ['Some.Movie.TRUE.FRENCH.1080p.WEB.H264-GRP', { title: 'Some Movie', year: null }],
   ['Inglorious.Basterds.CAM.XviD-CAMELOT', { title: 'Inglorious Basterds', year: null }],
   ['Inglourious.Basterds.SCR.XViD-xSCR', { title: 'Inglourious Basterds', year: null }],
