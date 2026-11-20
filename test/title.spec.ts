@@ -157,6 +157,13 @@ const radarrCases: Array<[string, { title: string; year: string | null }]> = [
   ['Cars.2.German.DL.720p.BluRay.x264-EmpireHD', { title: 'Cars 2', year: null }],
   // German inside the title, not a language tag
   ['A.German.Life.2016.mkv', { title: 'A German Life', year: '2016' }],
+  ['Wolfgirl.German.2001.DVDRiP.XviD-MFTW', { title: 'Wolfgirl', year: '2001' }],
+  [
+    'Taken.Away.Eisiges.Gefaengnis.German.1996.DVDRiP.XViD-DOLLHEAD',
+    { title: 'Taken Away Eisiges Gefaengnis', year: '1996' },
+  ],
+  ['Le.Film.TRUEFRENCH.2019.1080p.BluRay.x264-GRP', { title: 'Le Film', year: '2019' }],
+  ['A.German.Life.2016.1080p.BluRay.x264-GRP', { title: 'A German Life', year: '2016' }],
   [
     'Der.Film.deines.Lebens.German.2011.PAL.DVDR-ETM',
     { title: 'Der Film deines Lebens', year: '2011' },

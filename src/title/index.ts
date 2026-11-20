@@ -9,6 +9,10 @@ import type { TitleAndYear, TitleYearPattern } from './types.js';
 const commonReleaseTitleYearExp =
   /^(?<title>(?![([])[^\r\n]+?)[-_. ](?<year>(?:1[89]|20)\d{2})(?=[-_. ](?:2160p|1080p|720p|576p|540p|480p|UHD|Blu-?Ray|Bluray|WEB[-_. ]?DL|WEBRip|HDRip|HDTV|DVDRip|BDRip|BRRip)\b)/i;
 
+// German and TrueFrench tracker names put the language before the year
+// (Wolfgirl.German.2001.DVDRiP), the German/TrueFrench title pattern decides those
+const languageBeforeYearExp = /(?:^|[-_. ])(?:german|truefrench)(?:$|[-_. ])/i;
+
 // Leading [REQ], [Group] or tracker tags, from Radarr's RequestInfoRegex
 const requestInfoPrefixExp = /^(?:\[[^\]\r\n]+\][-_. ]*)+/;
 const akaExp = / +A\.K\.A\. +/gi;
@@ -82,7 +86,7 @@ function parseCommonReleaseTitleYear(title: string): TitleAndYear | null {
   }
 
   const match = commonReleaseTitleYearExp.exec(title);
-  if (!match?.groups) {
+  if (!match?.groups || languageBeforeYearExp.test(match.groups.title ?? '')) {
     return null;
   }
 
