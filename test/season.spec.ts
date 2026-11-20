@@ -122,6 +122,10 @@ const singleEpisodeCases: Array<[string, string, number, number]> = [
   ['The_Series_US_s06e19_04.28.2014_hdtv.x264.Poke.mp4', 'The Series US', 6, 19],
   ['Series Title - S02E01 1920x910', 'Series Title', 2, 1],
   ['Series-S03E14-720p-HDTV-X264-DIMENSION', 'Series', 3, 14],
+  ['Big.Love.1x07.Eviction.DVDRip.XviD-FoV', 'Big Love', 1, 7],
+  ['Klassen.S07E370.Et.Vildt.Venskab.DANISH.720p.WEB.h264-LSDK', 'Klassen', 7, 370],
+  ['Stargate_Atlantis_4x16_Trio_DVDRip_Dual_XviD-CLT', 'Stargate Atlantis', 4, 16],
+  ['Samurai.Jack.1x16.XVI.Jack.and.the.Smackback.SVCD.SD-6', 'Samurai Jack', 1, 16],
 ];
 for (const [postTitle, title, season, episode] of singleEpisodeCases) {
   it(`parse single episode release "${postTitle}"`, () => {
