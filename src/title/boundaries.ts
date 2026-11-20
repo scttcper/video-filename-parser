@@ -24,25 +24,39 @@ const sceneReleaseTagExp =
 // the name (Boys.Dont.Cry-WS-DVDRiP-SPHiSO) and the group parser needs them. No DL, it would split
 // a dotted WEB.DL and leave WEB in the title.
 const releaseTagExp =
-  /[._ ](?:DUBBED|WS|FS|LIMITED|UNCUT|UNRATED|STV|LD|XXX|DOC|DOCU|DOKU|READNFO|[A-Za-z]{2,7}SUB(?:S|BED)?)(?=[-_. ]|$)/;
+  /[._ ](?:DUBBED|WS|FS|UNCUT|UNRATED|STV|LD|XXX|DOC|DOCU|DOKU|READNFO|[A-Za-z]{2,7}SUB(?:S|BED)?)(?=[-_. ]|$)/;
+// Also a title word, only a tag once the name has lower case: THE.DARJEELING.LIMITED.1080p
+const limitedTagExp = /[._ ]LIMITED(?=[-_. ]|$)/g;
 // Sources aren't title words, so any case. Gota.Kanal.3.Bakom.Kulisserna.SWEDiSH.PDTV.XViD. A
-// dotted DVD.SCREENER is one tag, so DVD doesn't stay in the title.
+// dotted DVD.SCREENER or WEB.SCREENER is one tag, so DVD or WEB doesn't stay in the title.
 const sourceTagExp =
-  /[._ ](?:PDTV|SDTV|HDTVRip|DSR|DSRip|TVRip|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|VHSRip|DVDRip|DVDR|DVD[59]|DVDSCR|(?:DVD[._ ]?)?SCREENER|SVCD|VCD|BDRip|BRRip|HDRip)(?=[-_. ]|$)/i;
+  /[._ ](?:PDTV|[SH]D[._ ]?TV|HDTVRip|DSR|DSRip|TVRip|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|VHSRip|DVDRip|DVDR|DVD[59]|DVDSCR|(?:(?:DVD|WEB)[._ ]?)?SCREENER|SVCD|VCD|BDRip|BRRip|HDRip)(?=[-_. ]|$)/i;
 // Short source tags that are also words (My.Pal.Joey, a web cam), only upper case
 const upperCaseSourceTagExp = /[._ ](?:PAL|NTSC|SECAM|TS|TC|CAM|R5)(?=[-_. ]|$)/;
+const lowerCaseLetterExp = /\p{Ll}/u;
+
+// The first match with a lower case letter somewhere before it
+function searchAfterLowerCase(title: string, exp: RegExp): number {
+  for (const match of title.matchAll(exp)) {
+    if (lowerCaseLetterExp.test(title.slice(0, match.index))) {
+      return match.index;
+    }
+  }
+  return -1;
+}
 
 // Built on first use, language.ts imports the title parser so Language isn't set at load time
 let trailingLanguageExp: RegExp | undefined;
 const capitalizedWordExp = /^\p{Lu}\p{Ll}+$/u;
 let languageNames: ReadonlySet<string> | undefined;
 
-function isReleaseLanguageSpelling(word: string): boolean {
+function isReleaseLanguageSpelling(word: string, titleBefore: string): boolean {
   languageNames ??= new Set(Object.values(Language).map(name => name.toLowerCase()));
   if (languageNames.has(word.toLowerCase())) {
     return !capitalizedWordExp.test(word);
   }
-  return word === word.toUpperCase();
+  // Upper case codes are words in an upper case name too, FIRE.AND.ICE.1080p
+  return word === word.toUpperCase() && lowerCaseLetterExp.test(titleBefore);
 }
 
 export function getFirstTitleBoundaryPosition(title: string): number | null {
@@ -54,6 +68,7 @@ export function getFirstTitleBoundaryPosition(title: string): number | null {
     title.search(releaseTagExp),
     title.search(sourceTagExp),
     title.search(upperCaseSourceTagExp),
+    searchAfterLowerCase(title, limitedTagExp),
   );
   const validPositions = positions.filter(position => position > 0);
   if (validPositions.length === 0) {
@@ -63,8 +78,8 @@ export function getFirstTitleBoundaryPosition(title: string): number | null {
   // A language word right before the first release tag is the release language, not the title:
   // Snoopy.Presenta.Natale.Con.Snoopy.iTALiAN.MULTi.2160p. Only scene spellings (FRENCH, iTALiAN)
   // count, a capitalized word is the title: Get.Him.To.The.Greek.1080p. Language codes count when
-  // upper case, The.Negotiator.HUN.DVDRip, since lower case ones are words (dan, ice, lat).
-  const position = Math.min(...validPositions);
+  // upper case, The.Negotiator.HUN.ENG.DVDRip, since lower case ones are words (dan, ice, lat).
+  let position = Math.min(...validPositions);
   trailingLanguageExp ??= new RegExp(
     String.raw`[-_. ](?<marker>(?:TRUE[-_. ]?)?(?<language>${[
       ...Object.values(Language),
@@ -72,10 +87,19 @@ export function getFirstTitleBoundaryPosition(title: string): number | null {
     ].join('|')}))[-_. ]*$`,
     'i',
   );
-  const languageMatch = trailingLanguageExp.exec(title.slice(0, position));
-  const language = languageMatch?.groups?.language;
-  if (languageMatch && language && isReleaseLanguageSpelling(language)) {
-    return languageMatch.index > 0 ? languageMatch.index : position;
+  // Stacked tags like HUN.ENG come off one at a time, a few at most so long names stay fast
+  for (let stripped = 0; stripped < 4; stripped++) {
+    const languageMatch = trailingLanguageExp.exec(title.slice(0, position));
+    const language = languageMatch?.groups?.language;
+    if (
+      !languageMatch ||
+      !language ||
+      languageMatch.index === 0 ||
+      !isReleaseLanguageSpelling(language, title.slice(0, languageMatch.index))
+    ) {
+      break;
+    }
+    position = languageMatch.index;
   }
 
   return position;
