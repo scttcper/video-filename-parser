@@ -17,6 +17,8 @@ const languageCases: Array<[string, Language[]]> = [
   ['The.Polar.Express.2004.MULTI.VF2.1080p.BluRay.x264-PopHD', [Language.French, Language.English]],
   ['Castle.2009.S01E14.Spanish.HDTV.XviD-LOL', [Language.Spanish]],
   ['Castle.2009.S01E14.German.HDTV.XviD-LOL', [Language.German]],
+  ['Wolfgirl.German.2001.DVDRiP.XviD-MFTW', [Language.German]],
+  ['A.German.Life.Extended.Cut.2016.1080p.BluRay.x264-GRP', [Language.English]],
   ['Castle.2009.S01E14.Italian.HDTV.XviD-LOL', [Language.Italian]],
   ['Castle.2009.S01E14.Danish.HDTV.XviD-LOL', [Language.Danish]],
   ['Castle.2009.S01E14.Dutch.HDTV.XviD-LOL', [Language.Dutch]],
