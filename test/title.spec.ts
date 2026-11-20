@@ -165,6 +165,18 @@ const radarrCases: Array<[string, { title: string; year: string | null }]> = [
   ['Le.Film.TRUEFRENCH.2019.1080p.BluRay.x264-GRP', { title: 'Le Film', year: '2019' }],
   ['A.German.Life.2016.1080p.BluRay.x264-GRP', { title: 'A German Life', year: '2016' }],
   [
+    'A.German.Life.Extended.Cut.2016.1080p.BluRay.x264-GRP',
+    { title: 'A German Life', year: '2016' },
+  ],
+  ['The.Good.German.2006.1080p.BluRay.x264-GRP', { title: 'The Good German', year: '2006' }],
+  ['Wolfgirl.German.DL.2001.540p.WEBRip.x264-GRP', { title: 'Wolfgirl', year: '2001' }],
+  ['Wolfgirl_German_2001_DVDRiP.XviD-MFTW', { title: 'Wolfgirl', year: '2001' }],
+  ['Neun.Monate.German.REMASTERED.1995.BDRiP.x264-GRP', { title: 'Neun Monate', year: '1995' }],
+  [
+    'Blade.Runner.2049.TRUEFRENCH.2017.1080p.BluRay.x264-GRP',
+    { title: 'Blade Runner 2049', year: '2017' },
+  ],
+  [
     'Der.Film.deines.Lebens.German.2011.PAL.DVDR-ETM',
     { title: 'Der Film deines Lebens', year: '2011' },
   ],
