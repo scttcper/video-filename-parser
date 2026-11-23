@@ -3,6 +3,8 @@ import { webdlExp } from '../source.js';
 import { codecExp } from '../videoCodec.js';
 import { cleanTorrentSuffixExp, websitePostfixExp, websitePrefixExp } from '../website.js';
 
+import { sceneReleaseTagExp } from './boundaries.js';
+
 const resolutionOrCodecDetailsExp =
   /\s*(?:480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|HVEC|[xh][\W_]?26[45]|DD\W?5\W1|[<>?*:|]|848x480|1280x720|1920x1080)((8|10)b(it))?/i;
 const cleanTorrentPrefixRegex = /^\[(?:REQ)\]/i;
@@ -85,7 +87,9 @@ export function simplifyTitle(title: string): string {
   return applyCleanupPasses(title, simplifyTitleCleanupPasses).trim();
 }
 
-const editionMarkerPattern = String.raw`(?:(?:(?:Recut|Extended|Ultimate)[-_. ']*)?(?:(?:Director|Collector)[-_. ']*s?[-_. ']*(?:Cut|Edition|Version)|Theatrical|Anniversary|The[-_. ']*Uncut|DC|Ultimate|(?:Final|Rouge|Assembly|Imperial|Diamond|Signature|Hunter|Rekall)(?=[-_. ']*(?:Cut|Edition|Version))|Extended|Special|Despecialized|unrated|\d{2,3}(?:th)?[-_. ']*Anniversary)(?:[-_. ']*(?:Cut|Edition|Version))?(?:[-_. ']*(?:Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']*Edit))?|(?:Uncensored|Remastered|Unrated|Uncut|Open[-_. ']?Matte|IMAX|Fan[-_. ']*Edit|Edition|Restored|[234]in1)){1,3}`;
+// Special and Anniversary are only an edition in front of Cut, Edition or Version, on their own
+// they are title words: The.Special, Happy.Anniversary
+const editionMarkerPattern = String.raw`(?:(?:(?:Recut|Extended|Ultimate)[-_. ']*)?(?:(?:Director|Collector)[-_. ']*s?[-_. ']*(?:Cut|Edition|Version)|Theatrical|The[-_. ']*Uncut|DC|Ultimate|(?:Final|Rouge|Assembly|Imperial|Diamond|Signature|Hunter|Rekall|Special|Anniversary)(?=[-_. ']*(?:Cut|Edition|Version))|Extended|Despecialized|unrated|\d{2,3}(?:th)?[-_. ']*Anniversary)(?:[-_. ']*(?:Cut|Edition|Version))?(?:[-_. ']*(?:Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']*Edit))?|(?:Uncensored|Remastered|Unrated|Uncut|Open[-_. ']?Matte|IMAX|Fan[-_. ']*Edit|Edition|Restored|[234]in1)){1,3}`;
 const trailingLanguageMarkerPattern = String.raw`(?:${Object.values(Language).join('|')}|TRUE.?FRENCH|videomann|SUBFRENCH|PLDUB|MULTI)`;
 // Each suffix separator run must start where the run starts (lookbehind), otherwise a long run of
 // separators or brackets is retried from every position inside it
@@ -105,22 +109,24 @@ const languageNameSuffixExp = new RegExp(
     .map(l => l.toUpperCase())
     .join('|')})[-_. ']*$`,
 );
-const sceneGarbageSuffixExp =
-  /(?:^|(?<![-_. '])[-_. ']+)(?:PROPER|REAL|READ.NFO)(?:[-_. ']+(?:PROPER|REAL|READ.NFO))*[-_. ']*$/i;
 const titleContentExp = /[a-z0-9]/i;
+export const articleOnlyExp: RegExp = /^[-_. ']*(?:the|an?)[-_. ']*$/i;
+const lowerCaseLetterExp = /\p{Ll}/u;
 
 const trailingMetadataSuffixExps = [
   requestInfoSuffixExp,
   languageMarkerSuffixExp,
   languageNameSuffixExp,
-  sceneGarbageSuffixExp,
   editionSuffixExp,
 ];
 
 function removeTitleSuffix(title: string, suffixExp: RegExp): string {
   suffixExp.lastIndex = 0;
   const cleanedTitle = title.replace(suffixExp, '');
-  return titleContentExp.test(cleanedTitle) ? cleanedTitle : title;
+  // Metadata never leaves a title empty or as a lone article: The.Final.Cut is not "The"
+  return titleContentExp.test(cleanedTitle) && !articleOnlyExp.test(cleanedTitle)
+    ? cleanedTitle
+    : title;
 }
 
 // Release metadata should only trim the right edge. Title words that look like
@@ -148,10 +154,15 @@ function trimTrailingReleaseMetadata(title: string): string {
 // Handles full release strings passed directly into the title cleaner. This is
 // intentionally separator-based so bare title substrings do not become cut points.
 function truncateAtReleaseMetadataBoundary(title: string): string {
-  releaseBoundaryExp.lastIndex = 0;
-  const match = releaseBoundaryExp.exec(title);
+  // Scene flags come after the year or the episode title, never inside a title: Get.Real.1998 is
+  // a title, Episode.Title.REAL.PROPER is not. An upper case name can't tell (GET.REAL).
+  const sceneTag = title.search(sceneReleaseTagExp);
+  const positions = [
+    title.search(releaseBoundaryExp),
+    lowerCaseLetterExp.test(title.slice(0, Math.max(sceneTag, 0))) ? sceneTag : -1,
+  ].filter(position => position > 0);
 
-  return match && match.index > 0 ? title.slice(0, match.index) : title;
+  return positions.length > 0 ? title.slice(0, Math.min(...positions)) : title;
 }
 
 const releaseTitleCleanupPasses: readonly CleanupPass[] = [
@@ -164,11 +175,7 @@ const releaseTitleCleanupPasses: readonly CleanupPass[] = [
     clean: truncateAtReleaseMetadataBoundary,
     trimAfter: true,
   },
-  {
-    name: 'trim trailing release metadata',
-    clean: trimTrailingReleaseMetadata,
-    trimAfter: true,
-  },
+  // Gaps are left by a removed resolution or codec, the trailing tags sit in front of them
   {
     name: 'truncate at double space gap',
     clean: title => title.split('  ')[0]!,
@@ -176,6 +183,11 @@ const releaseTitleCleanupPasses: readonly CleanupPass[] = [
   {
     name: 'truncate at double dot gap',
     clean: title => title.split('..')[0]!,
+  },
+  {
+    name: 'trim trailing release metadata',
+    clean: trimTrailingReleaseMetadata,
+    trimAfter: true,
   },
 ];
 
@@ -190,7 +202,8 @@ function isDigit(character: string): boolean {
 const repeatedSpaceExp = / {2,}/g;
 
 // Radarr's ParseMovieMatchCollection: single letters keep their dot (S.H.I.E.L.D.), except a
-// trailing letter after a word (World War Z.), a lone "a" unless part of an acronym, and numbers
+// trailing letter after a word (World War Z.), a lone "a" unless part of an acronym, and numbers.
+// Unlike Radarr a lone "I" or lower case letter is a word, not an initial: I.Robot, Bob.s.Burgers
 function formatDottedTitleSegments(title: string): string {
   const segments = title.split('.');
   let formattedTitle = '';
@@ -200,10 +213,13 @@ function formatDottedTitleSegments(title: string): string {
     const nextSegment = segments[segmentIndex + 1] ?? '';
     const isLetter = segment.length === 1 && !isDigit(segment);
     const isArticle = segment.toLowerCase() === 'a';
+    const isWord = segment === 'I' || segment !== segment.toUpperCase();
+    const nextIsLetter = nextSegment.length === 1 && !isDigit(nextSegment);
 
     if (
       isLetter &&
       !isArticle &&
+      (!isWord || previousSegmentWasAcronym || nextIsLetter) &&
       (previousSegmentWasAcronym || segmentIndex < segments.length - 1) &&
       (previousSegmentWasAcronym || nextSegment.length !== 1 || !isDigit(nextSegment))
     ) {

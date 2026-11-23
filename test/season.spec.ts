@@ -400,6 +400,9 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
     'The Big Empty',
   ],
   ['Show.S02E02.Episode.Title.1080p.WEB.H264-GROUP', 'Show', [2], [2], 'Episode Title'],
+  ['Show.S01E05.Keeping.It.Real.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Keeping It Real'],
+  ['Show.S01E05.Episode.Title.REAL.PROPER.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.Episode.Title.REPACK.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['Series Title [S01E05] Episode Title', 'Series Title', [1], [5], 'Episode Title'],
   ['Series Title - [02x01-02] - Episode 1', 'Series Title', [2], [1, 2], 'Episode 1'],
 ];
@@ -421,6 +424,9 @@ const noRemainderCases: Array<[string]> = [
   ['The.Series.S02E15'],
   ['The Series Title! - S01E01-02-03'],
   ['[Judas] Series Title (2024) - S01E14'],
+  // Scene flags right after the episode aren't an episode title
+  ['Covert.Affairs.S05E09.REAL.PROPER.HDTV.x264-KILLERS'],
+  ['Show.S01E05.REPACK.1080p.WEB.H264-GRP'],
 ];
 for (const [postTitle] of noRemainderCases) {
   it(`does not expose junk remainder for "${postTitle}"`, () => {

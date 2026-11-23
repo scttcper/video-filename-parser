@@ -16,10 +16,11 @@ const titleBoundaryParsers: TitleBoundaryParser[] = [
   { name: 'video-codec', parse: title => parseVideoCodec(title).source },
 ];
 
-// Scene tags that end a title with no year. Case-sensitive so title words like "The Complete
-// Guide" don't end the title, scene names spell these upper case or iNTERNAL style.
-const sceneReleaseTagExp =
-  /[-_. ](?:MULTi|MULTI|DUAL|HDR|HDR10|HDR10Plus|DV|HLG|COMPLETE|PROPER|REPACK|iNTERNAL|INTERNAL|DiRFiX|DIRFIX|NFOFiX|NFOFIX|SUBBED|ANiME|ANIME|D\d{2,3})(?=[-_. ]|$)/;
+// Scene tags that end a title with no year, or an episode title. Case-sensitive so title words
+// like "The Complete Guide" or "Get Real" don't end the title, scene names spell these upper case
+// or iNTERNAL style.
+export const sceneReleaseTagExp: RegExp =
+  /[-_. ](?:MULTi|MULTI|DUAL|HDR|HDR10|HDR10Plus|DV|HLG|COMPLETE|PROPER|REAL|REPACK|RERIP|READ[-_. ]NFO|iNTERNAL|INTERNAL|DiRFiX|DIRFIX|NFOFiX|NFOFIX|SUBBED|ANiME|ANIME|D\d{2,3})(?=[-_. ]|$)/;
 // The tags below need a dot, underscore or space before them. Joined by a hyphen they are part of
 // the name (Boys.Dont.Cry-WS-DVDRiP-SPHiSO) and the group parser needs them. No DL, it would split
 // a dotted WEB.DL and leave WEB in the title.
