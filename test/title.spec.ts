@@ -167,6 +167,9 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
   ],
   ['Der.Film.German.EAC3.DL.1080p.WEB.H264-GRP', { title: 'Der Film', year: null }],
   ['Der.Film.German.DOKU.720p.HDTV.x264-GRP', { title: 'Der Film', year: null }],
+  ['der.film.german.dl.1080p.bluray.x264-grp', { title: 'der film', year: null }],
+  ['A.German.Road.Trip.1080p.BluRay.x264-GRP', { title: 'A German Road Trip', year: null }],
+  ['Movie.Title.Proper.1080p.BluRay.x264-GRP', { title: 'Movie Title', year: null }],
   // An upper case name can't tell a code or LIMITED from a title word
   ['FIRE.AND.ICE.1080p.BluRay.x264-GRP', { title: 'FIRE AND ICE', year: null }],
   ['GET.REAL.1998.1080P.BLURAY.X264-GRP', { title: 'GET REAL', year: '1998' }],

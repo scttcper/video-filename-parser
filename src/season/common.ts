@@ -1,6 +1,6 @@
 import { removeFileExtension } from '../extensions.js';
 import { sceneReleaseTagExp } from '../title/boundaries.js';
-import { releaseTitleCleaner } from '../title/cleanup.js';
+import { releaseTitleCleaner, sceneFlagSuffixExp } from '../title/cleanup.js';
 import { releaseGroupSuffixExp } from '../title/patterns.js';
 
 const requestInfoExp = /^(?:\[[^\]\r\n]+\])+/;
@@ -444,9 +444,9 @@ function parseRemainder(releaseTokens: string): string | undefined {
     return undefined;
   }
 
-  const remainder = releaseTitleCleaner(rawRemainder);
+  const remainder = releaseTitleCleaner(rawRemainder)?.replace(sceneFlagSuffixExp, '');
 
-  return remainder !== null && remainderContentExp.test(remainder) ? remainder : undefined;
+  return remainder && remainderContentExp.test(remainder) ? remainder : undefined;
 }
 
 function groupValue(groups: MatchGroups, name: string): string | undefined {

@@ -109,6 +109,10 @@ const languageNameSuffixExp = new RegExp(
     .map(l => l.toUpperCase())
     .join('|')})[-_. ']*$`,
 );
+// Flags that are never the last word of a title, so any case counts: release names often get the
+// case wrong. Words that are both (Real, Complete, Dual) stay case-sensitive in sceneReleaseTagExp.
+export const sceneFlagSuffixExp: RegExp =
+  /(?:^|(?<![-_. '])[-_. ']+)(?:PROPER|REPACK|RERIP|READ.NFO|INTERNAL|DIRFIX|NFOFIX|SUBBED)(?:[-_. ']+(?:PROPER|REPACK|RERIP|READ.NFO|INTERNAL|DIRFIX|NFOFIX|SUBBED))*[-_. ']*$/i;
 const titleContentExp = /[a-z0-9]/i;
 export const articleOnlyExp: RegExp = /^[-_. ']*(?:the|an?)[-_. ']*$/i;
 const lowerCaseLetterExp = /\p{Ll}/u;
@@ -117,6 +121,7 @@ const trailingMetadataSuffixExps = [
   requestInfoSuffixExp,
   languageMarkerSuffixExp,
   languageNameSuffixExp,
+  sceneFlagSuffixExp,
   editionSuffixExp,
 ];
 
