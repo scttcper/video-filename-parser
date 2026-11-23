@@ -108,6 +108,14 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
   ],
   ['The.Italian.Job.1080p.BluRay.x264-GRP', { title: 'The Italian Job', year: null }],
   ['Get.Him.To.The.Greek.1080p.BluRay.x264-GRP', { title: 'Get Him To The Greek', year: null }],
+  // A yearless title ends at the first resolution token, not the one the resolution is read from
+  ['Movie Name 4K 2160p BluRay', { title: 'Movie Name', year: null }],
+  ['Movie Name FHD 1080p WEB-DL', { title: 'Movie Name', year: null }],
+  ['Movie Name 720p 4K', { title: 'Movie Name', year: null }],
+  [
+    'Series.Title.S04E11.Teddys.Choice.FHD.1080p.Web-DL',
+    { title: 'Series Title S04E11 Teddys Choice', year: null },
+  ],
   // Source and release tags end a yearless title, and a language tag right before them comes off
   [
     'Gota.Kanal.3.Bakom.Kulisserna.SWEDiSH.PDTV.XViD-PRiNCE',
@@ -139,8 +147,42 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
     { title: 'Hot Doc Het Vrouwelijk Orgasme', year: null },
   ],
   ['The.Ice.Storm.DVDRip.XviD-GRP', { title: 'The Ice Storm', year: null }],
+  ['Get.Real.1998.1080p.BluRay.x264-GRP', { title: 'Get Real', year: '1998' }],
+  ['Keeping.It.Real.2001.1080p.WEB.x264-GRP', { title: 'Keeping It Real', year: '2001' }],
+  ['Real.Genius.1985.1080p.BluRay.x264-GRP', { title: 'Real Genius', year: '1985' }],
+  ['The.Special.2006.720p.WEB.x264-GRP', { title: 'The Special', year: '2006' }],
+  [
+    'Happy.Anniversary.2018.1080p.NF.WEB-DL.DDP5.1.x264-NTG',
+    { title: 'Happy Anniversary', year: '2018' },
+  ],
+  ['The.Final.Cut.2004.1080p.BluRay.x264-GRP', { title: 'The Final Cut', year: '2004' }],
+  ['Going.Rogue.2011', { title: 'Going Rogue', year: '2011' }],
+  ['Happy.Anniversary.2018', { title: 'Happy Anniversary', year: '2018' }],
+  ['The.Final.Cut.2004', { title: 'The Final Cut', year: '2004' }],
+  ['A.German.Life.1080p.BluRay.x264-GRP', { title: 'A German Life', year: null }],
+  ['Get.Real', { title: 'Get Real', year: null }],
+  ['Keeping.It.Real', { title: 'Keeping It Real', year: null }],
+  ['The.Special', { title: 'The Special', year: null }],
+  ['The.Real.Thing', { title: 'The Real Thing', year: null }],
+  // The same words are tags where a scene name puts them
+  ['Movie.Title.REAL.PROPER.2012.1080p.BluRay.x264-GRP', { title: 'Movie Title', year: '2012' }],
+  ['Movie.Title.2023.REAL.PROPER.1080p.WEB.H264-GRP', { title: 'Movie Title', year: '2023' }],
+  [
+    'Movie.Title.Special.Edition.2006.1080p.BluRay.x264-GRP',
+    { title: 'Movie Title', year: '2006' },
+  ],
+  [
+    'Movie.Title.25th.Anniversary.1988.1080p.BluRay.x264-GRP',
+    { title: 'Movie Title', year: '1988' },
+  ],
+  ['Der.Film.German.EAC3.DL.1080p.WEB.H264-GRP', { title: 'Der Film', year: null }],
+  ['Der.Film.German.DOKU.720p.HDTV.x264-GRP', { title: 'Der Film', year: null }],
+  ['der.film.german.dl.1080p.bluray.x264-grp', { title: 'der film', year: null }],
+  ['A.German.Trip.1080p.BluRay.x264-GRP', { title: 'A German Trip', year: null }],
+  ['Movie.Title.Proper.1080p.BluRay.x264-GRP', { title: 'Movie Title', year: null }],
   // An upper case name can't tell a code or LIMITED from a title word
   ['FIRE.AND.ICE.1080p.BluRay.x264-GRP', { title: 'FIRE AND ICE', year: null }],
+  ['GET.REAL.1998.1080P.BLURAY.X264-GRP', { title: 'GET REAL', year: '1998' }],
   ['THE.DARJEELING.LIMITED.1080p.BluRay.x264-GRP', { title: 'THE DARJEELING LIMITED', year: null }],
   ['Some.Movie.TRUE.FRENCH.1080p.WEB.H264-GRP', { title: 'Some Movie', year: null }],
   ['Inglorious.Basterds.CAM.XviD-CAMELOT', { title: 'Inglorious Basterds', year: null }],
@@ -216,6 +258,9 @@ const radarrCases: Array<[string, { title: string; year: string | null }]> = [
   ],
   ['Passengers.German.DL.AC3.Dubbed..BluRay.x264-PsO', { title: 'Passengers', year: null }],
   // Single letters and Dr.
+  ['I.Robot.2004.1080p.BluRay.x264-GRP', { title: 'I Robot', year: '2004' }],
+  ['Bob.s.Burgers', { title: 'Bob s Burgers', year: null }],
+  ['J.Edgar.2011.1080p.BluRay.x264-GRP', { title: 'J. Edgar', year: '2011' }],
   [
     'Movie.War.Q.EXTENDED.CUT.2013.German.DL.1080p.BluRay.x264-HQX',
     { title: 'Movie War Q', year: '2013' },

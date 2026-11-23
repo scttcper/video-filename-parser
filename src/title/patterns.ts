@@ -1,3 +1,4 @@
+import { articleOnlyExp } from './cleanup.js';
 import type { TitleYearPattern } from './types.js';
 
 export const releaseGroupSuffixExp: RegExp = /-([a-z0-9]+)$/i;
@@ -10,23 +11,36 @@ const animeHashExp = /\[\w{8}\](?:$|\.)/;
 
 // Release info that can sit between German/TrueFrench and the year
 const releaseInfoExp =
-  /\b(?:[DM]L|LD|MD|AC3|DTS|DD\+?|AAC|Dubbed|Synced|Subbed|DVD\w*|PAL|NTSC|Blu-?Ray|BDRip|BRRip|WEB\w*|HDTV|HDRip|UHD|\d{3,4}[pi]|[xh]\.?26[45]|AVC|HEVC|XviD|REMUX|UNCUT|EXTENDED|THEATRICAL|iNTERNAL|REPACK|PROPER|COMPLETE)\b/i;
+  /\b(?:[DM]L|LD|MD|E?AC3|DTS|DD[P+]?|AAC|Dubbed|Synced|Subbed|SUBFIX|DOKU|DOCU|DVD\w*|PAL|NTSC|Blu-?Ray|(?:BD|BR|HD|SAT|TV|VHS)Rip|WEB\w*|[HSP]DTV|UHD|\d{3,4}[pi]|[xh]\.?26[45]|AVC|HEVC|XviD|REMUX|UNCUT|UNRATED|EXTENDED|THEATRICAL|REMASTERED|iNTERNAL|REPACK|PROPER|COMPLETE)\b/i;
 const languageMarkerExp = /German|TrueFrench/i;
 const yearAfterLanguageExp = /(?:19|20)\d{2}/;
 const titleLetterExp = /\p{L}/u;
 
 /**
- * Words between German and the year must be release info, otherwise German is part of the title:
- * A.German.Life.2016 is "A German Life", Der.Film.German.DL.2011 is "Der Film"
+ * Release info must come right after German, otherwise German is part of the title:
+ * A.German.Life.2016 and A.German.Life.1080p are "A German Life", Der.Film.German.DL.2011 is
+ * "Der Film"
  */
 function hasReleaseInfoAfterLanguage(match: RegExpExecArray, title: string): boolean {
   if (!titleLetterExp.test(match.groups?.afterLanguage ?? '')) {
     return true;
   }
 
-  const afterLanguage = title.slice(title.search(languageMarkerExp));
+  const language = languageMarkerExp.exec(title);
+  if (!language) {
+    return false;
+  }
+
+  const afterLanguage = title.slice(language.index + language[0].length);
   const yearIndex = afterLanguage.search(yearAfterLanguageExp);
-  return releaseInfoExp.test(yearIndex === -1 ? afterLanguage : afterLanguage.slice(0, yearIndex));
+  const beforeYear = yearIndex === -1 ? afterLanguage : afterLanguage.slice(0, yearIndex);
+  const releaseInfoIndex = beforeYear.search(releaseInfoExp);
+  return releaseInfoIndex !== -1 && !titleLetterExp.test(beforeYear.slice(0, releaseInfoIndex));
+}
+
+/** The.Final.Cut.2004 is a title, an edition never leaves a lone article in front of it */
+function hasTitleBeforeEdition(match: RegExpExecArray): boolean {
+  return !articleOnlyExp.test(match.groups?.title ?? '');
 }
 
 export const movieTitleYearPatterns: TitleYearPattern[] = [
@@ -72,7 +86,8 @@ export const movieTitleYearPatterns: TitleYearPattern[] = [
   {
     name: 'edition-before-year',
     regex:
-      /^(?<title>(?![([])[^\r\n]+?)?(?:(?:[-_\W](?<![)[!]))*\(?\b(?<edition>(((?:Recut[-_. ']|Extended[-_. ']|Ultimate[-_. '])?(?:Director[-_. ']?s|Collector[-_. ']?s|Theatrical|Anniversary|The[-_. ']Uncut|Ultimate|(?:Final|Rouge|Assembly|Imperial|Diamond|Signature|Hunter|Rekall)(?=(?:[-_. '](?:Cut|Edition|Version)))|Extended|Rogue|Special|Despecialized|\d{2,3}(?:th)?[-_. ']Anniversary)(?:[-_. '](?:Cut|Edition|Version))?(?:[-_. '](?:Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']?Edit))?|(?:Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']?Edit|Edition|Restored|[234]in1))))\b\)?[-_. ]{1,3}(?<year>(?:1[89]|20)\d{2}(?!p|i|\d+|\]|\W\d+)))+(\W+|_|$)(?!\\)/i,
+      /^(?<title>(?![([])[^\r\n]+?)?(?:(?:[-_\W](?<![)[!]))*\(?\b(?<edition>(((?:Recut[-_. ']|Extended[-_. ']|Ultimate[-_. '])?(?:Director[-_. ']?s|Collector[-_. ']?s|Theatrical|The[-_. ']Uncut|Ultimate|(?:Final|Rouge|Rogue|Assembly|Imperial|Diamond|Signature|Hunter|Rekall|Special|Anniversary)(?=(?:[-_. '](?:Cut|Edition|Version)))|Extended|Despecialized|\d{2,3}(?:th)?[-_. ']Anniversary)(?:[-_. '](?:Cut|Edition|Version))?(?:[-_. '](?:Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']?Edit))?|(?:Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']?Edit|Edition|Restored|[234]in1))))\b\)?[-_. ]{1,3}(?<year>(?:1[89]|20)\d{2}(?!p|i|\d+|\]|\W\d+)))+(\W+|_|$)(?!\\)/i,
+    accept: hasTitleBeforeEdition,
   },
   {
     name: 'parenthesized-year',

@@ -23,6 +23,11 @@ const cases: Array<[string, Resolution | undefined]> = [
   ['[SubsPlease] Movie Title (540p) [AB649D32]', Resolution.R540P],
   ['Series.Title.S04E13.960p.WEB-DL.AAC2.0.H.264-squalor', Resolution.R720P],
   ['Movie.Title.4K.2160p.1080p', Resolution.R2160P],
+  // Picked by priority, an explicit 1080p or 720p beats a bare 4K or FHD
+  ['Movie Name 4K 2160p BluRay', Resolution.R2160P],
+  ['Movie Name FHD 1080p WEB-DL', Resolution.R1080P],
+  ['Movie Name 720p 4K', Resolution.R720P],
+  ['Series.Title.S04E11.Teddys.Choice.FHD.1080p.Web-DL', Resolution.R1080P],
   ['Movie.Title.1080p.720p', Resolution.R1080P],
   ['Movie.Title.720p.576p', Resolution.R720P],
   ['Movie.Title.576p.540p', Resolution.R576P],

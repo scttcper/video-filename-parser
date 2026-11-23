@@ -1,5 +1,6 @@
 import { removeFileExtension } from '../extensions.js';
-import { releaseTitleCleaner } from '../title/cleanup.js';
+import { sceneReleaseTagExp } from '../title/boundaries.js';
+import { releaseTitleCleaner, sceneFlagSuffixExp } from '../title/cleanup.js';
 import { releaseGroupSuffixExp } from '../title/patterns.js';
 
 const requestInfoExp = /^(?:\[[^\]\r\n]+\])+/;
@@ -434,13 +435,18 @@ function parseRemainder(releaseTokens: string): string | undefined {
     .replace(releaseGroupSuffixExp, '')
     .replaceAll(emptyBracketsExp, '')
     .replace(leadingRemainderSeparatorsExp, '');
-  if (leadingReleaseMetadataExp.test(rawRemainder)) {
+  // Release info or a scene flag right after the episode, there is no episode title:
+  // Show.S05E09.REAL.PROPER.HDTV
+  if (
+    leadingReleaseMetadataExp.test(rawRemainder) ||
+    `.${rawRemainder}`.search(sceneReleaseTagExp) === 0
+  ) {
     return undefined;
   }
 
-  const remainder = releaseTitleCleaner(rawRemainder);
+  const remainder = releaseTitleCleaner(rawRemainder)?.replace(sceneFlagSuffixExp, '');
 
-  return remainder !== null && remainderContentExp.test(remainder) ? remainder : undefined;
+  return remainder && remainderContentExp.test(remainder) ? remainder : undefined;
 }
 
 function groupValue(groups: MatchGroups, name: string): string | undefined {
