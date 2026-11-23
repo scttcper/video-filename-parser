@@ -404,6 +404,13 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
   ['Show.S01E05.Episode.Title.REAL.PROPER.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Episode.Title.REPACK.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['show.s01e05.episode.title.repack.1080p.web.h264-grp', 'show', [1], [5], 'episode title'],
+  [
+    'Klassen.S07E370.Et.Vildt.Venskab.DANISH.720p.WEB.h264-LSDK',
+    'Klassen',
+    [7],
+    [370],
+    'Et Vildt Venskab',
+  ],
   ['Series Title [S01E05] Episode Title', 'Series Title', [1], [5], 'Episode Title'],
   ['Series Title - [02x01-02] - Episode 1', 'Series Title', [2], [1, 2], 'Episode 1'],
 ];

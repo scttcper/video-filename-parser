@@ -157,6 +157,8 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
   ],
   ['The.Final.Cut.2004.1080p.BluRay.x264-GRP', { title: 'The Final Cut', year: '2004' }],
   ['Going.Rogue.2011', { title: 'Going Rogue', year: '2011' }],
+  ['Happy.Anniversary.2018', { title: 'Happy Anniversary', year: '2018' }],
+  ['The.Final.Cut.2004', { title: 'The Final Cut', year: '2004' }],
   ['A.German.Life.1080p.BluRay.x264-GRP', { title: 'A German Life', year: null }],
   ['Get.Real', { title: 'Get Real', year: null }],
   ['Keeping.It.Real', { title: 'Keeping It Real', year: null }],
@@ -176,7 +178,7 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
   ['Der.Film.German.EAC3.DL.1080p.WEB.H264-GRP', { title: 'Der Film', year: null }],
   ['Der.Film.German.DOKU.720p.HDTV.x264-GRP', { title: 'Der Film', year: null }],
   ['der.film.german.dl.1080p.bluray.x264-grp', { title: 'der film', year: null }],
-  ['A.German.Road.Trip.1080p.BluRay.x264-GRP', { title: 'A German Road Trip', year: null }],
+  ['A.German.Trip.1080p.BluRay.x264-GRP', { title: 'A German Trip', year: null }],
   ['Movie.Title.Proper.1080p.BluRay.x264-GRP', { title: 'Movie Title', year: null }],
   // An upper case name can't tell a code or LIMITED from a title word
   ['FIRE.AND.ICE.1080p.BluRay.x264-GRP', { title: 'FIRE AND ICE', year: null }],
