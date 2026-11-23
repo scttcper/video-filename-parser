@@ -108,6 +108,14 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
   ],
   ['The.Italian.Job.1080p.BluRay.x264-GRP', { title: 'The Italian Job', year: null }],
   ['Get.Him.To.The.Greek.1080p.BluRay.x264-GRP', { title: 'Get Him To The Greek', year: null }],
+  // A yearless title ends at the first resolution token, not the one the resolution is read from
+  ['Movie Name 4K 2160p BluRay', { title: 'Movie Name', year: null }],
+  ['Movie Name FHD 1080p WEB-DL', { title: 'Movie Name', year: null }],
+  ['Movie Name 720p 4K', { title: 'Movie Name', year: null }],
+  [
+    'Series.Title.S04E11.Teddys.Choice.FHD.1080p.Web-DL',
+    { title: 'Series Title S04E11 Teddys Choice', year: null },
+  ],
   // Source and release tags end a yearless title, and a language tag right before them comes off
   [
     'Gota.Kanal.3.Bakom.Kulisserna.SWEDiSH.PDTV.XViD-PRiNCE',
