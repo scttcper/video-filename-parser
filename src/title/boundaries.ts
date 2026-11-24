@@ -4,6 +4,8 @@ import { getLanguageAliasTokens, Language } from '../language.js';
 import { findFirstResolutionToken } from '../resolution.js';
 import { parseVideoCodec } from '../videoCodec.js';
 
+import { articleOnlyExp } from './cleanup.js';
+
 interface TitleBoundaryParser {
   name: string;
   parse: (title: string) => string | undefined;
@@ -29,11 +31,20 @@ const releaseTagExp =
 // Also a title word, only a tag once the name has lower case: THE.DARJEELING.LIMITED.1080p
 const limitedTagExp = /[._ ]LIMITED(?=[-_. ]|$)/g;
 // Sources aren't title words, so any case. Gota.Kanal.3.Bakom.Kulisserna.SWEDiSH.PDTV.XViD. A
-// dotted DVD.SCREENER or WEB.SCREENER is one tag, so DVD or WEB doesn't stay in the title.
+// dotted DVD.SCREENER or WEB.SCREENER is one tag, so DVD or WEB doesn't stay in the title. Cam is
+// a word (Court Cam) but right in front of a codec it is the source: Movie.Title.cam.XviD. The
+// codec list matches camBeforeCodecExp in cleanup.ts.
 const sourceTagExp =
-  /[._ ](?:PDTV|[SH]D[._ ]?TV|HDTVRip|DSR|DSRip|TVRip|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|VHSRip|DVDRip|DVDR|DVD[59]|DVDSCR|(?:(?:DVD|WEB)[._ ]?)?SCREENER|SVCD|VCD|BDRip|BRRip|HDRip)(?=[-_. ]|$)/i;
+  /[._ ](?:PDTV|[SH]D[._ ]?TV|HDTVRip|DSR|DSRip|TVRip|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|VHSRip|DVDRip|DVDR|DVD[59]|DVDSCR|(?:(?:DVD|WEB)[._ ]?)?SCREENER|SVCD|VCD|BDRip|BRRip|HDRip|CAM(?=[-._ ](?:XviD|DivX|[xh][._ ]?26[45]|HEVC|AVC|AAC|E?-?AC-?3|DDP?[._ ]?\d|DTS|MP3|FLAC)(?:[-_. ]|$)))(?=[-_. ]|$)/i;
 // Short source tags that are also words (My.Pal.Joey, a web cam), only upper case
-const upperCaseSourceTagExp = /[._ ](?:PAL|NTSC|SECAM|TS|TC|CAM|R5)(?=[-_. ]|$)/;
+export const upperCaseSourceTagExp: RegExp =
+  /[._ ](?:PAL|NTSC|SECAM|TS|TC|CAM|R5|SCREENER)(?=[-_. ]|$)/;
+const tokenEndExp = /[-_. ]|$/;
+// Source tags that are never a title word, unlike Screener or Cam: A.PDTV.XviD is "A"
+const technicalSourceTagExp = new RegExp(
+  String.raw`^(?![._ ](?:SCREENER|CAM)(?:[-_. ]|$))${sourceTagExp.source}`,
+  'i',
+);
 const lowerCaseLetterExp = /\p{Ll}/u;
 
 // The first match with a lower case letter somewhere before it
@@ -64,23 +75,41 @@ export function getFirstTitleBoundaryPosition(title: string): number | null {
   const positions = titleBoundaryParsers
     .map(({ parse }) => parse(title))
     .map(source => (source ? title.indexOf(source) : -1));
-  positions.push(
+  const wordTagPositions = [
     title.search(sceneReleaseTagExp),
     title.search(releaseTagExp),
     title.search(sourceTagExp),
     title.search(upperCaseSourceTagExp),
     searchAfterLowerCase(title, limitedTagExp),
-  );
-  const validPositions = positions.filter(position => position > 0);
+  ];
+  const validPositions = [...positions, ...wordTagPositions].filter(position => position > 0);
   if (validPositions.length === 0) {
     return null;
+  }
+
+  // A tag that is also a word never leaves a lone article as the title: The Screener. That word
+  // is part of the title, so blank it out and look for the next tag: The.Screener.Gets.Away.PDTV
+  const firstPosition = Math.min(...validPositions);
+  if (
+    wordTagPositions.includes(firstPosition) &&
+    !positions.includes(firstPosition) &&
+    !technicalSourceTagExp.test(title.slice(firstPosition)) &&
+    articleOnlyExp.test(title.slice(0, firstPosition))
+  ) {
+    const wordStart = firstPosition + 1;
+    const wordEnd = wordStart + title.slice(wordStart).search(tokenEndExp);
+    return wordEnd > wordStart
+      ? getFirstTitleBoundaryPosition(
+          title.slice(0, wordStart) + 'x'.repeat(wordEnd - wordStart) + title.slice(wordEnd),
+        )
+      : null;
   }
 
   // A language word right before the first release tag is the release language, not the title:
   // Snoopy.Presenta.Natale.Con.Snoopy.iTALiAN.MULTi.2160p. Only scene spellings (FRENCH, iTALiAN)
   // count, a capitalized word is the title: Get.Him.To.The.Greek.1080p. Language codes count when
   // upper case, The.Negotiator.HUN.ENG.DVDRip, since lower case ones are words (dan, ice, lat).
-  let position = Math.min(...validPositions);
+  let position = firstPosition;
   trailingLanguageExp ??= new RegExp(
     String.raw`[-_. ](?<marker>(?:TRUE[-_. ]?)?(?<language>${[
       ...Object.values(Language),

@@ -8,9 +8,12 @@ import { sceneReleaseTagExp } from './boundaries.js';
 const resolutionOrCodecDetailsExp =
   /\s*(?:480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|HVEC|[xh][\W_]?26[45]|DD\W?5\W1|[<>?*:|]|848x480|1280x720|1920x1080)((8|10)b(it))?/i;
 const cleanTorrentPrefixRegex = /^\[(?:REQ)\]/i;
-/** Used to help cleanup releases that often emit the year title.SCR-group */
+/**
+ * Used to help cleanup releases that often emit the year title.SCR-group. No Cam or Screener, they
+ * are title words (Court Cam, The Screener) and the source tag comes after the year or episode.
+ */
 const commonSourceMarkerExp =
-  /\b(Bluray|(dvdr?|BD)rip|HDTV|HDRip|TS|R5|CAM|SCR|(WEB|DVD)?.?SCREENER|DiVX|xvid|web-?dl)\b/i;
+  /\b(Bluray|(dvdr?|BD)rip|HDTV|HDRip|TS|R5|SCR|(WEB|DVD).?SCREENER|DiVX|xvid|web-?dl)\b/i;
 
 // Hoisted global variants (avoid re-creating RegExp on every call)
 const commonSourceMarkersGlobalExp = new RegExp(commonSourceMarkerExp.source, 'ig');
@@ -48,7 +51,29 @@ function applyCleanupPasses(title: string, passes: readonly CleanupPass[]): stri
   return cleanedTitle;
 }
 
+// WEBRip is not in commonSourceMarkerExp
+const webRipExp = /\bWEBRip\b/i;
+// WEB right in front of the video codec is the source: Episode.Title.WEB.H264. Upper case only, a
+// title can end in Web (The.Dark.Web.H264).
+const webBeforeCodecExp = /\bWEB(?=[-_. ](?:[xXhH][-_. ]?26[45]|HEVC|AVC)\b)/;
+// So are cam and screener in front of a video or audio codec, in any case: Movie.Title.cam.XviD.
+// Anywhere else they are title words (Court Cam, The Screener).
+const camBeforeCodecExp =
+  /\b(?:CAM|(?:(?:DVD|WEB)[-_. ]?)?SCREENER)(?=[-_. ](?:[xh][-_. ]?26[45]|HEVC|AVC|XviD|DivX|AAC|E?-?AC-?3|DDP?[-_. ]?\d|DTS|MP3|FLAC)\b)/i;
+
 const simplifyTitleCleanupPasses: readonly CleanupPass[] = [
+  {
+    name: 'remove webrip',
+    pattern: webRipExp,
+  },
+  {
+    name: 'remove web source before the codec',
+    pattern: webBeforeCodecExp,
+  },
+  {
+    name: 'remove cam or screener source before the codec',
+    pattern: camBeforeCodecExp,
+  },
   {
     name: 'remove resolution and first codec details',
     pattern: resolutionOrCodecDetailsExp,
@@ -82,6 +107,18 @@ const simplifyTitleCleanupPasses: readonly CleanupPass[] = [
     pattern: codecGlobalExp,
   },
 ];
+
+const trackerTagExps = [
+  websitePrefixExp,
+  websitePostfixExp,
+  cleanTorrentPrefixRegex,
+  cleanTorrentSuffixExp,
+];
+
+/** Only the website and tracker tags simplifyTitle removes, none of the release tags */
+export function removeTrackerTags(title: string): string {
+  return trackerTagExps.reduce((cleaned, exp) => cleaned.replace(exp, ''), title).trim();
+}
 
 export function simplifyTitle(title: string): string {
   return applyCleanupPasses(title, simplifyTitleCleanupPasses).trim();

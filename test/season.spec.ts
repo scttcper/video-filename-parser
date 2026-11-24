@@ -119,6 +119,7 @@ for (const [postTitle, title, season, episodes] of multiEpisodeCases) {
 
 // Numbers in episode titles and resolutions are not extra episodes
 const singleEpisodeCases: Array<[string, string, number, number]> = [
+  ['Court.Cam.S02E01.1080p.WEB.h264-GRP', 'Court Cam', 2, 1],
   ['Series.S01E04.2-45.PM.[HDTV-720p].mkv', 'Series', 1, 4],
   ['Series-S07E12-31st_Century_Fox-[Bluray-1080p].mkv', 'Series', 7, 12],
   ['Series S08E20 50-50 Carla [DVD]', 'Series', 8, 20],
@@ -401,9 +402,50 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
   ],
   ['Show.S02E02.Episode.Title.1080p.WEB.H264-GROUP', 'Show', [2], [2], 'Episode Title'],
   ['Show.S01E05.Keeping.It.Real.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Keeping It Real'],
+  ['Show.S01E05.Body.Cam.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Body Cam'],
+  ['Show.S01E05.Episode.Title.CAM.XviD-GRP.mkv', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.Episode.Title.SCREENER.XviD-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.Episode.Title.Screener.XviD-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.Episode.Title.DVD.SCREENER.XviD-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.Episode.Title.CAM.AAC.2.0-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.PAL.Joey.mkv', 'Show', [1], [5], 'PAL Joey'],
+  ['Show.S01E05.PAL.mkv', 'Show', [1], [5], 'PAL'],
+  ['Show.S01E05.Episode.Title.PAL.DVDRip.XviD-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.My.PAL.Joey.mkv', 'Show', [1], [5], 'My PAL Joey'],
+  ['Show.S01E05.My.PAL.Joey.1080p.WEB.H264-GRP', 'Show', [1], [5], 'My PAL Joey'],
+  ['Show.S01E05.My.PAL.mkv', 'Show', [1], [5], 'My PAL'],
   ['Show.S01E05.Episode.Title.REAL.PROPER.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Episode.Title.REPACK.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['show.s01e05.episode.title.repack.1080p.web.h264-grp', 'show', [1], [5], 'episode title'],
+  // Language tags right before the release tags aren't part of the episode title, in any case
+  ['Show.S01E05.Episode.Title.German.DL.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.Episode.Title.iTALiAN.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['show.s01e05.episode.title.german.1080p.web.h264-grp', 'show', [1], [5], 'episode title'],
+  ['Show.S01E05.The.Russian.1080p.WEB.H264-GRP', 'Show', [1], [5], 'The Russian'],
+  ['Show.S01E05.The.Russian.German.DL.1080p.WEB.H264-GRP', 'Show', [1], [5], 'The Russian'],
+  // Without release tags a language word is the title
+  ['Show.S01E05.Speaking.French.mkv', 'Show', [1], [5], 'Speaking French'],
+  ['Show - S01E05 - Speaking French', 'Show', [1], [5], 'Speaking French'],
+  ['Show.S01E05.Speaking.French.[Group].mkv', 'Show', [1], [5], 'Speaking French'],
+  ['Show.S01E05.Speaking.French[rartv]', 'Show', [1], [5], 'Speaking French'],
+  ['Show.S01E05.Speaking.French?.mkv', 'Show', [1], [5], 'Speaking French'],
+  // Only one language comes off, the word in front of it is the title
+  ['Show.S01E05.Speaking.French.German.DL.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Speaking French'],
+  ['show.s01e05.episode.title.multi.french.1080p.web.h264-grp', 'show', [1], [5], 'episode title'],
+  ['Show.S01E05.Episode.Title.German.x264-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.Episode.Title.German.x264-GRP.mkv', 'Show', [1], [5], 'Episode Title'],
+  // Doubled separators in the name itself aren't a removed tag
+  ['Show.S01E05..The.Pilot.mkv', 'Show', [1], [5], 'The Pilot'],
+  ['Show.S01E05.:.The.Pilot.mkv', 'Show', [1], [5], 'The Pilot'],
+  ['Show.S01E05..Speaking.French.mkv', 'Show', [1], [5], 'Speaking French'],
+  ['Show.S01E05.Speaking.French..Part.2.mkv', 'Show', [1], [5], 'Speaking French'],
+  ['Show.S01E05.Episode.Title.German.1080p.mkv', 'Show', [1], [5], 'Episode Title'],
+  ['Show S01E05  Episode Title.mkv', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.Black.Ice.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Black Ice'],
+  // WEB right before the codec is the source
+  ['Show.S01E05.The.Dark.Web.WEB.H264-GRP', 'Show', [1], [5], 'The Dark Web'],
+  ['Show.S01E05.The.Dark.Web.H264-GRP', 'Show', [1], [5], 'The Dark Web'],
+  ['Show.S01E05.Episode.Title.WEBRip.x264-GRP', 'Show', [1], [5], 'Episode Title'],
   [
     'Klassen.S07E370.Et.Vildt.Venskab.DANISH.720p.WEB.h264-LSDK',
     'Klassen',
@@ -435,6 +477,19 @@ const noRemainderCases: Array<[string]> = [
   // Scene flags right after the episode aren't an episode title
   ['Covert.Affairs.S05E09.REAL.PROPER.HDTV.x264-KILLERS'],
   ['Show.S01E05.REPACK.1080p.WEB.H264-GRP'],
+  ['Show.S01E05.SCREENER.XviD-GRP.mkv'],
+  // Nor are language tags
+  ['Babylon.Berlin.S01E05.GERMAN.1080p.WEB.H264-GRP'],
+  ['Show.S01E05.German.DL.1080p.WEB.H264-GRP'],
+  ['Show.S01E05.German.DL.1080p.mkv'],
+  ['Show.S01E05.PAL.DVDRip.XviD-GRP'],
+  // Release tags right after the episode leave no episode title
+  ['Show.S01E05.1080p.AMZN.WEB-DL.DDP5.1.H.264-GRP'],
+  ['Show.S01E05.2160p.ATVP.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-FLUX'],
+  ['Show.S01E05.1080p.WEB.x264-GRP-postbot'],
+  ['Some  Show.S01E05.1080p.WEB.x264-GRP-postbot'],
+  ['[REQ]Some..Show.S01E05.1080p.CR.WEB-DL.mkv'],
+  ['Orphan Black S05E09 WEBRip 1080p10bit DD5 1 x265 HEVC D0ct0rLew'],
   ['show.s01e05.proper.1080p.web.h264-grp'],
 ];
 for (const [postTitle] of noRemainderCases) {

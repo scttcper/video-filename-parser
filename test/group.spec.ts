@@ -5,6 +5,7 @@ import { parseGroup } from '../src/index.js';
 const cases: Array<[string, string | null]> = [
   ['Whats.Eating.Gilbert.Grape.1993.720p.BluRay.x264-SiNNERS.mkv', 'SiNNERS'],
   ['Up.REPACK.720p.Bluray.x264-CBGB', 'CBGB'],
+  ['Avengers Infinity War 2018 NEW PROPER 720p HD-CAM X264 HQ-LPG', 'LPG'],
   ['Surfing.Antarctica.2018.1080p.WEB.H264-13', '13'],
   ['Jarek.2025.CZECH.1080p.WEB.H264-SDTV', 'SDTV'],
   ['The.Daily.Show.2026.11.16.Adam.Ad-Rock.Horovitz.1080p.WEB.h264-EDITH', 'EDITH'],

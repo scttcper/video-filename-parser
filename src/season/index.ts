@@ -1,9 +1,11 @@
-import { simplifyTitle } from '../title/cleanup.js';
+import { removeFileExtension } from '../extensions.js';
+import { removeTrackerTags, simplifyTitle } from '../title/cleanup.js';
 
 import {
   normalizeSixDigitAirDate,
   parseGenericMatchCollection,
   type ParsedMatchCollection,
+  parseRemainder,
 } from './common.js';
 import {
   preSubstitutions,
@@ -65,7 +67,7 @@ export function parseSeason(title: string): Season | null {
       continue;
     }
 
-    return toSeason(title, result);
+    return toSeason(title, getRemainder(substituted, simpleTitle, result), result);
   }
 
   return null;
@@ -89,7 +91,57 @@ function preValidation(title: string): boolean {
   return true;
 }
 
-function toSeason(title: string, result: ParsedMatchCollection): Season {
+const gapExp = /\.{2}| {2}/;
+// Punctuation simplifyTitle strips, it is no release tag: Speaking.French?.mkv
+const punctuationExp = /[<>?*:|]/g;
+
+function removePunctuation(text: string): string {
+  return text.replaceAll(punctuationExp, '');
+}
+const leadingGapExp = /^(?:\.{2}| {2})/;
+
+// The episode title, checked against the name the release tags were stripped from
+function getRemainder(
+  name: string,
+  simpleTitle: string,
+  result: ParsedMatchCollection,
+): string | undefined {
+  const tokens = result.releaseTokens;
+  if (result.remainder === undefined || tokens === undefined) {
+    return undefined;
+  }
+
+  // A gap right after the episode is where a resolution or source was removed, so what follows is
+  // release info and not an episode title: S01E05.1080p.AMZN.WEB-DL.DDP5.1.H.264. Not when the
+  // gap was in the name to begin with, Show.S01E05..The.Pilot
+  const plainName = removePunctuation(name);
+  const plainTokens = removePunctuation(tokens);
+  if (leadingGapExp.test(tokens)) {
+    // Find the text in front of the gap in the name, the name has the gap there if it is its own
+    const plainTitle = removePunctuation(simpleTitle);
+    const gapIndex = plainTitle.length - plainTokens.length;
+    const prefixIndex = plainName.indexOf(plainTitle.slice(0, gapIndex));
+    const isOwnGap =
+      prefixIndex === -1
+        ? gapExp.test(removeFileExtension(plainName))
+        : leadingGapExp.test(plainName.slice(prefixIndex + gapIndex));
+    if (!isOwnGap) {
+      return undefined;
+    }
+  }
+
+  // The name no longer ends the same way, so release tags were stripped after the episode title.
+  // A tracker tag like [rartv] isn't one.
+  return removeTrackerTags(plainName).endsWith(plainTokens)
+    ? result.remainder
+    : parseRemainder(tokens, true);
+}
+
+function toSeason(
+  title: string,
+  remainder: string | undefined,
+  result: ParsedMatchCollection,
+): Season {
   const isSpecialFullSeason =
     result.fullSeason === true &&
     result.releaseTokens !== undefined &&
@@ -100,7 +152,7 @@ function toSeason(title: string, result: ParsedMatchCollection): Season {
     seriesTitle: result.seriesName,
     seasons: result.seasonNumbers ?? [],
     episodeNumbers: result.episodeNumbers ?? [],
-    ...(result.remainder ? { remainder: result.remainder } : {}),
+    ...(remainder ? { remainder } : {}),
     airDate: result.airDate ?? null,
     fullSeason: isSpecialFullSeason ? false : (result.fullSeason ?? false),
     isPartialSeason: result.isPartialSeason ?? false,
