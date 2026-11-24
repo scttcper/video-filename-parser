@@ -164,8 +164,6 @@ const languageOrMultiExp = new RegExp(
 // Season/episode tokens end a series title, anything after them is the episode title or release info
 const seasonEpisodeTokenExp = /^(?:s\d{1,4}(?:e\d{1,4})*|\d{1,2}x\d{1,3}|e\d{1,4})$/;
 const germanMultiLanguageExp = /\bML\b/i;
-// The codes languageExpRules reads in upper case only
-const upperCaseLanguageCodeExp = /^(?:NO|BG|DE|ES)$/;
 // Tags the title parser doesn't end a title at, some are words too (Web, Dubbed). Ending an
 // episode title early only means a language word after it counts, as it would without a title.
 const looseReleaseTagExp =
@@ -318,11 +316,16 @@ function findEpisodeTitleSpan(tokens: Token[], title: string): TokenSpan | undef
 }
 
 function isLanguageTag({ text, start, end }: Token, title: string): boolean {
-  return (
-    languageAliasTokens.has(text) ||
-    multiTokens.has(text) ||
-    upperCaseLanguageCodeExp.test(title.slice(start, end))
-  );
+  if (languageAliasTokens.has(text) || multiTokens.has(text)) {
+    return true;
+  }
+
+  // The codes and markers of languageExpRules (NO, POR, cat.DD), matched where the token sits
+  const context = title.slice(Math.max(start - 1, 0), end + 6);
+  return languageExpRules.some(({ exp }) => {
+    const match = exp.exec(context);
+    return match !== null && match.index <= 1;
+  });
 }
 
 function hasMultiLanguageToken(tokens: Token[]): boolean {
