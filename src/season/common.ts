@@ -454,10 +454,17 @@ function parseRemainder(releaseTokens: string): string | undefined {
   }
 
   const cleanRemainder = releaseTitleCleaner(rawRemainder)?.replace(sceneFlagSuffixExp, '');
-  const remainder = cleanRemainder && removeLanguageTags(cleanRemainder);
+  // Without release tags after it nothing says a language word is a tag: Speaking.French.mkv
+  const remainder =
+    cleanRemainder && removedTagsExp.test(rawRemainder)
+      ? removeLanguageTags(cleanRemainder)
+      : cleanRemainder;
 
   return remainder && remainderContentExp.test(remainder) ? remainder : undefined;
 }
+
+// Stripped release tags leave a gap or a trailing separator behind: Episode.Title.German..-GRP
+const removedTagsExp = /\.{2}| {2}|[-_. ]$/;
 
 // Built on first use, the language module isn't loaded yet when this one is
 let languageTagSuffixExp: RegExp | undefined;
@@ -476,12 +483,15 @@ function removeLanguageTags(remainder: string): string {
   );
 
   let title = remainder;
-  while (languageTagSuffixExp.test(title)) {
-    title = title.replace(languageTagSuffixExp, '');
-  }
+  for (;;) {
+    const shorter = title.replace(languageTagSuffixExp, '');
+    // A language never leaves a lone article behind: The.Russian is the episode title
+    if (shorter === title || articleOnlyExp.test(shorter)) {
+      return title;
+    }
 
-  // A language never leaves a lone article behind: The.Russian is the episode title
-  return articleOnlyExp.test(title) ? remainder : title;
+    title = shorter;
+  }
 }
 
 function groupValue(groups: MatchGroups, name: string): string | undefined {

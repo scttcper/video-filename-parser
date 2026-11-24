@@ -409,6 +409,10 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
   ['Show.S01E05.Episode.Title.iTALiAN.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['show.s01e05.episode.title.german.1080p.web.h264-grp', 'show', [1], [5], 'episode title'],
   ['Show.S01E05.The.Russian.1080p.WEB.H264-GRP', 'Show', [1], [5], 'The Russian'],
+  ['Show.S01E05.The.Russian.German.DL.1080p.WEB.H264-GRP', 'Show', [1], [5], 'The Russian'],
+  // Without release tags a language word is the title
+  ['Show.S01E05.Speaking.French.mkv', 'Show', [1], [5], 'Speaking French'],
+  ['Show - S01E05 - Speaking French', 'Show', [1], [5], 'Speaking French'],
   ['Show.S01E05.Black.Ice.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Black Ice'],
   // WEB right before the codec is the source
   ['Show.S01E05.The.Dark.Web.WEB.H264-GRP', 'Show', [1], [5], 'The Dark Web'],
