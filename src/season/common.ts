@@ -430,7 +430,11 @@ function finishResult(
 }
 
 function parseRemainder(releaseTokens: string): string | undefined {
-  const rawRemainder = removeFileExtension(releaseTokens)
+  const tokens = removeFileExtension(releaseTokens);
+  // Without release tags after the episode title nothing says a word in it is a tag:
+  // Speaking.French.mkv, My.PAL.Joey.mkv
+  const hasRemovedTags = removedTagsExp.test(tokens.replace(leadingRemainderSeparatorsExp, ''));
+  const rawRemainder = tokens
     .replaceAll(hashTagExp, '')
     .replace(trailingRemainderRequestInfoExp, '')
     .replace(releaseGroupSuffixExp, '')
@@ -446,20 +450,17 @@ function parseRemainder(releaseTokens: string): string | undefined {
     return undefined;
   }
 
-  // An upper case source tag ends the episode title, Episode.Title.CAM.XviD. Not Body.Cam, and an
-  // upper case name can't tell.
-  const sourceTag = rawRemainder.search(upperCaseSourceTagExp);
+  // An upper case source tag right in front of the release tags ends the episode title,
+  // Episode.Title.PAL.DVDRip. Not Body.Cam, and an upper case name can't tell.
+  const sourceTag = hasRemovedTags ? rawRemainder.search(trailingUpperCaseSourceTagExp) : -1;
   const untaggedRemainder =
     sourceTag > 0 && lowerCaseLetterExp.test(rawRemainder.slice(0, sourceTag))
       ? rawRemainder.slice(0, sourceTag)
       : rawRemainder;
 
   const cleanRemainder = releaseTitleCleaner(untaggedRemainder)?.replace(sceneFlagSuffixExp, '');
-  // Without release tags after it nothing says a language word is a tag: Speaking.French.mkv
   const remainder =
-    cleanRemainder && removedTagsExp.test(releaseTokens)
-      ? removeLanguageTags(cleanRemainder)
-      : cleanRemainder;
+    cleanRemainder && hasRemovedTags ? removeLanguageTags(cleanRemainder) : cleanRemainder;
 
   return remainder && remainderContentExp.test(remainder) ? remainder : undefined;
 }
@@ -468,6 +469,9 @@ function parseRemainder(releaseTokens: string): string | undefined {
 // Episode.Title.German..-GRP, Episode.Title.German.-GRP
 const removedTagsExp = /\.{2}| {2}|[._ ]-[^-_. ]+$/;
 const lowerCaseLetterExp = /\p{Ll}/u;
+const trailingUpperCaseSourceTagExp = new RegExp(
+  String.raw`${upperCaseSourceTagExp.source}[-_. ]*$`,
+);
 
 // Built on first use, the language module isn't loaded yet when this one is
 let languageTagSuffixExp: RegExp | undefined;

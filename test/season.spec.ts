@@ -405,6 +405,11 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
   ['Show.S01E05.Body.Cam.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Body Cam'],
   ['Show.S01E05.Episode.Title.CAM.XviD-GRP.mkv', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Episode.Title.SCREENER.XviD-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.Episode.Title.Screener.XviD-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.Episode.Title.PAL.DVDRip.XviD-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.My.PAL.Joey.mkv', 'Show', [1], [5], 'My PAL Joey'],
+  ['Show.S01E05.My.PAL.Joey.1080p.WEB.H264-GRP', 'Show', [1], [5], 'My PAL Joey'],
+  ['Show.S01E05.My.PAL.mkv', 'Show', [1], [5], 'My PAL'],
   ['Show.S01E05.Episode.Title.REAL.PROPER.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Episode.Title.REPACK.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['show.s01e05.episode.title.repack.1080p.web.h264-grp', 'show', [1], [5], 'episode title'],
@@ -419,8 +424,10 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
   ['Show - S01E05 - Speaking French', 'Show', [1], [5], 'Speaking French'],
   ['Show.S01E05.Speaking.French.[Group].mkv', 'Show', [1], [5], 'Speaking French'],
   ['Show.S01E05.Episode.Title.German.x264-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.Episode.Title.German.x264-GRP.mkv', 'Show', [1], [5], 'Episode Title'],
   // Doubled separators in the name itself aren't a removed tag
   ['Show.S01E05..The.Pilot.mkv', 'Show', [1], [5], 'The Pilot'],
+  ['Show.S01E05..Speaking.French.mkv', 'Show', [1], [5], 'Speaking French'],
   ['Show S01E05  Episode Title.mkv', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Black.Ice.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Black Ice'],
   // WEB right before the codec is the source
@@ -466,6 +473,7 @@ const noRemainderCases: Array<[string]> = [
   ['Show.S01E05.1080p.AMZN.WEB-DL.DDP5.1.H.264-GRP'],
   ['Show.S01E05.2160p.ATVP.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-FLUX'],
   ['Show.S01E05.1080p.WEB.x264-GRP-postbot'],
+  ['Some  Show.S01E05.1080p.WEB.x264-GRP-postbot'],
   ['Orphan Black S05E09 WEBRip 1080p10bit DD5 1 x265 HEVC D0ct0rLew'],
   ['show.s01e05.proper.1080p.web.h264-grp'],
 ];

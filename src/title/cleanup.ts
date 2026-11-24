@@ -56,8 +56,9 @@ const webRipExp = /\bWEBRip\b/i;
 // WEB right in front of the video codec is the source: Episode.Title.WEB.H264. Upper case only, a
 // title can end in Web (The.Dark.Web.H264).
 const webBeforeCodecExp = /\bWEB(?=[-_. ](?:[xXhH][-_. ]?26[45]|HEVC|AVC)\b)/;
-// So is cam in any case, Movie.Title.cam.XviD. Anywhere else it is a title word (Court Cam).
-const camBeforeCodecExp = /\bCAM(?=[-_. ](?:[xh][-_. ]?26[45]|HEVC|AVC|XviD|DivX)\b)/i;
+// So are cam and screener in any case, Movie.Title.cam.XviD. Anywhere else they are title words
+// (Court Cam, The Screener).
+const camBeforeCodecExp = /\b(?:CAM|SCREENER)(?=[-_. ](?:[xh][-_. ]?26[45]|HEVC|AVC|XviD|DivX)\b)/i;
 
 const simplifyTitleCleanupPasses: readonly CleanupPass[] = [
   {
@@ -69,7 +70,7 @@ const simplifyTitleCleanupPasses: readonly CleanupPass[] = [
     pattern: webBeforeCodecExp,
   },
   {
-    name: 'remove cam source before the codec',
+    name: 'remove cam or screener source before the codec',
     pattern: camBeforeCodecExp,
   },
   {
