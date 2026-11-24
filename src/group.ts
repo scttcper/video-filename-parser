@@ -114,11 +114,14 @@ export function parseGroup(title: string, parsedTitle?: string): string | null {
     return candidateSubgroup;
   }
 
-  trimmed = simplifyTitle(trimmed);
+  // simplifyTitle leaves these for the title parser, here they hide the group: HD-CAM X264 HQ-LPG
+  trimmed = simplifyTitle(trimmed).replaceAll(camSourceExp, '');
   trimmed = stripCleanupSuffixes(trimmed);
 
   return matchGenericReleaseGroup(trimmed);
 }
+
+const camSourceExp = /\b(?:CAM|SCREENER)\b/gi;
 
 function matchCodecReleaseGroup(title: string): string | null {
   const cleanTitle = stripCleanupSuffixes(

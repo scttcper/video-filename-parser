@@ -8,9 +8,12 @@ import { sceneReleaseTagExp } from './boundaries.js';
 const resolutionOrCodecDetailsExp =
   /\s*(?:480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|HVEC|[xh][\W_]?26[45]|DD\W?5\W1|[<>?*:|]|848x480|1280x720|1920x1080)((8|10)b(it))?/i;
 const cleanTorrentPrefixRegex = /^\[(?:REQ)\]/i;
-/** Used to help cleanup releases that often emit the year title.SCR-group */
+/**
+ * Used to help cleanup releases that often emit the year title.SCR-group. No Cam or Screener, they
+ * are title words (Court Cam, The Screener) and the source tag comes after the year or episode.
+ */
 const commonSourceMarkerExp =
-  /\b(Bluray|(dvdr?|BD)rip|HDTV|HDRip|TS|R5|CAM|SCR|(WEB|DVD)?.?SCREENER|DiVX|xvid|web-?dl)\b/i;
+  /\b(Bluray|(dvdr?|BD)rip|HDTV|HDRip|TS|R5|SCR|(WEB|DVD).?SCREENER|DiVX|xvid|web-?dl)\b/i;
 
 // Hoisted global variants (avoid re-creating RegExp on every call)
 const commonSourceMarkersGlobalExp = new RegExp(commonSourceMarkerExp.source, 'ig');

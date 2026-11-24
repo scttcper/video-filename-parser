@@ -119,6 +119,7 @@ for (const [postTitle, title, season, episodes] of multiEpisodeCases) {
 
 // Numbers in episode titles and resolutions are not extra episodes
 const singleEpisodeCases: Array<[string, string, number, number]> = [
+  ['Court.Cam.S02E01.1080p.WEB.h264-GRP', 'Court Cam', 2, 1],
   ['Series.S01E04.2-45.PM.[HDTV-720p].mkv', 'Series', 1, 4],
   ['Series-S07E12-31st_Century_Fox-[Bluray-1080p].mkv', 'Series', 7, 12],
   ['Series S08E20 50-50 Carla [DVD]', 'Series', 8, 20],
@@ -401,6 +402,7 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
   ],
   ['Show.S02E02.Episode.Title.1080p.WEB.H264-GROUP', 'Show', [2], [2], 'Episode Title'],
   ['Show.S01E05.Keeping.It.Real.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Keeping It Real'],
+  ['Show.S01E05.Body.Cam.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Body Cam'],
   ['Show.S01E05.Episode.Title.REAL.PROPER.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Episode.Title.REPACK.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['show.s01e05.episode.title.repack.1080p.web.h264-grp', 'show', [1], [5], 'episode title'],

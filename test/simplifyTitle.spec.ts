@@ -41,7 +41,7 @@ const simplifyCases: Array<[string, string]> = [
     'Spider-Man Far from Home.2019.1080p.HDRip.X264.AC3-EVO',
     'Spider-Man Far from Home.2019....AC3-EVO',
   ],
-  ['Inglorious.Basterds.CAM.XviD-CAMELOT', 'Inglorious.Basterds..-CAMELOT'],
+  ['Inglorious.Basterds.CAM.XviD-CAMELOT', 'Inglorious.Basterds.CAM.-CAMELOT'],
   ['The.Fighter.DVDR-MPTDVD', 'The.Fighter.-MPTDVD'],
   ['The Card Counter WEBSCREENER XviD-EVO', 'The Card Counter  -EVO'],
   ['[ www.Torrenting.com ] - Revenge.2008.720p.X264-DIMENSION', 'Revenge.2008..-DIMENSION'],

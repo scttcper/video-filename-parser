@@ -29,9 +29,10 @@ const releaseTagExp =
 // Also a title word, only a tag once the name has lower case: THE.DARJEELING.LIMITED.1080p
 const limitedTagExp = /[._ ]LIMITED(?=[-_. ]|$)/g;
 // Sources aren't title words, so any case. Gota.Kanal.3.Bakom.Kulisserna.SWEDiSH.PDTV.XViD. A
-// dotted DVD.SCREENER or WEB.SCREENER is one tag, so DVD or WEB doesn't stay in the title.
+// dotted DVD.SCREENER or WEB.SCREENER is one tag, so DVD or WEB doesn't stay in the title. A bare
+// Screener needs tags after it, at the end of a name it is the title: The Screener
 const sourceTagExp =
-  /[._ ](?:PDTV|[SH]D[._ ]?TV|HDTVRip|DSR|DSRip|TVRip|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|VHSRip|DVDRip|DVDR|DVD[59]|DVDSCR|(?:(?:DVD|WEB)[._ ]?)?SCREENER|SVCD|VCD|BDRip|BRRip|HDRip)(?=[-_. ]|$)/i;
+  /[._ ](?:PDTV|[SH]D[._ ]?TV|HDTVRip|DSR|DSRip|TVRip|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|VHSRip|DVDRip|DVDR|DVD[59]|DVDSCR|(?:DVD|WEB)[._ ]?SCREENER|SCREENER(?=[-_. ])|SVCD|VCD|BDRip|BRRip|HDRip)(?=[-_. ]|$)/i;
 // Short source tags that are also words (My.Pal.Joey, a web cam), only upper case
 const upperCaseSourceTagExp = /[._ ](?:PAL|NTSC|SECAM|TS|TC|CAM|R5)(?=[-_. ]|$)/;
 const lowerCaseLetterExp = /\p{Ll}/u;
