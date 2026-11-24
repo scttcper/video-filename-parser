@@ -56,10 +56,10 @@ const webRipExp = /\bWEBRip\b/i;
 // WEB right in front of the video codec is the source: Episode.Title.WEB.H264. Upper case only, a
 // title can end in Web (The.Dark.Web.H264).
 const webBeforeCodecExp = /\bWEB(?=[-_. ](?:[xXhH][-_. ]?26[45]|HEVC|AVC)\b)/;
-// So are cam and screener in any case, Movie.Title.cam.XviD. Anywhere else they are title words
-// (Court Cam, The Screener).
+// So are cam and screener in front of a video or audio codec, in any case: Movie.Title.cam.XviD.
+// Anywhere else they are title words (Court Cam, The Screener).
 const camBeforeCodecExp =
-  /\b(?:CAM|(?:(?:DVD|WEB)[-_. ]?)?SCREENER)(?=[-_. ](?:[xh][-_. ]?26[45]|HEVC|AVC|XviD|DivX)\b)/i;
+  /\b(?:CAM|(?:(?:DVD|WEB)[-_. ]?)?SCREENER)(?=[-_. ](?:[xh][-_. ]?26[45]|HEVC|AVC|XviD|DivX|AAC|E?-?AC-?3|DDP?[-_. ]?\d|DTS|MP3|FLAC)\b)/i;
 
 const simplifyTitleCleanupPasses: readonly CleanupPass[] = [
   {
@@ -107,6 +107,18 @@ const simplifyTitleCleanupPasses: readonly CleanupPass[] = [
     pattern: codecGlobalExp,
   },
 ];
+
+const trackerTagExps = [
+  websitePrefixExp,
+  websitePostfixExp,
+  cleanTorrentPrefixRegex,
+  cleanTorrentSuffixExp,
+];
+
+/** Only the website and tracker tags simplifyTitle removes, none of the release tags */
+export function removeTrackerTags(title: string): string {
+  return trackerTagExps.reduce((cleaned, exp) => cleaned.replace(exp, ''), title).trim();
+}
 
 export function simplifyTitle(title: string): string {
   return applyCleanupPasses(title, simplifyTitleCleanupPasses).trim();

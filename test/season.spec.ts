@@ -407,6 +407,7 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
   ['Show.S01E05.Episode.Title.SCREENER.XviD-GRP', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Episode.Title.Screener.XviD-GRP', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Episode.Title.DVD.SCREENER.XviD-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.Episode.Title.CAM.AAC.2.0-GRP', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.PAL.Joey.mkv', 'Show', [1], [5], 'PAL Joey'],
   ['Show.S01E05.PAL.mkv', 'Show', [1], [5], 'PAL'],
   ['Show.S01E05.Episode.Title.PAL.DVDRip.XviD-GRP', 'Show', [1], [5], 'Episode Title'],
@@ -426,6 +427,7 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
   ['Show.S01E05.Speaking.French.mkv', 'Show', [1], [5], 'Speaking French'],
   ['Show - S01E05 - Speaking French', 'Show', [1], [5], 'Speaking French'],
   ['Show.S01E05.Speaking.French.[Group].mkv', 'Show', [1], [5], 'Speaking French'],
+  ['Show.S01E05.Speaking.French[rartv]', 'Show', [1], [5], 'Speaking French'],
   ['Show.S01E05.Episode.Title.German.x264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Episode.Title.German.x264-GRP.mkv', 'Show', [1], [5], 'Episode Title'],
   // Doubled separators in the name itself aren't a removed tag

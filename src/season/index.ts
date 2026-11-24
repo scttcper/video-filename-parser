@@ -1,5 +1,5 @@
 import { removeFileExtension } from '../extensions.js';
-import { simplifyTitle } from '../title/cleanup.js';
+import { removeTrackerTags, simplifyTitle } from '../title/cleanup.js';
 
 import {
   normalizeSixDigitAirDate,
@@ -119,8 +119,9 @@ function getRemainder(
     }
   }
 
-  // The name no longer ends the same way, so release tags were stripped after the episode title
-  return name.trimEnd().endsWith(tokens) ? result.remainder : parseRemainder(tokens, true);
+  // The name no longer ends the same way, so release tags were stripped after the episode title.
+  // A tracker tag like [rartv] isn't one.
+  return removeTrackerTags(name).endsWith(tokens) ? result.remainder : parseRemainder(tokens, true);
 }
 
 function toSeason(
