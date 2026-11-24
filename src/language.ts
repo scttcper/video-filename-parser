@@ -1,3 +1,4 @@
+import { getFirstTitleBoundaryPosition } from './title/boundaries.js';
 import { parseTitleAndYear } from './title/index.js';
 export enum Language {
   English = 'English',
@@ -163,9 +164,21 @@ const languageOrMultiExp = new RegExp(
 // Season/episode tokens end a series title, anything after them is the episode title or release info
 const seasonEpisodeTokenExp = /^(?:s\d{1,4}(?:e\d{1,4})*|\d{1,2}x\d{1,3}|e\d{1,4})$/;
 const germanMultiLanguageExp = /\bML\b/i;
+// Tags the title parser doesn't end a title at, some are words too (Web, Dubbed). Ending an
+// episode title early only means a language word after it counts, as it would without a title.
+const looseReleaseTagExp =
+  /[-_. ([](?:WEB(?:[-_. ]?DL|Mux)?|[a-z]+(?:SD|HD|Rip)|Dub(?:bed)?|Sub(?:bed|s)?|Synced|Audio|E?AC3D?|DDP?\d*|DTS|AAC)(?=[-_. )\]]|$)/i;
 
 interface Token {
   text: string;
+  start: number;
+  end: number;
+}
+
+/** A run of tokens, `from`/`to` index the tokens and `start`/`end` the release title */
+interface TokenSpan {
+  from: number;
+  to: number;
   start: number;
   end: number;
 }
@@ -194,13 +207,17 @@ export function parseLanguageInfo(
   }
 
   parsedTitle ??= parseTitleAndYear(title).title;
-  const titleSpan = findParsedTitleSpan(allTitleTokens, tokenize(parsedTitle));
-  const titleTokens = titleSpan
-    ? [...allTitleTokens.slice(0, titleSpan.from), ...allTitleTokens.slice(titleSpan.to)]
-    : allTitleTokens;
-  const releaseInfo = titleSpan
-    ? title.slice(0, titleSpan.start) + title.slice(titleSpan.end)
-    : title;
+  const titleSpans = [
+    findParsedTitleSpan(allTitleTokens, tokenize(parsedTitle)),
+    findEpisodeTitleSpan(allTitleTokens, title),
+  ].filter(span => span !== undefined);
+  const titleTokens = allTitleTokens.filter(
+    (_, index) => !titleSpans.some(({ from, to }) => index >= from && index < to),
+  );
+  let releaseInfo = title;
+  for (const { start, end } of titleSpans.toSorted((a, b) => b.start - a.start)) {
+    releaseInfo = releaseInfo.slice(0, start) + releaseInfo.slice(end);
+  }
 
   const titleTokenSet = new Set(titleTokens.map(({ text }) => text));
   const languages = [
@@ -248,12 +265,12 @@ function tokenize(title: string): Token[] {
 
 /**
  * Finds the parsed title inside the release title tokens. A series title stops at the first
- * season/episode token so language words in the episode title still count.
+ * season/episode token, the episode title after it is found by findEpisodeTitleSpan.
  */
 function findParsedTitleSpan(
   titleTokens: Token[],
   parsedTitleTokens: Token[],
-): { from: number; to: number; start: number; end: number } | undefined {
+): TokenSpan | undefined {
   const seasonIndex = parsedTitleTokens.findIndex(({ text }) => seasonEpisodeTokenExp.test(text));
   const sequence = (
     seasonIndex === -1 ? parsedTitleTokens : parsedTitleTokens.slice(0, seasonIndex)
@@ -271,6 +288,44 @@ function findParsedTitleSpan(
 
   const to = from + sequence.length;
   return { from, to, start: titleTokens[from]!.start, end: titleTokens[to - 1]!.end };
+}
+
+/**
+ * Finds the episode title, the words between the episode token and the first release tag. The
+ * release language sits right in front of the tags, so trailing language words are left out of
+ * the span: The.Italian.Bob.1080p is an episode title, Ausgebacken.German.720p is in German.
+ */
+function findEpisodeTitleSpan(tokens: Token[], title: string): TokenSpan | undefined {
+  const from = tokens.findIndex(({ text }) => seasonEpisodeTokenExp.test(text)) + 1;
+  if (from === 0) {
+    return undefined;
+  }
+
+  const episodeEnd = tokens[from - 1]!.end;
+  const looseTag = title.slice(episodeEnd).search(looseReleaseTagExp);
+  const firstTag = Math.min(
+    getFirstTitleBoundaryPosition(title) ?? title.length,
+    looseTag === -1 ? title.length : episodeEnd + looseTag,
+  );
+  let to = tokens.findLastIndex(({ end }) => end <= firstTag) + 1;
+  while (to > from && isLanguageTag(tokens[to - 1]!, title)) {
+    to--;
+  }
+
+  return to > from ? { from, to, start: tokens[from]!.start, end: tokens[to - 1]!.end } : undefined;
+}
+
+function isLanguageTag({ text, start, end }: Token, title: string): boolean {
+  if (languageAliasTokens.has(text) || multiTokens.has(text)) {
+    return true;
+  }
+
+  // The codes and markers of languageExpRules (NO, POR, cat.DD), matched where the token sits
+  const context = title.slice(Math.max(start - 1, 0), end + 6);
+  return languageExpRules.some(({ exp }) => {
+    const match = exp.exec(context);
+    return match !== null && match.index <= 1;
+  });
 }
 
 function hasMultiLanguageToken(tokens: Token[]): boolean {
