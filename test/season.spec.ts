@@ -404,6 +404,15 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
   ['Show.S01E05.Episode.Title.REAL.PROPER.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Episode.Title.REPACK.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['show.s01e05.episode.title.repack.1080p.web.h264-grp', 'show', [1], [5], 'episode title'],
+  // Language tags right before the release tags aren't part of the episode title, in any case
+  ['Show.S01E05.Episode.Title.German.DL.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.Episode.Title.iTALiAN.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Episode Title'],
+  ['show.s01e05.episode.title.german.1080p.web.h264-grp', 'show', [1], [5], 'episode title'],
+  ['Show.S01E05.The.Russian.1080p.WEB.H264-GRP', 'Show', [1], [5], 'The Russian'],
+  ['Show.S01E05.Black.Ice.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Black Ice'],
+  // WEB right before the codec is the source
+  ['Show.S01E05.The.Dark.Web.WEB.H264-GRP', 'Show', [1], [5], 'The Dark Web'],
+  ['Show.S01E05.Episode.Title.WEBRip.x264-GRP', 'Show', [1], [5], 'Episode Title'],
   [
     'Klassen.S07E370.Et.Vildt.Venskab.DANISH.720p.WEB.h264-LSDK',
     'Klassen',
@@ -435,6 +444,14 @@ const noRemainderCases: Array<[string]> = [
   // Scene flags right after the episode aren't an episode title
   ['Covert.Affairs.S05E09.REAL.PROPER.HDTV.x264-KILLERS'],
   ['Show.S01E05.REPACK.1080p.WEB.H264-GRP'],
+  // Nor are language tags
+  ['Babylon.Berlin.S01E05.GERMAN.1080p.WEB.H264-GRP'],
+  ['Show.S01E05.German.DL.1080p.WEB.H264-GRP'],
+  // Release tags right after the episode leave no episode title
+  ['Show.S01E05.1080p.AMZN.WEB-DL.DDP5.1.H.264-GRP'],
+  ['Show.S01E05.2160p.ATVP.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-FLUX'],
+  ['Show.S01E05.1080p.WEB.x264-GRP-postbot'],
+  ['Orphan Black S05E09 WEBRip 1080p10bit DD5 1 x265 HEVC D0ct0rLew'],
   ['show.s01e05.proper.1080p.web.h264-grp'],
 ];
 for (const [postTitle] of noRemainderCases) {
