@@ -3,7 +3,7 @@ import { webdlExp } from '../source.js';
 import { codecExp } from '../videoCodec.js';
 import { cleanTorrentSuffixExp, websitePostfixExp, websitePrefixExp } from '../website.js';
 
-import { sceneReleaseTagExp, upperCaseSourceTagExp } from './boundaries.js';
+import { sceneReleaseTagExp } from './boundaries.js';
 
 const resolutionOrCodecDetailsExp =
   /\s*(?:480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|HVEC|[xh][\W_]?26[45]|DD\W?5\W1|[<>?*:|]|848x480|1280x720|1920x1080)((8|10)b(it))?/i;
@@ -51,14 +51,26 @@ function applyCleanupPasses(title: string, passes: readonly CleanupPass[]): stri
   return cleanedTitle;
 }
 
-// WEB right in front of the video codec is the source, on its own it is a title word (The Dark
-// Web). WEBRip is not in commonSourceMarkerExp.
-const webSourceExp = /\bWEB(?:Rip\b|(?=[-_. ](?:[xh][-_. ]?26[45]|HEVC|AVC)\b))/i;
+// WEBRip is not in commonSourceMarkerExp
+const webRipExp = /\bWEBRip\b/i;
+// WEB right in front of the video codec is the source: Episode.Title.WEB.H264. Upper case only, a
+// title can end in Web (The.Dark.Web.H264).
+const webBeforeCodecExp = /\bWEB(?=[-_. ](?:[xXhH][-_. ]?26[45]|HEVC|AVC)\b)/;
+// So is cam in any case, Movie.Title.cam.XviD. Anywhere else it is a title word (Court Cam).
+const camBeforeCodecExp = /\bCAM(?=[-_. ](?:[xh][-_. ]?26[45]|HEVC|AVC|XviD|DivX)\b)/i;
 
 const simplifyTitleCleanupPasses: readonly CleanupPass[] = [
   {
+    name: 'remove webrip',
+    pattern: webRipExp,
+  },
+  {
     name: 'remove web source before the codec',
-    pattern: webSourceExp,
+    pattern: webBeforeCodecExp,
+  },
+  {
+    name: 'remove cam source before the codec',
+    pattern: camBeforeCodecExp,
   },
   {
     name: 'remove resolution and first codec details',
@@ -167,21 +179,15 @@ function trimTrailingReleaseMetadata(title: string): string {
   return trimmedTitle;
 }
 
-function searchAfterLowerCase(title: string, exp: RegExp): number {
-  const index = title.search(exp);
-  return lowerCaseLetterExp.test(title.slice(0, Math.max(index, 0))) ? index : -1;
-}
-
 // Handles full release strings passed directly into the title cleaner. This is
 // intentionally separator-based so bare title substrings do not become cut points.
 function truncateAtReleaseMetadataBoundary(title: string): string {
   // Scene flags come after the year or the episode title, never inside a title: Get.Real.1998 is
-  // a title, Episode.Title.REAL.PROPER is not. The same goes for the short source tags that are
-  // words too, Episode.Title.CAM.XviD and Body.Cam. An upper case name can't tell (GET.REAL).
+  // a title, Episode.Title.REAL.PROPER is not. An upper case name can't tell (GET.REAL).
+  const sceneTag = title.search(sceneReleaseTagExp);
   const positions = [
     title.search(releaseBoundaryExp),
-    searchAfterLowerCase(title, sceneReleaseTagExp),
-    searchAfterLowerCase(title, upperCaseSourceTagExp),
+    lowerCaseLetterExp.test(title.slice(0, Math.max(sceneTag, 0))) ? sceneTag : -1,
   ].filter(position => position > 0);
 
   return positions.length > 0 ? title.slice(0, Math.min(...positions)) : title;

@@ -1,3 +1,4 @@
+import { removeFileExtension } from '../extensions.js';
 import { simplifyTitle } from '../title/cleanup.js';
 
 import {
@@ -89,6 +90,20 @@ function preValidation(title: string): boolean {
   return true;
 }
 
+const gapExp = /\.{2}| {2}/;
+const leadingGapExp = /^(?:\.{2}| {2})/;
+
+// A gap right after the episode is where a resolution or source was removed, so what follows is
+// release info and not an episode title: S01E05.1080p.AMZN.WEB-DL.DDP5.1.H.264. Not when the name
+// has doubled separators of its own, Show.S01E05..The.Pilot
+function hasTagAfterEpisode(title: string, result: ParsedMatchCollection): boolean {
+  return (
+    result.releaseTokens !== undefined &&
+    leadingGapExp.test(result.releaseTokens) &&
+    !gapExp.test(removeFileExtension(title))
+  );
+}
+
 function toSeason(title: string, result: ParsedMatchCollection): Season {
   const isSpecialFullSeason =
     result.fullSeason === true &&
@@ -100,7 +115,9 @@ function toSeason(title: string, result: ParsedMatchCollection): Season {
     seriesTitle: result.seriesName,
     seasons: result.seasonNumbers ?? [],
     episodeNumbers: result.episodeNumbers ?? [],
-    ...(result.remainder ? { remainder: result.remainder } : {}),
+    ...(result.remainder && !hasTagAfterEpisode(title, result)
+      ? { remainder: result.remainder }
+      : {}),
     airDate: result.airDate ?? null,
     fullSeason: isSpecialFullSeason ? false : (result.fullSeason ?? false),
     isPartialSeason: result.isPartialSeason ?? false,

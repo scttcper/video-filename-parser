@@ -404,6 +404,7 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
   ['Show.S01E05.Keeping.It.Real.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Keeping It Real'],
   ['Show.S01E05.Body.Cam.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Body Cam'],
   ['Show.S01E05.Episode.Title.CAM.XviD-GRP.mkv', 'Show', [1], [5], 'Episode Title'],
+  ['Show.S01E05.Episode.Title.SCREENER.XviD-GRP', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Episode.Title.REAL.PROPER.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Episode.Title.REPACK.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['show.s01e05.episode.title.repack.1080p.web.h264-grp', 'show', [1], [5], 'episode title'],
@@ -416,9 +417,15 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
   // Without release tags a language word is the title
   ['Show.S01E05.Speaking.French.mkv', 'Show', [1], [5], 'Speaking French'],
   ['Show - S01E05 - Speaking French', 'Show', [1], [5], 'Speaking French'],
+  ['Show.S01E05.Speaking.French.[Group].mkv', 'Show', [1], [5], 'Speaking French'],
+  ['Show.S01E05.Episode.Title.German.x264-GRP', 'Show', [1], [5], 'Episode Title'],
+  // Doubled separators in the name itself aren't a removed tag
+  ['Show.S01E05..The.Pilot.mkv', 'Show', [1], [5], 'The Pilot'],
+  ['Show S01E05  Episode Title.mkv', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Black.Ice.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Black Ice'],
   // WEB right before the codec is the source
   ['Show.S01E05.The.Dark.Web.WEB.H264-GRP', 'Show', [1], [5], 'The Dark Web'],
+  ['Show.S01E05.The.Dark.Web.H264-GRP', 'Show', [1], [5], 'The Dark Web'],
   ['Show.S01E05.Episode.Title.WEBRip.x264-GRP', 'Show', [1], [5], 'Episode Title'],
   [
     'Klassen.S07E370.Et.Vildt.Venskab.DANISH.720p.WEB.h264-LSDK',

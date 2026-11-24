@@ -31,12 +31,16 @@ const releaseTagExp =
 // Also a title word, only a tag once the name has lower case: THE.DARJEELING.LIMITED.1080p
 const limitedTagExp = /[._ ]LIMITED(?=[-_. ]|$)/g;
 // Sources aren't title words, so any case. Gota.Kanal.3.Bakom.Kulisserna.SWEDiSH.PDTV.XViD. A
-// dotted DVD.SCREENER or WEB.SCREENER is one tag, so DVD or WEB doesn't stay in the title.
+// dotted DVD.SCREENER or WEB.SCREENER is one tag, so DVD or WEB doesn't stay in the title. Cam is
+// a word (Court Cam) but right in front of the codec it is the source: Movie.Title.cam.XviD
 const sourceTagExp =
-  /[._ ](?:PDTV|[SH]D[._ ]?TV|HDTVRip|DSR|DSRip|TVRip|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|VHSRip|DVDRip|DVDR|DVD[59]|DVDSCR|(?:(?:DVD|WEB)[._ ]?)?SCREENER|SVCD|VCD|BDRip|BRRip|HDRip)(?=[-_. ]|$)/i;
+  /[._ ](?:PDTV|[SH]D[._ ]?TV|HDTVRip|DSR|DSRip|TVRip|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|VHSRip|DVDRip|DVDR|DVD[59]|DVDSCR|(?:(?:DVD|WEB)[._ ]?)?SCREENER|SVCD|VCD|BDRip|BRRip|HDRip|CAM(?=[._ ](?:XviD|DivX|[xh][._ ]?26[45]|HEVC|AVC)(?:[-_. ]|$)))(?=[-_. ]|$)/gi;
 // Short source tags that are also words (My.Pal.Joey, a web cam), only upper case
 export const upperCaseSourceTagExp: RegExp =
   /[._ ](?:PAL|NTSC|SECAM|TS|TC|CAM|R5|SCREENER)(?=[-_. ]|$)/;
+const sceneReleaseTagGlobalExp = new RegExp(sceneReleaseTagExp.source, 'g');
+const releaseTagGlobalExp = new RegExp(releaseTagExp.source, 'g');
+const upperCaseSourceTagGlobalExp = new RegExp(upperCaseSourceTagExp.source, 'g');
 const lowerCaseLetterExp = /\p{Ll}/u;
 
 // The first match with a lower case letter somewhere before it
@@ -63,21 +67,33 @@ function isReleaseLanguageSpelling(word: string, titleBefore: string): boolean {
   return word === word.toUpperCase() && lowerCaseLetterExp.test(titleBefore);
 }
 
+// A tag never leaves a lone article as the title: The Screener, The.4K
+function isTitleBefore(title: string, position: number): boolean {
+  return position > 0 && !articleOnlyExp.test(title.slice(0, position));
+}
+
+// The first match that leaves a title in front of it, The.Screener.Gets.Away.PDTV ends at PDTV
+function searchTag(title: string, globalExp: RegExp): number {
+  for (const match of title.matchAll(globalExp)) {
+    if (isTitleBefore(title, match.index)) {
+      return match.index;
+    }
+  }
+  return -1;
+}
+
 export function getFirstTitleBoundaryPosition(title: string): number | null {
   const positions = titleBoundaryParsers
     .map(({ parse }) => parse(title))
     .map(source => (source ? title.indexOf(source) : -1));
   positions.push(
-    title.search(sceneReleaseTagExp),
-    title.search(releaseTagExp),
-    title.search(sourceTagExp),
-    title.search(upperCaseSourceTagExp),
+    searchTag(title, sceneReleaseTagGlobalExp),
+    searchTag(title, releaseTagGlobalExp),
+    searchTag(title, sourceTagExp),
+    searchTag(title, upperCaseSourceTagGlobalExp),
     searchAfterLowerCase(title, limitedTagExp),
   );
-  // A tag never leaves a lone article as the title: The Screener, The.4K
-  const validPositions = positions.filter(
-    position => position > 0 && !articleOnlyExp.test(title.slice(0, position)),
-  );
+  const validPositions = positions.filter(position => isTitleBefore(title, position));
   if (validPositions.length === 0) {
     return null;
   }

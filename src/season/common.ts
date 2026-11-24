@@ -429,15 +429,7 @@ function finishResult(
   };
 }
 
-// A gap right after the episode is where a resolution or source was removed, so what follows is
-// release info and not an episode title: S01E05.1080p.AMZN.WEB-DL.DDP5.1.H.264
-const leadingGapExp = /^(?:\.{2}| {2})/;
-
 function parseRemainder(releaseTokens: string): string | undefined {
-  if (leadingGapExp.test(releaseTokens)) {
-    return undefined;
-  }
-
   const rawRemainder = removeFileExtension(releaseTokens)
     .replaceAll(hashTagExp, '')
     .replace(trailingRemainderRequestInfoExp, '')
@@ -454,18 +446,28 @@ function parseRemainder(releaseTokens: string): string | undefined {
     return undefined;
   }
 
-  const cleanRemainder = releaseTitleCleaner(rawRemainder)?.replace(sceneFlagSuffixExp, '');
+  // An upper case source tag ends the episode title, Episode.Title.CAM.XviD. Not Body.Cam, and an
+  // upper case name can't tell.
+  const sourceTag = rawRemainder.search(upperCaseSourceTagExp);
+  const untaggedRemainder =
+    sourceTag > 0 && lowerCaseLetterExp.test(rawRemainder.slice(0, sourceTag))
+      ? rawRemainder.slice(0, sourceTag)
+      : rawRemainder;
+
+  const cleanRemainder = releaseTitleCleaner(untaggedRemainder)?.replace(sceneFlagSuffixExp, '');
   // Without release tags after it nothing says a language word is a tag: Speaking.French.mkv
   const remainder =
-    cleanRemainder && removedTagsExp.test(rawRemainder)
+    cleanRemainder && removedTagsExp.test(releaseTokens)
       ? removeLanguageTags(cleanRemainder)
       : cleanRemainder;
 
   return remainder && remainderContentExp.test(remainder) ? remainder : undefined;
 }
 
-// Stripped release tags leave a gap or a trailing separator behind: Episode.Title.German..-GRP
-const removedTagsExp = /\.{2}| {2}|[-_. ]$/;
+// Stripped release tags leave a gap behind, or a separator in front of the group:
+// Episode.Title.German..-GRP, Episode.Title.German.-GRP
+const removedTagsExp = /\.{2}| {2}|[._ ]-[^-_. ]+$/;
+const lowerCaseLetterExp = /\p{Ll}/u;
 
 // Built on first use, the language module isn't loaded yet when this one is
 let languageTagSuffixExp: RegExp | undefined;
@@ -484,15 +486,18 @@ function removeLanguageTags(remainder: string): string {
   );
 
   let title = remainder;
-  for (;;) {
+  // Stacked tags like German.DL come off one at a time, a few at most so long names stay fast
+  for (let stripped = 0; stripped < 4; stripped++) {
     const shorter = title.replace(languageTagSuffixExp, '');
     // A language never leaves a lone article behind: The.Russian is the episode title
     if (shorter === title || articleOnlyExp.test(shorter)) {
-      return title;
+      break;
     }
 
     title = shorter;
   }
+
+  return title;
 }
 
 function groupValue(groups: MatchGroups, name: string): string | undefined {
