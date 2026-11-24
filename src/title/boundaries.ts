@@ -4,6 +4,8 @@ import { getLanguageAliasTokens, Language } from '../language.js';
 import { findFirstResolutionToken } from '../resolution.js';
 import { parseVideoCodec } from '../videoCodec.js';
 
+import { articleOnlyExp } from './cleanup.js';
+
 interface TitleBoundaryParser {
   name: string;
   parse: (title: string) => string | undefined;
@@ -29,12 +31,12 @@ const releaseTagExp =
 // Also a title word, only a tag once the name has lower case: THE.DARJEELING.LIMITED.1080p
 const limitedTagExp = /[._ ]LIMITED(?=[-_. ]|$)/g;
 // Sources aren't title words, so any case. Gota.Kanal.3.Bakom.Kulisserna.SWEDiSH.PDTV.XViD. A
-// dotted DVD.SCREENER or WEB.SCREENER is one tag, so DVD or WEB doesn't stay in the title. A bare
-// Screener needs tags after it, at the end of a name it is the title: The Screener
+// dotted DVD.SCREENER or WEB.SCREENER is one tag, so DVD or WEB doesn't stay in the title.
 const sourceTagExp =
-  /[._ ](?:PDTV|[SH]D[._ ]?TV|HDTVRip|DSR|DSRip|TVRip|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|VHSRip|DVDRip|DVDR|DVD[59]|DVDSCR|(?:DVD|WEB)[._ ]?SCREENER|SCREENER(?=[-_. ])|SVCD|VCD|BDRip|BRRip|HDRip)(?=[-_. ]|$)/i;
+  /[._ ](?:PDTV|[SH]D[._ ]?TV|HDTVRip|DSR|DSRip|TVRip|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|VHSRip|DVDRip|DVDR|DVD[59]|DVDSCR|(?:(?:DVD|WEB)[._ ]?)?SCREENER|SVCD|VCD|BDRip|BRRip|HDRip)(?=[-_. ]|$)/i;
 // Short source tags that are also words (My.Pal.Joey, a web cam), only upper case
-const upperCaseSourceTagExp = /[._ ](?:PAL|NTSC|SECAM|TS|TC|CAM|R5)(?=[-_. ]|$)/;
+export const upperCaseSourceTagExp: RegExp =
+  /[._ ](?:PAL|NTSC|SECAM|TS|TC|CAM|R5|SCREENER)(?=[-_. ]|$)/;
 const lowerCaseLetterExp = /\p{Ll}/u;
 
 // The first match with a lower case letter somewhere before it
@@ -72,7 +74,10 @@ export function getFirstTitleBoundaryPosition(title: string): number | null {
     title.search(upperCaseSourceTagExp),
     searchAfterLowerCase(title, limitedTagExp),
   );
-  const validPositions = positions.filter(position => position > 0);
+  // A tag never leaves a lone article as the title: The Screener, The.4K
+  const validPositions = positions.filter(
+    position => position > 0 && !articleOnlyExp.test(title.slice(0, position)),
+  );
   if (validPositions.length === 0) {
     return null;
   }

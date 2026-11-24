@@ -3,7 +3,7 @@ import { webdlExp } from '../source.js';
 import { codecExp } from '../videoCodec.js';
 import { cleanTorrentSuffixExp, websitePostfixExp, websitePrefixExp } from '../website.js';
 
-import { sceneReleaseTagExp } from './boundaries.js';
+import { sceneReleaseTagExp, upperCaseSourceTagExp } from './boundaries.js';
 
 const resolutionOrCodecDetailsExp =
   /\s*(?:480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|HVEC|[xh][\W_]?26[45]|DD\W?5\W1|[<>?*:|]|848x480|1280x720|1920x1080)((8|10)b(it))?/i;
@@ -159,15 +159,21 @@ function trimTrailingReleaseMetadata(title: string): string {
   return trimmedTitle;
 }
 
+function searchAfterLowerCase(title: string, exp: RegExp): number {
+  const index = title.search(exp);
+  return lowerCaseLetterExp.test(title.slice(0, Math.max(index, 0))) ? index : -1;
+}
+
 // Handles full release strings passed directly into the title cleaner. This is
 // intentionally separator-based so bare title substrings do not become cut points.
 function truncateAtReleaseMetadataBoundary(title: string): string {
   // Scene flags come after the year or the episode title, never inside a title: Get.Real.1998 is
-  // a title, Episode.Title.REAL.PROPER is not. An upper case name can't tell (GET.REAL).
-  const sceneTag = title.search(sceneReleaseTagExp);
+  // a title, Episode.Title.REAL.PROPER is not. The same goes for the short source tags that are
+  // words too, Episode.Title.CAM.XviD and Body.Cam. An upper case name can't tell (GET.REAL).
   const positions = [
     title.search(releaseBoundaryExp),
-    lowerCaseLetterExp.test(title.slice(0, Math.max(sceneTag, 0))) ? sceneTag : -1,
+    searchAfterLowerCase(title, sceneReleaseTagExp),
+    searchAfterLowerCase(title, upperCaseSourceTagExp),
   ].filter(position => position > 0);
 
   return positions.length > 0 ? title.slice(0, Math.min(...positions)) : title;

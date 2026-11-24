@@ -403,6 +403,7 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
   ['Show.S02E02.Episode.Title.1080p.WEB.H264-GROUP', 'Show', [2], [2], 'Episode Title'],
   ['Show.S01E05.Keeping.It.Real.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Keeping It Real'],
   ['Show.S01E05.Body.Cam.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Body Cam'],
+  ['Show.S01E05.Episode.Title.CAM.XviD-GRP.mkv', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Episode.Title.REAL.PROPER.720p.HDTV.x264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Episode.Title.REPACK.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['show.s01e05.episode.title.repack.1080p.web.h264-grp', 'show', [1], [5], 'episode title'],
@@ -437,6 +438,7 @@ const noRemainderCases: Array<[string]> = [
   // Scene flags right after the episode aren't an episode title
   ['Covert.Affairs.S05E09.REAL.PROPER.HDTV.x264-KILLERS'],
   ['Show.S01E05.REPACK.1080p.WEB.H264-GRP'],
+  ['Show.S01E05.SCREENER.XviD-GRP.mkv'],
   ['show.s01e05.proper.1080p.web.h264-grp'],
 ];
 for (const [postTitle] of noRemainderCases) {

@@ -1,5 +1,5 @@
 import { removeFileExtension } from '../extensions.js';
-import { sceneReleaseTagExp } from '../title/boundaries.js';
+import { sceneReleaseTagExp, upperCaseSourceTagExp } from '../title/boundaries.js';
 import { releaseTitleCleaner, sceneFlagSuffixExp } from '../title/cleanup.js';
 import { releaseGroupSuffixExp } from '../title/patterns.js';
 
@@ -435,11 +435,12 @@ function parseRemainder(releaseTokens: string): string | undefined {
     .replace(releaseGroupSuffixExp, '')
     .replaceAll(emptyBracketsExp, '')
     .replace(leadingRemainderSeparatorsExp, '');
-  // Release info or a scene flag right after the episode, there is no episode title:
+  // Release info, a scene flag or a source tag right after the episode, there is no episode title:
   // Show.S05E09.REAL.PROPER.HDTV
   if (
     leadingReleaseMetadataExp.test(rawRemainder) ||
-    `.${rawRemainder}`.search(sceneReleaseTagExp) === 0
+    `.${rawRemainder}`.search(sceneReleaseTagExp) === 0 ||
+    `.${rawRemainder}`.search(upperCaseSourceTagExp) === 0
   ) {
     return undefined;
   }
