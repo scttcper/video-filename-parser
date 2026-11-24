@@ -51,7 +51,15 @@ function applyCleanupPasses(title: string, passes: readonly CleanupPass[]): stri
   return cleanedTitle;
 }
 
+// WEB right in front of the video codec is the source, on its own it is a title word (The Dark
+// Web). WEBRip is not in commonSourceMarkerExp.
+const webSourceExp = /\bWEB(?:Rip\b|(?=[-_. ](?:[xh][-_. ]?26[45]|HEVC|AVC)\b))/i;
+
 const simplifyTitleCleanupPasses: readonly CleanupPass[] = [
+  {
+    name: 'remove web source before the codec',
+    pattern: webSourceExp,
+  },
   {
     name: 'remove resolution and first codec details',
     pattern: resolutionOrCodecDetailsExp,

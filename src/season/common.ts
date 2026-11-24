@@ -1,6 +1,7 @@
 import { removeFileExtension } from '../extensions.js';
+import { getLanguageAliasTokens, Language } from '../language.js';
 import { sceneReleaseTagExp, upperCaseSourceTagExp } from '../title/boundaries.js';
-import { releaseTitleCleaner, sceneFlagSuffixExp } from '../title/cleanup.js';
+import { articleOnlyExp, releaseTitleCleaner, sceneFlagSuffixExp } from '../title/cleanup.js';
 import { releaseGroupSuffixExp } from '../title/patterns.js';
 
 const requestInfoExp = /^(?:\[[^\]\r\n]+\])+/;
@@ -10,7 +11,7 @@ const sixDigitAirDateMatchExp =
 const trailingRemainderRequestInfoExp = /(?:\s*\[[^\]\r\n]+\])+$/;
 const leadingRemainderSeparatorsExp = /^[-_.\s\])]+/;
 const leadingReleaseMetadataExp =
-  /^(?:[ip][-_.\s]+[xh][-. ]?26[45]|(?:1[89]|20)\d{2}|480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|WEB(?:[-_. ]?DL|Rip)?|Blu[-_. ]?Ray|HDTV|DVD(?:Rip)?|BDRip|BRRip|[xh][-. ]?26[45]|h[-. ]?26[45]|HEVC|XviD)\b/i;
+  /^(?:[ip][-_.\s]+[xh][-. ]?26[45]|(?:1[89]|20)\d{2}|480[ip]|576[ip]|720[ip]|1080[ip]|2160[ip]|WEB(?:[-_. ]?DL|Rip)?|Blu[-_. ]?Ray|HDTV|DVD(?:Rip)?|BDRip|BRRip|[xh][-. ]?26[45]|h[-. ]?26[45]|HEVC|XviD|DD[P+]?[-_. ]?\d|E?-?AC-?3|AAC|DTS|TrueHD|FLAC)\b/i;
 const remainderContentExp = /[a-z]/i;
 // Brackets left empty after quality tokens are stripped, e.g. `VOSTFR ()` or `[Web][MKV][]`
 const emptyBracketsExp = /\s*(?:\(\s*\)|\[\s*\]|\{\s*\})/g;
@@ -428,7 +429,15 @@ function finishResult(
   };
 }
 
+// A gap right after the episode is where a resolution or source was removed, so what follows is
+// release info and not an episode title: S01E05.1080p.AMZN.WEB-DL.DDP5.1.H.264
+const leadingGapExp = /^(?:\.{2}| {2})/;
+
 function parseRemainder(releaseTokens: string): string | undefined {
+  if (leadingGapExp.test(releaseTokens)) {
+    return undefined;
+  }
+
   const rawRemainder = removeFileExtension(releaseTokens)
     .replaceAll(hashTagExp, '')
     .replace(trailingRemainderRequestInfoExp, '')
@@ -445,9 +454,45 @@ function parseRemainder(releaseTokens: string): string | undefined {
     return undefined;
   }
 
-  const remainder = releaseTitleCleaner(rawRemainder)?.replace(sceneFlagSuffixExp, '');
+  const cleanRemainder = releaseTitleCleaner(rawRemainder)?.replace(sceneFlagSuffixExp, '');
+  // Without release tags after it nothing says a language word is a tag: Speaking.French.mkv
+  const remainder =
+    cleanRemainder && removedTagsExp.test(rawRemainder)
+      ? removeLanguageTags(cleanRemainder)
+      : cleanRemainder;
 
   return remainder && remainderContentExp.test(remainder) ? remainder : undefined;
+}
+
+// Stripped release tags leave a gap or a trailing separator behind: Episode.Title.German..-GRP
+const removedTagsExp = /\.{2}| {2}|[-_. ]$/;
+
+// Built on first use, the language module isn't loaded yet when this one is
+let languageTagSuffixExp: RegExp | undefined;
+
+// The release language sits right in front of the release tags, so language words at the end of
+// an episode title are tags in any case: Episode.Title.German.DL.1080p, Episode.Title.iTALiAN.720p.
+// Short codes are left alone, they are words too (ice, dan, lat).
+function removeLanguageTags(remainder: string): string {
+  languageTagSuffixExp ??= new RegExp(
+    String.raw`(?:^|(?<![-_. ])[-_. ]+)(?:${[
+      ...Object.values(Language),
+      ...[...getLanguageAliasTokens()].filter(alias => alias.length >= 5),
+      'vostfr|multi|dubbed|dl|ml',
+    ].join('|')})$`,
+    'i',
+  );
+
+  let title = remainder;
+  for (;;) {
+    const shorter = title.replace(languageTagSuffixExp, '');
+    // A language never leaves a lone article behind: The.Russian is the episode title
+    if (shorter === title || articleOnlyExp.test(shorter)) {
+      return title;
+    }
+
+    title = shorter;
+  }
 }
 
 function groupValue(groups: MatchGroups, name: string): string | undefined {
