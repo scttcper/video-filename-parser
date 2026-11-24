@@ -35,11 +35,16 @@ const limitedTagExp = /[._ ]LIMITED(?=[-_. ]|$)/g;
 // a word (Court Cam) but right in front of a codec it is the source: Movie.Title.cam.XviD. The
 // codec list matches camBeforeCodecExp in cleanup.ts.
 const sourceTagExp =
-  /[._ ](?:PDTV|[SH]D[._ ]?TV|HDTVRip|DSR|DSRip|TVRip|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|VHSRip|DVDRip|DVDR|DVD[59]|DVDSCR|(?:(?:DVD|WEB)[._ ]?)?SCREENER|SVCD|VCD|BDRip|BRRip|HDRip|CAM(?=[._ ](?:XviD|DivX|[xh][._ ]?26[45]|HEVC|AVC|AAC|E?-?AC-?3|DDP?[._ ]?\d|DTS|MP3|FLAC)(?:[-_. ]|$)))(?=[-_. ]|$)/i;
+  /[._ ](?:PDTV|[SH]D[._ ]?TV|HDTVRip|DSR|DSRip|TVRip|SATRip|DVBRip|DVB|DTVRip|DTV|DVTV|VHSRip|DVDRip|DVDR|DVD[59]|DVDSCR|(?:(?:DVD|WEB)[._ ]?)?SCREENER|SVCD|VCD|BDRip|BRRip|HDRip|CAM(?=[-._ ](?:XviD|DivX|[xh][._ ]?26[45]|HEVC|AVC|AAC|E?-?AC-?3|DDP?[._ ]?\d|DTS|MP3|FLAC)(?:[-_. ]|$)))(?=[-_. ]|$)/i;
 // Short source tags that are also words (My.Pal.Joey, a web cam), only upper case
 export const upperCaseSourceTagExp: RegExp =
   /[._ ](?:PAL|NTSC|SECAM|TS|TC|CAM|R5|SCREENER)(?=[-_. ]|$)/;
 const tokenEndExp = /[-_. ]|$/;
+// Source tags that are never a title word, unlike Screener or Cam: A.PDTV.XviD is "A"
+const technicalSourceTagExp = new RegExp(
+  String.raw`^(?![._ ](?:SCREENER|CAM)(?:[-_. ]|$))${sourceTagExp.source}`,
+  'i',
+);
 const lowerCaseLetterExp = /\p{Ll}/u;
 
 // The first match with a lower case letter somewhere before it
@@ -88,6 +93,7 @@ export function getFirstTitleBoundaryPosition(title: string): number | null {
   if (
     wordTagPositions.includes(firstPosition) &&
     !positions.includes(firstPosition) &&
+    !technicalSourceTagExp.test(title.slice(firstPosition)) &&
     articleOnlyExp.test(title.slice(0, firstPosition))
   ) {
     const wordStart = firstPosition + 1;

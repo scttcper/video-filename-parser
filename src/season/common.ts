@@ -470,6 +470,7 @@ const trailingUpperCaseSourceTagExp = new RegExp(
   String.raw`${upperCaseSourceTagExp.source}[-_. ]*$`,
 );
 
+const languageMarkerSuffixExp = /(?:^|(?<![-_. ])[-_. ]+)(?:vostfr|multi|dubbed|dl|ml)$/i;
 // Built on first use, the language module isn't loaded yet when this one is
 let languageTagSuffixExp: RegExp | undefined;
 
@@ -481,17 +482,22 @@ function removeLanguageTags(remainder: string): string {
     String.raw`(?:^|(?<![-_. ])[-_. ]+)(?:${[
       ...Object.values(Language),
       ...[...getLanguageAliasTokens()].filter(alias => alias.length >= 5),
-      'vostfr|multi|dubbed|dl|ml',
     ].join('|')})$`,
     'i',
   );
 
   let title = remainder;
-  // Stacked tags like German.DL come off one at a time, a few at most so long names stay fast
-  for (let stripped = 0; stripped < 4; stripped++) {
-    const shorter = title.replace(languageTagSuffixExp, '');
+  // One language with the markers around it, German.DL or MULTi.FRENCH. A second language word in
+  // front of that is the episode title: Speaking.French.German.DL
+  for (const suffixExp of [
+    languageMarkerSuffixExp,
+    languageMarkerSuffixExp,
+    languageTagSuffixExp,
+    languageMarkerSuffixExp,
+  ]) {
+    const shorter = title.replace(suffixExp, '');
     // A language never leaves a lone article behind: The.Russian is the episode title
-    if (shorter === title || articleOnlyExp.test(shorter)) {
+    if (articleOnlyExp.test(shorter)) {
       break;
     }
 

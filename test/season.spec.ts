@@ -428,10 +428,15 @@ const remainderCases: Array<[string, string, number[], number[], string]> = [
   ['Show - S01E05 - Speaking French', 'Show', [1], [5], 'Speaking French'],
   ['Show.S01E05.Speaking.French.[Group].mkv', 'Show', [1], [5], 'Speaking French'],
   ['Show.S01E05.Speaking.French[rartv]', 'Show', [1], [5], 'Speaking French'],
+  ['Show.S01E05.Speaking.French?.mkv', 'Show', [1], [5], 'Speaking French'],
+  // Only one language comes off, the word in front of it is the title
+  ['Show.S01E05.Speaking.French.German.DL.1080p.WEB.H264-GRP', 'Show', [1], [5], 'Speaking French'],
+  ['show.s01e05.episode.title.multi.french.1080p.web.h264-grp', 'show', [1], [5], 'episode title'],
   ['Show.S01E05.Episode.Title.German.x264-GRP', 'Show', [1], [5], 'Episode Title'],
   ['Show.S01E05.Episode.Title.German.x264-GRP.mkv', 'Show', [1], [5], 'Episode Title'],
   // Doubled separators in the name itself aren't a removed tag
   ['Show.S01E05..The.Pilot.mkv', 'Show', [1], [5], 'The Pilot'],
+  ['Show.S01E05.:.The.Pilot.mkv', 'Show', [1], [5], 'The Pilot'],
   ['Show.S01E05..Speaking.French.mkv', 'Show', [1], [5], 'Speaking French'],
   ['Show.S01E05.Speaking.French..Part.2.mkv', 'Show', [1], [5], 'Speaking French'],
   ['Show.S01E05.Episode.Title.German.1080p.mkv', 'Show', [1], [5], 'Episode Title'],
@@ -483,6 +488,7 @@ const noRemainderCases: Array<[string]> = [
   ['Show.S01E05.2160p.ATVP.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265-FLUX'],
   ['Show.S01E05.1080p.WEB.x264-GRP-postbot'],
   ['Some  Show.S01E05.1080p.WEB.x264-GRP-postbot'],
+  ['[REQ]Some..Show.S01E05.1080p.CR.WEB-DL.mkv'],
   ['Orphan Black S05E09 WEBRip 1080p10bit DD5 1 x265 HEVC D0ct0rLew'],
   ['show.s01e05.proper.1080p.web.h264-grp'],
 ];

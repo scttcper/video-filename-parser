@@ -147,6 +147,8 @@ const cases: Array<[string, { title: string; year: string | null }]> = [
   ['Movie.Title.SCREENER', { title: 'Movie Title', year: null }],
   ['The.Screener.Gets.Away.PDTV', { title: 'The Screener Gets Away', year: null }],
   ['A.720p.HDTV.x264-GRP', { title: 'A', year: null }],
+  ['A.PDTV.XviD-GRP', { title: 'A', year: null }],
+  ['Movie.Title.cam-x264-GRP', { title: 'Movie Title', year: null }],
   ['movie.title.cam.aac-grp', { title: 'movie title', year: null }],
   ['movie.title.cam.x264-GRP', { title: 'movie title', year: null }],
   ['Court.Cam.1080p.WEB.h264-GRP', { title: 'Court Cam', year: null }],

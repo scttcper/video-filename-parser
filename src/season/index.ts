@@ -92,6 +92,12 @@ function preValidation(title: string): boolean {
 }
 
 const gapExp = /\.{2}| {2}/;
+// Punctuation simplifyTitle strips, it is no release tag: Speaking.French?.mkv
+const punctuationExp = /[<>?*:|]/g;
+
+function removePunctuation(text: string): string {
+  return text.replaceAll(punctuationExp, '');
+}
 const leadingGapExp = /^(?:\.{2}| {2})/;
 
 // The episode title, checked against the name the release tags were stripped from
@@ -108,12 +114,17 @@ function getRemainder(
   // A gap right after the episode is where a resolution or source was removed, so what follows is
   // release info and not an episode title: S01E05.1080p.AMZN.WEB-DL.DDP5.1.H.264. Not when the
   // gap was in the name to begin with, Show.S01E05..The.Pilot
+  const plainName = removePunctuation(name);
+  const plainTokens = removePunctuation(tokens);
   if (leadingGapExp.test(tokens)) {
-    // Nothing was removed in front of the gap, so the name has it at the same place if it is its own
-    const gapIndex = simpleTitle.length - tokens.length;
-    const isOwnGap = name.startsWith(simpleTitle.slice(0, gapIndex))
-      ? leadingGapExp.test(name.slice(gapIndex))
-      : gapExp.test(removeFileExtension(name));
+    // Find the text in front of the gap in the name, the name has the gap there if it is its own
+    const plainTitle = removePunctuation(simpleTitle);
+    const gapIndex = plainTitle.length - plainTokens.length;
+    const prefixIndex = plainName.indexOf(plainTitle.slice(0, gapIndex));
+    const isOwnGap =
+      prefixIndex === -1
+        ? gapExp.test(removeFileExtension(plainName))
+        : leadingGapExp.test(plainName.slice(prefixIndex + gapIndex));
     if (!isOwnGap) {
       return undefined;
     }
@@ -121,7 +132,9 @@ function getRemainder(
 
   // The name no longer ends the same way, so release tags were stripped after the episode title.
   // A tracker tag like [rartv] isn't one.
-  return removeTrackerTags(name).endsWith(tokens) ? result.remainder : parseRemainder(tokens, true);
+  return removeTrackerTags(plainName).endsWith(plainTokens)
+    ? result.remainder
+    : parseRemainder(tokens, true);
 }
 
 function toSeason(
