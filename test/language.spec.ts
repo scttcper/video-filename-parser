@@ -152,6 +152,17 @@ const languageCases: Array<[string, Language[]]> = [
   ['Movie.Title.2021.1080p.WEB-DL.Kannada.x264-GRP', [Language.Kannada]],
   // Language after the season/episode token, where the parsed title runs past it
   ['Series.Title.S13E11.Ausgebacken.German.AmazonSD.h264-4SF', [Language.German]],
+  // A language word in the episode title isn't the release language, only one right before the tags
+  ['Seinfeld.S02E11.The.Chinese.Restaurant.1080p.WEB.H264-GRP', [Language.English]],
+  ['The.Simpsons.S17E08.The.Italian.Bob.720p.HDTV.x264-GRP', [Language.English]],
+  ['show.name.s01e05.spanish.flu.1080p.web.h264-grp', [Language.English]],
+  ['Show.Name.2019.S01E05.German.Engineering.1080p.WEB.H264-GRP', [Language.English]],
+  ['Show Name - S01E05 - The French Connection', [Language.English]],
+  ['SHOW.NAME.S01E05.NO.QUARTER.720P.HDTV.X264-GRP', [Language.English]],
+  ['Show.Name.S01E05.The.Italian.Bob.GERMAN.1080p.WEB.H264-GRP', [Language.German]],
+  ['Show.Name.S01E05.Episode.Title.German.WEB.H264-GRP', [Language.German]],
+  ['Show.Name.S01E05.Episode.Title.NO.720p.HDTV.x264-GRP', [Language.Norwegian]],
+  ['Show.Name.S01E05.French.1080p.WEB.H264-GRP', [Language.French]],
   ['Series.Title.1x04.ITA.WEBMux.x264-NovaRip', [Language.Italian]],
   ['Series - S03E10 - Episode #3.10 - rus 720p WEBDL (LostFilm)', [Language.Russian]],
   ['Tokyo Ghoul: RE S2 - Episode 4 VOSTFR (1080p)', [Language.French]],
