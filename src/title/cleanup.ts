@@ -58,7 +58,8 @@ const webRipExp = /\bWEBRip\b/i;
 const webBeforeCodecExp = /\bWEB(?=[-_. ](?:[xXhH][-_. ]?26[45]|HEVC|AVC)\b)/;
 // So are cam and screener in any case, Movie.Title.cam.XviD. Anywhere else they are title words
 // (Court Cam, The Screener).
-const camBeforeCodecExp = /\b(?:CAM|SCREENER)(?=[-_. ](?:[xh][-_. ]?26[45]|HEVC|AVC|XviD|DivX)\b)/i;
+const camBeforeCodecExp =
+  /\b(?:CAM|(?:(?:DVD|WEB)[-_. ]?)?SCREENER)(?=[-_. ](?:[xh][-_. ]?26[45]|HEVC|AVC|XviD|DivX)\b)/i;
 
 const simplifyTitleCleanupPasses: readonly CleanupPass[] = [
   {

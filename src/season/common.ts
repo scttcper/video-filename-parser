@@ -429,12 +429,12 @@ function finishResult(
   };
 }
 
-function parseRemainder(releaseTokens: string): string | undefined {
-  const tokens = removeFileExtension(releaseTokens);
-  // Without release tags after the episode title nothing says a word in it is a tag:
-  // Speaking.French.mkv, My.PAL.Joey.mkv
-  const hasRemovedTags = removedTagsExp.test(tokens.replace(leadingRemainderSeparatorsExp, ''));
-  const rawRemainder = tokens
+/**
+ * @param hasRemovedTags release tags were stripped from the name after the episode. Without them
+ * nothing says a word in the episode title is a tag: Speaking.French.mkv, My.PAL.Joey.mkv
+ */
+export function parseRemainder(releaseTokens: string, hasRemovedTags = false): string | undefined {
+  const rawRemainder = removeFileExtension(releaseTokens)
     .replaceAll(hashTagExp, '')
     .replace(trailingRemainderRequestInfoExp, '')
     .replace(releaseGroupSuffixExp, '')
@@ -445,7 +445,7 @@ function parseRemainder(releaseTokens: string): string | undefined {
   if (
     leadingReleaseMetadataExp.test(rawRemainder) ||
     `.${rawRemainder}`.search(sceneReleaseTagExp) === 0 ||
-    `.${rawRemainder}`.search(upperCaseSourceTagExp) === 0
+    (hasRemovedTags && `.${rawRemainder}`.search(trailingUpperCaseSourceTagExp) === 0)
   ) {
     return undefined;
   }
@@ -465,9 +465,6 @@ function parseRemainder(releaseTokens: string): string | undefined {
   return remainder && remainderContentExp.test(remainder) ? remainder : undefined;
 }
 
-// Stripped release tags leave a gap behind, or a separator in front of the group:
-// Episode.Title.German..-GRP, Episode.Title.German.-GRP
-const removedTagsExp = /\.{2}| {2}|[._ ]-[^-_. ]+$/;
 const lowerCaseLetterExp = /\p{Ll}/u;
 const trailingUpperCaseSourceTagExp = new RegExp(
   String.raw`${upperCaseSourceTagExp.source}[-_. ]*$`,

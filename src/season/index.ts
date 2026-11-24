@@ -5,6 +5,7 @@ import {
   normalizeSixDigitAirDate,
   parseGenericMatchCollection,
   type ParsedMatchCollection,
+  parseRemainder,
 } from './common.js';
 import {
   preSubstitutions,
@@ -66,7 +67,7 @@ export function parseSeason(title: string): Season | null {
       continue;
     }
 
-    return toSeason(title, simpleTitle, result);
+    return toSeason(title, getRemainder(substituted, simpleTitle, result), result);
   }
 
   return null;
@@ -93,27 +94,40 @@ function preValidation(title: string): boolean {
 const gapExp = /\.{2}| {2}/;
 const leadingGapExp = /^(?:\.{2}| {2})/;
 
-// A gap right after the episode is where a resolution or source was removed, so what follows is
-// release info and not an episode title: S01E05.1080p.AMZN.WEB-DL.DDP5.1.H.264. Not when the gap
-// was in the name to begin with, Show.S01E05..The.Pilot
-function hasTagAfterEpisode(
-  title: string,
+// The episode title, checked against the name the release tags were stripped from
+function getRemainder(
+  name: string,
   simpleTitle: string,
   result: ParsedMatchCollection,
-): boolean {
+): string | undefined {
   const tokens = result.releaseTokens;
-  if (tokens === undefined || !leadingGapExp.test(tokens)) {
-    return false;
+  if (result.remainder === undefined || tokens === undefined) {
+    return undefined;
   }
 
-  // Nothing was removed in front of the gap, so the name has it at the same place if it is its own
-  const gapIndex = simpleTitle.length - tokens.length;
-  return title.startsWith(simpleTitle.slice(0, gapIndex))
-    ? !leadingGapExp.test(title.slice(gapIndex))
-    : !gapExp.test(removeFileExtension(title));
+  // A gap right after the episode is where a resolution or source was removed, so what follows is
+  // release info and not an episode title: S01E05.1080p.AMZN.WEB-DL.DDP5.1.H.264. Not when the
+  // gap was in the name to begin with, Show.S01E05..The.Pilot
+  if (leadingGapExp.test(tokens)) {
+    // Nothing was removed in front of the gap, so the name has it at the same place if it is its own
+    const gapIndex = simpleTitle.length - tokens.length;
+    const isOwnGap = name.startsWith(simpleTitle.slice(0, gapIndex))
+      ? leadingGapExp.test(name.slice(gapIndex))
+      : gapExp.test(removeFileExtension(name));
+    if (!isOwnGap) {
+      return undefined;
+    }
+  }
+
+  // The name no longer ends the same way, so release tags were stripped after the episode title
+  return name.trimEnd().endsWith(tokens) ? result.remainder : parseRemainder(tokens, true);
 }
 
-function toSeason(title: string, simpleTitle: string, result: ParsedMatchCollection): Season {
+function toSeason(
+  title: string,
+  remainder: string | undefined,
+  result: ParsedMatchCollection,
+): Season {
   const isSpecialFullSeason =
     result.fullSeason === true &&
     result.releaseTokens !== undefined &&
@@ -124,9 +138,7 @@ function toSeason(title: string, simpleTitle: string, result: ParsedMatchCollect
     seriesTitle: result.seriesName,
     seasons: result.seasonNumbers ?? [],
     episodeNumbers: result.episodeNumbers ?? [],
-    ...(result.remainder && !hasTagAfterEpisode(title, simpleTitle, result)
-      ? { remainder: result.remainder }
-      : {}),
+    ...(remainder ? { remainder } : {}),
     airDate: result.airDate ?? null,
     fullSeason: isSpecialFullSeason ? false : (result.fullSeason ?? false),
     isPartialSeason: result.isPartialSeason ?? false,
